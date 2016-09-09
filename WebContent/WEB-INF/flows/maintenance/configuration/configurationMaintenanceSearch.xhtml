@@ -1,0 +1,149 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/WEB-INF/newTemplate.xhtml">
+
+	<ui:define name="title">System Configuration Maintenance</ui:define>
+	<ui:define name="pageHeader">System Configuration Maintenance</ui:define>
+	
+	<ui:define name="content">
+    	<ui:fragment id="messages">
+			<div id="messagesInsertionPoint"><h:messages errorClass="error"
+				infoClass="info" layout="list" /></div>
+		</ui:fragment>
+		<fieldset><legend title="configurationDetails">System Details</legend>
+		<h:form styleClass="form" id="configurationMaintenanceSearch">
+			
+			<table  width="70%">
+				<tr>
+					<td><h:outputText styleClass="outputText" value="Configuration Code" /></td>
+					<td><p:inputText value="" id="cfgCode" maxlength="12"
+						size="14" style="text-align: left"  /></td>
+					<td><h:outputText styleClass="outputText" value="Description" /></td>
+					<td ><p:inputTextarea value="" id="description" maxlength="255"
+						size="257" style="text-align: left"  /></td>
+				</tr>
+				<tr>
+					
+					<td><h:outputText styleClass="outputText" value="Data Type" /></td>
+					<td><p:inputText value="" id="dataType" maxlength="1"
+						size="14" style="text-align: left"  /></td>
+					<td><h:outputText styleClass="outputText" value="Value" /></td>
+					<td><p:inputTextarea value="" id="value" maxlength="255"
+						size="257" style="text-align: left"  /></td>
+				</tr>
+				<tr>
+					<td><h:outputText styleClass="outputText" value="Selectable" /></td>
+					<td><p:inputText value="" id="selectable" maxlength="1"
+						size="14" style="text-align: left" /></td>
+					<td><h:outputText styleClass="outputText" value="Start Date" /></td>
+					<td><p:inputText id="startDate" value="" 
+						size="26" maxlength="27" /></td>
+				</tr>
+				<tr>	
+					<td><h:outputText styleClass="outputText" value="Status ID" /></td>
+					<td><p:inputText value="" id="statusId" maxlength="6"
+						size="14" style="text-align: left" /></td>
+					<td><h:outputText styleClass="outputText" value="End Date" /></td>
+					<td><p:inputText id="endDate" value="" 
+						 size="26" maxlength="27" />
+					</td>
+				</tr>
+			</table>
+			<div id="buttons" style="margin-top:10px;width:100%;">
+				<p:commandButton styleClass="blue" value="Search" action="search" processIds="*" />
+				<p:commandButton styleClass="blue" value="Add" action="add" processIds="*" />
+				<p:commandButton styleClass="blue" value="Clear" action="clear" processIds="*" />
+			</div>
+			
+		
+		</h:form>
+		
+		<h:form id="configurationResults">
+			<ui:fragment id="configurationResultsFragment">
+				<div id="dataTableDiv" class="dataTableResults" style="height: 200px;margin-top:10px;" >
+
+					<p:dataTable
+					value="#{configurations}" var="obj" rowsPerPageTemplate="5,10,15"  paginator="true" rows="5"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					paginatorPosition="bottom"> 
+					
+					<f:facet name="header">  
+						            Results  
+						        </f:facet> 
+					
+					<p:column id="cfgCodeCol" headerText="Configuration Code">
+						<!-- <f:facet name="header">
+							<p:panelGroup id="pnlfst">
+								<sf:commandLink id="sortByCodeLink" action="sort" value="Configuration Code"  processIds="*" styleClass="commandHdrLink">							
+								<f:param name="sortOrder" value="" id="srdr1" />
+								</sf:commandLink>
+								
+							</p:panelGroup> 
+						</f:facet> -->
+						<!-- <h:commandLink title="click to update" action="view" id="cmdsec">
+							<h:outputText id="codeValue" value="#{obj.cfgCode}"></h:outputText>
+						</h:commandLink> -->
+					</p:column>
+					<p:column id="descCol" headerText="Description">
+						<!-- <f:facet name="header">
+							 <h:panelGroup id="pnlsec">
+								<sf:commandLink id="sortByDescLink" action="sort"
+									value="Description" styleClass="commandHdrLink" processIds="*">
+									<f:param name="sortOn" value="Desc" id="prmsec" />
+									<f:param name="sortOrder" value="" id="srdr2" />
+								</sf:commandLink>
+
+							</h:panelGroup> 
+						</f:facet>
+						<h:outputText id="descValue" value="#{obj.description}"></h:outputText> -->
+					</p:column>
+					<p:column id="cfgDateCol" headerText="Configuration Dates">
+						<!-- <f:facet name="header">
+							<h:panelGroup id="pnltrd">
+								<sf:commandLink action="sort" value="Configuration Dates"
+									processIds="*" styleClass="commandHdrLink" id="Date">
+									<f:param name="sortOn" value="StartDate"
+										id="prmsecOn" />										
+								<f:param name="sortOrder" value="" id="srdr3" />
+								</sf:commandLink>
+								
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText id="startValue"
+							value="#{obj.startDate}"></h:outputText>
+						<h:outputText id="dash"
+							value=" - "></h:outputText>
+						<h:outputText id="endValue" value="#{obj.endDate}"></h:outputText> -->
+					</p:column>
+					<p:column id="status" headerText="Status">
+						<!-- <f:facet name="header">
+							<h:outputText id="statusLbl" value="Status"></h:outputText>
+						</f:facet>
+						<h:outputText id="statusValue"
+							value="#{obj.statusDescription}"></h:outputText> -->
+					</p:column>
+				</p:dataTable>
+				</div>
+				<!-- <div class="footerClass"><div class="resultClass">Results #{datatable.indexOfFirstItem + 1} - ${pagerBaseAction.pageSize  > datatable.pageElements.rowCount ? datatable.totalNumberOfElements : datatable.indexOfLastItem} of  #{datatable.totalNumberOfElements}</div>
+					<div class="pagingClass">[<sf:commandLink action="first" processIds="*" id="first" disabled="#{datatable.currentPageNumber == 1}">First</sf:commandLink>| <sf:commandLink action="previous" processIds="*" id="previous" disabled="#{datatable.currentPageNumber == 1}">Prev</sf:commandLink>]
+					&#160; &#160; [<sf:commandLink action="next" processIds="*"	id="next" disabled="#{datatable.currentPageNumber == datatable.totalPages}">Next</sf:commandLink>	| <sf:commandLink action="last" processIds="*" id="last" disabled="#{datatable.currentPageNumber == datatable.totalPages}">Last</sf:commandLink> ]</div>
+					
+			</div>
+				</div>-->
+				
+				</ui:fragment>
+				
+		</h:form>
+		</fieldset>
+	</ui:define>
+	
+
+</ui:composition>

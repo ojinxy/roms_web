@@ -1,0 +1,294 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"	
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:fsl="http://org.fsl.com"
+	xmlns:display="urn:jsptld:http://displaytag.sf.net"	
+	template="/WEB-INF/newTemplate.xhtml">
+
+	<ui:define name="title">Reason Maintenance </ui:define>
+	<ui:define name="pageHeader">
+	<!-- div id="tabs">Reason Maintenance</div--> </ui:define>
+    
+    <ui:define name="content">
+    <script>
+    var rend = "";
+    		$("document").ready(function(){
+    			
+    			$('#javax_faces_developmentstage_messages').css('display','none');
+    			
+    			//hide result table
+				rend="#{reasonBean.reasonList.size()}";
+				if(rend == "0"){
+				$('#reasonMaintenanceDetails\\:reasonResults').hide();
+    			}
+    			$('#reasonMaintenanceDetails\\:reasonResults').forceDatatablePagin();
+    			
+    			$("#reasonMaintenanceDetails\\:addRedasonBtn").click(function () {
+		
+				$(this).attr("disabled","true");
+				});	 
+    		});
+    	
+    
+    	function addRowOnComplete() {
+    				disablePag();
+    				 var x = "#{reasonBean.reasonList.size()>0}"
+    				$('.ui-icon-pencil')[0].id= 'someId';
+    				$('#someId').trigger('click');
+			 		 disablePen();
+			 		}
+			 	
+
+			function cancelHide(){
+				  $('.ui-icon-pencil').each(function(){
+			 		  	//$(').addClass('rat');
+			 		  	// $(this).css({backgroundColor: '#0099ff'});
+			 		  	$(this).css('display',''); 
+			 		  });
+			 		  
+			 	$("button[id*='cancelBtnID']").click();  
+			}
+			function disablePen(){
+			 $('.ui-icon-pencil').each(function(){
+			 		  	$(this).css('display','none'); 
+			 		  });
+			$('.ui-tooltip').each(function(){
+					$(this).html('Save/Cancel');
+					});
+			}
+			function disablePag(){
+			$('#reasonMaintenanceDetails\\:reasonResults_paginator_bottom span').text("");
+			
+			}
+			function trigClick(){
+				//Show results table 
+				$('#reasonMaintenanceDetails\\:reasonResults').show();
+			}
+			
+			function catchValidation(){
+			addRowOnComplete();
+		}
+		
+		function disableAdd(){
+			$("#reasonMaintenanceDetails\\:addRedasonBtn").attr("disabled","true");
+			
+		}
+		
+		function enableAdd(){
+			$("#reasonMaintenanceDetails\\:addRedasonBtn").removeAttr("disabled");
+		}	
+    	</script>
+    	
+		<h:form styleClass="form" id="reasonMaintenanceDetails">
+			
+			<div class="tabs"><a href="#">Reason Maintenance</a></div>
+   			<div class="main borders">			
+			 <p:messages autoupdate="true" id="msg" closable="true"/>
+			
+			<p:panelGrid style="margin-top:5px;width:100%;" id="gridVehicleDetails">
+				<p:row>
+					<p:column style="width:50%;">
+						
+								<h:outputLabel for="reasonType" value="Reason Type: " style="margin-right:10px;" />
+							
+								<!-- <p:inputText value="#{criteria.reasonDescription}" id="reasonType" label="Reason Type" /> -->
+								<p:selectOneMenu value="#{criteria.type}" id="reasonType" style="margin-left:10px;width:200px;">
+									<f:selectItem itemValue="" itemLabel="All"></f:selectItem>
+									<f:selectItems value="#{reasonCodesList}" />
+								</p:selectOneMenu>
+							<span style="padding-left:1px;display: inline-block;">			
+								<h:outputLabel for="statusSel" value="Status: " style="margin-right:20px;margin-left:40px;"/>								
+							</span>
+							<p:selectOneMenu value="#{criteria.statusId}" id="statusSel" style="margin-left:0px;width:200px;">
+								<f:selectItem itemValue="" itemLabel="All"></f:selectItem>
+								<f:selectItem itemValue="ACT" itemLabel="ACTIVE"></f:selectItem>
+								<f:selectItem itemValue="INA" itemLabel="INACTIVE"></f:selectItem>
+							</p:selectOneMenu>
+						
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:100%;padding-top:20px;text-align:center;">
+						<sec:authorize ifAnyGranted="ROLE_ROMS_REF_REASON_SEARCH">
+								<p:commandButton styleClass="blue blue-icon icon-search icon-af"  value="Search" action="search" processIds="*" ajax="false" />
+						</sec:authorize>
+						<sec:authorize ifAnyGranted="ROLE_ROMS_REF_REASON_ADD">		
+								<p:commandButton styleClass="blue blue-icon icon-plus icon-af" id="addRedasonBtn"  value="Add" action="add" processIds="*" ajax="true" update=":reasonMaintenanceDetails:reasonResults" oncomplete="addRowOnComplete();disableAdd();" onclick="trigClick();reaTable.getPaginator().setPage(0);" />
+						</sec:authorize>		
+								<p:commandButton styleClass="blue blue-icon icon-refresh icon-af" id="butReset1" style="padding-rght:1em;" value="Clear" processIds="*" action="clear" ajax="false" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			</div>
+				
+					<ui:fragment id="reasonResultsFragment">
+						<div id="dataTableDiv" class="dataTableResults" style="height: auto;" >
+						
+						<p:dataTable id="reasonResults" value="#{reasonBean.reasonList}" var="rea" widgetVar="reaTable" editable="true"
+							paginator="true" rows="10" paginatorPosition="bottom" 
+							selectionMode="single" rowKey="#{rea.reasonId}" selection="#{reasonBean.selectedReason}"
+							 rowsPerPageTemplate="10,50,100"
+							currentPageReportTemplate="Results: {startRecord}-{endRecord} of {totalRecords}" rowIndexVar="rowIndex"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+							
+							<sec:authorize ifAnyGranted="ROLE_ROMS_REF_REASON_ADD,ROLE_ROMS_REF_REASON_EDIT">
+								<p:ajax event="rowEditInit" listener="#{reasonMaintenanceServiceAction.initRow}" oncomplete="disablePen();disablePag();"/>
+							 	<p:ajax event="rowEdit"  oncomplete="if(!args.validationFailed){cancelHide();clickUpdate();}else{focusName();}" update=":reasonMaintenanceDetails:reasonResults,:reasonMaintenanceDetails:msg"/>  
+	        					<p:ajax event="rowEditCancel" oncomplete="cancelHide();enableAdd();"  listener="#{reasonMaintenanceServiceAction.cancelAdd}" update=":reasonMaintenanceDetails:reasonResults,:reasonMaintenanceDetails:msg"/> 
+        					 	
+        					 	
+        					 	
+        					 <!-- <p:ajax event="page"  oncomplete="paginate();"/>  -->
+        					<!-- <p:ajax event="rowSelect"   oncomplete="clickUpdate();">
+                   			</p:ajax>  -->
+        					</sec:authorize>
+							<!--  <p:ajax event="rowSelect" listener="#{reasonMaintenanceServiceAction.updatereason()}"   
+                    			update=":reasonMaintenanceDetails:reasonResults" />   -->
+							<f:facet name="header">
+								Reason(s)
+							</f:facet>
+							<p:column sortBy="reasonDescription" headerText="Name">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{rea.reasonDescription}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText id="reasonNameID" value="#{rea.reasonDescription}" style="width:90%" maxlength="30" validatorMessage="Name is required.">
+											 <f:validateLength minimum="1"/>
+											<p:clientValidator />
+											<p:ajax event="focus"  />
+										</p:inputText>
+										<!-- <p:message for="reasonNameID" />--> 
+									</f:facet>
+								</p:cellEditor>
+								<!-- <h:outputText value="#{rea.reasonDescription}" /> -->
+							</p:column>
+							
+							<p:column sortBy="type" headerText="Reason Type">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{rea.typeDescription}" /><!-- // -->
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu value="#{rea.type}" style="width:100%">											
+											<f:selectItems value="#{reasonCodesList}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>								
+							</p:column>
+							
+							<p:column headerText="Status">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{rea.statusId=='ACT'?'Active':'Inactive'}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu value="#{rea.statusId}" style="width:100%">
+											<f:selectItem itemValue="ACT" itemLabel="ACTIVE"></f:selectItem>
+											<f:selectItem itemValue="INA" itemLabel="INACTIVE"></f:selectItem>
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+								
+							</p:column>
+							
+							<p:column headerText="Last Updated">
+								<h:outputText value="#{rea.auditEntryBO.updateDTime!=null?rea.auditEntryBO.updateDTime:rea.auditEntryBO.createDTime}">
+									<fsl:dateTimeConverter showTime="false"/>
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Updated By">
+								<h:outputText value="#{rea.auditEntryBO.updateUsername!=null?rea.auditEntryBO.updateUsername:rea.auditEntryBO.createUsername}" />
+							</p:column>
+							<sec:authorize ifAnyGranted="ROLE_ROMS_REF_REASON_ADD,ROLE_ROMS_REF_REASON_EDIT">
+							<p:column style="width:6%" headerText="Edit">
+								<p:rowEditor id="editID">
+									<p:tooltip id="tooltipId" for="editID" value="Click to edit record." showEffect="fade" hideEffect="fade" 
+						            shared="false" showDelay="500" style="margin-left:200px;"/>
+								</p:rowEditor>
+							
+							</p:column>
+							</sec:authorize>
+							 
+						</p:dataTable>
+						
+						
+							 <p:commandButton wigetVar="btnSel" id="pageBtn" value="Do select" style="display:none" processIds="*" update=":reasonMaintenanceDetails:reasonResults" 
+							 ajax="false" ></p:commandButton>
+							 
+							 <p:commandButton wigetVar="btnSel2" id="addBtn2" value="Do select" style="display:none" processIds="*" update=":reasonMaintenanceDetails:reasonResults" 
+							 ajax="false" ></p:commandButton>
+							 
+							  <p:commandButton wigetVar="btnSel3" id="rError" value="Do select" style="display:none" processIds="*" update=":reasonMaintenanceDetails:msg" 
+							 ajax="true" oncomplete="addRowOnComplete();"></p:commandButton>
+							 
+							  <p:commandButton wigetVar="btnSel3" id="rError2" value="Do select" style="display:none" processIds="*" update="" 
+							 ajax="true" oncomplete="addRowOnComplete();"></p:commandButton>
+							  
+							   
+						</div>
+						</ui:fragment>
+						<script>
+								
+							
+							 	function paginate()
+							 	{  //alert();
+							 		//$("button[id*='pageBtn']").click();
+							 		$('#reasonMaintenanceDetails\\:reasonResults').forceDatatablePagin();
+							 	}
+							 	
+							 	function focusName(){
+										$("#reasonMaintenanceDetails\\:reasonResults\\:0\\:reasonNameID").focus();
+									}
+							 	
+							 	function openRow2()
+							 	{
+							 		$("button[id*='addBtn2']").click();
+							 	}
+							 	
+								function clickUpdate(){
+									//selectReason();
+									/* alert("click 1");
+									  $('.ui-icon-pencil[aria-selected=true]').trigger('click');
+			 		  				 $('#someId').trigger('click');  */
+			 		  				
+								$("button[id*='updateBtn']").click();
+								//$('#reasonMaintenanceDetails\\:reasonResults_paginator_bottom span').css('display','');
+									//								
+								}				
+								function selectReason(){
+									//alert("click 2");
+							 		$("button[id*='selectBtn']").click()			 	
+							 	}
+							 	
+							 	
+							</script>
+							
+							<p:commandButton wigetVar="btnSel" id="cancelBtnID" value="Do select" style="display:none" processIds="*" 
+			 ajax="true" oncomplete="paginate();" update=":reasonMaintenanceDetails:reasonResults" ></p:commandButton> 
+							
+						 <p:commandButton wigetVar="btnSel" id="selectBtn" value="Do select" style="display:none" processIds="*" action="select" 
+			 ajax="false" update=":reasonMaintenanceDetails:reasonResults" ></p:commandButton>
+			
+							<p:commandButton  id="updateBtn"
+								value="Do select" style="display:none" processIds="*"
+								action="update" ajax="true" oncomplete="if(args.validationFailed){disableAdd();addRowOnComplete();}else{enableAdd();paginate();}"
+								update=":reasonMaintenanceDetails:reasonResults,:reasonMaintenanceDetails:msg,reasonMaintenanceDetails"></p:commandButton>
+
+							
+		</h:form>
+		
+		
+		
+		
+	</ui:define>
+</ui:composition>

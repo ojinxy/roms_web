@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+    version="2.0">
+    
+ <converter>
+    <converter-id>sqlConverter</converter-id>
+    <converter-class>org.fsl.converter.SqlDateConverter</converter-class>
+ </converter>
+ 
+ <converter>
+    <converter-id>moneyConverter</converter-id>
+    <converter-class>org.fsl.converter.MoneyConverter</converter-class>
+ </converter>
+ 
+ <converter>
+    <converter-id>pickListConverter</converter-id>
+    <converter-class>org.fsl.converter.PicklistConverter</converter-class>
+  </converter>
+  
+ 	<converter>  
+	  <converter-id>StandardBooleanConverter</converter-id>  
+	  <converter-class>javax.faces.convert.BooleanConverter</converter-class>  
+	</converter>
+ 	<converter>
+ 		<description>Convert Dates and Time</description>
+ 		<display-name>dateTimeConverter</display-name>
+ 		<converter-id>DateTimeConverter</converter-id>
+ 		<converter-class>org.fsl.converter.DateTimeConverter</converter-class>
+ 		<property>
+ 			<property-name>showTime</property-name>
+ 			<property-class>java.lang.String</property-class>
+ 			<default-value>true</default-value>
+ 			<suggested-value>true</suggested-value>
+ 		</property>
+ 	</converter> 
+    
+   <converter>
+   <description>Converter for formatting dates as short yyyy-MM-dd or long yyyy-MM-dd hh:mm a. This 
+    is to be used for XMLGregorianCalendar values passed by WSDL web services.</description>
+   <converter-id>XMLGregorianCalendarConverter</converter-id>
+   <converter-class>org.fsl.converter.XMLGregorianCalendarConverter</converter-class>
+   <property>
+      <property-name>showTime</property-name>
+      <property-class>java.lang.String</property-class>
+      <default-value>true</default-value>
+   </property>
+  </converter>
+  
+  <!-- <converter>  
+	  <converter-id>StandardBooleanConverter</converter-id>  
+	  <converter-class>org.fsl.converter.BooleanConverter</converter-class>  
+	</converter> -->
+	
+	<converter>  
+	  <converter-id>staffUserMappingConverter</converter-id>  
+	  <converter-class>org.fsl.converter.StaffUserMappingConverter</converter-class>  
+	</converter> 
+	
+	<converter>  
+	  <converter-id>TAStaffIDConverter</converter-id>  
+	  <converter-class>org.fsl.converter.TAStaffIDConverter</converter-class>  
+	</converter> 
+    
+
+    
+    <converter>  
+	  <converter-id>TAStaffConverter</converter-id>  
+	  <converter-class>org.fsl.converter.TAStaffConverter</converter-class>  
+	</converter> 
+	
+	<converter>  
+	  <converter-id>AutoCompletePersonConverter</converter-id>  
+	  <converter-class>org.fsl.converter.AutoCompletePersonConverter</converter-class>  
+	</converter> 
+	
+	 <converter>  
+	  <converter-id>ArteryConverter</converter-id>  
+	  <converter-class>org.fsl.converter.ArteryConverter</converter-class>  
+	</converter> 
+	
+	 <converter>  
+	  <converter-id>BIMSStaffConverter</converter-id>  
+	  <converter-class>org.fsl.converter.BIMSStaffConverter</converter-class>  
+	</converter> 
+	
+	<converter>  
+	  <converter-id>LMISUserConverter</converter-id>  
+	  <converter-class>org.fsl.converter.LMISUserConverter</converter-class>  
+	</converter> 
+	
+	<converter>  
+	  <converter-id>PersonConverter</converter-id>  
+	  <converter-class>org.fsl.converter.PersonConverter</converter-class>  
+	</converter> 
+    
+     <application>
+	  <resource-bundle>
+		<base-name>regex</base-name>
+		<var>regex</var>
+	   </resource-bundle>
+	   <resource-bundle>
+		<base-name>messages</base-name>
+		<var>messages</var>
+	   </resource-bundle>
+     </application>
+     
+</faces-config>

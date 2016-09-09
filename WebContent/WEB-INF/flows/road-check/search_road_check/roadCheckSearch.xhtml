@@ -1,0 +1,345 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/newTemplate.xhtml"
+	xmlns:fsl="http://org.fsl.com">
+	
+<!-- 	<ui:define name="title">Road Check Search</ui:define> -->
+	<ui:define name="pageHeader">
+		<script type="text/javascript" 	src="${request.contextPath}/script/roadCheckSummaryReview.js" />
+		<style type="text/css">
+			.even, .odd
+			{
+				/*border-bottom: solid 2px black;*/
+			}
+			
+			label
+			{
+				margin-right:5px !important;
+			}
+		</style>
+				<!-- CSS Used for Road Operation Screens -->
+		<link	href="${request.contextPath}/theme/roadOp.css"	rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/theme/cssgrids-responsive-min.css"/>
+		<link	href="${request.contextPath}/theme/docManager.css"	rel="stylesheet" />	
+		<script type="text/javascript">
+			/* <![CDATA[ */
+			//RoadCheck Search
+			function emptyTAStaffValFromhiddenField(){
+				var taStaffID = $('#roadCheckSearch\\:acc\\:txtTeamLead_hinput').val();
+				if(taStaffID == ""){
+					$('#roadCheckSearch\\:acc\\:taStaffIDHidden').val("");
+				}
+			}
+
+			/* ]]> */
+  </script>	
+	</ui:define>
+	<ui:define name="content">
+	
+		<h:form styleClass="form" id="roadCheckSearch">
+		<p:panel id="panelRoadCheckSearch"  >
+		<div class="tabs"><a href="#">Road Check Search</a></div>
+			<div class="main borders">
+				
+			<p:messages id="errorMessages" closable="true" autoUpdate="true"/>
+
+			<div style="/*border: 2.8px solid gainsboro;*/padding: 0.9em;clear:both;padding-top:10px;">
+				<!-- <h4 class="pageHead">
+						<span>At least one search criteria MUST be entered</span>
+				</h4> -->
+				<p:accordionPanel multiple="true" id="acc" prependId="false"  >
+					<p:tab title="Person Details">
+						<div class="yui3-g-r">
+							<div class="yui3-u-1-12">
+								<h:outputText styleClass="outputText" value="TRN: " ></h:outputText>
+							</div>
+							<div class="yui3-u">
+								<p:inputText id="txtTRN" value="#{criteria.trn}" />
+							</div>  
+	              
+						</div>
+						<div class="yui3-g-r" style="padding-top:20px">
+							<div class="yui3-u-1-12" style="vertical-align:sub">
+								<h:outputText styleClass="outputText" value="Name: " ></h:outputText>
+							</div>
+							<div class="yui3-u">						
+								<p:inputText id="txtLastName" value="#{criteria.lastName}" style="margin-right:10px" maxlength="40"/>
+								<p:watermark for="txtLastName" value="LAST NAME"/>   
+								<p:inputText id="txtFirstName" value="#{criteria.firstName}" style="margin-right:10px" maxlength="40"/> 
+								<p:watermark for="txtFirstName" value="FIRST NAME"/>   
+								<p:inputText id="txtMidName" value="#{criteria.middleName}" maxlength="25"/>
+								<p:watermark for="txtMidName" value="MIDDLE NAME"/>   
+							</div>				
+						</div>
+					</p:tab>
+					<p:tab title="Road Check Details">
+						
+						<div id="divInHouseOperationDetails" style="display: #{isHandHeld?'none':''}" >
+					
+							<div class="yui3-g-r" style="padding-top:10px;width:90%;padding-top:20px">
+								<div class="yui3-u-1-6" style="vertical-align:sub">
+									<h:outputText styleClass="outputText" value="TA Staff: " style="display:inherit;vertical-align:super"></h:outputText>						
+		              
+								</div>
+								<div class="yui3-u">
+									<p:watermark id="teamLeadWM" for="txtTeamLead" value="Last, First Middle Name [ID]"/>  
+									<p:autoComplete global="false" id="txtTeamLead" scrollHeight="200"  size="43" value="#{flowScope.staffBOForSearch}" 
+									completeMethod="#{roadOperationsServiceAction.taStaffNameAutoComplete}" converter="TAStaffIDConverter"
+									var="p" itemValue="#{p}" forceSelection="true" itemLabel="#{p.fullName.concat(' [').concat(p.staffId).concat(']')}">
+									<p:ajax event="query" global="false"></p:ajax>   
+									</p:autoComplete>
+									
+									<h:inputHidden id="taStaffIDHidden" value="#{criteria.staffID}"></h:inputHidden>
+									
+								</div>
+							</div>
+						</div>
+						
+						<div class="yui3-g-r" style="width:90%;padding-top:20px">
+							<div class="yui3-u-1-6" style="vertical-align:sub">
+								<h:outputText value="Status: " style="margin-right:10px;vertical-align:super"></h:outputText>
+							</div>
+							<div class="yui3-u">
+								<p:selectOneMenu   style="width:240px"
+										id="comboStatus" value="#{criteria.status}">
+										<f:selectItem itemValue="" itemLabel="[Select One]" />
+										<f:selectItems value="#{statusList}" />
+								</p:selectOneMenu>
+							</div>
+						</div>
+						<div class="yui3-g-r" style="width:90%;padding-top:20px;padding-bottom:20px">
+								<div class="yui3-u-1-6" style="vertical-align:sub" >
+									<h:outputText value="Road Check Date: " style="width:20%"></h:outputText>
+								</div>
+								<div class="yui3-u" style="white-space:nowrap">
+									<p:calendar value="#{criteria.roadCheckStartDateRange}" navigator="true" id="txtRoadCheckStartDate" pattern="yyyy-MM-dd" 
+									readonlyInput="true" showOn="button">
+									
+									</p:calendar>
+									<p:watermark for="txtRoadCheckStartDate" value="yyyy-mm-dd"></p:watermark>
+									
+									<h:outputText value=" to " style="padding-right:5px;padding-left:5px;"></h:outputText>
+			
+									<p:calendar value="#{criteria.roadCheckEndDateRange}"  navigator="true"  id="txtRoadCheckEndDate" pattern="yyyy-MM-dd"
+										readonlyInput="true" showOn="button">
+										
+									</p:calendar>
+									<p:watermark for="txtRoadCheckEndDate" value="yyyy-mm-dd"></p:watermark>
+									
+								</div>						
+						</div>	
+					</p:tab>
+					<p:tab title="Operation Details">
+							<div  style="width:90%;padding-top:10px" class="yui3-g-r">
+								
+									<div class="yui3-u-1-5" style="vertical-align:sub">
+										<h:outputText styleClass="outputText" value="Operation Name: " ></h:outputText>
+										  
+									</div>
+									<div class="yui3-u">
+										<p:autoComplete global="false" id="txtOpName"  size="35" scrollHeight="200" cache="true" cacheTimeout="30000" value="#{criteria.operationName}" completeMethod="#{roadCheckServiceAction.roadOperationNameAutoComplete}"
+											disabled="#{roadCheckServiceAction.isHandHeldNoFlow()}">
+											<p:ajax event="query" global="false"></p:ajax>   
+										</p:autoComplete>
+									</div>
+								
+							</div>
+							<div class="yui3-g-r" style="width:90%;padding-top:20px;padding-bottom:20px">
+								<div class="yui3-u-1-5" style="vertical-align:sub" >
+									<h:outputText value="Operation Date: " style="width:20%"></h:outputText>
+								</div>
+								<div class="yui3-u" style="white-space:nowrap">
+									<p:calendar value="#{criteria.actualStartDateRange}" navigator="true" id="txtActualStartDate" pattern="yyyy-MM-dd" 
+									readonlyInput="true" showOn="button">
+									
+									</p:calendar>
+									<p:watermark for="txtActualStartDate" value="yyyy-mm-dd"></p:watermark>
+									
+									<h:outputText value=" to " style="padding-right:5px;padding-left:5px;"></h:outputText>
+			
+									<p:calendar value="#{criteria.actualEndDateRange}"  navigator="true"  id="txtActualEndDate" pattern="yyyy-MM-dd"
+										readonlyInput="true" showOn="button">
+										
+									</p:calendar>
+									<p:watermark for="txtActualEndDate" value="yyyy-mm-dd"></p:watermark>
+									
+								</div>						
+						</div>
+		
+						<div class="yui3-g-r" style="width:90%;padding-bottom:20px">
+							
+								<div  class="yui3-u-1-5" style="vertical-align:sub">
+									<h:outputText value="Region: " style="margin-right:10px;vertical-align:super"></h:outputText>
+									
+								</div>
+								<div class="yui3-u">
+									<p:selectOneMenu style="width:210px"
+										id="comboOfficeRegion" value="#{criteria.region}" disabled="#{! flowScope.hasSpecialPermissions }">
+										<f:selectItem itemValue="" itemLabel="[ Select One ]" />
+										<f:selectItems value="#{officeRegionList}" />
+									</p:selectOneMenu>
+								</div>
+						</div>
+					</p:tab>  
+				</p:accordionPanel>				
+
+				<div style="text-align:center;pading-top:10px;/* border-top: .1em solid #ddd;*/ margin-top:10px;">
+					<span>
+						<p:commandButton id="butSearch" widgetVar="butSearch" value="Search" action="search" processIds="*" ajax="true"  styleClass="blue blue-icon icon-search icon-af" update="panelResults,errorMessages"
+							onclick="emptyTAStaffValFromhiddenField();" onstart="butSearch.disable();" oncomplete="tableScrollLook();">
+						</p:commandButton>	
+						<p:commandButton id="butClear" widgetVar="butClear"  style="padding-right:1em;" value="Clear" processIds="*" action="clear" ajax="false" styleClass="blue blue-icon icon-refresh icon-af"
+							onstart="butClear.disable();" oncomplete="butClear.enable();">
+						</p:commandButton>			
+					</span>
+				</div>
+				</div>
+			</div>
+			<p:outputPanel id="panelResults">
+			<div id="divResults" style="border: 1px solid gainsboro;display: #{dataTable.amountOfRecords gt 0 ?'':'none'}" >
+				<div style="padding: 0.9em; border-bottom: 2px solid gainsboro;overflow: auto;white-space: nowrap;">
+					<p:outputPanel id="panelResultsMenu" style="padding-bottom:10px;">
+					<span >
+						Results:
+						<h:outputText styleClass="outputText" value="#{dataTable.pagingDetails}" id="lblResultsPaging"></h:outputText>
+						<label style="padding-left:30px">Sort By:</label>
+						<p:selectOneMenu 
+								id="comboSortBy"
+								valueChangeListener="#{roadCheckServiceAction.sortBy}" value="#{dataTable.sortBy}"
+								style="vertical-align:middle">
+								<f:selectItem itemValue="Created" itemLabel="Created" />
+								<f:selectItem itemValue="Offender Name" itemLabel="Offender Name" />
+								<f:selectItem itemValue="Operation Name" itemLabel="Operation Name" />
+								<f:selectItem itemValue="Operation Start Date" itemLabel="Operation Start Date" />
+								<f:selectItem itemValue="Road Check Date" itemLabel="Road Check Date" />
+								<f:selectItem itemValue="Status" itemLabel="Status" />
+								<p:ajax update="roadCheckSearch,panelResults"/>
+						</p:selectOneMenu>
+						<span>
+							<p:commandLink id="linkSortASC" action="sortOrderASC" update="roadCheckSearch,panelResults" disabled="#{dataTable.sortOrder eq 'asc'?true:false}">
+								<h:outputText value="ASC" />
+							</p:commandLink>
+							|
+							<p:commandLink id="linkSortDESC" action="sortOrderDESC" update="roadCheckSearch,panelResults" disabled="#{dataTable.sortOrder eq 'desc'?true:false}">
+								<h:outputText value="DESC" />
+							</p:commandLink>
+						</span>
+						
+						<label style="padding-left:10px;padding-right:10px">Items:</label>
+						<p:selectOneMenu valueChangeListener="#{roadOperationsServiceAction.changePageSize}"
+								id="comboItems" value="#{dataTable.rowsPerPage}" 
+								style="vertical-align:middle">
+								<f:selectItem itemValue="10" itemLabel="10" />
+								<f:selectItem itemValue="50" itemLabel="50" />
+								<f:selectItem itemValue="100" itemLabel="100" />
+								<p:ajax update="roadCheckSearch,panelResults"/>
+						</p:selectOneMenu>
+						
+					</span>
+					</p:outputPanel>
+					</div>
+					
+					<div style="/*height: 600px;*/overflow: auto;width: 100% !important;">
+					
+						  <p:outputPanel id="panelTable">			
+					      <h:dataTable 
+							styleClass="tblroadCheckClass" style="width: 100%;border-collapse: collapse;"
+							footerClass="footerClass" rowClasses="even,odd" cellpadding="5"  
+							cellspacing="8"  id="searchResults" rendered="true" rows="100"
+							value="#{dataTable.pageElements}" var="roadCheckRec" >
+								<h:column>
+									<div>
+										<p:outputLabel value="Operation Name: " style="font-weight:bolder;"/>
+										<h:outputText value="#{roadCheckRec.getRoadOperationBO().getOperationName()}" />
+									</div>
+									<div>
+										<p:outputLabel value="Operation Start Date: " style="font-weight:bolder;"/>
+										<h:outputText value="#{roadCheckRec.getRoadOperationBO().actualStartDate != null?roadCheckRec.getRoadOperationBO().actualStartDate:roadCheckRec.getRoadOperationBO().scheduledStartDate}" >
+											<fsl:dateTimeConverter showTime="true" />
+										</h:outputText>
+									</div>
+									<div>
+										<p:outputLabel value="Road Check Status: " style="font-weight:bolder;"/>
+										<h:outputText value="#{roadCheckRec.statusDescription}" />
+									</div>
+								</h:column>
+								<h:column id="colPersonDetails" >
+									<div>
+										<p:outputLabel value="TRN: " style="font-weight:bolder;"/>
+										<h:outputText value="#{roadCheckRec.person.trnNbr}"/>
+									</div>
+									<div>
+										<p:outputLabel value="Name: " style="font-weight:bolder;"/>
+										<h:outputText value="#{roadCheckRec.person.fullName}"/>
+									</div>
+									<div style="display:#{roadCheckRec.complianceDate ne null ? 'block': 'none'}">
+										<p:outputLabel value="Road Check Date: " style="font-weight:bolder;"/>
+										<h:outputText value="#{roadCheckRec.complianceDate}">
+					  						<fsl:dateTimeConverter showTime="true" />
+					  					</h:outputText>
+									</div>
+								</h:column>
+								<h:column>
+									<div>
+										<p:outputLabel value="Queries Performed: " style="font-weight:bolder;"/>
+										<h:outputText value="#{roadCheckRec.getListOfRoadChecks().size()}"/>
+									</div>
+									<p:outputPanel autoUpdate="true">
+									<div style="display: #{isHandHeld?'none':''}">
+										<p:outputLabel value="Performed By: " style="font-weight:bolder;"/>
+										<h:outputText value="#{roadCheckRec.getTaStaffBO().getFullName()}" />
+									</div>
+									<div>
+										<span style="display: #{roadCheckRec.getCompliant().trim().equalsIgnoreCase('n')?'':'none'}">
+											<p:outputLabel value="Number of Offences: " style="font-weight:bolder;"/>
+											<h:outputText value="#{roadCheckRec.getListOfOffences().size()}" />
+										</span>
+										<span style="display: #{roadCheckRec.getCompliant().trim().equalsIgnoreCase('n') or roadCheckRec.statusId.equalsIgnoreCase('RC_INC')?'none':''}">
+											<p:outputLabel value="All in Order" style="font-weight:bolder;"/>
+										</span>
+									</div>
+									</p:outputPanel>
+								</h:column>
+								<h:column>
+										<p:commandLink id="butView" action="viewDetails" processIds="*" ajax="false" rendered="#{roadCheckRec.statusId ne 'RC_INC' and (roadCheckServiceAction.getRomsLoggedInUser().currentRoadOperationId != null or ! roadCheckServiceAction.isHandHeldNoFlow())}">
+													<h:graphicImage value="/resources/images/viewRoadOp.png" styleClass="roadOpView" style="border-bottom: transparent 4px solid;"/>
+										</p:commandLink>
+										<p:tooltip for="butView" value="View Details of Road Check."/>
+										<sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_CHK_EDIT">
+											<p:commandLink id="butViewIncomplete" action="viewDetailsIncomplete" processIds="*" ajax="false" rendered="#{roadCheckRec.statusId eq 'RC_INC' and (roadCheckServiceAction.getRomsLoggedInUser().currentRoadOperationId != null or ! roadCheckServiceAction.isHandHeldNoFlow())}">
+														<h:graphicImage value="/resources/images/viewRoadOp.png" styleClass="roadOpView" style="border-bottom: transparent 4px solid;"/>
+											</p:commandLink>
+											<p:tooltip for="butViewIncomplete" value="Continue Incomplete Road Check."/>
+										</sec:authorize>
+								</h:column>
+							</h:dataTable>  	
+							</p:outputPanel>
+							
+					</div>
+					<div style="text-align:right;padding-right: 50px">
+						<p:outputPanel id="panelNavigation">
+						<span style="padding-right:20px">
+							<p:commandLink id="butPrevious" oncomplete="tableScrollLook();" disabled="#{dataTable.getCurrentFirstRow() eq 0}" action="prev" processIds="*" update="panelTable,panelResultsMenu,panelNavigation" ajax="true">&lt;&lt;Prev</p:commandLink>
+							|
+							<p:commandLink id="butNext" oncomplete="tableScrollLook();" action="next" disabled="#{dataTable.getAmountOfRecords() eq dataTable.getCurrentLastRow() + 1}" processIds="*" ajax="true" update="panelTable,panelResultsMenu,panelNavigation">Next&gt;&gt;</p:commandLink>
+						</span>
+						<span>
+							<p:commandLink id="butFirst" oncomplete="tableScrollLook();" action="first" processIds="*" disabled="#{dataTable.getCurrentFirstRow() eq 0 }" update="panelTable,panelResultsMenu,panelNavigation" ajax="true">First</p:commandLink>
+							|
+							<p:commandLink id="butLast" oncomplete="tableScrollLook();" action="last" processIds="*" disabled="#{dataTable.getAmountOfRecords() eq dataTable.getCurrentLastRow() + 1}"  update="panelTable,panelResultsMenu,panelNavigation" ajax="true">Last</p:commandLink>
+						</span>
+						</p:outputPanel>
+					</div>
+			</div>
+			</p:outputPanel>
+  			</p:panel>
+	  </h:form>
+	</ui:define>
+</ui:composition>

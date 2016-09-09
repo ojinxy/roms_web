@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://ticket.ws.fsl.org" xmlns:impl="http://ticket.ws.fsl.org" xmlns:intf="http://ticket.ws.fsl.org" xmlns:tns1="http://object.ticket.ws.fsl.org" xmlns:tns2="http://exceptions.ws.fsl.org" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsi="http://ws-i.org/profiles/basic/1.1/xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+ <wsdl:types>
+  <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ticket.ws.fsl.org">
+   <import namespace="http://object.ticket.ws.fsl.org"/>
+   <element name="getTicketsForDriverIResponse">
+    <complexType>
+     <sequence>
+      <element name="getTicketsForDriverIReturn" nillable="true" type="impl:ArrayOf_206962931_687221736_nillable_TrafficTicket"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTicketsForDriverLimit">
+    <complexType>
+     <sequence>
+      <element name="driversLicenceNo" nillable="true" type="xsd:string"/>
+      <element name="limit" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTicketsForDriverLimitResponse">
+    <complexType>
+     <sequence>
+      <element name="getTicketsForDriverLimitReturn" nillable="true" type="impl:ArrayOf_206962931_687221736_nillable_TrafficTicket"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTicketsForDriverI">
+    <complexType>
+     <sequence>
+      <element name="driversLicenceNo" nillable="true" type="xsd:string"/>
+      <element name="fromDate" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <complexType name="ArrayOf_206962931_687221736_nillable_TrafficTicket">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="TrafficTicket" nillable="true" type="tns1:TrafficTicket"/>
+    </sequence>
+   </complexType>
+  </schema>
+  <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://object.ticket.ws.fsl.org">
+   <complexType name="TrafficTicket">
+    <sequence>
+     <element name="ticketNo" nillable="true" type="xsd:string"/>
+     <element name="driversLicenceNo" nillable="true" type="xsd:string"/>
+     <element name="trnNo" nillable="true" type="xsd:string"/>
+     <element name="issueDate" nillable="true" type="xsd:string"/>
+     <element name="issueTime" nillable="true" type="xsd:string"/>
+     <element name="offenceCode" nillable="true" type="xsd:string"/>
+     <element name="offenceDesc" nillable="true" type="xsd:string"/>
+     <element name="fineAmount" nillable="true" type="xsd:string"/>
+     <element name="statusCode" nillable="true" type="xsd:string"/>
+     <element name="statusDesc" nillable="true" type="xsd:string"/>
+     <element name="mandatoryCourtApp" nillable="true" type="xsd:string"/>
+     <element name="courtDate" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+  </schema>
+  <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://exceptions.ws.fsl.org">
+   <complexType name="FslWebServiceException">
+    <sequence>
+     <element name="errorCode" nillable="true" type="xsd:string"/>
+     <element name="errorDescription" nillable="true" type="xsd:string"/>
+     <element name="variables" nillable="true" type="tns2:ArrayOf_873062395_1440052060_nillable_string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOf_873062395_1440052060_nillable_string">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="string" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <element name="FslWebServiceException" nillable="true" type="tns2:FslWebServiceException"/>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="getTicketsForDriverIRequest">
+     <wsdl:part element="impl:getTicketsForDriverI" name="parameters">
+    </wsdl:part>
+
+  </wsdl:message>
+
+   <wsdl:message name="getTicketsForDriverLimitRequest">
+     <wsdl:part element="impl:getTicketsForDriverLimit" name="parameters">
+    </wsdl:part>
+
+  </wsdl:message>
+
+   <wsdl:message name="getTicketsForDriverIResponse">
+     <wsdl:part element="impl:getTicketsForDriverIResponse" name="parameters">
+    </wsdl:part>
+
+  </wsdl:message>
+
+   <wsdl:message name="FslWebServiceException">
+     <wsdl:part element="tns2:FslWebServiceException" name="fault">
+    </wsdl:part>
+
+  </wsdl:message>
+
+   <wsdl:message name="getTicketsForDriverLimitResponse">
+     <wsdl:part element="impl:getTicketsForDriverLimitResponse" name="parameters">
+    </wsdl:part>
+
+  </wsdl:message>
+
+   <wsdl:portType name="FslTrafficTicket">
+     <wsdl:operation name="getTicketsForDriverI">
+       <wsdl:input message="impl:getTicketsForDriverIRequest" name="getTicketsForDriverIRequest">
+    </wsdl:input>
+
+       <wsdl:output message="impl:getTicketsForDriverIResponse" name="getTicketsForDriverIResponse">
+    </wsdl:output>
+
+       <wsdl:fault message="impl:FslWebServiceException" name="FslWebServiceException">
+    </wsdl:fault>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="getTicketsForDriverLimit">
+       <wsdl:input message="impl:getTicketsForDriverLimitRequest" name="getTicketsForDriverLimitRequest">
+    </wsdl:input>
+
+       <wsdl:output message="impl:getTicketsForDriverLimitResponse" name="getTicketsForDriverLimitResponse">
+    </wsdl:output>
+
+       <wsdl:fault message="impl:FslWebServiceException" name="FslWebServiceException">
+    </wsdl:fault>
+
+    </wsdl:operation>
+
+  </wsdl:portType>
+
+   <wsdl:binding name="FslTrafficTicketSoapBinding" type="impl:FslTrafficTicket">
+ <wsaw:UsingAddressing xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" wsdl:required="false"/>
+
+     <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+     <wsdl:operation name="getTicketsForDriverI">
+       <wsdlsoap:operation soapAction=""/>
+
+       <wsdl:input name="getTicketsForDriverIRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="getTicketsForDriverIResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+       <wsdl:fault name="FslWebServiceException">
+         <wsdlsoap:fault name="FslWebServiceException" use="literal"/>
+
+      </wsdl:fault>
+
+    </wsdl:operation>
+
+     <wsdl:operation name="getTicketsForDriverLimit">
+       <wsdlsoap:operation soapAction=""/>
+
+       <wsdl:input name="getTicketsForDriverLimitRequest">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:input>
+
+       <wsdl:output name="getTicketsForDriverLimitResponse">
+         <wsdlsoap:body use="literal"/>
+
+      </wsdl:output>
+
+       <wsdl:fault name="FslWebServiceException">
+         <wsdlsoap:fault name="FslWebServiceException" use="literal"/>
+
+      </wsdl:fault>
+
+    </wsdl:operation>
+
+  </wsdl:binding>
+
+   <wsdl:service name="FslTrafficTicketService">
+     <wsdl:port binding="impl:FslTrafficTicketSoapBinding" name="FslTrafficTicket">
+       <wsdlsoap:address location="http://localhost:9080/TICKET-WS-TAJ/FslTrafficTicketService"/>
+
+    </wsdl:port>
+
+  </wsdl:service>
+
+</wsdl:definitions>

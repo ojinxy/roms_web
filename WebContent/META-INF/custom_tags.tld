@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib version="2.1" xmlns="http://java.sun.com/xml/ns/javaee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd">
+ <tlib-version>2.0</tlib-version>
+ <short-name>n</short-name>
+ <uri>http://org.fsl.com</uri>
+ <tag>
+  <description>Converter for formatting dates as short yyyy-MM-dd or long yyyy-MM-dd hh:mm a. This 
+    is to be used for XMLGregorianCalendar values passed by WSDL web services.</description>
+  <name>xmlGregorianCalendarConverter</name>
+  <tag-class>org.fsl.converter.XMLGregorianCalendarConverter</tag-class>
+  <body-content>JSP</body-content>
+  <attribute>
+   <description>If time should be used in the date input.</description>
+   <name>showTime</name>
+   <rtexprvalue>false</rtexprvalue>
+   <deferred-value>
+    <type>java.lang.String</type>
+   </deferred-value>
+  </attribute>
+ </tag>
+</taglib>

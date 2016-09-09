@@ -1,0 +1,158 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/WEB-INF/newTemplate.xhtml">
+
+	<ui:define name="title">ITA Examiner Maintenance </ui:define>
+	<ui:define name="pageHeader"> </ui:define>
+    
+    <ui:define name="content">
+    	<script>
+    		$("document").ready(function(){
+    			
+    			$('#javax_faces_developmentstage_messages').css('display','none');
+    			$('#itaResults\\:searchResults').forceDatatablePagin();
+    		});
+    	</script>
+    	
+		 
+		
+		<fieldset>
+		<div class="tabs"><a href="#">ITA Examiner Maintenance</a></div>
+   		<div class="main borders">
+   		<p:messages autoupdate="true" id="msg" closable="true"/>
+		<h:form styleClass="form" id="itaExaminerSearch">
+			
+			<p:panelGrid style="margin-top:5px;width:100%;" id="gridVehicleDetails">
+				<p:row>
+					<p:column style="width:50%;">
+						<h:outputText styleClass="outputText" value="Name:" style="vertical-align: inherit;padding-right: 8px;"/>
+						<!-- criteria.lastName -->
+						<p:autoComplete id="nameId" scrollHeight="200" size="33" cache="true" style="margin-left:10px;" cacheTimeout="30000" value="#{flowScope.fullName}" completeMethod="#{itaExaminerMaintenanceServiceAction.ItaExaminerNameAutoComplete}"/>
+						 <p:watermark for="nameId" value="LAST NAME, Firstname MI" />  
+					</p:column>
+					<p:column>
+						<h:outputText styleClass="outputText" value="Region: " style="vertical-align: inherit;"/>
+						<p:selectOneMenu value="#{criteria.officeLocationCode}"
+								id="officeLocationCode"  style="margin-left:10px;width:220px;">
+								<f:selectItem itemValue="" itemLabel="All" />
+								<f:selectItems value="#{officeLocationListAll}" />
+							</p:selectOneMenu>
+						
+					</p:column>
+			</p:row>	
+			<p:row>
+					<p:column colspan="2">
+						<h:outputText styleClass="outputText" value="Status: " style="vertical-align: inherit;"/>
+						<p:selectOneMenu value="#{criteria.statusId}" id="statusSel" style="width:220px;text-align:left;margin:0px 0 0px 10px;">
+							<f:selectItem itemValue="" itemLabel="All"></f:selectItem>
+							<f:selectItem itemValue="ACT" itemLabel="ACTIVE"></f:selectItem>
+							<f:selectItem itemValue="INA" itemLabel="INACTIVE"></f:selectItem>
+						</p:selectOneMenu>
+					</p:column>
+			</p:row>
+				
+			<p:row>
+				<p:column colspan="2" style="text-align:center;">
+				<sec:authorize ifAnyGranted="#{constants.ROLE_ROMS_REF_ITA_SEARCH}">
+					<p:commandButton styleClass="blue blue-icon icon-search icon-af" value="Search" action="search" processIds="*" ajax="false"/>
+				</sec:authorize>
+				<sec:authorize ifAnyGranted="#{constants.ROLE_ROMS_REF_ITA_ADD}">
+					<p:commandButton styleClass="blue blue-icon icon-plus icon-af" value="Add" action="add" processIds="*" ajax="false"/>
+				</sec:authorize>	
+					<p:commandButton styleClass="blue blue-icon icon-refresh icon-af" value="Clear" action="clear" processIds="*" ajax="false"/>
+				</p:column>
+			</p:row>
+		</p:panelGrid>	
+		</h:form>
+		</div>
+		
+		<h:form id="itaResults" >
+			<ui:fragment id="itaResultsFragment">
+				<div id="dataTableDiv" class="dataTableResults" style="height: auto;margin-top:10px;" >
+
+					<p:dataTable
+					id="searchResults" rows="10" rowsPerPageTemplate="10,50,100"
+					value="#{itaExaminers.itaExaminerList}" var="obj"  paginator="true"
+							rowKey="#{obj.idNumber}" selection="#{itaExaminers.selectedItaExaminer}"
+							selectionMode="single" rowIndexVar="rowIndex"
+							rendered="#{itaExaminers.itaExaminerList.size()>0}"
+							currentPageReportTemplate="Results: {startRecord}-{endRecord} of {totalRecords}"
+						     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						     paginatorPosition="bottom">
+					<sec:authorize ifAnyGranted="#{constants.ROLE_ROMS_REF_ITA_EDIT}">
+						 <p:ajax event="rowSelect" oncomplete="clickBtn();" >
+	                   	</p:ajax>
+                   	</sec:authorize>
+                   <!-- 	<p:ajax event="page"  oncomplete="paginate();"/> 	 -->
+                   			
+					<f:facet name="header">
+						ITA Examiner
+					</f:facet>
+				
+					<p:column id="nameCol" headerText="Name" sortBy="personBO.lastName">
+						
+						<b><h:outputText id="lNameValue" value="#{obj.personBO.lastName}"></h:outputText> 
+						<h:outputText value = ", " />
+						<h:outputText id="fNameValue"
+							value="#{obj.personBO.firstName} "> </h:outputText>
+						<h:outputText id="mNameValue"
+							value="#{obj.personBO.middleName}"> </h:outputText>
+						</b>
+						<br/>
+						<h:outputText id="idNum"
+							value="ID#: #{obj.examinerId}"> </h:outputText>
+						
+					</p:column>
+					<p:column id="parishCol" headerText="Region">
+						
+						<h:outputText  value="#{obj.officeLocationCode}"></h:outputText> - 
+						 <h:outputText id="parishValue" value="#{parishMaintenanceServiceAction.getParishDesc(obj.personBO.parishCode)}"></h:outputText> 
+					</p:column>
+					<p:column id="status" headerText="Status" sortBy="statusDescription">
+						
+							<h:outputText id="statId"  value="#{obj.statusDescription}"/>
+					</p:column>
+					<p:column id="LastupdatedId" headerText="Last Updated">
+						<h:outputText value="#{itaExaminerMaintenanceServiceAction.formatDate(obj.auditEntryBO.updateDTime!=null?obj.auditEntryBO.updateDTime:obj.auditEntryBO.createDTime)}" />
+					</p:column>
+					
+					<p:column id="updatedbyId" headerText="Updated By">
+					
+						<h:outputText value="#{obj.auditEntryBO.updateUsername!=null?obj.auditEntryBO.updateUsername:obj.auditEntryBO.createUsername}" /> 
+						 <p:tooltip for="@(tr[role=row][data-ri=#{rowIndex}])" value="Click row to edit record." showEffect="fade" hideEffect="fade" 
+						            shared="false" showDelay="500" style="margin-left:200px;"/> 
+					</p:column>
+					
+					
+				</p:dataTable>
+				 <p:commandButton wigetVar="btnSel" id="pageBtn" value="Do select" style="display:none" processIds="*" update=":itaResults:searchResults" 
+			 	ajax="false" ></p:commandButton>
+				</div>
+				</ui:fragment>
+				<script>
+					function clickBtn()
+						{
+						
+							$("button[id*='editBtn']").click();
+						}
+					function paginate()
+				 	{
+				 		$("button[id*='pageBtn']").click();
+				 	}
+				</script>
+				
+				 <p:commandButton wigetVar="btnSel" id="editBtn" value="Do select" style="display:none" processIds="*" action="edit" 
+			 ajax="false" ></p:commandButton>
+		</h:form>
+		</fieldset>
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+	<var name="mode" class="java.lang.String" />
+	<var name="saved" class="java.lang.String" />
+	<var name="officeRegionList" class="java.util.ArrayList" />
+	<var name="statusList" class="java.util.ArrayList" />
+	<var name="criteria" class="fsl.ta.toms.roms.webservices.roadcompliancy.RoadCompliancyCriteriaBO" />
+	<var name="dataTable" class="org.fsl.datatable.DataTableMemory" />
+	<var name="nameUtil" class="org.fsl.roms.util.NameUtil" />
+	<var name="currentOffenceOutcomeList" class="java.util.ArrayList" />
+	<var name="roadCheckReviewSummaryBean" class="org.fsl.roms.view.RoadCheckReviewSummaryBean" />
+
+	
+
+	<input name="theRecordOffenceOutcomeView" />
+	<input name="theSupportingDetailsView"/>
+	<input name="theInitiateView" />
+	<input name="theMvOffenceOutcomes"/>
+	<input name="theDlOffenceOutcomes"/>
+	<input name="theRlOffenceOutcomes" />
+	<input name="theBdgOffenceOutcomes"/>
+	<input name="theChOffenceOutcomes"/>
+	<input name="theOtOffenceOutcomes"/>
+
+	<on-start>
+		<evaluate expression="nameUtil eq new org.fsl.roms.util.NameUtil()"></evaluate>
+		<evaluate expression="roadCheckServiceAction.isHandHeld(flowRequestContext)"></evaluate>
+		<evaluate expression="roadCheckServiceAction.combineOffenceOutcomes(flowRequestContext)"></evaluate>
+	</on-start>
+
+	<view-state id="roadCheckReview" redirect="false">
+		<transition on="printAssociatedDocs" to="roadCheckReview">
+			<evaluate expression="roadCheckServiceAction.printAssociatedDocs()"></evaluate>
+		</transition>
+		<transition on="uploadAssociatedDoc" to="roadCheckReview">
+			<evaluate expression="roadCheckServiceAction.uploadAssociatedDoc(flowRequestContext)"></evaluate>
+		</transition>
+		<transition on="uploadDoc" to="roadCheckReview">
+			<evaluate expression="roadCheckServiceAction.uploadDoc(flowRequestContext)"></evaluate>
+		</transition>
+		<transition on="cancelUploadDoc" to="roadCheckReview">
+			<evaluate expression="roadCheckServiceAction.cancelUploadDoc(flowRequestContext)"></evaluate>
+		</transition>
+		<transition on="completeRoadCheck" to="completeRoadCheck">
+		</transition>
+		<transition on="toStep5" to="prepareAndPrint"/>
+	</view-state>
+	
+	<action-state id="completeRoadCheck" >
+		<evaluate expression="roadCheckServiceAction.completeRoadCheck(flowRequestContext)"></evaluate>
+		<transition on="success" to="prepareAndPrint"></transition>
+		<transition on="error" to="roadCheckReview"></transition>
+	</action-state>
+	
+	<view-state id="prepareAndPrint" redirect="false">
+		<transition on="printDoc" to="prepareAndPrint">
+			<evaluate expression="roadCheckServiceAction.setOpenReportWindow(true,flowRequestContext)"></evaluate>
+		</transition>
+		<transition on="backToStep4" to="roadCheckReview"></transition>
+	</view-state>
+
+
+	<end-state id="endState" />
+
+
+
+</flow>

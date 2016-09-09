@@ -1,0 +1,551 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"	
+	xmlns:fsl="http://org.fsl.com">
+
+	<ui:fragment id="page">	
+	
+	<!-- <p:fieldset  toggleable="true" legend="#{initiateView.citationPersonLabel}" > -->
+	<div style="width:98%;padding-bottom:10px">
+			<span  class="info-alert" style="font-size:1.4em !important;">
+				* The records displayed are the most current and do not necessarily represent the complete list.
+				  
+				  <c:if test="#{(citResult.getTotalAmountOfROMSOffences() gt 0) or (citResult.getTotalAmountOfROMSOffencesVehicle() gt 0)}">
+					  
+					  
+					  <c:if test="#{(citResult.getTotalAmountOfROMSOffences() gt citResult.getMaxRomsOffences()) and (citResult.getTotalAmountOfROMSOffencesVehicle() gt citResult.getMaxRomsOffences())}">
+					  	<h:outputText value="Currently the last #{citResult.getMaxRomsOffences()} of a total of  #{citResult.getTotalAmountOfROMSOffences()} ROMS offences are being displayed for the person and 
+					  		#{citResult.getMaxRomsOffences()} of a total of #{citResult.getTotalAmountOfROMSOffencesVehicle()} ROMS offences for the vehicle."></h:outputText>
+					  </c:if>
+					  <c:if test="#{not(citResult.getTotalAmountOfROMSOffences() gt citResult.getMaxRomsOffences()) and (citResult.getTotalAmountOfROMSOffencesVehicle() gt citResult.getMaxRomsOffences())}">
+					  	<h:outputText value="Currently the last #{citResult.getMaxRomsOffences()} of a total of  #{citResult.getTotalAmountOfROMSOffencesVehicle()} ROMS offences are being displayed for the vehicle.">
+					  	</h:outputText>
+					  </c:if>
+					  <c:if test="#{(citResult.getTotalAmountOfROMSOffences() gt citResult.getMaxRomsOffences()) and not(citResult.getTotalAmountOfROMSOffencesVehicle() gt citResult.getMaxRomsOffences())}">
+					  	<h:outputText value="Currently the last #{citResult.getMaxRomsOffences()} of a total of  #{citResult.getTotalAmountOfROMSOffences()} ROMS offences are being displayed for the person.">
+					  	</h:outputText>
+					  </c:if>
+					   <c:if test="#{(citResult.getTotalAmountOfROMSOffencesVehicle() le citResult.getMaxRomsOffences() and citResult.getTotalAmountOfROMSOffencesVehicle() ne 0)}">
+					  	<h:outputText value=" All ROMS offences are being displayed for the vehicle."></h:outputText>
+					   </c:if>
+					   <c:if test="#{(citResult.getTotalAmountOfROMSOffences() le citResult.getMaxRomsOffences()) and citResult.getTotalAmountOfROMSOffences() ne 0}">
+					  	<h:outputText value=" All ROMS offences are being displayed for the person."></h:outputText>
+					   </c:if>
+				  </c:if>
+			</span>
+	</div>
+	 <p:accordionPanel id="panelAccordian1" >
+	  <p:tab title="#{initiateView.citationPersonLabel}">
+	<p:panel id="panelPersonOffence"  >
+
+
+	<p:panel rendered="#{taPersonOffences.size() == 0 &amp;&amp; ttmsOffences.size() == 0}">
+			<c:if test="#{roadCheckServiceAction.isDriversLicenceNumAndTrnEntered()}">
+				<h:outputText value="No TA Offences found." style="font-weight:bold;"/>		
+			</c:if>
+			<c:if test="#{!roadCheckServiceAction.isDriversLicenceNumAndTrnEntered()}">
+				<h:outputText value="No drivers licence number or TRN was supplied for the person therefore no offence results will be displayed." style="font-weight:bold;"/>		
+			</c:if>
+						
+	</p:panel>
+	<p:dataTable  var="personOff" value="#{taPersonOffences}" 
+	  					   rows="10" id="personOffList" rendered="#{taPersonOffences.size() > 0}"
+	  					   paginator="true"  paginatorPosition="bottom" rowsPerPageTemplate="10,50,100"
+        paginatorTemplate="Items: {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+        currentPageReportTemplate="Results: {startRecord} - {endRecord} of {totalRecords} TA Offences">  
+	  	
+	  		  		  
+		  <f:facet name="header" > 	   
+		   <span  style="margin: auto 20%; ">	
+		  
+		</span> 
+		  </f:facet> 
+		  <p:column headerText="Offence Date" style="text-align:left; width:20%">  
+		   <h:outputText value="#{roadCheckServiceAction.formatDate(personOff.offenceDateTime)}" />
+		   </p:column>
+		   
+		   <p:column headerText="Offence" style="text-align:left; width:30%">  
+		   	<h:outputText value="#{personOff.offenceShortDesc}" />
+		   </p:column>
+		   
+		    <p:column headerText="Plate Reg No." style="text-align:left; width:15%">  
+		   	<h:outputText value="#{personOff.plateRegNo}" />
+		   </p:column>
+		   
+		   <p:column headerText="Court Date" style="text-align:left; width:20%">  
+		   	<h:outputText value="#{roadCheckServiceAction.formatDateTime(personOff.courtDate)}" />
+		   </p:column>
+		   
+		   <p:column headerText="Court Ruling" style="text-align:left; width:15%">  
+		   	<h:outputText value="#{personOff.courtOutcome}" />
+		   </p:column>
+		   
+		 
+		   
+	  </p:dataTable>
+	    <p:commandButton wigetVar="btnSel1" id="pageBtn1" value="Do select" style="display:none" processIds="*" update="recordOffenceOutcome:tabV:personOffList" 
+			 ajax="false" ></p:commandButton>
+         <script>
+         function paginate1()
+		 	{
+		 		$("button[id*='pageBtn1']").click();
+		 	}
+         </script>
+	  <!--  <div align="right">
+	  	 <p:commandButton id="viewAllPersonOffenceBtn" value="Show All" processIds="*"  ajax="true"  rendered="#{taPersonOffences.size() > 10}"
+	  	 oncomplete="PF('allPersonOffResultdlg').show();"  update=":recordOffenceOutcome:tabV:personOffAllPanel"></p:commandButton>
+		</div> -->
+	</p:panel>
+	<br/>
+		<p:panel id="panelTTMS"  rendered="#{initiateView.includeTTMSResults}">
+	 <p:dataTable  var="ttmsOffence" value="#{ttmsOffences}"
+	  					   rows="10" id="chTTMSList" rendered="#{ttmsOffences.size() > 0}"
+	  					   paginator="true"  paginatorPosition="bottom" rowsPerPageTemplate="10,50,100"
+        paginatorTemplate="Items: {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+        currentPageReportTemplate="Results: {startRecord} - {endRecord} of {totalRecords} Traffic Ticket Offences">  
+	  				  
+	  	
+		  <f:facet name="header" > 
+		 <span  style="margin: auto 20%; "/>
+		
+		  </f:facet> 
+		   <p:column headerText="Issue Date" style="text-align:left; width:20%">  
+		   	 <h:outputText value="#{ttmsOffence.issueDate}" />
+		   </p:column>
+		   
+		    <p:column headerText="Ticket NO" style="text-align:left; width:20%">  
+		   	 <h:outputText value="#{ttmsOffence.ticketNo}" />
+		   </p:column>
+		   
+		   <p:column headerText="Offence" style="text-align:left; width:40%">  
+		   	<h:outputText value="#{ttmsOffence.offenceDesc}" />
+		   </p:column>
+		   
+		   <p:column headerText="Ticket Status" style="text-align:left; width:40%">  
+		   	<h:outputText value="#{ttmsOffence.statusDesc}" />
+		   </p:column>
+		   
+		      
+		  
+	  </p:dataTable>
+	  
+	  <c:if test="#{ttmsOffences.size() le 0}">
+	  	  <h:outputText value="No Traffic Ticket Records found." style="font-weight:bold;"/>
+	  	</c:if>
+	  <p:commandButton wigetVar="btnSel2" id="pageBtn2" value="Do select" style="display:none" processIds="*" update="recordOffenceOutcome:tabV:chTTMSList" 
+			 ajax="false" ></p:commandButton>
+         <script>
+         function paginate2()
+		 	{
+		 		$("button[id*='pageBtn2']").click();
+		 	}
+         </script>
+	  <!--  <div align="right">
+	  	<p:commandButton id="viewAllTTMSOffenceBtn" value="Show All" processIds="*" 
+	  	 ajax="true"   oncomplete="PF('allTTMSOffResultdlg').show();"  rendered="#{ttmsOffences.size() > 10}"
+	  	 update=":recordOffenceOutcome:tabV:ttmsOffAllPanel"></p:commandButton>
+	 	</div>-->
+	  </p:panel>
+	  </p:tab>
+	  </p:accordionPanel>
+	 <!--  </p:fieldset> -->
+	  
+	  <!-- <p:fieldset  toggleable="true" legend="#{initiateView.citationVehicleLabel}" > -->
+	  <p:accordionPanel id="panelAccordian2" >
+	  <p:tab title="#{initiateView.citationVehicleLabel}">
+	  <p:panel id="panelVehicleOffence"  >
+	  <p:panel rendered="#{taVehicleOffences.size() == 0}">
+						<h:outputText value="No TA Offences Records found." style="font-weight:bold;"/>
+	 </p:panel>
+	 <p:dataTable var="vehicleOffence" value="#{taVehicleOffences}" 
+	  					   rows="10" id="chVehicleOffenceList" rendered="#{taVehicleOffences.size() > 0}"
+	  					   paginator="true"  paginatorPosition="bottom" rowsPerPageTemplate="10,50,100"
+        paginatorTemplate="Items: {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+        currentPageReportTemplate="Results: {startRecord} - {endRecord} of {totalRecords} TA Offences">  
+	  				  
+		  <f:facet name="header" > 
+		  
+		  	 <span  style="margin: auto 20%; "/>
+		  </f:facet> 
+		   <p:column headerText="Offence Date" style="text-align:left; width:10%">  
+		   <h:outputText value="#{roadCheckServiceAction.formatDate(vehicleOffence.offenceDateTime)}" />
+		   </p:column>
+		   
+		   	<p:column headerText="Offender" style="text-align:left;width:15%">  
+		   <h:outputText value="#{vehicleOffence.offenderFullName}" />
+		   </p:column>
+		   
+  
+		   <p:column headerText="Person Role" style="text-align:left;width:15%">  
+		   	<h:outputText value="#{vehicleOffence.offenderType}" />
+		   </p:column>
+		   
+		   <p:column headerText="Offence" style="text-align:left; width:30%">  
+		   	<h:outputText value="#{vehicleOffence.offenceShortDesc}" />
+		   </p:column>
+		   
+		   <p:column headerText="Court Date" style="text-align:left; width:15%">  
+		   	<h:outputText value="#{roadCheckServiceAction.formatDateTime(vehicleOffence.courtDate)}" />
+		   </p:column>
+		   
+		   <p:column headerText="Court Ruling" style="text-align:left; width:20%">  
+		   	<h:outputText value="#{vehicleOffence.courtOutcome}" />
+		   </p:column>
+	  </p:dataTable>
+	  
+	   <p:commandButton wigetVar="btnSel3" id="pageBtn3" value="Do select" style="display:none" processIds="*" update="recordOffenceOutcome:tabV:chVehicleOffenceList" 
+			 ajax="false" ></p:commandButton>
+         <script>
+         function paginate3()
+		 	{
+		 		$("button[id*='pageBtn3']").click();
+		 	}
+         </script>
+	  	  <!-- <div align="right">
+	  	<p:commandButton id="viewAllVehicleOffenceBtn" value="Show All" processIds="*" ajax="true" 
+ oncomplete="PF('allVehicleOffResultdlg').show();"  rendered="#{taVehicleOffences.size() > 10}"
+	  	 update=":recordOffenceOutcome:tabV:vehicleOffAllPanel"></p:commandButton>
+		</div>-->
+	</p:panel>
+	</p:tab>
+	</p:accordionPanel>
+<!-- </p:fieldset> -->
+	
+		<p:panel>
+	    					 <div align="left">
+	    				<h:outputText value="Indicate Action to be taken " style="font-weight:bold;"/> <br/>
+	    			 <p:selectOneRadio id="customRadioCH" value="#{recordOffenceOutcomeView.chActionToBeTaken}" style="margin-bottom: 0px;">  
+	      					  <f:selectItem itemLabel="All is in Order" itemValue="A" />  
+	      					  <f:selectItem itemLabel="Record Offences and Outcomes" itemValue="R" />     
+	      					  
+	      					  <p:ajax  oncomplete="addCHRowOnComplete(); updateCHTable();" listener="#{roadCheckServiceAction.indicateActionCH}"  update=":recordOffenceOutcome:tabV:panelDataTableCH :recordOffenceOutcome:panelButtons"></p:ajax> 
+	  					  </p:selectOneRadio>  
+	  					  
+	  					 </div>
+  
+	    				</p:panel>
+	    				<br/>
+	    				 <p:panel id="panelDataTableRLErr">
+						<h:outputText value="#{recordOffenceOutcomeView.chTableError}" id="chTableErr" style="display:none"/> 
+						<h:outputText value="#{chOffenceList.size()}" id="chOffListSize" style="display:none"/> 
+						 <h:outputText value="#{recordOffenceOutcomeView.chOpenRecordCount}" style="display:none"/>
+						</p:panel>
+						<p:panel id="panelMsgCH">
+						<p:messages id="msgMV" closable="true"/>
+						</p:panel>
+				 <p:panel id="panelDataTableCH" header="Record Offence and Outcomes" >
+	  					  
+	  					  <p:panel rendered="#{recordOffenceOutcomeView.chActionToBeTaken=='R' &amp;&amp; chOffenceList.size() == 0}">
+	    			 		<h:outputText value="No Offence related to Citation History Check" style="font-weight:bold;"/>
+	    			 	</p:panel>
+	  					  
+	  					  <p:dataTable var="offOutcome" value="#{chOffenceOutcomes}" editable="true" rendered="#{recordOffenceOutcomeView.chActionToBeTaken=='R' &amp;&amp; chOffenceList.size() > 0}"
+	  					   rows="50" id="chOffenceOutcomeList" >  
+  
+						       <f:facet name="header" >  
+						           <div align="left">
+						             <h:outputText value=" Offences/Outcomes Observed " style="padding-right:30px"/>  
+						           <p:commandButton icon="ui-icon-plusthick" id="addCHBtn"  value="Add" action="chAddOffenceOutcome" processIds="*"  ajax="true" style="padding-right:20px" oncomplete="addCHRowOnComplete();" update=":recordOffenceOutcome:tabV:panelDataTableCH :recordOffenceOutcome:panelButtons" disabled="#{recordOffenceOutcomeView.chOpenRecordCount > 0 || chOffenceList.size() == chOffenceOutcomes.size()}"/>
+						           <p:commandButton icon="ui-icon-trash"  id="deleteCHBtn"  value="Delete" action="chDeleteOffenceOutcome" processIds="*"  ajax="true" update=":recordOffenceOutcome:tabV:panelDataTableCH :recordOffenceOutcome:panelButtons" disabled="#{!recordOffenceOutcomeView.chOffenceOutcomeSelected || recordOffenceOutcomeView.chOpenRecordCount > 0 || chOffenceOutcomes.size() == 0}"
+						           	/>
+						           </div>
+						           
+						       </f:facet>  
+						 
+						 		<p:ajax event="rowEditInit"  listener="#{roadCheckServiceAction.initRowEditCH}" oncomplete="updateCHTable();disablePenCH();disableCheckBoxCH();"/>
+						 		  <p:ajax event="rowEdit" listener="#{roadCheckServiceAction.editChSelectedOffenceOutcome}"  update=":recordOffenceOutcome:tabV:panelMsgCH :recordOffenceOutcome:tabV:chTableErr" oncomplete="updateCHTableEdit();editAndCancelHideCH();"/>  
+						       <p:ajax event="rowEditCancel" listener="#{roadCheckServiceAction.cancelChEditSelectedOffenceOutcome}" update=":recordOffenceOutcome:tabV:panelMsgCH" oncomplete="updateCHTable();selectCHAll();cancelHideCH();"/>  
+						       
+						 		  <p:column  style="width:6%" id="checkBoxes">  
+						         <f:facet  name="header">
+									 <p:selectBooleanCheckbox id="chSelectAllBox" value="#{recordOffenceOutcomeView.chSelectAllOffenceOutcome}" onchange="selectCHAll();" disabled="#{recordOffenceOutcomeView.chOpenRecordCount > 0}" >
+									 		
+									 </p:selectBooleanCheckbox> 
+									</f:facet>
+						                <p:selectBooleanCheckbox value="#{offOutcome.rowSelected}" styleClass="ui-corner-checkbox"> 
+						                	<p:ajax oncomplete="selectCHRow();" />
+						                </p:selectBooleanCheckbox> 
+						            
+						       </p:column>  
+						     
+						       <p:column headerText="Offence(s)" style="width:41%; text-align:left">  
+						         
+						                  <p:cellEditor>  
+						               <f:facet name="output">  
+						                     <h:outputText value="#{offOutcome.offenceShortDescription}" /> 
+						               </f:facet>  
+						               <f:facet name="input">  
+						                  <p:selectOneMenu style="width:100%"
+								id="comboOffenceInput" value="#{offOutcome.offenceId}">
+								<f:selectItem itemValue="" itemLabel="[Select One]" />
+								<f:selectItems var="offence" itemValue="#{offence.offenceId}" itemLabel="#{offence.shortDescription}" value="#{chOffenceList}" />
+									</p:selectOneMenu>  
+						               </f:facet>  
+						           </p:cellEditor>
+						            
+						       </p:column>  
+						         <p:column headerText="Issue Summons" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">  
+						                   <f:subview rendered="#{offOutcome.issueSummons}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.issueSummons}"/>  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column> 
+						        <p:column headerText="Issue Warning Notice" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">    
+						                   <f:subview rendered="#{offOutcome.issuewWarningNotice}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.issuewWarningNotice}"/>  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column>  
+						       <p:column headerText="Warning No Prosecution" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">  
+						                   <f:subview rendered="#{offOutcome.issueWarningNP}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.issueWarningNP}"/>  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column> 
+						       <p:column headerText="Warning For Prosecution" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">   
+						                    <f:subview rendered="#{offOutcome.warnForProsecution}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.warnForProsecution}"/>  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column>
+<!-- 						        <p:column headerText="Remove Plate" style="width:10%">   -->
+<!-- 						           <p:cellEditor>   -->
+<!-- 						               <f:facet name="output">    -->
+<!-- 						                     <f:subview rendered="#{offOutcome.removePlate}"> -->
+<!-- 												<i class="icon icon-check icon-1x"></i> -->
+<!-- 											</f:subview> -->
+<!-- 						               </f:facet>   -->
+						             
+<!-- 						               <f:facet name="input">   -->
+<!-- 						                   <p:selectBooleanCheckbox value="#{offOutcome.removePlate}" disabled="#{initiateView.activityType == 'U'}"/>   -->
+<!-- 						               </f:facet>   -->
+<!-- 						           </p:cellEditor>   -->
+<!-- 						       </p:column>  -->
+						         <p:column>  
+           							 <p:rowEditor id="chRowEditor"/>  
+           							  <p:tooltip for="chRowEditor" value="Click to Add/Edit" showEffect="fade" hideEffect="fade" /> 
+        							</p:column>  
+						   </p:dataTable>
+						   
+						   <p:commandButton wigetVar="allBtnSelCH" id="allSelectBtnCH" value="Do select" style="display:none" processIds="*" action="chSelectAllOffenceOutcome" 
+			 ajax="true" update=":recordOffenceOutcome:tabV:panelDataTableCH" ></p:commandButton>
+			 
+			    <p:commandButton wigetVar="selectCH" id="selectBtnCHRow" value="Do select" style="display:none" processIds="*" action="chSelectRowOffenceOutcome" 
+			 ajax="true" update=":recordOffenceOutcome:tabV:panelDataTableCH"> </p:commandButton>
+			 
+			 
+			  <p:commandButton wigetVar="updateCHTableVar" id="updateCHTable" value="Do select2" style="display:none" processIds="*" 
+			 	ajax="true" update=":recordOffenceOutcome:tabV:chOffenceOutcomeList:addCHBtn :recordOffenceOutcome:tabV:chOffenceOutcomeList:deleteCHBtn :recordOffenceOutcome:tabV:chOffenceOutcomeList:chSelectAllBox :recordOffenceOutcome:panelButtons :recordOffenceOutcome:progressPanel"
+			 	>
+			 </p:commandButton>
+			
+			 <script>
+			//<![CDATA[
+			           
+			           
+			     $("document").ready( function(){
+ 			
+ 					$('#recordOffenceOutcome\\:tabV\\:panelAccordian1\\:personOffList').forceDatatablePagin();
+ 					$('#recordOffenceOutcome\\:tabV\\:panelAccordian1\\:chTTMSList').forceDatatablePagin();
+ 					$('#recordOffenceOutcome\\:tabV\\:panelAccordian2\\:chVehicleOffenceList').forceDatatablePagin();
+ 				});
+			    function selectCHRow(){
+			    $("button[id*='selectBtnCHRow']").click();	
+			    }
+			 	function selectCHAll(){
+			 	$("button[id*='allSelectBtnCH']").click()			 	
+			 	}
+			 	function addCHRowOnComplete() {
+					var x = $('[name="recordOffenceOutcome:tabV:customRadioCH"]:checked').val();
+					var y = $('#recordOffenceOutcome\\:tabV\\:chOffListSize').text();
+			 		if((x=='R') && (y > 0)){
+			 		  jQuery('#recordOffenceOutcome\\:tabV\\:chOffenceOutcomeList\\:0\\:chRowEditor .ui-icon-pencil')[0].id = 'supercoolnewrowCh';
+			 		  jQuery('#supercoolnewrowCh').trigger('click');
+			 		}
+			 	}
+			 	
+			 	function updateCHTableEdit(){
+			 		var x = $('#recordOffenceOutcome\\:tabV\\:chTableErr').text();
+			 		
+			 		if(x=='false'){
+				 		$("button[id*='updateCHTable']").click();	
+			 		}
+				 }
+			 	
+				function updateCHTable(){
+			 		
+				 		$("button[id*='updateCHTable']").click();	
+			 		
+				 }
+			 	
+				function disableCheckBoxCH(){
+			 		$('#recordOffenceOutcome\\:tabV\\:chOffenceOutcomeList .ui-corner-checkbox').each(function(){
+			        	 $(this).css('display','none');
+			        	 });
+			 		
+	        	 }
+			 	function disablePenCH(){
+		        	 $('#recordOffenceOutcome\\:tabV\\:chOffenceOutcomeList .ui-icon-pencil').each(function(){
+		        	 $(this).css('display','none');
+		        	 });
+	        	 }
+			 	function cancelHideCH(){
+		        	 $('#recordOffenceOutcome\\:tabV\\:chOffenceOutcomeList .ui-icon-pencil').each(function(){
+		        	 //$(').addClass('rat');
+		        	 // $(this).css({backgroundColor: '#0099ff'});
+		        	 $(this).css('display','');
+		        	 });
+		        	 
+		        	 $('#recordOffenceOutcome\\:tabV\\:chOffenceOutcomeList .ui-corner-checkbox').each(function(){
+			        	 $(this).css('display','');
+			        	 });
+	        	 }
+	        	 
+	        	 function editAndCancelHideCH(){
+				 		var x = $('#recordOffenceOutcome\\:tabV\\:chTableErr').text();
+				 		//alert(x);
+				 		if(x=='false'){
+				 			cancelHideCH();
+				 		}
+					 }
+	        	//]]>
+			 </script>
+			
+			 </p:panel>
+	  	
+	  	<p:panel id="personOffAllPanel">
+	  		 <p:dialog id="personOffAllDialog" header="Offence Related to Person [Show All]" widgetVar="allPersonOffResultdlg" resizable="false" modal="true" width="70%">
+				  <p:dataTable var="personoffAll" value="#{taPersonOffences}" 
+	  					   rows="10" id="chPersonOffenceAllList" 
+	  					   paginator="true"  paginatorPosition="bottom" rowsPerPageTemplate="10,20,30"
+        paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+        currentPageReportTemplate="Results: {startRecord} - {endRecord} of {totalRecords}">  
+	  						  
+		  <f:facet name="header" > 
+		   <div align="left">
+		  	 <h:outputText value="TA Offences" style="text-align:left"/>  
+		   </div>
+		  </f:facet> 
+		  <p:column headerText="Date" style="text-align:left; width:20%">  
+		   <h:outputText value="#{roadCheckServiceAction.formatDate(personoffAll.offenceDateTime)}" />
+		   </p:column>
+		   
+		   <p:column headerText="Offence" style="text-align:left; width:30%">  
+		   	<h:outputText value="#{personoffAll.offenceShortDesc}" />
+		   </p:column>
+		   
+		    <p:column headerText="Plate Reg No." style="text-align:left; width:15%">  
+		   	<h:outputText value="#{personoffAll.plateRegNo}" />
+		   </p:column>
+		   
+		   <p:column headerText="Court Date" style="text-align:left; width:20%">  
+		   	<h:outputText value="#{roadCheckServiceAction.formatDateTime(personoffAll.courtDate)}" />
+		   </p:column>
+		   
+		   <p:column headerText="Court Ruling" style="text-align:left; width:15%">  
+		   	<h:outputText value="#{personoffAll.courtOutcome}" />
+		   </p:column>
+		   
+		 
+		   
+	  </p:dataTable> 
+		</p:dialog>
+		</p:panel>
+		
+			<p:panel id="ttmsOffAllPanel">
+	  		 <p:dialog id="ttmsOffAllDialog" header="TTMS Offence Related to Person [Show All]" widgetVar="allTTMSOffResultdlg" resizable="false" modal="true" width="70%">
+				  <p:dataTable  var="ttmsoffAll" value="#{ttmsOffences}" 
+	  					   rows="10" id="chTTMSOffenceAllList" 
+	  					   paginator="true"  paginatorPosition="bottom" rowsPerPageTemplate="10,20,30"
+        paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+        currentPageReportTemplate="Results: {startRecord} - {endRecord} of {totalRecords}">  
+	  						  
+		  <f:facet name="header" > 
+		   <div align="left">
+		   	<h:outputText value="Traffic Ticket Offences" />  
+		 </div>
+		  </f:facet> 
+		   <p:column headerText="Date" style="text-align:left; width:20%">  
+		   	 <h:outputText value="#{ttmsoffAll.issueDate}" />
+		   </p:column>
+		   
+		   <p:column headerText="Offence" style="text-align:left; width:40%">  
+		   	<h:outputText value="#{ttmsoffAll.offenceDesc}" />
+		   </p:column>
+		   
+		   <p:column headerText="Ticket Status" style="text-align:left; width:40%">  
+		   	<h:outputText value="#{ttmsoffAll.statusDesc}" />
+		   </p:column>  
+	  </p:dataTable> 
+		</p:dialog>
+		</p:panel>
+		
+		<p:panel id="vehicleOffAllPanel">
+	  		 <p:dialog id="vehicleOffAllDialog" header="Offence Related to Vehicle [Show All]" widgetVar="allVehicleOffResultdlg" resizable="false" modal="true" width="70%">
+				  <p:dataTable var="vehicleoffAll" value="#{taVehicleOffences}" 
+	  					   rows="10" id="chVehicleOffenceAllList" 
+	  					   paginator="true"  paginatorPosition="bottom" rowsPerPageTemplate="10,20,30"
+        paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+        currentPageReportTemplate="Results: {startRecord} - {endRecord} of {totalRecords}">  
+	  						  
+		   <f:facet name="header" > 
+		   <div align="left">
+		  	 <h:outputText value="TA Offences" />  
+		  	 </div>
+		  </f:facet> 
+		   <p:column headerText="Date" style="text-align:left; width:20%">  
+		   <h:outputText value="#{roadCheckServiceAction.formatDate(vehicleoffAll.offenceDateTime)}" />
+		   </p:column>
+		   
+		   <p:column headerText="Offender" style="text-align:left; width:20%">  
+		   <h:outputText value="#{vehicleoffAll.offenderFullName}" />
+		   </p:column>
+		   
+  
+		   <p:column headerText="Offence" style="text-align:left; width:30%">  
+		   	<h:outputText value="#{vehicleoffAll.offenderType}" />
+		   </p:column>
+		   
+		   <p:column headerText="Court Date" style="text-align:left; width:30%">  
+		   	<h:outputText value="#{roadCheckServiceAction.formatDateTime(vehicleoffAll.courtDate)}" />
+		   </p:column>
+		   
+		   <p:column headerText="Court Ruling" style="text-align:left; width:20%">  
+		   	<h:outputText value="#{vehicleOffence.courtOutcome}" />
+		   </p:column>  
+	  </p:dataTable> 
+		</p:dialog>
+		</p:panel>
+</ui:fragment>
+</ui:composition>

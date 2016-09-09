@@ -1,0 +1,628 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+		xmlns:fsl="http://org.fsl.com"
+	template="/WEB-INF/newTemplate.xhtml">
+	
+	<ui:define name="title">Road Check</ui:define>
+	<ui:define name="pageHeader">Perform Road Check</ui:define>
+	<ui:define name="content">
+
+	
+	<ui:fragment id="supportingDetailsFrag" >	 
+		<h:form styleClass="form" id="addSupportingDetails" >
+			 <div style="padding-bottom:30px">
+              <p:panel id="progressPanel">
+              <ol class="progtrckr" data-progtrckr-steps="5">
+              
+    			<li class="progtrckr-done" num="1">
+	    			<p:commandLink action="backToInitiate" id="backToInititate" processIds="*" ajax="false" >
+	    			Initiate Road Check
+	    			</p:commandLink>
+    			</li>
+				 
+				<li class="progtrckr-done" num="2">
+					 <p:commandLink action="back" id="backToRecordOff" processIds="*" ajax="false" >
+					 Record Offences &amp; Outcomes
+					 </p:commandLink>
+				</li>
+				 <li class="progtrckr-current" num="3">Add Supporting Details</li>
+				 	
+				<c:if test="${initiateView.completeSupportingDetails}">
+			 	<li class="progtrckr-done" num="4">
+				 	 <p:commandLink action="backToReviewSummary" id="backToReviewSum" processIds="*" ajax="false" rendered="#{initiateView.completeSupportingDetails}">
+				 	 Review Summary
+					 </p:commandLink>
+				 </li>
+				 </c:if>
+				 <c:if test="${!initiateView.completeSupportingDetails}">
+					<li class="progtrckr-todo" num="4">Review Summary</li>
+				</c:if>
+				
+				
+				 <li class="progtrckr-todo" num="5">Prepare &amp; Print Documents</li>
+			 </ol>
+            </p:panel>
+			</div>
+		<p:panel id="panelSupportingDetails" header="AddSupporting Details" >
+		
+		<p:messages id="msg" closable="true" autoUpdate="true"/>
+			
+ 		<p:outputPanel id="customPanel">  
+    <br/><div align="left" style="padding-bottom: 10px;"><h:outputText value="Step 3: Add Supporting Details - " styleClass="progress-label"/> 
+    <h:outputText value="#{nameUtil.getLastNameCapsFirstNameMiddleName(initiateView.firstName, initiateView.lastName , initiateView.middleName)}" id="Name" styleClass="progress-label-key"/>
+		<f:subview rendered="#{!initiateView.trn.trim().equalsIgnoreCase('')}"	>
+		 <h:outputText value="[" styleClass="progress-label-key"/><h:outputText value="#{initiateView.trn}" id="trn"  styleClass="progress-label-key"/> 
+		 <h:outputText value="]" styleClass="progress-label-key"/>
+    	</f:subview>
+    </div>
+    <p:panel  id="siezurePanel" header="Vehicle Seizure Details" style="vertical-align: top; text-align:left;" rendered="#{recordOffenceOutcomeView.warningNoticeSelected}">  
+    	 <h2><span style=" text-align:left;">Vehicle Seizure Details</span></h2>
+    	<p:panelGrid>
+    	  	<p:row >
+				<p:column> 
+					<h:outputText value="Parish of Pound: " /><h:outputText value=" * " styleClass="required"/>   
+				</p:column>
+    			<p:column colspan="2" > 
+    				<p:selectOneMenu style="width:360px;"
+								id="comboPoundParish" value="#{supportingDetailsView.selectedPoundParishCode}">
+								<f:selectItem itemValue="" itemLabel="[Select One]" />
+								<f:selectItems var="poundParish" itemValue="#{poundParish.parishCode}" itemLabel="#{poundParish.description}" value="#{parishList}" />
+								<p:ajax update="comboPound" listener="#{roadCheckServiceAction.changePoundParish}"></p:ajax>
+					</p:selectOneMenu>
+    			</p:column>
+   			</p:row>
+    		<p:row>
+    			<p:column> <h:outputText value="Pound: " /><h:outputText value=" * " styleClass="required"/>   </p:column>
+    			<p:column colspan="2" > 
+    				<p:selectOneMenu style="width:360px;"
+								id="comboPound" value="#{supportingDetailsView.poundId}" >
+								<f:selectItem itemValue="" itemLabel="[Select One]" />
+								<f:selectItems var="pound" itemValue="#{pound.poundId}" itemLabel="#{pound.poundName}" value="#{poundList}" />
+									<p:ajax update="siezurePanel"></p:ajax>
+					</p:selectOneMenu>
+				</p:column>
+    		</p:row>
+    		<p:row>
+   				<p:column>
+   					Vehicle Moved By:<h:outputText value=" * " styleClass="required"/>
+   				</p:column>
+   				<p:column colspan="2" >
+	    			<p:selectOneMenu id="comboWhoCarriedVeh" value="#{supportingDetailsView.vehicleMoverType}" style="width:360px;">
+								<f:selectItem itemValue="" itemLabel="[Select One]" />
+								<f:selectItems var="vehicleMoverPersonType" value="#{vehcileMoversList}" />
+								<p:ajax update="siezurePanel" listener="#{roadCheckServiceAction.changeWhoCarriedVehicle}"></p:ajax>
+					</p:selectOneMenu>
+					
+				</p:column>
+  			</p:row>
+  			<p:row >
+				<p:column style="display:#{supportingDetailsView.vehicleMoverType eq 'WD'?'table-cell':'none'}"> 
+					<h:outputText value="Wrecker Company Parish: " /><h:outputText value=" * " styleClass="required"/>   
+				</p:column>
+    			<p:column colspan="2" style="display:#{supportingDetailsView.vehicleMoverType eq 'WD'?'table-cell':'none'}"> 
+    				<p:selectOneMenu style="width:360px;"
+								id="comboWreckerParish" value="#{supportingDetailsView.selectedWreckerParishCode}">
+								<f:selectItem itemValue="" itemLabel="[Select One]" />
+								<f:selectItems var="wreckerParish" itemValue="#{wreckerParish.parishCode}" itemLabel="#{wreckerParish.description}" value="#{wreckingParishList}" />
+								<p:ajax update="comboWrecking" listener="#{roadCheckServiceAction.changeWreckerParish}"></p:ajax>
+					</p:selectOneMenu>
+    			</p:column>
+   			</p:row>
+			<p:row >
+				<p:column style="display:#{supportingDetailsView.vehicleMoverType eq 'WD'?'table-cell':'none'}"> 
+					<h:outputText value="Wrecker Company: " /><h:outputText value=" * " styleClass="required"/>   
+				</p:column>
+    			<p:column colspan="2" style="display:#{supportingDetailsView.vehicleMoverType eq 'WD'?'table-cell':'none'}"> 
+    				<p:selectOneMenu style="width:360px;"
+								id="comboWrecking" value="#{supportingDetailsView.wreckingCompanyId}">
+								<f:selectItem itemValue="" itemLabel="[Select One]" />
+								<f:selectItems var="wrecking" itemValue="#{wrecking.wreckingCompanyId}" itemLabel="#{wrecking.companyName}" value="#{wreckingList}" />
+								<p:ajax update="siezurePanel"></p:ajax>
+					</p:selectOneMenu>
+    			</p:column>
+   			</p:row>
+   			<p:row rendered="#{supportingDetailsView.vehicleMoverType eq 'WD' }">
+    			<p:column > 
+    				<h:outputText value="Wrecker Driver's DLN: " />   
+    			</p:column>
+    			<p:column style="width:105px"> 
+    				<p:inputText value="#{supportingDetailsView.vehicleMoverWreckerBO.dlNo}" id="txtVehicleWDMover" maxlength="9" size="11" style="text-align: left;width:65px;margin:0 0 0 0px;" />
+					<p:commandLink action="searchWreckerDLN" id="searchWreckerDLNLink" update="siezurePanel"  processIds="*" ajax="true"   style="width: 10px; margin: 0px; text-align: center; padding: 0px;">
+   		  					<img id="trnSearchWreckerDriverIcon" src="${request.contextPath}/images/search-icon.gif"  alt="Input search criteria" style="margin:0px;padding:0px;"></img>
+    	 			 </p:commandLink>
+    	 					 <p:tooltip for="searchWreckerDLNLink" value="Enter Driver's Licence Number and click to search" showEffect="fade" hideEffect="fade" />
+    			</p:column>
+    			<p:column rendered="#{supportingDetailsView.vehicleMoverType eq 'WD' and supportingDetailsView.vehicleMoverWreckerBO ne null and supportingDetailsView.vehicleMoverWreckerBO.dlNo ne null and supportingDetailsView.vehicleMoverWreckerBO.dlNo ne '' and supportingDetailsView.vehicleMoverWreckerBO.getFullName()  ne null and supportingDetailsView.vehicleMoverWreckerBO.getFullName()  ne ''}"> 
+    				<span class="info-alert" style="width:auto">
+   						<h:outputText styleClass="outputText" value="#{supportingDetailsView.vehicleMoverWreckerBO.getFullName() }" />
+   					</span>
+    			</p:column>
+   			</p:row>
+   			
+		    <p:row rendered="#{supportingDetailsView.vehicleMoverType eq 'WD'}">
+    			<p:column > 
+    				<h:outputText value="Wrecker Vehicle Plate Registration #: " /><h:outputText value=" * " styleClass="required"/>   </p:column>
+    			<p:column style="width:105px"> 
+    				<p:inputText value="#{supportingDetailsView.wreckerVehicleBO.plateRegNo}" id="txtWreckerVehicle" maxlength="9" size="11" style="text-align: left;width:65px;margin:0 0 0 0px;text-transform: uppercase" />
+				<p:commandLink action="searchWreckerVehcile" id="searchWreckerVehcileLink" processIds="*" update="siezurePanel"   style="width: 10px; margin: 0px; text-align: center; padding: 0px;">
+   		  					<img id="trnSearchWreckerVehicleIcon" src="${request.contextPath}/images/search-icon.gif"  alt="Input search criteria" style="margin:0px;padding:0px;"></img>
+    	 			</p:commandLink>
+    	 			<p:tooltip for="searchWreckerVehcileLink" value="Enter Plate Registration # and click to search" showEffect="fade" hideEffect="fade" />					 	
+    			</p:column>
+    			<p:column rendered="#{supportingDetailsView.vehicleMoverType eq 'WD' and supportingDetailsView.wreckerVehicleBO ne null
+   										and supportingDetailsView.wreckerVehicleBO.plateRegNo ne null and supportingDetailsView.wreckerVehicleBO.plateRegNo ne '' and supportingDetailsView.wreckerVehicleBO.makeDescription ne null and supportingDetailsView.wreckerVehicleBO.makeDescription ne ''}"> 
+    				<span class="info-alert" style="width:auto">
+						<h:outputText styleClass="outputText" value="#{'Make:'.concat(supportingDetailsView.wreckerVehicleBO.makeDescription).concat('; Model:').concat(supportingDetailsView.wreckerVehicleBO.model).concat('; Type:').concat(supportingDetailsView.wreckerVehicleBO.typeDesc) }" />
+					</span>
+    			</p:column>
+   			</p:row>
+   			
+   			<p:row rendered="#{supportingDetailsView.vehicleMoverType eq 'TA' }">
+    			<p:column > 
+    				<h:outputText value="Inspector: " /><h:outputText value=" * " styleClass="required"/>   
+    			</p:column>
+    			<p:column > 
+    				<p:selectOneMenu style="width:360px;" rendered="#{initiateView.getActivityType().equalsIgnoreCase('s')}"
+								id="comboVehicleMoverTA" value="#{supportingDetailsView.vehicleMoverTABO}" converter="PersonConverter">
+								<f:selectItem itemValue="#{emptyPerson}" itemLabel="[Select One]" />
+								<f:selectItems value="#{vehicleMoverTAStaffList}" var="taStaff" itemLabel="#{taStaff.fullName}" itemValue="#{taStaff}"/>
+								<p:ajax update="siezurePanel"></p:ajax>
+					</p:selectOneMenu>
+					<p:autoComplete global="false" id="txtTAStaff" scrollHeight="200"  size="66" value="#{supportingDetailsView.vehicleMoverTABO}"
+					completeMethod="#{roadCheckServiceAction.roadCheckTaStaffAutoCompleteSupportingDetails}" converter="AutoCompletePersonConverter"
+					var="p" itemValue="#{p}" forceSelection="true" itemLabel="#{p.fullName}"
+					rendered="#{initiateView.getActivityType().equalsIgnoreCase('u')}" >
+								<p:ajax event="query" global="false"></p:ajax>   
+						  </p:autoComplete>
+    			</p:column>
+   			</p:row>
+   			<p:row rendered="#{supportingDetailsView.vehicleMoverType eq 'PO' }">
+    			<p:column > 
+    				<h:outputText value="Police Officer: " /><h:outputText value=" * " styleClass="required"/>   
+    			</p:column>
+    			<p:column > 
+    				<p:selectOneMenu style="width:360px;" rendered="#{initiateView.getActivityType().equalsIgnoreCase('s')}"
+								id="comboVehicleMoverPO" value="#{supportingDetailsView.vehicleMoverPOBO}" converter="PersonConverter">
+								<f:selectItem itemValue="#{emptyPerson}" itemLabel="[Select One]" />
+								<f:selectItems value="#{vehicleMoverPoliceStaffList}" var="police" itemLabel="#{police.fullName}" itemValue="#{police}"/>
+								<p:ajax update="siezurePanel"></p:ajax>
+					</p:selectOneMenu>
+					<p:autoComplete global="false" id="txtPoliceStaff" scrollHeight="200"  size="66" value="#{supportingDetailsView.vehicleMoverPOBO}"
+					completeMethod="#{roadCheckServiceAction.roadCheckPoliceStaffAutoComplete}" converter="AutoCompletePersonConverter"
+					var="p" itemValue="#{p}" forceSelection="true" itemLabel="#{p.fullName}"
+					rendered="#{initiateView.getActivityType().equalsIgnoreCase('u')}" minQueryLength="3">
+								<p:ajax event="query" global="false"></p:ajax>   
+					</p:autoComplete>
+    			</p:column>
+   			</p:row>
+   			<p:row rendered="#{supportingDetailsView.vehicleMoverType eq 'IE' }">
+    			<p:column > 
+    				<h:outputText value="ITA Examiner: " /><h:outputText value=" * " styleClass="required"/>   
+    			</p:column>
+    			<p:column > 
+    				<p:selectOneMenu style="width:360px;" rendered="#{initiateView.getActivityType().equalsIgnoreCase('s')}"
+								id="comboVehicleMoverITA" value="#{supportingDetailsView.vehicleMoverITABO}" converter="PersonConverter">
+								<f:selectItem itemValue="#{emptyPerson}" itemLabel="[Select One]" />
+								<f:selectItems value="#{vehicleMoverITAStaffList}" var="examiner" itemLabel="#{examiner.fullName}" itemValue="#{examiner}"/>
+								<p:ajax update="siezurePanel"></p:ajax>
+					</p:selectOneMenu>
+					<p:autoComplete global="false" id="txtITAStaff" scrollHeight="200"  size="66" value="#{supportingDetailsView.vehicleMoverITABO}"
+					completeMethod="#{roadCheckServiceAction.roadCheckItaStaffAutoComplete}" converter="AutoCompletePersonConverter"
+					var="p" itemValue="#{p}" forceSelection="true" itemLabel="#{p.fullName}"
+					rendered="#{initiateView.getActivityType().equalsIgnoreCase('u')}" >
+								<p:ajax event="query" global="false"></p:ajax>   
+						  </p:autoComplete>
+    			</p:column>
+   			</p:row>
+   			<p:row rendered="#{supportingDetailsView.vehicleMoverType eq 'OT' }">
+    			<p:column > 
+    				<h:outputText value="Other Driver's DLN: " /><h:outputText value=" * " styleClass="required"/>   
+    			</p:column>
+    			<p:column style="width:105px"> 
+    				<p:inputText value="#{supportingDetailsView.vehicleMoverOTBO.dlNo}" id="txtVehicleOTMover" maxlength="9" size="11" style="text-align: left;width:65px;margin:0 0 0 0px;" />
+					<p:commandLink action="searchWreckerDLN" id="searchOTDLNLink" update="siezurePanel"  processIds="*" ajax="true"   style="width: 10px; margin: 0px; text-align: center; padding: 0px;">
+   		  					<img id="trnSearchWreckerDriverIcon_" src="${request.contextPath}/images/search-icon.gif"  alt="Input search criteria" style="margin:0px;padding:0px;"></img>
+    	 			 </p:commandLink>
+    	 			  
+    	 					 <p:tooltip for="searchOTDLNLink" value="Enter Driver's Licence Number and click to search" showEffect="fade" hideEffect="fade" />
+    			</p:column>
+    			<p:column rendered="#{supportingDetailsView.vehicleMoverType eq 'OT' and 
+    			supportingDetailsView.vehicleMoverOTBO ne null and supportingDetailsView.vehicleMoverOTBO.dlNo ne null 
+    			and supportingDetailsView.vehicleMoverWreckerBO.dlNo ne '' and 
+    			supportingDetailsView.vehicleMoverOTBO.getFullName() ne '' and 
+    			supportingDetailsView.vehicleMoverOTBO.getFullName() ne null and 
+    			supportingDetailsView.vehicleMoverOTBO.dlNo ne ''}">
+    				<span class="info-alert" style="width: auto;">
+   						<h:outputText styleClass="outputText" value="#{supportingDetailsView.vehicleMoverOTBO.getFullName() }" />
+   					</span> 
+    			</p:column>
+   			</p:row>
+   			
+    	</p:panelGrid>
+    </p:panel> 
+    
+    <p:panel  id="mvDetailsPanel" header="Motor Vehicle Details" style="vertical-align: top; text-align:left;" rendered="true">  
+     <h2><span style=" text-align:left;">Motor Vehicle Details</span></h2>
+    	<p:panelGrid>
+    		<p:row>
+    			<p:column> <h:outputText value="Plate No.: " style="font-weight:bold;"/></p:column>
+    			<p:column> <h:outputText value="#{initiateView.plateRegNo}" id="plateRegNo" size="20" style="text-transform: uppercase"/></p:column>
+    			<p:column> <h:outputText value="Chassis No.: " style="font-weight:bold;"/></p:column>
+    			<p:column> <h:outputText value="#{initiateView.chassisNo}" id="chassis" size="20" /></p:column>
+    			<p:column> <h:outputText value="Engine No.: " style="font-weight:bold;"/></p:column>
+    			<p:column> <h:outputText value="#{initiateView.engineNo}" id="engine" size="20" /></p:column>
+    		</p:row>
+    		
+    		<p:row>
+    			<p:column> <h:outputText value="Make: " style="font-weight:bold;"/></p:column>
+    			<p:column> <h:outputText value="#{initiateView.makeDescription}" id="make" size="20" /></p:column>
+    			<p:column> <h:outputText value="Model: " style="font-weight:bold;"/></p:column>
+    			<p:column> <h:outputText value="#{initiateView.model}" id="model" size="20" /></p:column>
+    		</p:row>
+    		
+    		<p:row>
+    			<p:column> <h:outputText value="Year: " style="font-weight:bold;"/></p:column>
+    			<p:column> <h:outputText value="#{initiateView.year}" id="year" size="20" /></p:column>
+    			<p:column> <h:outputText value="Colour: " style="font-weight:bold;"/></p:column>
+    			<p:column> <h:outputText value="#{initiateView.colour}" id="colour" size="20" /></p:column>
+    		</p:row>
+    	</p:panelGrid>
+    </p:panel> 
+  
+    <p:panel  id="otherPanel" header="Other Details" style="vertical-align: top; text-align:left;" rendered="#{supportingDetailsView.directiveParamRequired || supportingDetailsView.inspectorParamRequired || supportingDetailsView.allegationRequired || supportingDetailsView.noOfPassengersRequired}" >  
+ <h2><span style=" text-align:left;">Other Details</span></h2>
+
+    	<p:panelGrid>
+    		<p:row>
+    			<p:column> <h:outputText value="Allegation: " rendered="#{supportingDetailsView.allegationRequired}" /><h:outputText value=" * " styleClass="required" rendered="#{supportingDetailsView.allegationRequired}" />   </p:column>
+    			<p:column> 
+    			<p:inputTextarea rows="5" cols="63" maxlength="250"  value="#{supportingDetailsView.allegation}" rendered="#{supportingDetailsView.allegationRequired}"/>
+    		<!-- <h:inputText value="#{supportingDetailsView.allegation}" id="allegation" size="64" rendered="#{supportingDetailsView.allegationRequired}"/>
+				 --></p:column>
+    		</p:row>
+    		<p:row>
+    			<p:column> <h:outputText value="Directive from Inspector: " rendered="#{supportingDetailsView.directiveParamRequired}" /><h:outputText value=" * " styleClass="required" rendered="#{supportingDetailsView.directiveParamRequired}" />   </p:column>
+    			<p:column> 
+    			<p:inputTextarea rows="5" cols="63" maxlength="255"  value="#{supportingDetailsView.directiveParam}" rendered="#{supportingDetailsView.directiveParamRequired}"/>  
+    		<!-- <h:inputText value="#{supportingDetailsView.directiveParam}" id="directive" size="64" rendered="#{supportingDetailsView.directiveParamRequired}"/> -->
+				</p:column>
+    		</p:row>
+    		
+    		<p:row>
+    		<p:watermark for="txtThreatenedTAStaff" value="Last, First Middle Name [ID]"/>  
+    			<p:column> <h:outputText  value="Inspector Threatened: " rendered="#{supportingDetailsView.inspectorParamRequired}"/><h:outputText value=" * " styleClass="required" rendered="#{supportingDetailsView.inspectorParamRequired}"/>   </p:column>
+    			<p:column> 
+    					
+    					  <p:autoComplete global="false" id="txtThreatenedTAStaff" scrollHeight="200"  size="66" value="#{supportingDetailsView.inspectorParam}" rendered="#{supportingDetailsView.inspectorParamRequired}"
+					completeMethod="#{roadCheckServiceAction.roadCheckTaStaffAutoComplete}" converter="TAStaffConverter"
+					var="p" itemValue="#{p}" forceSelection="true" itemLabel="#{p.fullName.concat(' [').concat(p.staffId).concat(']')}" >
+						<p:ajax event="query" global="false"></p:ajax>   
+					</p:autoComplete>
+    					<!-- <h:inputText value="#{supportingDetailsView.inspectorParam}" id="inspector" size="64" rendered="#{supportingDetailsView.inspectorParamRequired}"/>
+    				 -->
+						
+    			</p:column>
+    		</p:row>
+    		<p:row>
+    		<p:column> <h:outputText value="No. of Passengers: " rendered="#{supportingDetailsView.noOfPassengersRequired}" /><h:outputText value=" * " styleClass="required" rendered="#{supportingDetailsView.noOfPassengersRequired}" />   </p:column>
+    			<p:column> 
+ 
+    		<p:inputText value="#{supportingDetailsView.noOfPassengers}" id="noOfPass" size="5" rendered="#{supportingDetailsView.noOfPassengersRequired}" onkeyup="restrictNumericFields(this);" onkeydown="restrictNumericFields(this);" maxlength="2"/>
+				 </p:column>
+    		</p:row>
+    	</p:panelGrid>
+    </p:panel> 
+  
+     <p:panel  id="courtPanel" header="Court Details" style="vertical-align: top; text-align:left;" rendered="#{recordOffenceOutcomeView.summonsSelected}">  
+ <h2><span style=" text-align:left;">Court Details</span></h2>
+    	<p:panelGrid>
+    		<p:row>
+    			<p:column> <h:outputText value="Court: " style="font-weight:bold;"/><h:outputText value=" * " styleClass="required"/>   </p:column>
+    			<p:column> <!-- rendered="#{not supportingDetailsView.regionalOperation }" -->
+	    			<p:selectOneMenu 
+									id="comboCourt" value="#{supportingDetailsView.courtId}"    >
+									<f:selectItem itemValue="" itemLabel="[Select One]" />
+									<f:selectItems var="court" itemValue="#{court.courtId}" itemLabel="#{court.shortDescription}" value="#{courtList}" />
+					</p:selectOneMenu>
+					
+					<!-- <h:outputText  value="#{initiateView.roadOperationBO.courtBO.shortDescription}" rendered="#{supportingDetailsView.regionalOperation }"></h:outputText>
+					-->
+				</p:column>
+    		
+    			<p:column> <h:outputText value="Court Date: " style="font-weight:bold;"/><h:outputText value=" * " styleClass="required"/>   </p:column>
+    			<p:column> 
+    					
+				
+				
+    				
+    				<p:calendar value="#{supportingDetailsView.courtDateTime}" pattern="yyyy-MM-dd" id="courtDate" readonlyInput="true" 
+    				showOn="button" disabledWeekends="true" navigator="true">
+								</p:calendar>
+						
+    			</p:column>
+    		</p:row>
+    	</p:panelGrid>
+    </p:panel> 
+    
+    <p:panel  id="ownerPanel" header="Owner Details" style="vertical-align: top; text-align:left;" rendered="#{supportingDetailsView.issueToOwner}">  
+ <h2><span style=" text-align:left;">Owner Details</span></h2>
+    	<p:panelGrid>
+    		<p:row>
+    			<p:column> <h:outputText value="Vehicle Owner: " style="font-weight:bold;"/><h:outputText value=" * " styleClass="required"/>   </p:column>
+	    		<p:column> 
+	    				<p:selectOneMenu id="comboOwner" value="#{supportingDetailsView.owner}"  converter="vehicleOwnerConverter" >
+							<f:selectItem itemValue="" itemLabel="[Select One]" />
+							<f:selectItems var="owner" itemValue="#{owner}" itemLabel="#{owner.firstName} #{owner.lastName}" value="#{mvResult.vehicleOwners}" />
+							 						
+						</p:selectOneMenu>
+				</p:column> 
+    		</p:row>
+    		
+    	</p:panelGrid>
+    </p:panel> 
+    
+        <p:panel  id="witnessPanel" header="Witnesses" style="vertical-align: top; text-align:left;" rendered="#{recordOffenceOutcomeView.warningNoticeSelected}">  
+    	 <h2><span style=" text-align:left;">Witnesses</span></h2>
+    	  <p:commandButton icon="ui-icon-plusthick" id="addFirstBtn"  value="Click to Add Witnesses" action="addFirstWitness" 
+    	  processIds="*"  ajax="false" rendered="#{supportingDetailsView.witnessList.size() == 0}" update=":addSupportingDetails:witnessPanel" style="margin-left: 25px;"/>
+						         
+						         
+		  <p:dataTable  var="witness" value="#{supportingDetailsView.witnessList}" editable="true" rendered="#{supportingDetailsView.witnessList.size() > 0}"
+	  					   rows="10" id="witnessList"  selectionMode="single" rowKey="#{witness.lastName}" selection="#{supportingDetailsView.selectedWitness}">  
+	  					
+	  				<p:ajax event="rowSelect"  oncomplete="selectWitnessRow();" >
+                    	</p:ajax>		
+	  					   	
+  				<f:facet name="header" >  
+					<div align="left">	          
+		           <h:outputText value="Witness Listing " style="padding-right:30px; text-align:left"/>  
+		           <p:commandButton icon="ui-icon-plusthick" id="addWitnessBtn1"  value="Add" action="addFirstWitness" processIds="*"  ajax="false" style="padding-right:20px"  />
+		           <p:commandButton icon="ui-icon-trash"  id="deleteWitnessBtn1"  value="Delete" action="deleteWitness" processIds="*"  ajax="true" oncomplete="updateWitnessPanel();" />
+						</div>          
+				</f:facet> 
+				
+				 <p:column  id="checkBoxes" style="width:7%">  
+						         <f:facet  name="header">
+									<div align="left">
+									 <p:selectBooleanCheckbox id="selectAllBox" value="#{supportingDetailsView.selectAllWitness}" onchange="selectAllWitness();" >
+									 		
+									 </p:selectBooleanCheckbox> 
+									 </div>
+									</f:facet>
+						                <p:selectBooleanCheckbox value="#{witness.rowSelected}"  >
+						                </p:selectBooleanCheckbox>  
+						             
+						       </p:column>  
+						       
+				
+				<p:column headerText="Name"  style="text-align:left width:30%">   
+				
+					<h:outputText value="#{roadCheckServiceAction.withnessFullName(witness)}" />
+				
+				</p:column>
+					
+				<p:column headerText="Address"  style="text-align:left; width:40%">   
+					<h:outputText value="#{witness.addressView.addressLine1}" />
+					<h:outputText value=", " rendered="#{roadCheckServiceAction.getAddressLine1(witness.addressView.streetName,witness.addressView.markText,
+		  				witness.addressView.streetNo) ne ''}"/>
+		  			<h:outputText  value="#{roadCheckServiceAction.getAddressLine2(witness.addressView.poBoxNo,witness.addressView.poLocationName,
+		  				witness.parishDesc)}" escape="false"></h:outputText>					
+				</p:column>
+				
+				<p:column headerText="Phone Number"  style="text-align:left width:23%">   
+				
+					<h:outputText value="#{roadCheckServiceAction.withnessPhoneNumber(witness)}" />
+				
+				</p:column>
+				
+  			</p:dataTable>	
+  			
+  			  <p:commandButton wigetVar="allBtnSelWit" id="allSelectBtnWith" value="Do select" style="display:none" processIds="*" action="selectAllWitness" 
+			 ajax="true" update=":addSupportingDetails:witnessPanel"></p:commandButton>
+			
+			<p:commandButton wigetVar="updateWitnessPan" id="updateWitnessPanBtn" value="Do select" style="display:none" processIds="*" action="selectAllWitness" 
+			 ajax="true" update=":addSupportingDetails:witnessPanel"></p:commandButton>
+			
+			<p:commandButton wigetVar="selectRow" id="selectRowBtn" value="Do select" style="display:none" processIds="*" action="selectWitnessRow" 
+			 ajax="false"   ></p:commandButton>
+			 
+			 <script>
+			 
+			 function selectWitnessRow(){
+				 	$("button[id*='selectRowBtn']").click();			 	
+				 	}
+			 
+			 	function updateWitnessPanel(){
+				 	$("button[id*='updateWitnessPanBtn']").click();			 	
+				 	}
+			
+				
+			 	function selectAllWitness(){
+			 	$("button[id*='allSelectBtnWith']").click();			 	
+			 	}
+			</script> 	
+    </p:panel> 
+    
+    <p:panel  id="commentPanel" header="Comment" style="vertical-align: top; text-align:left;" rendered="true">  
+      <h2><span style=" text-align:left;">Comment <h:outputText value="*" styleClass="required" style="vertical-align:super" rendered="#{initiateView.vehicleInfoDifferent}"/></span></h2>
+    	<p:inputTextarea rows="5" cols="63" maxlength="250"  value="#{supportingDetailsView.comment}" style="margin-left: 25px;"/>  
+    </p:panel> 
+    </p:outputPanel>  
+    <p:panel id="panelButtons"  >
+    		 <p:panelGrid style="margin-left:auto; margin-right:auto;">
+		   <p:row>
+		   	<p:column>
+		   		  	<p:commandButton id="backBtn"  value="Back" action="back" processIds="*"  ajax="false"  styleClass="blue"/>
+		   	</p:column>
+		   	<p:column>
+		   		  	<p:commandButton id="proceedBtn"  value="Proceed to Review Summary" action="reviewSummary" processIds="*"  ajax="false"  styleClass="blue"/>
+		   	</p:column>
+		   	
+		   	<p:column>
+		   		  	<p:commandButton id="cancelBtn"  value="Cancel" action="cancel" processIds="*"  ajax="false"  styleClass="blue"/>
+		   	</p:column>
+		   
+		   </p:row>
+		   
+		   </p:panelGrid>
+    		</p:panel> 
+ 				
+ 				
+ 		
+ 		<!-- <p:panel id="witnessDialog">
+ 		<p:dialog id="witnessDialog" header="Add/Edit Witness Details" widgetVar="witnessdlg" resizable="false" modal="true" width="70%" rendered="#{supportingDetailsView.showWitnessDialog}" visible="true">
+			<p:messages autoupdate="true" closable="true"></p:messages >
+			<p:panelGrid>
+				<p:row>
+					 <p:column>
+					 	<h:outputText value="Full Name" />	<h:outputText value=" * " styleClass="required"/>   
+					</p:column>
+					 <p:column >
+					  <h:inputText value="#{supportingDetailsView.currentWitness.lastName}" id="lname" size="20" maxlength="40"/>
+					 </p:column>
+					  <p:column >
+					  <h:inputText value="#{supportingDetailsView.currentWitness.firstName}" id="fname" size="20" maxlength="40"/>
+					 </p:column>
+					  <p:column >
+					  <h:inputText value="#{supportingDetailsView.currentWitness.middleName}" id="midname" size="20" maxlength="25"/>
+					 </p:column>
+				
+				
+				</p:row>
+				<p:row>
+				 <p:column>
+					 	<h:outputText value="Street Number" />	
+					</p:column>
+					 <p:column colspan="3">
+					  <h:inputText value="#{supportingDetailsView.currentWitness.addressView.streetNo}" id="snum" size="20" maxlength="15"/>
+					 </p:column>
+				</p:row>
+				<p:row>
+				 <p:column>
+					 	<h:outputText value="Street Name" />	<h:outputText value=" * " styleClass="required"/>   
+					</p:column>
+					 <p:column colspan="3">
+					  <h:inputText value="#{supportingDetailsView.currentWitness.addressView.streetName}" id="sname" size="50" maxlength="25"/>
+					 </p:column>
+				</p:row>
+				<p:row>
+				 <p:column>
+					 	<h:outputText value="P.O. Box" />	
+					</p:column>
+					 <p:column>
+					  <h:inputText value="#{supportingDetailsView.currentWitness.addressView.poBoxNo}" id="pobox" size="10" maxlength="6"/>
+					 </p:column>
+					  <p:column>
+					 	<h:outputText value="P.O. Location" />	
+					</p:column>
+					 <p:column>
+					  <h:inputText value="#{supportingDetailsView.currentWitness.addressView.poLocationName}" id="poboxLoc" size="40" maxlength="25"/>
+					 </p:column>
+				</p:row>
+				<p:row>
+				 <p:column>
+					 	<h:outputText value="Mark" />	
+					</p:column>
+					<p:column colspan="3">
+					  <h:inputText value="#{supportingDetailsView.currentWitness.addressView.markText}" id="markLoc" size="80" maxlength="40"/>
+					 </p:column>
+				</p:row>
+				<p:row>
+				 <p:column>
+					 	<h:outputText value="Parish" />	<h:outputText value=" * " styleClass="required"/>   
+					</p:column>
+					 <p:column colspan="3">
+					 <p:selectOneMenu 
+								id="comboParish" value="#{supportingDetailsView.currentWitness.addressView.parish}">
+								<f:selectItem itemValue="" itemLabel="[Select One]" />
+								<f:selectItems var="parish" itemValue="#{parish.parishCode}" itemLabel="#{parish.description}" value="#{parishList}" />
+									</p:selectOneMenu>
+					 </p:column>
+				</p:row>
+				<p:row>
+					 <p:column>
+					 	<h:outputText value="Phone Number" />	
+					</p:column>
+					 <p:column >
+					  <p:inputMask id="mobile" value="#{supportingDetailsView.currentWitness.mobilePhoneNo}" mask="(999) 999-9999" size="15"/>
+					 </p:column>
+					  <p:column >
+					  <p:inputMask id="home" value="#{supportingDetailsView.currentWitness.homePhoneNo}" mask="(999) 999-9999" size="15"/>
+					 </p:column>
+					  <p:column >
+					  <p:inputMask id="work" value="#{supportingDetailsView.currentWitness.workPhoneNo}" mask="(999) 999-9999" size="15"/>
+					 </p:column>
+				</p:row>
+			</p:panelGrid>
+			
+			<p:panelGrid style="margin-left:auto; margin-right:auto;">
+		   <p:row>
+		   	<p:column>
+		   		  	<p:commandButton id="backBtn"  value="Save" action="saveWitness" processIds="*"  ajax="false"  update=":addSupportingDetails:witnessDialog" styleClass="blue"/>
+		   	</p:column>
+		   		   	
+		   	<p:column>
+		   		  	<p:commandButton id="cancelBtn"  value="Cancel" action="cancelWitness" processIds="*"  ajax="false"  styleClass="blue"/>
+		   	</p:column>
+		   
+		   </p:row>
+		   
+		   </p:panelGrid>
+		</p:dialog>
+		
+		</p:panel> -->
+ 		
+ 		</p:panel>
+ 		
+ 		<!-- Invisible Button used for Navigation -->
+		<p:commandButton style="display:none" action="backToInitiate" id="backToInitiateLink" processIds="*" ajax="false" ></p:commandButton>
+		<p:commandButton style="display:none" action="back" id="backToRecordOffLink" processIds="*" ajax="false" ></p:commandButton>
+		<p:commandButton style="display:none" action="backToAddSupportingDet" id="backToAddSupDetLink" processIds="*" ajax="false"></p:commandButton>
+		<p:commandButton style="display:none" action="backToReviewSummary" id="backToReviewSumLink" processIds="*" ajax="false" ></p:commandButton>
+			 <!-- Step 5 is Never a link -->
+		<!-- end -->
+ 	
+ 	
+		</h:form>
+		</ui:fragment>
+		
+		<script type="text/javascript">
+			
+			$(document).ready( function() { 
+				
+	        	 $(".progtrckr li:has(a)").click(function() {
+	                  
+	               //TODO use if condition along with invisible buttons
+	                //alert($(this).attr('num'));//.click();
+	               if($(this).attr('num')== 1){
+	            	   $('button[id*=backToInitiateLink]').click(); 
+	               }if($(this).attr('num')== 2){
+	            	   $('button[id*=backToRecordOffLink]').click(); 
+	               } 
+	               else if($(this).attr('num')== 3){
+	                
+	            	   $('button[id*=backToAddSupDetLink]').click(); 
+	               }else if($(this).attr('num')== 4){
+	            	   $('button[id*=backToReviewSumLink]').click();
+	                	
+	               }// <!-- Step 5 is Never a link -->
+	               //else if($(this).attr('num')== 5){
+	            	   //$('button[id*=reviewIdLink]').click(); 
+	              // }
+	               
+	               });		
+	        	  
+	          });
+	
+			
+			</script>
+	</ui:define>
+</ui:composition>

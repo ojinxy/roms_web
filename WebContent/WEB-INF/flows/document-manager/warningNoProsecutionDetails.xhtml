@@ -1,0 +1,208 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces" xmlns:hx="http://www.ibm.com/jsf/html_extended" xmlns:sec="http://www.springframework.org/security/tags" xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+>
+	<ui:define name="title">Warning Notice Details</ui:define>
+	<ui:define name="pageHeader"></ui:define>
+	<ui:fragment id="page">
+		<div class="main borders">
+			<p:panel id="panelMain" header="warningNoProsecution Details">
+				<div class="pageHead">
+					<c:if test="#{ !empty flowScope.warningNoProsecution.manualSerialNo}">
+						<div style="float: left; min-width: 30%">
+							<h:outputLabel for="msn" value="Manual Reference No.: " />
+							<h:outputText value="#{flowScope.warningNoProsecution.manualSerialNo }" id="msn" style="text-transform: uppercase"/>
+						</div>
+					</c:if>
+					<div style="float: left; min-width: 30%">
+						<h:outputLabel for="msna" value="Reference No.: " />
+						<h:outputText value="#{flowScope.warningNoProsecution.referenceNo}" id="msna" />
+					</div>
+					<div style="float: right; min-width: 30%">
+						<h:outputLabel for="adt" value="Date Created: " />
+						<h:outputText value="#{flowScope.warningNoProsecution.issueDate}" id="adt">
+							<fsl:dateTimeConverter showTime="true" />
+						</h:outputText>
+					</div>
+				</div>
+				<p:panelGrid id="panelSD2">
+					<p:row>
+						<p:column style="width:152px">
+							<h:outputLabel for="ori" value="Document Origin:" styleClass="lbl-display" />
+						</p:column>
+						<p:column style="width:30%">	
+							<h:outputText value="#{flowScope.warningNoProsecution.origin}" id="ori" />
+						</p:column>
+						<p:column style="width:152px">
+							<h:outputLabel for="stat" value="Status:" styleClass="lbl-display" />
+						</p:column>
+						<p:column style="width:30%">	
+							<h:outputText value="#{flowScope.warningNoProsecution.statusDescription}" id="stat" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel for="tasn" value="Inspector:" styleClass="lbl-display" />
+						</p:column>
+						<p:column>	
+							<h:outputText value="#{flowScope.warningNoProsecution.taStaffFullName}" id="tasn" />
+						</p:column>
+						<p:column>
+							<h:outputLabel for="dpr" value="Date Printed:" styleClass="lbl-display" />
+						</p:column>
+						<p:column>	
+							<h:outputText value="#{!(empty flowScope.warningNoProsecution.printDtime) ? flowScope.warningNoProsecution.printDtime : '[Not yet Printed]'}" id="dpr">
+								<fsl:dateTimeConverter showTime="true" />
+							</h:outputText>
+						</p:column>
+					</p:row>
+					<c:if test="#{!empty flowScope.warningNoProsecution.servedOnDate and flowScope.warningNoProsecution.statusId=='DOC_SE'}">
+						<p:row>
+							<p:column>
+								<h:outputLabel for="isb" value="Served by:" styleClass="lbl-display" />
+							</p:column>
+							<p:column>	
+								<h:outputText value="#{flowScope.warningNoProsecution.servedByLastName}, #{flowScope.warningNoProsecution.servedByFirstName} " id="isb" />
+							</p:column>
+							<p:column>
+								<h:outputLabel for="sod" value="Date Served:" styleClass="lbl-display" />
+							</p:column>
+							<p:column>	
+								<h:outputText value="#{flowScope.warningNoProsecution.servedOnDate}" id="sod">
+									<fsl:dateTimeConverter showTime="true" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+					</c:if>
+				</p:panelGrid>
+				<div style="float: left; width: 50%">
+					<p:panelGrid id="panelSD3" header="Offender's Details">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2"> Offender's Details </p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:152px">
+								<h:outputLabel for="trn" value="TRN:" styleClass="lbl-display" />
+							</p:column>
+							<p:column style="width:30%">	
+								<h:outputText value="#{flowScope.warningNoProsecution.offenderTRN}" id="trn" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel for="ofn" value="Name:" styleClass="lbl-display" />
+							</p:column>
+							<p:column>	
+								<h:outputText value="#{flowScope.warningNoProsecution.offenderFullName}" id="ofn" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel for="rob" value="Offender Type:" styleClass="lbl-display" />
+							</p:column>
+							<p:column>	
+								<h:outputText value="#{flowScope.warningNoProsecution.offenderRoleObserved}" id="rob" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel for="addr" value="Address:" styleClass="lbl-display" />
+							</p:column>
+							<p:column>	
+								<h:outputText style="width: 277px;float: right;" value="#{fn:replace(flowScope.warningNoProsecution.offenderAddressWithNewLine,'\\n','&lt;br/&gt;&#9;')}" id="addr" escape="false" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+				<div style="float: right; width: 50%">
+					<p:panelGrid>
+						<f:facet name="header">
+							<p:row>
+								<p:column>Contact Information</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column>
+								<h:outputLabel for="mob" value="Mobile:" styleClass="lbl-display" />
+								<h:outputText value="#{flowScope.warningNoProsecution.offenderCellPhone}" id="mob" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel for="hom" value="Home:" styleClass="lbl-display" />
+								<h:outputText value="#{flowScope.warningNoProsecution.offenderHomePhone}" id="hom" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel for="work" value="Work:" styleClass="lbl-display" />
+								<h:outputText value="#{flowScope.warningNoProsecution.offenderWorkPhone}" id="work" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+				<p:panelGrid id="panelSD4" header="Details of Offence">
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="2">Details of Offence</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column style="width:152px">
+							<h:outputLabel for="loo" value="Offence Date:" styleClass="lbl-display" />
+						</p:column>	
+						<p:column>
+							<h:outputText value="#{flowScope.warningNoProsecution.offenceDtime}" id="odt">
+								<fsl:dateTimeConverter showTime="true" />
+							</h:outputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel for="loo" value="Place of offence:" styleClass="lbl-display" />
+						</p:column>	
+						<p:column>	
+							<h:outputText value="#{flowScope.warningNoProsecution.offenceLocation}" id="loo" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel for="ofc" value="Offence(s) Committed:" styleClass="lbl-display" style="float:left;text-transform:none" />
+						</p:column>	
+						<p:column>	
+							<div style="width: 80%; float: left;">
+								<p:dataList columns="2" paginator="false" value="#{flowScope.warningNoProsecution.listOfOffences}" var="offence" id="ofc" itemType="disc">  
+								    #{offence.offenceDescription} 
+								</p:dataList>
+							</div>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<!-- Vehicle Detail  -->
+				<p:panel id="vehicleDetailsPanel">
+					<ui:include src="fragments/vehicleDetailsFragment.xhtml"></ui:include>
+				</p:panel>
+				<p:panelGrid id="panelSD8jp" header="Comments" columns="1">
+					<f:facet name="header">
+						Comments		
+				</f:facet>
+					<h:outputText id="adcom" value="#{fn:replace((empty flowScope.warningNoProsecution.comment ? '[No Comment Added]' : flowScope.warningNoProsecution.comment),'\\(','&lt;br/&gt;&#9;&#40;')}"
+						escape="false"
+					/>
+					<h:outputText id="recom" value="#{fn:replace((empty flowScope.warningNoProsecution.reprintComment ? '' : flowScope.warningNoProsecution.reprintComment),'\\(','&lt;br/&gt;&#9;&#40;')}" escape="false" />
+				</p:panelGrid>
+				
+				
+				<p:panelGrid id="panelSD8al" header="Allegations" columns="1">
+					<f:facet name="header">
+						Allegations		
+				</f:facet>
+					<h:outputText id="adcom" style="word-break:break-word"  value="#{fn:replace((empty flowScope.warningNoProsecution.allegation ? '[No Details Added]' : flowScope.warningNoProsecution.allegation),'\\n','&lt;br/&gt;&#9;')}" escape="false" />
+				</p:panelGrid>
+			</p:panel>
+		</div>
+	</ui:fragment>
+</ui:composition>

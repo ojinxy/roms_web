@@ -1,0 +1,54 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces" xmlns:hx="http://www.ibm.com/jsf/html_extended" xmlns:sec="http://www.springframework.org/security/tags" xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com" xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
+	<ui:define name="title">Summons Details</ui:define>
+	<ui:define name="pageHeader">Summons Details</ui:define>
+	<ui:fragment id="page">
+		<p:dialog id="ovrddialog" header="${flowScope.document.documentTypeName} Override" rendered="#{flowScope.mode == 'override'}" visible="true" widgetVar="ovrddialog" resizable="false" modal="true"
+			width="40%"
+		>
+			<p:messages autoupdate="true" closable="true"></p:messages>
+			<p:fieldset label="Please provide the following details:">
+				<div>
+					<strong><h:outputText value="Username:" style="font-weight:bold;text-transform:uppercase;min-width:30%" />
+					</strong>
+					<p:inputText value="${flowScope.overrideView.userName}" id="usernameov" maxlength="20" />
+				</div>
+				<div>
+					<strong><h:outputText value="Password:" style="font-weight:bold;text-transform:uppercase;min-width:30%" />
+					</strong>
+					<p:password value="${flowScope.overrideView.password}" id="passwordov" maxlength="20" />
+				</div>
+				<div>
+					<strong><h:outputText value="Additional Comment:" style="font-weight:bold;text-transform:uppercase;min-width:30%" />
+					</strong>
+					<c:choose>
+						<c:when test="#{ flowScope.docType == 'SUM'}">
+							<p:inputTextarea rows="6" cols="50" value="${flowScope.overrideView.comment}" maxlength="250" />
+						</c:when>
+						<c:when test="#{flowScope.docType == 'WNO' }">
+							<p:inputTextarea rows="6" cols="50" value="${flowScope.overrideView.comment}" maxlength="250" />
+						</c:when>
+						<c:when test="#{flowScope.docType == 'WNP' }">
+							<p:inputTextarea rows="6" cols="50" value="${flowScope.overrideView.comment}" maxlength="250" />
+						</c:when>
+					</c:choose>
+				</div>
+				<div style="text-align: center;">
+					<span style="margin: 0 10px;"><p:commandButton id="save5" value="Override" processIds="*" action="override" ajax="false" onerror="PF('ovrddialog').show();"
+							onsuccess="PF('ovrddialog').hide();" styleClass="blue"
+						/>
+					</span> <span style="margin: 0 10px;"><p:commandButton icon="ui-icon-refresh" id="cancel5" value="Cancel" processIds="*" action="cancelAction" ajax="false" onerror="PF('ovrddialog').show();"
+							onsuccess="PF('ovrddialog').hide();" styleClass="blue"
+						/>
+					</span>
+				</div>
+			</p:fieldset>
+			
+			<p:ajax event="close"  listener="#{documentManagerServiceAction.handleDialogClose}"/>
+			
+		</p:dialog>
+	</ui:fragment>
+</ui:composition>

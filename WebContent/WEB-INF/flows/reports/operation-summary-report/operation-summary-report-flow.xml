@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+        
+        
+     <var name="criteria" class="fsl.ta.toms.roms.search.criteria.impl.OperationSummaryReportCriteriaBO" />
+   
+     <view-state id="operationSummaryReport" >
+	    
+	    <on-entry>
+	    	<evaluate expression="roadOperationsServiceAction.getCategoryList" />
+	    	<evaluate expression="operationSummaryReportServiceAction.getRegionList" />
+	    	<set name="flowScope.taOfficeRegion"  value="new java.util.ArrayList()"  type="java.io.Serializable"></set>
+	    </on-entry>
+		
+		<transition on="generateOperationSummaryReport">
+			<evaluate expression="operationSummaryReportServiceAction.generate(flowRequestContext)"/>
+			<render fragments="pdfView, operationSummaryReport" />
+		</transition>
+		
+    	<transition on="clear" to="endState" />
+	
+	</view-state>
+	
+	<end-state id="endState" />
+	
+	
+</flow>

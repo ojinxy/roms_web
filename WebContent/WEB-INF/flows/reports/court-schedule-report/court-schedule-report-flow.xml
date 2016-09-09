@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+        
+        
+     <var name="criteria" class="fsl.ta.toms.roms.search.criteria.impl.CourtScheduleCriteriaBO" />
+     <var name="taFullName" class="fsl.ta.toms.roms.bo.StaffUserMappingBO" />
+        
+     <view-state id="courtScheduleReport" >
+	    
+	    <on-entry>
+	    	<evaluate expression="courtScheduleReportServiceAction.getRegionList" />
+	    	<evaluate expression="courtScheduleReportServiceAction.getCourtList" />
+	    	<evaluate expression="courtScheduleReportServiceAction.getTAStaffList" />
+	    	<set name="flowScope.taOfficeRegion"  value="new java.util.ArrayList()"  type="java.io.Serializable"></set>
+	    </on-entry>
+		
+		<transition on="generateCourtScheduleReport">
+			<evaluate expression="courtScheduleReportServiceAction.generate(flowRequestContext)"/>
+			<render fragments="pdfView, courtScheduleReport" />
+		</transition>
+		
+    	<transition on="clear" to="endState" />
+	
+	</view-state>
+	
+	<end-state id="endState" />
+	
+	
+</flow>

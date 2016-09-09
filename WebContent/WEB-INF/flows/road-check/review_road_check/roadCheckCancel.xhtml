@@ -1,0 +1,41 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/WEB-INF/newTemplate.xhtml"
+	xmlns:fsl="http://org.fsl.com">
+	
+	<ui:define name="title">Cancel Road Check</ui:define>
+	<ui:define name="pageHeader">
+		Cancel Road Check
+	</ui:define>
+	<ui:define name="content">
+	
+	  <h:form styleClass="form" id="roadCheckCancel">
+ 		<div style="text-align:left;padding-bottom: 10px;">
+	 		<span class="progress-label">
+					<!-- <h3>Step 4: Review Summary</h3> -->
+					<p:commandLink action="cancelAction" id="backIcon" processIds="*" ajax="false"  >
+		  			<i class="icon icon-chevron-left icon-1x"></i>  			
+		  			</p:commandLink>
+		  			<p:tooltip for="backIcon" value="Click to return to Road Check Review" showEffect="fade" hideEffect="fade" /> 
+					<h:outputText value="#{roadCheckReviewSummaryBean.isViewDetailsScreen()?'Road Check Review -':'Step 4: Review Summary' }" styleClass="progress-label"/>
+				    <h:outputText value="#{nameUtil.getLastNameCapsFirstNameMiddleName(initiateView.firstName, initiateView.lastName , initiateView.middleName)}" id="Name"  styleClass="progress-label-key"/>
+					 <f:subview rendered="#{!initiateView.trn.trim().equalsIgnoreCase('')}"	 >
+						 <h:outputText value="["  styleClass="progress-label-key"/><h:outputText value="#{initiateView.trn}" id="trn" styleClass="progress-label-key"/> 
+						 <h:outputText value="]"  styleClass="progress-label-key"/>
+				   </f:subview>
+			</span>
+		</div>
+		<ui:include src="/WEB-INF/flows/document-manager/fragments/cancelDocInnerFragment.xhtml"></ui:include>	
+	  </h:form>
+		
+       
+	</ui:define>
+</ui:composition>

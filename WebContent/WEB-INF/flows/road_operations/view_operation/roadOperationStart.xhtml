@@ -1,0 +1,286 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fsl="http://org.fsl.com">
+
+	<ui:fragment id="startRoadOp">	
+	
+		<p:panel>
+			
+<!-- 			<p:panel id="panelConfirmStart" style="display:#{operation.confirmStartPopup eq 'Y'?'none':'block'}"> -->
+<!-- 			<div> -->
+			
+<!-- 					<h:outputText style="text-align:center" value="Please ensure that all changes made are saved before starting the Road Operation." /> -->
+			
+<!-- 					<br></br> -->
+<!-- 					<br></br> -->
+					
+					
+<!-- 					<div id="buttons" style="text-align:center"> -->
+<!-- 						<p:commandButton styleClass ="blue"  id="continueToStart" value="Continue" ajax="true" widgetVar="continueToStart"  -->
+<!-- 									 update=":reviewOperations:startRoadOp" action="openStartPopup" -->
+<!-- 									oncomplete="PF('startdialog').show();"> -->
+<!-- 						</p:commandButton> -->
+						
+						
+<!-- 						<p:commandButton styleClass ="blue"  id="cancelDontStart" value="Cancel"  -->
+<!-- 									update=":reviewOperations" ajax="false" widgetVar="cancelDontStart"  -->
+<!-- 									oncomplete="PF('startdialog').hide();"> -->
+<!-- 						</p:commandButton> -->
+<!-- 					</div> -->
+			
+					
+<!-- 					<h:inputText id="confirmStartPopup" style="display:none" value="#{operation.confirmStartPopup}"></h:inputText> -->
+<!-- 			</div> -->
+<!-- 			</p:panel> -->
+			
+			
+<!-- 			<p:panel id="panelRoadOpStart" header="Road Operation Start Details" closable="true" style="width:50em;display:#{operation.confirmStartPopup eq 'Y'?'block':'none'}"> -->
+			<p:panel id="panelRoadOpStart" header="Road Operation Start Details" closable="true" style="width:50em">
+			<p:ajax event="close" oncomplete="closeRoadOpStartPop()" />
+			<p:messages id="errorMessages" closable="true" autoUpdate="true"/>	
+			<div style="padding-left:30px;">
+				<span class="progress-label-key"><h:outputText value="#{operation.operationName} (#{operation.categoryId}) - #{operation.statusDescription} "/></span>
+				
+			</div>
+			
+				<h2 style="margin-bottom:15px !important; font-size:14px !important;"><span>Operation Actual Details</span></h2>		
+			
+			<div style="white-space: nowrap;padding-bottom:10px; padding-left:30px;">
+				<span style="display:inline-block;width:27%">Actual Start :</span>
+				 <p:calendar value="#{operation.actualStartDtime}" id="txtScheduledStartDate" pattern="yyyy-MM-dd hh:mm a" showOn="both">
+                        <fsl:dateTimeConverter showTime="true"  />
+                 </p:calendar>
+                 
+<!--                  <p:calendar id="calActualStartId" readonlyInput="true" widgetVar="calActualStartWidgetId" value="#{operation.actualStartDtime}"  -->
+<!--                  pattern="yyyy-MM-dd hh:mm a" onchange="findDuration()" showOn="both" style="width:200px;" > -->
+<!-- 					<fsl:xmlGregorianCalendarConverter showTime="true" /> -->
+<!-- 				</p:calendar> -->
+				
+			</div>
+			<div id="divEndTimeDur" style="display:#{operation.statusId.trim().toLowerCase().contains('COM') ? '':'none'}">
+				<div style="white-space: nowrap;padding-bottom:10px;">
+					<span style="display:inline-block;width:27%">Actual End :</span>
+					
+					<p:calendar value="#{operation.actualEndDtime}" id="txtScheduledEndDate" pattern="yyyy-MM-dd hh:mm a" showOn="both">
+                        <fsl:dateTimeConverter showTime="true"  />
+                 	</p:calendar>
+<!-- 				<p:calendar id="calActualStartId" readonlyInput="true" widgetVar="calActualStartWidgetId" value="#{operation.actualEndDtime}"  -->
+<!--                  pattern="yyyy-MM-dd hh:mm a" onchange="findDuration()" showOn="both" style="width:200px;" > -->
+<!-- 					<fsl:xmlGregorianCalendarConverter showTime="true" /> -->
+<!-- 				</p:calendar> -->
+				</div>
+				<div id="divDuration" style="padding-bottom:10px;">
+					<span style="display:inline-block;width:30%">Actual Duration :</span><span id="spanDurationText"/> 
+				</div>
+			</div>
+			<div style="color: blue;white-space: nowrap;padding-top: 20px;padding-bottom: 10px;">
+				<h2><span style="font-size:14px !important;">Resource Attendance</span></h2>
+			</div>
+			<div>
+						<p:dataTable
+								border="1"  style="width: 100%" styleClass="tblroadOpClass"
+								footerClass="footerClass"  cellpadding="5"
+								cellspacing="8"  id="teamResults"  rows="1"
+								value="#{operation.teams}" var="roadOperationTeam" widgetVar="dataTableTeam"
+								currentPageReportTemplate="{currentPage} of {totalPages} Teams" paginator="true"
+								paginatorTemplate="{PreviousPageLink} {NextPageLink}           {CurrentPageReport}"
+								paginatorPosition="top">
+							<p:ajax event="page" oncomplete="setAttendedStateColors()" />
+							<h:column id="roadOpInfo">
+									
+							</h:column>
+							<p:column>
+								<h:outputText value="Team Name: #{roadOperationTeam.teamName}" style="font-weight:bolder;"/>
+								<p:tabView id="tabView">
+									<p:tab id="tabTAStaff" title="TA Staff">
+										<span style="color:purple">Record the Attendance of each resource</span>
+												<p:dataTable
+													border="1"  style="width: 100%" styleClass="tblroadOpClass"
+													 cellpadding="5"
+													cellspacing="8"  id="teamTAStaff"  rows="10"
+													value="#{roadOperationTeam.taStaffList}" var="taStaff" 
+													currentPageReportTemplate="{currentPage} of {totalPages} TA Staff" paginator="true"
+													paginatorTemplate="{PreviousPageLink} {NextPageLink}           {CurrentPageReport}"
+													paginatorPosition="top" paginatorAlwaysVisible="false" scrollable="true">
+														<p:column id="col1" headerText="Team Member">
+																<h:outputText value="#{taStaff.getFullName()} - #{taStaff.getStaffId()}"/>
+														</p:column>
+														<p:column id="col2" headerText="Role" style="width:10%">
+															
+																<h:outputText value="#{taStaff.getStaffTypeCode()}"/>
+														</p:column>
+														<p:column id="col3" headerText="Attended" style="width:50%">
+																<span style="display:inline-block;white-space:nowrap">
+															        <p:selectOneButton value="#{taStaff.attended}"  onchange="checkAttendedState(this)" >
+															        	  <p:ajax update="taStaffAbsentComment"/> 
+															            <f:selectItem itemLabel="YES" itemValue="#{true}" />  
+															            <f:selectItem itemLabel="NO" itemValue="#{false}" />    
+															        </p:selectOneButton>
+															        <p:inputText id="taStaffAbsentComment"  value="taStaff.comment"  style="visibility:#{(taStaff.attended eq null or taStaff.attended)?'hidden':'' }"/>
+														        </span> 
+														</p:column>
+														
+												</p:dataTable>
+									</p:tab>
+									<p:tab id="tabExaminer" title="ITA Examiner">
+										<span style="color:purple">Record the Attendance of each resource</span>
+										<p:dataTable
+													border="1"  style="width: 100%" styleClass="tblroadOpClass"
+													 cellpadding="5"
+													cellspacing="8"  id="teamITAExaminer"  rows="10"
+													value="#{roadOperationTeam.itaExaminerList}" var="itaEx" 
+													currentPageReportTemplate="{currentPage} of {totalPages} ITA Examiner" paginator="true"
+													paginatorTemplate="{PreviousPageLink} {NextPageLink}           {CurrentPageReport}"
+													paginatorPosition="top" paginatorAlwaysVisible="false" scrollable="true">
+														<p:column id="col1" headerText="Team Member">
+																<h:outputText value="#{itaEx.personBO.getFullName()} - #{itaEx.getExaminerId()}"/>
+														</p:column>
+														<p:column id="col2" headerText="Attended" style="width:50%">
+																<span style="display:inline-block;white-space:nowrap">
+															        <p:selectOneButton value="#{itaEx.attended}"  onchange="checkAttendedState(this)" >
+															        	<p:ajax update="itaExAbsentComment"/>   
+															            <f:selectItem itemLabel="YES" itemValue="#{true}" />  
+															            <f:selectItem itemLabel="NO" itemValue="#{false}" />    
+															        </p:selectOneButton>
+															        <p:inputText id="itaExAbsentComment"  value="itaEx.comment"  style="visibility:#{(itaEx.attended eq null or itaEx.attended)?'hidden':'' }"/>
+														        </span>
+														</p:column>
+														 
+										</p:dataTable>
+									</p:tab>
+									<p:tab id="tabPolice" title="Police">
+										<span style="color:purple">Record the Attendance of each resource</span>
+										<p:dataTable
+													border="1"  style="width: 100%" styleClass="tblroadOpClass"
+													 cellpadding="5"
+													cellspacing="8"  id="teamPolice"  rows="10"
+													value="#{roadOperationTeam.policeOfficerList}" var="police" 
+													currentPageReportTemplate="{currentPage} of {totalPages} Police Officer" paginator="true"
+													paginatorTemplate="{PreviousPageLink} {NextPageLink}           {CurrentPageReport}"
+													paginatorPosition="top" paginatorAlwaysVisible="false" scrollable="true">
+														<p:column id="col1" headerText="Rank" style="width:15%">
+																<h:outputText value="#{police.getRank()}"/>
+														</p:column>
+														<p:column id="col2" headerText="Team Member">
+																<h:outputText value="#{police.getFullName()} - [#{police.getPolOfficerCompNo()}] - #{police.getStationDescription()}"/>
+														</p:column>
+														<p:column id="col3" headerText="Attended" style="width:50%">
+																<span style="display:inline-block;white-space:nowrap">
+															        <p:selectOneButton value="#{police.attended}"  onchange="checkAttendedState(this)" >
+															        	<p:ajax update="policeAbsentComment"/>    
+															            <f:selectItem itemLabel="YES" itemValue="#{true}" />  
+															            <f:selectItem itemLabel="NO" itemValue="#{false}" />    
+															        </p:selectOneButton>
+															        <p:inputText id="policeAbsentComment"  value="police.comment"  style="visibility:#{(police.attended eq null or police.attended)?'hidden':'' }"/>
+														        </span>
+														</p:column>
+														
+												</p:dataTable>
+									</p:tab>
+									<p:tab id="tabJP" title="JP">
+										<span style="color:purple">Record the Attendance of each resource</span>
+											<p:dataTable
+												border="1"  style="width: 100%" styleClass="tblroadOpClass"
+												 cellpadding="5"
+												cellspacing="8"  id="teamJP"  rows="10"
+												value="#{roadOperationTeam.jpList}" var="jp" 
+												currentPageReportTemplate="{currentPage} of {totalPages} Justice of the Peace" paginator="true"
+												paginatorTemplate="{PreviousPageLink} {NextPageLink}           {CurrentPageReport}"
+												paginatorPosition="top" paginatorAlwaysVisible="false" scrollable="true">
+													<p:column id="col1" headerText="Team Member">
+															<h:outputText value="#{jp.personBO.getFullName()} - #{jp.getRegNumber()}"/>
+													</p:column>
+													<p:column id="col2" headerText="Attended" style="width:50%">
+															<span style="display:inline-block;white-space:nowrap">
+														        <p:selectOneButton value="#{jp.attended}"  onchange="checkAttendedState(this)" >
+														        	<p:ajax update="jpAbsentComment"/>   
+														            <f:selectItem itemLabel="YES" itemValue="#{true}" />  
+														            <f:selectItem itemLabel="NO" itemValue="#{false}" />    
+														        </p:selectOneButton>
+														        <p:inputText id="jpAbsentComment"  value="jp.comment"  style="visibility:#{(jp.attended eq null or jp.attended)?'hidden':'' }"/>
+														    </span>
+													</p:column>
+													
+											</p:dataTable>
+									</p:tab>
+									<p:tab id="tabVehicle" title="Vehicle">
+										<span style="color:purple">Record the Attendance of each resource</span>
+										<p:dataTable
+												border="1"  style="width: 100%" styleClass="tblroadOpClass"
+												 cellpadding="5"
+												cellspacing="8"  id="teamVehicle"  rows="10"
+												value="#{roadOperationTeam.taVehicleList}" var="veh" 
+												currentPageReportTemplate="{currentPage} of {totalPages} Vehicle" paginator="true"
+												paginatorTemplate="{PreviousPageLink} {NextPageLink}           {CurrentPageReport}"
+												paginatorPosition="top" paginatorAlwaysVisible="false" scrollable="true">
+													<p:column id="col1" headerText="Plate Number">
+															<h:outputText value="#{veh.vehicle.plateRegNo}"/>
+													</p:column>
+													<p:column id="col2" headerText="Make-Model [Color]">
+															<h:outputText value="#{veh.vehicle.makeDescription} - #{veh.vehicle.model} [ #{veh.vehicle.colour} ]"/>
+													</p:column>
+													<p:column id="col2" headerText="Attended" style="width:50%">
+															<span style="display:inline-block;white-space:nowrap">
+														        <p:selectOneButton value="#{veh.attended}"  onchange="checkAttendedState(this)" > 
+														        	<p:ajax update="vehAbsentComment"/>  
+														            <f:selectItem itemLabel="YES" itemValue="#{true}" />  
+														            <f:selectItem itemLabel="NO" itemValue="#{false}" />    
+														        </p:selectOneButton>
+														        <p:inputText id="vehAbsentComment"  value="jp.comment"  style="visibility:#{(veh.attended eq null or veh.attended)?'hidden':'' }"/>
+														    </span>
+													</p:column>
+													
+											</p:dataTable>
+											<div style="color:purple;padding-top:15px">
+												<!-- Motor Cycles -->
+												Other Agency Vehicles
+											</div>
+											<div style="padding-top:10px; width: 40%;display: inline-block;">
+												<h:outputText style="width:14%;" value="Requested :"/> 
+												<h:outputText style="text-align:left" value="#{roadOperationTeam.numOfMotorCycle}"/>
+											</div>
+											<div style="padding-top:10px; width: 40%;display: inline-block;">
+												<h:outputText style="width:14%;" value="Provided :"/>
+												<p:inputText id="txtMotorCyclesProvided" value="#{roadOperationTeam.numOfMotorCycleUsed}"/>
+											</div> 
+									</p:tab>  
+								</p:tabView>
+							</p:column>
+					</p:dataTable>
+					
+			</div>
+			<p:inputText widgetVar="txtCloseStatus" value="#{closeStatus}" style="display:none"></p:inputText>
+			<div style="text-align: center;margin-top: 21px;">
+				<span>
+					<p:commandButton id="butRoadOpPopStart"  styleClass="blue" style="padding-rght:1em;" value="Start" processIds="*" action="start" ajax="true" update=":reviewOperations:panelRoadOpStart :reviewOperations:headerPanel" oncomplete="closePopUpUsingStatus();"></p:commandButton>
+					<p:commandButton id="butRoadOpPopCancel" styleClass="blue" value="Cancel" action="roadOpPopCancel" processIds="*" ajax="false" ></p:commandButton>
+					
+			
+				</span>
+			</div>
+  		</p:panel>
+  		
+  		</p:panel>
+  		<p:remoteCommand name="closeRoadOpStartPop" action="close" processIds="*" oncomplete="closePopUp();" />
+  		<script type="text/javascript">
+  			/*This function is used to color code select one buttons red or green.*/
+			setAttendedStateColors();
+  			
+  			function setConfirmStartVal()
+  			{
+  				alert('IN HERE');
+  				$('input[id*="confirmStartPopup"]').val('Y');
+  			}
+		</script>
+		
+		</ui:fragment>
+	
+</ui:composition>

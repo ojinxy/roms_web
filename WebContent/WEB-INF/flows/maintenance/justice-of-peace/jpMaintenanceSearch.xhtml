@@ -1,0 +1,405 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"	
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/WEB-INF/newTemplate.xhtml">
+
+	<ui:define name="title">JP Maintenance </ui:define>
+	<ui:define name="pageHeader">
+	
+	
+	</ui:define>
+    
+    <ui:define name="content">
+   <!-- <script type="text/javascript" src="${request.contextPath}/script/js/mask.js" />-->
+    	<script>
+    		$("document").ready(function(){
+    			
+    			$('#javax_faces_developmentstage_messages').css('display','none');
+    			//$('#jpMaintenanceSearch\\:trnNbr').mask('999999999',{placeholder:""});
+    		
+    			$('legend').removeClass();
+				$('span.ui-fieldset-toggler').css('float','right');
+				$('legend span').click( 
+				  function() {
+				    $('legend').removeClass();
+				 }); 
+				$('legend').hover( 
+				  function() {
+				    $('legend').removeClass();
+				 }); 
+				 
+				 
+				
+				refreshDatatable();
+				 
+    		});
+    		
+    		 function addFields(){
+					//alert();
+					  var fname =  $('#jpMaintenanceDetails\\:origFName').val();
+					  var lname =  $('#jpMaintenanceDetails\\:origLName').val();
+					var mname =  $('#jpMaintenanceDetails\\:origMName').val(); 
+					//alert(fname + " " + lname); 
+					 $('#jpMaintenanceDetails\\:FName').val(fname);
+					  $('#jpMaintenanceDetails\\:LName').val(lname);
+					$('#jpMaintenanceDetails\\:MName').val(mname);
+					 
+				 }
+				 
+			 function refreshDatatable(){
+					$('#jpMaintenanceSearch\\:searchResults').forceDatatablePagin();
+					}
+				function trnMask(){
+				//$('#jpMaintenanceDetails\\:trnNumber').mask('999999999',{placeholder:""});
+					} 
+    	</script>
+		
+		<h:form styleClass="form" id="jpMaintenanceSearch">
+		<div class="tabs"><a href="#">Justice Of The Peace Maintenance</a></div>
+   		<div class="main borders">
+			 <p:messages autoupdate="true" id="msg" closable="true"/>
+				<p:panelGrid style="margin-top:0px;margin-bottom:0px;width:100%;" id="gridVehicleDetails">
+					<p:row>
+						<p:column>
+							<span style="padding-left:1px;width: 50px;display: inline-block;">
+								<h:outputText styleClass="outputText" value="TRN:" style="margin-right:25px;"/>
+							</span>
+							<!-- <p:inputText value="#{criteria.trnNbr}" id="trnNbr" maxlength="9"
+								size="30" style="text-align: left;" >
+								
+							</p:inputText>-->
+							<p:inputMask value="#{criteria.trnNbr}" id="trnNbr"  mask="9?99999999" maxlength="9" size="30"  style="text-align: left;" placeHolder=""/>
+							<!-- <p:message for="trnNbr" /> -->
+						</p:column>
+						<p:column>
+						<span style="padding-left:1px;width: 120px;display: inline-block;">
+							<h:outputText
+								styleClass="outputText" value="JP Registration #:" style="margin-right:19px;"/>
+						</span>					
+						
+						<p:inputText value="#{criteria.regNumber}" id="regNumber"
+								style="text-align: left;" maxlength="10" size="22" />
+						</p:column>
+					</p:row>
+					
+					<p:row>
+						<p:column>
+						<span style="padding-left:1px;width: 50px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Name:" style="margin-right:10px;"/>
+						</span>
+							<p:autoComplete id="NameId" scrollHeight="200" size="42" cache="true" cacheTimeout="30000" value="#{flowScope.fullName}" completeMethod="#{jpMaintenanceServiceAction.jPNameAutoComplete}"/>
+							<p:watermark for="NameId" value="LAST NAME, First Name MI [Registration No.]" /> 
+						</p:column>
+						<p:column>
+						<span style="padding-left:1px;width: 90px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Parish:" style="margin-right:75px;"/>
+						</span>
+							<p:selectOneMenu
+									value="#{criteria.parishCode}" id="parishCode" style="width:200px;">
+									<f:selectItem itemValue="" itemLabel="All" />
+									<f:selectItems value="#{parishList}" />
+								</p:selectOneMenu>
+						</p:column>
+					</p:row> 
+							
+				<p:row>
+					<p:column colspan="2" style="padding-top:20px;text-align:center;">
+					<sec:authorize ifAnyGranted="#{constants.ROLE_ROMS_REF_JP_SEARCH}">
+						<p:commandButton styleClass="blue blue-icon icon-search icon-af" value="Search" action="search" processIds="*" ajax="false"/>
+					</sec:authorize>
+					<sec:authorize ifAnyGranted="#{constants.ROLE_ROMS_REF_JP_ADD}">
+						<p:commandButton styleClass="blue blue-icon icon-plus icon-af" value="Add" action="add" processIds="*" update=":jpMaintenanceDetails:jpDialog" oncomplete="PF('jpDlg').show();trnMask();" ajax="true"/>
+					</sec:authorize>
+						<p:commandButton id="clearBtn" styleClass="blue blue-icon icon-refresh icon-af" value="Clear" action="clear" processIds="*" ajax="false"/>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			</div>
+		
+				<div id="dataTableDiv" class="dataTableResults" style="height: auto;" >
+
+					<p:dataTable
+					id="searchResults" 
+					value="#{jps.jpList}" var="obj" rows="10"  paginator="true"
+							 selectionMode="single" rowKey="#{obj.regNumber}" selection="#{jps.selectedJP}"
+							 rendered="#{jps.jpList.size()>0}" rowsPerPageTemplate="10,50,100" rowIndexVar="rowIndex"
+							currentPageReportTemplate="Results: {startRecord}-{endRecord} of {totalRecords}"
+						     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						     paginatorPosition="bottom">
+					
+						<sec:authorize ifAnyGranted="#{constants.ROLE_ROMS_REF_JP_EDIT}">
+					 			<p:ajax event="rowSelect" oncomplete="selectJP();" >
+                    		   </p:ajax>
+                    	</sec:authorize>
+					<!-- <p:ajax event="page"  oncomplete="paginate();"/>  -->	
+					<f:facet name="header" >
+						Justice Of The Peace
+					</f:facet>
+					
+					<p:column id="nameCol" sortBy="personBO.lastName" headerText="Name">
+						
+						<b><h:outputText id="lNameValue" value="#{obj.personBO.lastName}" style="padding-right:0px;"></h:outputText>
+						 <h:outputText id="fNameValue" value=", #{obj.personBO.firstName}" style="padding-right:10px;"></h:outputText>
+						 <h:outputText id="middleNameValue" value="#{obj.personBO.middleName}" ></h:outputText></b>
+						<br/>
+						<h:outputText id="regNum" value="Registration #: #{obj.regNumber}" ></h:outputText>
+					</p:column>
+					<p:column id="parishCol" sortBy="parishDescription" headerText="Parish">
+						
+						<h:outputText id="parishValue" value="#{obj.parishDescription}" ></h:outputText>
+					</p:column>
+					<p:column id="status" sortBy="statusDescription" headerText="Status">
+						<h:outputText id="statusValue"
+							value="#{obj.statusDescription}" ></h:outputText>
+					</p:column>
+					<p:column id="lUpdated" headerText="Last Updated">
+						<h:outputText value="#{jpMaintenanceServiceAction.formatDate(obj.auditEntryBO.updateDTime!=null?obj.auditEntryBO.updateDTime:obj.auditEntryBO.createDTime)}" />
+					</p:column>
+					<p:column id="upDateBy" headerText="Updated By">
+						<h:outputText value="#{obj.auditEntryBO.updateUsername!=null?obj.auditEntryBO.updateUsername:obj.auditEntryBO.createUsername}" /> 
+						 <p:tooltip for="@(tr[role=row][data-ri=#{rowIndex}])" value="Click row to edit record." showEffect="fade" hideEffect="fade" 
+						            shared="false" showDelay="500" style="margin-left:200px;"/> 
+					</p:column>
+				</p:dataTable>
+				<!-- <div class="footerClass"><div class="resultClass">Results #{datatable.indexOfFirstItem + 1} - ${pagerBaseAction.pageSize  > datatable.pageElements.rowCount ? datatable.totalNumberOfElements : datatable.indexOfLastItem} of  #{datatable.totalNumberOfElements}</div>
+					<div class="pagingClass">[<sf:commandLink action="first" processIds="*" id="first" disabled="#{datatable.currentPageNumber == 1}">First</sf:commandLink>| <sf:commandLink action="previous" processIds="*" id="previous" disabled="#{datatable.currentPageNumber == 1}">Prev</sf:commandLink>]
+					&#160; &#160; [<sf:commandLink action="next" processIds="*"	id="next" disabled="#{datatable.currentPageNumber == datatable.totalPages }">Next</sf:commandLink>	| <sf:commandLink action="last" processIds="*" id="last" disabled="#{datatable.currentPageNumber == datatable.totalPages }">Last</sf:commandLink> ]</div>
+					
+			</div> -->
+			 <p:commandButton wigetVar="btnSel" id="pageBtn" value="Do select" style="display:none" processIds="*" update=":jpMaintenanceSearch:searchResults" 
+			 ajax="false" ></p:commandButton>
+			 
+				</div>
+				
+		 </h:form>
+		
+		
+		<h:form styleClass="form" id="jpMaintenanceDetails">
+			<p:dialog id="jpDialog" header="#{displaySaveBtn == 'none'?'Edit Justice of the Peace':'Add New Justice of the Peace'}" widgetVar="jpDlg" modal="true" style="max-width:850px;height:400px;" onHide="cancel()">
+			
+			<fieldset><legend id="" title="jpMaintenanceDetails"></legend>
+				 <p:messages autoupdate="true" id="msg2" closable="true"/>
+				<div>
+					<div id="userIdSec" style="float: left; width: 100%; margin: 10px 0px 20px 40px;">
+						<div style="width:28%;float:left;">
+							<h:outputText value="TRN:"  />
+							<h:outputText value="*" styleClass="required" />
+							<span  style="display:#{displaySaveBtn}">
+							<!-- <c:choose>
+							<c:when test="#{displayUpdateBtn == 'none'}"> -->
+								<!-- <p:inputText value="#{jp.personBO.trnNbr}" id="trnNumber" maxlength="9" size="11" style="text-align: left; width: 120px; margin: 0px 0px 10px 15px;" /> -->
+								<p:inputMask  value="#{jp.personBO.trnNbr}" id="trnNumber" maxlength="9" size="11" style="text-align: left; width: 120px; margin: 0px 0px 10px 15px;" mask="9?99999999" placeHolder=""/>
+													
+							</span>
+							<span style="display:#{displayUpdateBtn}">
+								<p:inputText value="#{jp.personBO.trnNbr}" id="trnNumberReadOnly" maxlength="9" size="11" style="text-align: left; width: 120px; margin: 0px 0px 10px 15px;background:#dddddd;" disabled="true"/>
+							</span>
+							 <p:commandLink action="searchTrn" id="searchTrnLink" processIds="*" ajax="true" oncomplete="PF('jpDlg').show();addFields();" update=":jpMaintenanceDetails:jpDialog,:jpMaintenanceSearch:searchResults,:jpMaintenanceDetails:msg2,:jpMaintenanceSearch:msg" disabled="" style="width: 10px; margin: 0px; text-align: center; padding: 0px;">
+     		  					<img id="trnSearchIcon" src="${request.contextPath}/images/search-icon.gif"  alt="Input search criteria" style="float:right;margin:0px;padding:0px;"></img>
+      	 					 </p:commandLink>
+      	 					 <p:tooltip for="searchTrnLink" value="Enter TRN and click to search" showEffect="fade" hideEffect="fade" />
+						</div>
+						<div style="width:100%;float:left;">
+							<h:outputText value="Name:" style="margin: 0px 0px 20px;" />
+							<p:inputText value="#{jp.personBO.lastName}" id="LName" style="text-align: left;margin: 0px 10px 0px 10px;width:120px;background:#dddddd;" disabled="true" />
+							<p:watermark for="LName" value="Last Name" />  
+							<p:inputText value="#{jp.personBO.firstName}" id="FName" style="text-align: left; margin-right: 10px;width:120px;background:#dddddd;" disabled="true"/>
+							<p:watermark for="FName" value="First Name" />  
+							<p:inputText value="#{jp.personBO.middleName}" id="MName" style="text-align: left;width:100px;background:#dddddd;" disabled="true" />
+							<p:watermark for="MName" value="Middle Name" />
+							
+							<h:inputHidden id="origLName" value="#{jp.personBO.lastName}"></h:inputHidden>
+							<h:inputHidden id="origFName" value="#{jp.personBO.firstName}"></h:inputHidden>
+							<h:inputHidden id="origMName" value="#{jp.personBO.middleName}"></h:inputHidden>  
+						</div>
+						<div style="width:100%;float:left;margin-top:10px;">
+							<h:outputText value="JP Registration Number:" style="margin: 0px 0px 40px;" />
+							<h:outputText value="*" styleClass="required" />
+							<p:inputText value="#{jp.regNumber}" id="regNumber" style="text-align: left;margin: 0px 10px 0px 40px;width:120px;" maxlength="10" size="10"/>
+						</div>
+					</div>
+					<br/> <h2 class="sectionTitle"><span>Justice of the Peace Contact Details</span></h2>
+					<p:panelGrid style="margin-top:5px;width:100%;margin-left:20px;" id="gridJP">
+					<p:row>
+						<p:column style="width:60%;">	
+							<h:outputText styleClass="outputText" value="Address" />
+						</p:column>
+						<p:column style="width:40%;">
+							<h:outputText styleClass="outputText" value="Contact Number" />
+						</p:column>
+					</p:row>	
+					<p:row>
+						<p:column>
+						<span style="padding-left:1px;width: 100px;display: inline-block;">
+							<h:outputText value="Street Number: "  />
+						</span>
+							<p:inputText value="#{jp.personBO.streetNo}" id="strtNumber" style="text-align: left; 
+							margin-left: 0px;width:100px;" maxlength="15" />
+						</p:column>
+						<p:column>
+							<h:outputText value="Mobile:"  />
+							<p:inputMask id="mobilePhoneID" styleClass="telephoneCell" value="#{jp.personBO.telephoneCell}" maxlength="17" size="17" mask="(9?99)999-9999" style="margin:0px 0 0px 5px;width: 110px;" onfocus="this.value = this.value==''?'876':this.value;" onblur="this.value = this.value=='(876)___-____'?'':this.value;"/>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+						<span style="padding-left:1px;width: 100px;display: inline-block;">
+							<h:outputText value="Street Name: "  />
+						</span>
+							<p:inputText value="#{jp.personBO.streetName}" id="strtName" 
+							style="text-align: left; margin: 0px 0px 0px 0px; width: 300px;"
+							maxlength="25" />
+						</p:column>
+						<p:column>
+							<h:outputText value="Home:"  />
+							<p:inputMask value="#{jp.personBO.telephoneHome}" maxlength="17" size="38" mask="(9?99)999-9999" id="homePhoneID" style="text-align: left; margin: 0px 0px 0px 10px; width: 110px;" onfocus="this.value = this.value==''?'876':this.value;" onblur="this.value = this.value=='(876)___-____'?'':this.value;"/>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+						<span style="padding-left:1px;width: 100px;display: inline-block;">
+							<h:outputText value="P.O. Box: "  />
+						</span>
+							<p:inputText value="#{jp.personBO.poBoxNo}" id="poBox" size="10" maxlength="6" style="text-align: left; margin: 0px 0px 0px 0px; width: 100px;"/>
+							<h:outputText styleClass="outputText" value="P.O. Location:" style="margin-left:10px;"/>
+								<p:inputText value="#{jp.personBO.poLocationName}" id="poLocationName" maxlength="25" size="40" style="text-align: left;margin: 5px 0px 0px 5px;width:105px;" />
+						</p:column>
+						<p:column>
+							<h:outputText value="Work:"  />
+							<p:inputMask value="#{jp.personBO.telephoneWork}" maxlength="17" size="38" mask="(9?99)999-9999" id="workPhoneID" style="text-align: left; margin: 0px 0px 0px 15px; width: 110px;" onfocus="this.value = this.value==''?'876':this.value;" onblur="this.value = this.value=='(876)___-____'?'':this.value;"/>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2">
+						<span style="padding-left:1px;width: 100px;display: inline-block;">
+							<h:outputText value="Mark: "  />
+						</span>
+							<p:inputText value="#{jp.personBO.markText}" id="markID" style="text-align: left; margin: 0px 0px 0px 0px;width:300px;" maxlength="50" size="50" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2">
+						<span style="padding-left:1px;width: 100px;display: inline-block;">
+							<h:outputText value="Parish: "  />
+							<h:outputText value="*" styleClass="required" />
+						</span>
+							<p:selectOneMenu value="#{jp.parishCode}" id="parishCode" style="margin: 0px 0px 0px 0px; width: 200px;">
+								<f:selectItem itemValue=""  itemLabel="[Select One]"/>
+    							<f:selectItems value="#{parishList}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					
+					<p:row>
+						<p:column colspan="2">
+						<span style="padding-left:1px;width: 100px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Status:" />
+						</span>
+							<span style="display:#{displayUpdateBtn}">
+								<p:selectOneMenu value="#{jp.statusId}" id="statusSel" style="width:170px;text-align:left;margin:0px 0 0px 0px;">
+									<f:selectItem itemValue="ACT" itemLabel="ACTIVE"></f:selectItem>
+									<f:selectItem itemValue="INA" itemLabel="INACTIVE"></f:selectItem>
+								</p:selectOneMenu>
+							</span>
+							<span style="display:#{displaySaveBtn}">
+								<p:inputText value="Active" id="statIdReadOnly" style="text-align: left; margin-left: 0px;width:120px;background:#dddddd;" readonly="true"/>
+							</span>	
+						</p:column>
+					</p:row>
+					
+					
+					</p:panelGrid>
+					
+					
+				<sec:authorize ifAnyGranted="#{constants.ROLE_ROMS_REF_JP_REST_PIN}">
+					<div id="configPinSec" style="float: left; margin: 0px 0px 0px 15px; width: 90%;">
+						<!-- <p:fieldset id="jpDlgFieldSet" legend="Configure Pin" toggleable="true" toggleSpeed="500" style="border-left: medium none; border-right: medium none; border-bottom: medium none; border-radius: 0px;"> -->
+						<p:accordionPanel activeIndex="-1">  
+							
+    						<!-- <p:tab title="#{displayUpdateBtn == 'none'  ? 'Configure PIN':'Reset PIN'}">   -->
+    						<p:tab title="Set PIN">  
+						<!--  <h:panelGrid columns="2" id="matchGrid"> -->
+						
+						<!-- <div style="display:#{displayUpdateBtn}">
+							<h:outputText value="Old PIN:"  />
+							<p:password id="pin0" value="#{jp.oldPin}" label="Old Pin" style="margin: 10px 0px 0px 40px; text-align: left; width: 140px;" />
+						</div> -->
+						<p:panelGrid style="margin-top:5px;width:100%" id="gridPIN">
+								<p:row>
+									<p:column style="width:50%;">
+									<span style="padding-left:1px;width: 50px;display: inline-block;">
+											<h:outputText value="New PIN:"  />
+									</span>
+										<p:password id="pin1" value="#{jp.newPin}" label="Enter Pin" style="margin: 0px 0px 0px 30px; text-align: left; width: 140px;" />
+									</p:column>
+									<p:column style="width:50%;">
+									<span style="padding-left:1px;width: 50px;display: inline-block;">
+										<h:outputText value="Re-Enter PIN:"  />
+									</span>
+										<p:password id="pin2" value="#{jp.confirmedPin}" label="Re-Enter Pin" style="text-align: left; margin: 0px 0px 0px 10px; width: 140px;"/>
+									</p:column>
+								</p:row>
+								
+						</p:panelGrid>
+							</p:tab>
+						</p:accordionPanel>				
+					</div>
+				</sec:authorize>	
+					<div id="buttons" style="width:100%;float:left;margin:20px 0 0 0;text-align:center;">
+						<script>
+						
+						function paginate()
+					 	{
+					 		$("button[id*='pageBtn']").click();
+					 	}
+					 	
+					 	
+					 	showvar = false;
+					 	function cancel()
+						{
+							//console.log("Close button called");
+							$("button[id*='cancel']").click();
+							
+						}
+						
+					</script>
+						
+						<p:commandButton styleClass="blue" value="Save" action="save" oncomplete="if(args.validationFailed){PF('jpDlg').show();addFields();}refreshDatatable();" update=":jpMaintenanceDetails:jpDialog,:jpMaintenanceSearch:searchResults,:jpMaintenanceDetails:msg2,:jpMaintenanceSearch:msg" processIds="*" ajax="true" style="display:#{displaySaveBtn}"/>			
+						<p:commandButton styleClass="blue" value="Save" action="update" oncomplete="if(args.validationFailed){PF('jpDlg').show();addFields();}refreshDatatable();" processIds="*" update=":jpMaintenanceDetails:jpDialog,:jpMaintenanceSearch:searchResults,:jpMaintenanceDetails:msg2,:jpMaintenanceSearch:msg" ajax="true" style="display:#{displayUpdateBtn}"/>
+						<p:commandButton styleClass="blue" value="Clear" processIds="*" actionListener="#{jpMaintenanceServiceAction.clearDetails(flowRequestContext)}" update=":jpMaintenanceDetails:jpDialog" ajax="true" oncomplete="PF('jpDlg').show();" style="display:#{displaySaveBtn}"/>
+						<!-- <p:commandButton styleClass="blue" value="Clear" >  
+				        	<p:ajax update=":jpMaintenanceDetails:jpDialog" resetValues="true" />  
+						</p:commandButton> -->  
+						<p:commandButton id="cancel" styleClass="blue" value="Back" action="cancel" processIds="*" onclick="PF('jpDlg').hide" ajax="false"  update=":jpMaintenanceDetails:jpDialog" />
+					</div>
+				
+				</div>
+			
+				
+				
+			</fieldset>
+			</p:dialog>
+			
+		</h:form> 
+		 <p:commandButton wigetVar="btnSel" id="selectBtn" value="Do select" style="display:none" processIds="*" action="edit" 
+			 ajax="true" oncomplete="PF('jpDlg').show();trnMask();addFields();" update=":jpMaintenanceDetails:jpDialog" ></p:commandButton>
+			 <script>
+			 	function selectJP(){
+			 	$("button[id*='selectBtn']").click()			 	
+			 	}
+
+			 	
+			 
+  				//document.getElementById("jpMaintenanceDetails").reset();
+
+			 </script>
+	</ui:define>
+
+</ui:composition>

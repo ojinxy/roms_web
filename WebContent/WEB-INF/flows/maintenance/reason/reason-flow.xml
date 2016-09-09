@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+    
+    <secured attributes="ROLE_ROMS_REF_REASON_SEARCH" />
+        
+    <var name="mode" class="java.lang.String" />
+	<var name="saved" class="java.lang.String" />
+	<var name="reason" class="fsl.ta.toms.roms.bo.ReasonBO" />
+	<var name="reasons" class="java.util.ArrayList" />
+	<var name="reasonTypeList" class="java.util.ArrayList" />
+	<var name="reasonCodesList" class="java.util.ArrayList" />
+	<var name="criteria" class="fsl.ta.toms.roms.search.criteria.impl.ReasonCriteriaBO" />
+	<var name="reasonBean" class="org.fsl.roms.view.ReasonBean" />
+	<var name="booVal" class="java.lang.String" />
+	<var name="firstEdit" class="java.lang.String" />
+	<on-start>
+		<evaluate expression="reasonMaintenanceServiceAction.getReasonCodes"></evaluate>	
+	</on-start>
+
+<view-state id="reasonMaintenanceSearch">
+	<transition on="search">
+			<evaluate expression="reasonMaintenanceServiceAction.search(flowRequestContext)"></evaluate>
+			<!-- <set name="flowScope.mode" value="'search'"></set>
+			<set name="flowScope.saved" value="'false'"></set-->	
+			<render fragments="reasonResults" />
+	</transition>
+	
+	<transition on="view" to="view">
+			<set name="flowScope.mode" value="'view'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+			<set name="flowScope.reason" value="flowScope.reasonBean.selectedReason" />
+			
+	</transition>
+
+	<transition on="add" >
+			
+			<!-- <set name="flowScope.mode" value="'save'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+			
+			<set name="flowScope.reason.reasonId" value="criteria.reasonId"></set>
+			<set name="flowScope.reason.reasonDescription" value="criteria.reasonDescription" />
+			<set name="flowScope.reason.type" value="criteria.type" />
+			<set name="flowScope.reason.statusId" value="'ACT'" />
+			<render fragments="reasonDetails" /> -->
+			<evaluate expression="reasonMaintenanceServiceAction.addReasonRow(flowRequestContext)"></evaluate>
+			<set name="flowScope.booVal" value="'true'"></set>
+		</transition>
+		
+		<transition on="select">
+			<evaluate expression="reasonMaintenanceServiceAction.select(flowRequestContext)"></evaluate>
+		</transition>
+		
+		
+		<transition on="update">
+			<evaluate expression="reasonMaintenanceServiceAction.updatereason(flowRequestContext)"></evaluate>
+			<set name="flowScope.booVal" value="''"></set>
+		</transition>
+		
+		
+		<!-- Sort the values on the screen -->
+		<transition on="sort" to="reasonMaintenanceSearch">
+			<set name="criteria.sortOn" value="requestParameters.sortOn"/>
+			<evaluate expression="reasonMaintenanceServiceAction.sort" />	
+			<set name="flowScope.reasonBean.reasonList" value="flowScope.datatable.pageElements" />					
+			<render fragments="reasonMaintenanceSearch,reasonResults" />
+		</transition>
+		
+		<!-- Next action on datatable -->
+		<transition on="next" to="reasonMaintenanceSearch">
+			<evaluate expression="reasonMaintenanceServiceAction.next" />	
+			<set name="flowScope.reasonBean.reasonList" value="flowScope.datatable.pageElements" />	
+			<render fragments="reasonMaintenanceSearch,reasonResults" />
+		</transition>
+		
+		<!-- previous action on datatable -->
+		<transition on="previous" to="reasonMaintenanceSearch">
+			<evaluate expression="reasonMaintenanceServiceAction.previous" />	
+			<set name="flowScope.reasonBean.reasonList" value="flowScope.datatable.pageElements" />				
+			<render fragments="reasonMaintenanceSearch,reasonResults" />
+		</transition>
+		
+		<!-- first action on datatable -->
+		<transition on="first" to="reasonMaintenanceSearch">
+			<evaluate expression="reasonMaintenanceServiceAction.first" />	
+			<set name="flowScope.reasonBean.reasonList" value="flowScope.datatable.pageElements" />				
+			<render fragments="reasonMaintenanceSearch,reasonResults" />
+		</transition>
+		
+		<!-- last action on datatable -->
+		<transition on="last" to="reasonMaintenanceSearch">
+			<evaluate expression="reasonMaintenanceServiceAction.last" />	
+			<set name="flowScope.reasonBean.reasonList" value="flowScope.datatable.pageElements" />				
+			<render fragments="reasonMaintenanceSearch,reasonResults" />
+		</transition>
+		
+		<transition on="clear" to="endState" />
+	
+</view-state>
+
+	<view-state id="reasonMaintenanceDetails">
+
+		<transition on="cancelUpdate" to="reasonMaintenanceSearch">
+			<set name="flowScope.saved" value="'false'"></set>
+			<evaluate expression="reasonMaintenanceServiceAction.search"></evaluate>
+			<render fragments="reasonSearch" />
+		</transition>
+		
+		<transition on="cancel" to="reasonMaintenanceSearch">
+			<set name="flowScope.saved" value="'false'"></set>			
+			<render fragments="reasonSearch" />
+		</transition>
+
+		<transition on="initEditMode" to="reasonMaintenanceDetails">
+			<set name="flowScope.mode" value="'update'"></set>
+		</transition>		
+			
+		<transition on="add" to="reasonMaintenanceDetails">
+			<set name="flowScope.mode" value="'save'"></set>						
+			<evaluate expression="reasonMaintenanceServiceAction.initAddMode(flowRequestContext)" />			
+			<set name="flowScope.reason.status" value="'ACT'" />			
+			<render fragments="reasonMaintenanceDetails" />
+		</transition>
+
+		<transition on="success" to="reasonMaintenanceDetails">
+		</transition>
+
+		<transition on="error" to="reasonMaintenanceDetails">
+		</transition>
+
+		<transition on="save" to="savereason" />
+
+		<transition on="update" to="updatereason" />
+	</view-state>
+
+	<action-state id="search">
+		<evaluate expression="reasonMaintenanceServiceAction.search"></evaluate>
+		<transition on="success" to="reasonMaintenanceSearch"></transition>
+		<transition on="error" to="reasonMaintenanceSearch" />
+		<transition on="yes" to="reasonMaintenanceSearch">
+			<set name="flowScope.mode" value="'view'"></set>
+		</transition>
+	</action-state>
+
+	<action-state id="savereason">
+		<evaluate expression="reasonMaintenanceServiceAction.savereason(flowRequestContext)" />		
+		<transition on="success" to="reasonMaintenanceSearch">
+			<set name="flowScope.saved" value="'true'"></set>
+			<set name="flowScope.mode" value="'view'"></set>		
+		</transition>
+		<transition on="error" to="reasonMaintenanceDetails">
+		</transition>
+	</action-state>
+
+	<action-state id="updatereason">
+		<evaluate expression="reasonMaintenanceServiceAction.updatereason(flowRequestContext)" />
+		<transition on="success" to="reasonMaintenanceSearch">
+		</transition>
+
+		<transition on="error" to="reasonMaintenanceSearch">
+		</transition>
+
+	</action-state>
+	
+	<end-state id="endState" />
+	
+</flow>
+
+
+
+
+

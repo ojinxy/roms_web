@@ -1,0 +1,725 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/WEB-INF/newTemplate.xhtml"
+	xmlns:fsl="http://org.fsl.com">
+	
+	<ui:define name="title">Initiate Road Check</ui:define>
+	<ui:define name="pageHeader">Perform Road Check
+	
+	
+	<style> 
+	td{
+		text-align: left;
+	}
+	
+	
+	</style>
+		
+	</ui:define>
+
+	<ui:define name="content">
+   
+	
+	
+	<ui:fragment id="startRoadOp">	 
+		<h:form styleClass="form" id="roadCheckInitiate">
+		 <f:loadBundle basename="messages" var="messages"/>
+		 <div style="padding-bottom:30px">
+              <p:panel id="progressPanel">
+              
+              <ol class="progtrckr" data-progtrckr-steps="5" >
+	    			<li class="progtrckr-current" num="1">Initiate Road Check</li>
+	    			
+					 <c:if test="${initiateView.completeInitiate}">
+					 	<li class="progtrckr-done" num="2">
+						 	<p:commandLink action="backToRecordOffOutcome" id="backToRecordOff" processIds="*" ajax="false" rendered="#{initiateView.completeInitiate}" 
+							 disabled="#{(initiateView.roadLicQuery &amp;&amp; !initiateView.rlQueryDone) || (initiateView.dlQuery &amp;&amp; !initiateView.dlQueryDone) || (initiateView.badgeQuery &amp;&amp; !initiateView.badgeQueryDone) || (initiateView.citationHistQuery &amp;&amp; !initiateView.citationHistQueryDone)}">
+							 Record Offences &amp; Outcomes
+							 </p:commandLink>
+					 	</li>
+					</c:if>
+				 	<c:if test="${!initiateView.completeInitiate}">
+						  	<li class="progtrckr-todo" num="2">Record Offences &amp; Outcome</li>
+					</c:if>
+					
+					<c:if test="${initiateView.completeRecordOffOutcome}">
+					 	<li class="progtrckr-done" num="3">
+						 	<p:commandLink action="backToAddSupportingDet" id="backToAddSupDet" processIds="*" ajax="false" rendered="#{initiateView.completeRecordOffOutcome}" 
+							disabled="#{(initiateView.roadLicQuery &amp;&amp; !initiateView.rlQueryDone) || (initiateView.dlQuery &amp;&amp; !initiateView.dlQueryDone) || (initiateView.badgeQuery &amp;&amp; !initiateView.badgeQueryDone) || (initiateView.citationHistQuery &amp;&amp; !initiateView.citationHistQueryDone)}">
+							Add Supporting Details
+							</p:commandLink>
+						</li>
+					</c:if>
+				 	<c:if test="${!initiateView.completeRecordOffOutcome}">
+						 <li class="progtrckr-todo" num="3">Add Supporting Details</li>
+					</c:if>
+				 
+				 	<c:if test="${initiateView.completeSupportingDetails}">
+					 	<li class="progtrckr-done" num="4">
+						 	<p:commandLink action="backToReviewSummary" id="backToReviewSum" processIds="*" ajax="false" rendered="#{initiateView.completeSupportingDetails}"
+							 disabled="#{(initiateView.roadLicQuery &amp;&amp; !initiateView.rlQueryDone) || (initiateView.dlQuery &amp;&amp; !initiateView.dlQueryDone) || (initiateView.badgeQuery &amp;&amp; !initiateView.badgeQueryDone) || (initiateView.citationHistQuery &amp;&amp; !initiateView.citationHistQueryDone)}">
+							 Review Summary
+							 </p:commandLink>
+					 	</li>
+				 	</c:if>
+				 	<c:if test="${!initiateView.completeSupportingDetails}">
+						  <li class="progtrckr-todo" num="4">Review Summary</li>
+					</c:if>
+				
+				 
+				 <li class="progtrckr-todo" num="5">Prepare &amp; Print Documents</li>
+			 </ol>
+            </p:panel>
+			</div>
+		<p:panel id="panelInitiateRoadCheck" header="Road Check">
+		<p:outputPanel  id="updatePanelOperationType"> 
+			<!-- 
+			<p:panel rendered="#{initiateView.activityType eq 'U'}">
+			<div  class="ui-messages ui-widget" aria-live="polite"><div class="ui-messages-warn ui-corner-all"><span class="ui-messages-warn-icon"></span><ul><li><span class="ui-messages-warn-summary">#{messages['UnscheduledOperation']}</span></li></ul></div></div>
+			</p:panel>
+			 -->
+		</p:outputPanel>
+		<p:messages id="msg" closable="true" autoUpdate="true" redisplay="true"/>
+		
+ 			<p:outputPanel id="customPanel">  
+ 
+ 			 <br/> 
+ 			 <div align="left" style="padding-bottom: 10px;"><h:outputText value="Step 1: Initiate Road Check -"  styleClass="progress-label"/>
+				 <h:outputText value="#{nameUtil.getLastNameCapsFirstNameMiddleName(initiateView.firstName, initiateView.lastName , initiateView.middleName)}" id="Name" styleClass="progress-label-key"/>
+				 <f:subview rendered="#{!initiateView.trn.trim().equalsIgnoreCase('')}"	>
+				 <h:outputText value="["  styleClass="progress-label-key"/><h:outputText value="#{initiateView.trn}" id="trn"  styleClass="progress-label-key"/> 
+				 <h:outputText value="]"  styleClass="progress-label-key"/>
+				 </f:subview>
+				
+			</div>
+ 			 <p:panel id="panelInit" style="padding-left:15px">
+ 			
+	  					
+ 			 	<p:panelGrid id="topPanelGrid">  
+ 			 		<p:row>
+ 			 			<p:column>
+	 			 		 <h:outputText value="Activity: " />   <h:outputText value=" * "  styleClass="required"/>     
+	 			 		 </p:column>
+	 			 		 <p:column style="padding-bottom: 0px;padding-top: 0px;">
+	 			 		  <p:selectOneRadio id="customRadio" value="#{initiateView.activityType}" disabled="#{initiateView.mobileDevice or initiateViewFromQuickQuery ne null}" style="margin-bottom: 0px !important;">  
+	      					  <f:selectItem itemLabel="Scheduled" itemValue="S" />  
+	      					  <f:selectItem itemLabel="Unscheduled" itemValue="U" />     
+	      					  	<p:ajax listener="#{roadCheckServiceAction.getListsForOperation(false)}"  update="roadCheckInitiate:operationNameLabl roadCheckInitiate:operationNameAst roadCheckInitiate:txtRoadOperation roadCheckInitiate:txtTAStaff roadCheckInitiate:txtPlaceOffence updatePanelOperationType" />  
+	  					  		<!-- roadCheckInitiate:txtPlaceOffence roadCheckInitiate:txtTAStaff  -->
+	  					  </p:selectOneRadio>  
+	  					  </p:column>	  					
+	  				</p:row>
+	  				<p:row>	 
+	  				
+	  					 <p:column>
+	  					  <h:outputText id="operationNameLabl" value="Operation Name: "  style="display:#{(initiateView.activityType != 'S')?'none':'inline'}"/>  <h:outputText id="operationNameAst" value=" * " styleClass="required"  style="display:#{(initiateView.activityType != 'S')?'none':'inline'}"/>  
+	  					  </p:column>
+	  					  <p:column>   
+	  					  			
+ 					  			<p:autoComplete global="false" id="txtRoadOperation" scrollHeight="200"  size="40" value="#{initiateView.roadOperationBO}" disabled="#{initiateView.mobileDevice or initiateViewFromQuickQuery ne null}"  style="display:#{(initiateView.activityType != 'S')?'none':'inline'}"
+							completeMethod="#{roadCheckServiceAction.roadCheckRoadOpAutoComplete}" 
+							var="o" itemValue="#{o}" forceSelection="true" itemLabel="#{o.operationName}" >
+							<f:converter binding="#{roadCheckOperationConverter}"></f:converter>
+							<p:ajax event="query" global="false"></p:ajax> 
+							<p:ajax event="itemSelect"  listener="#{roadCheckServiceAction.getListsForOperation(false)}" update="roadCheckInitiate:topPanelGrid roadCheckInitiate:txtOffenceDate roadCheckInitiate:txtPlaceOffence roadCheckInitiate:txtTAStaff :roadCheckInitiate:msg" />  
+						</p:autoComplete> 
+	  					  					  
+	  					
+									
+									 <p:commandButton wigetVar="changeOperation" id="changeOpBtn" value="Do select" style="display:none" processIds="*" action="changeOperation" 
+			 ajax="true" update="roadCheckInitiate:panelInit"></p:commandButton>
+			 <script>
+			 	function changeOperation(){
+			 	$("button[id*='changeOpBtn']").click()			 	
+			 	}
+			 	
+			 </script>
+	  					  </p:column>
+	  					  
+	  				</p:row>
+	  				
+	  				<p:row>	  
+	  				
+	  					  <p:column>
+	  					  <h:outputText value="Place of Offence: " />  <h:outputText value=" * " styleClass="required"/>   
+							</p:column>	  					  
+	  					  <p:column>
+			  			  <p:autoComplete  global="false"  id="txtPlaceOffence" scrollHeight="200"  size="40" value="#{initiateView.offencePlace}" 
+							completeMethod="#{roadCheckServiceAction.roadCheckArteryAutoComplete}" converter="ArteryConverter"
+							var="a" itemValue="#{a}" forceSelection="true" itemLabel="#{a.shortDescription}" disabled="#{initiateView.activityType eq ''}">				 
+		
+						            <p:column style="padding: 0.4em;border: 0 none;">
+						                <h:outputText value="#{a.shortDescription} - #{a.locationDescription}" />
+						            </p:column>
+									<p:ajax event="query" global="false"></p:ajax>  
+						   </p:autoComplete>
+ 					 
+
+	  					  </p:column>
+	  					  
+	  					  <p:column>
+	  					  <h:outputText value="Offence Date: " />  <h:outputText value=" * " styleClass="required"/>   
+							</p:column>	  					  
+	  					  <p:column>
+						 <p:calendar value="#{initiateView.offenceDate}" id="txtOffenceDate" pattern="yyyy-MM-dd hh:mm a"  disabled="#{initiateView.mobileDevice}" showOn="button"
+								readonlyInput="true" size="25">
+							</p:calendar>
+	  					  </p:column>
+	  				</p:row>
+	  				
+	  				
+	  				<p:row>	  
+	  				
+	  					  <p:column>
+	  					  <h:outputText value="Inspector: " />  <h:outputText value=" * " styleClass="required"/>   
+	  					  </p:column>
+	  					  <p:column>
+	  					  
+	  					  <p:watermark id="inspectorWM" for="txtTAStaff" value="Last, First Middle Name [ID]"/>  
+	  					   <p:autoComplete global="false" id="txtTAStaff" scrollHeight="200"  size="40" value="#{initiateView.taStaffBO}" disabled="#{initiateView.mobileDevice or initiateViewFromQuickQuery ne null or initiateView.activityType eq '' }"
+					completeMethod="#{roadCheckServiceAction.roadCheckTaStaffAutoComplete}" converter="TAStaffConverter"
+					var="p" itemValue="#{p}" forceSelection="true" itemLabel="#{p.fullName.concat(' [').concat(p.staffId).concat(']')}" >
+								<p:ajax event="query" global="false"></p:ajax>   
+						  </p:autoComplete>
+	  				
+	  					  </p:column>
+	  					  
+  					  </p:row>
+ 			 	</p:panelGrid>
+ 			 	</p:panel>
+ 			 <h2><span>Person Detail</span></h2>
+ 			 	<p:panelGrid style="margin-left:25px; margin-bottom: 0px !important;" >
+ 			 		
+ 			 	
+ 			 		 
+ 			 	<p:row>
+ 			 		 <p:column  >
+ 			 				<h:graphicImage id="photo2" width="90" height="100"  border="0"
+						url="#{initiateView.photoURL}" alt="No Image" style="display: inline-block; border:3px solid #dddddd;" rendered="#{initiateView.showPhoto}" />
+							
+					</p:column>
+						
+				
+				
+					<p:column style="vertical-align: top" >
+					<p:panelGrid style="margin-bottom: 0px !important;">
+					<p:row>
+						<p:column style="padding-top: 0;padding-right: 0;" >
+							  <h:outputText value="TRN:" style="font-weight:bold;"/> 
+						</p:column>
+				  		<p:column colspan="4" style="padding-top: 0;padding-right: 0;" >
+				  			<h:outputText value="#{initiateView.trn}" id="trn" size="20" disabled="true"/>
+				  		</p:column>
+				  	</p:row>
+					
+					<p:row>	  
+						  
+						  		<p:column style="padding-top: 0;padding-right: 0;" >
+						  			<h:outputText value="Name:" style="font-weight:bold;"/>	
+						  		</p:column>
+						  		<p:column colspan="4" style="padding-top: 0;padding-right: 0;" >
+						  			 <h:outputText value="#{nameUtil.getLastNameCapsFirstNameMiddleName(initiateView.firstName, initiateView.lastName , initiateView.middleName)}" id="lName" size="27" disabled="true"/>
+						  		</p:column>
+						  		<!-- <p:column>
+						  				<h:outputText value="#{initiateView.firstName}" id="fName" size="27" disabled="true"/>
+ 			
+ 				
+						  		</p:column>
+						  		<p:column>
+						  			<h:outputText value="#{initiateView.middleName}" id="middleInitial" size="17" disabled="true"/>
+						  		</p:column>
+						  		 -->
+						 
+				</p:row>
+				<p:row>
+					<p:column style="padding-top: 0;padding-right: 0;" >
+						<h:outputText value="Badge Type:" style="font-weight:bold;"/>  <h:outputText value="  " /> <h:outputText value="  " /> <h:outputText value="  " />
+					</p:column>
+			  		<p:column style="padding-top: 0;padding-right: 0;" >
+				  		<h:outputText value="1. "  rendered="#{initiateView.conductionBadge &amp;&amp;  initiateView.driverBadge}"/><h:outputText value="Conductor"  rendered="#{initiateView.conductionBadge}"/>
+				  		<c:if test="${initiateView.conductionBadge &amp;&amp;  initiateView.driverBadge}">
+							<br></br>
+				  		</c:if>
+				  	
+				  		
+				  		<h:outputText value="2. " rendered="#{initiateView.conductionBadge &amp;&amp;  initiateView.driverBadge}" /><h:outputText value="Driver"  rendered="#{initiateView.driverBadge}"/>
+				  	
+				  		
+				  		
+				  		<h:outputText value="None"  rendered="#{!initiateView.conductionBadge &amp;&amp;  !initiateView.driverBadge}"/> 
+				  	</p:column>					  		
+				
+					<p:column  style="padding-top: 0;padding-right: 0;" >
+				  		<!-- <h:outputText value="Role Observed: " style="font-weight:bold;"/> <h:outputText value=" * " styleClass="required"/>   &nbsp;&nbsp;&nbsp;&nbsp; -->
+				  	</p:column>
+				  	<p:column style="padding-top: 0;padding-right: 0;" >
+				  		<!-- <p:panelGrid>
+				  			<p:row>
+				  				<p:column>
+						  			<p:selectOneMenu id="comboBadgeType" value="#{initiateView.roleObserved}">
+										<f:selectItem itemValue="" itemLabel="[Select One]" />
+										<f:selectItem itemValue="C" itemLabel="Conductor" />
+										<f:selectItem itemValue="D" itemLabel="Driver" />
+										<f:selectItem itemValue="O" itemLabel="Owner" />
+										<f:selectItem itemValue="T" itemLabel="Other" />
+										<p:ajax update="roadCheckInitiate:otherPanel roadCheckInitiate:panelQueries" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column>
+									<p:panel id="otherPanel">
+									<p:selectOneMenu id="comboOtherRole" value="#{initiateView.otherRoleId}" rendered="#{initiateView.roleObserved eq 'T'}">
+										<f:selectItem itemValue="" itemLabel="[Select One]" />
+										<f:selectItems var="otherRole" itemValue="#{otherRole.code}" itemLabel="#{otherRole.description}" value="#{roadCheckServiceAction.getOtherRoleList()}" />
+																				
+									</p:selectOneMenu>
+									</p:panel>
+							</p:column>
+							</p:row>
+						</p:panelGrid> -->
+				  	</p:column>
+				</p:row>
+				
+				<p:row>
+				<p:column style="padding-top: 0;padding-right: 0;" >
+				  		<h:outputText value="Role Observed: " style="font-weight:bold;"/> <h:outputText value=" * " styleClass="required"/>   &nbsp;&nbsp;&nbsp;&nbsp;
+				  	</p:column>
+				  	<p:column style="padding-top: 0;padding-right: 0;" >
+				  		<p:panelGrid style="margin-bottom: 0px !important;">
+				  			<p:row>
+				  				<p:column>
+						  			<p:selectOneMenu id="comboBadgeType" value="#{initiateView.roleObserved}">
+										<f:selectItem itemValue="" itemLabel="[Select One]" />
+										<f:selectItem itemValue="C" itemLabel="Conductor" />
+										<f:selectItem itemValue="D" itemLabel="Driver" />
+										<f:selectItem itemValue="O" itemLabel="Owner" />
+										<f:selectItem itemValue="T" itemLabel="Other" />
+										<p:ajax update="roadCheckInitiate:otherPanel roadCheckInitiate:panelQueries" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column>
+									<p:panel id="otherPanel">
+									<p:selectOneMenu id="comboOtherRole" value="#{initiateView.otherRoleId}" rendered="#{initiateView.roleObserved eq 'T'}">
+										<f:selectItem itemValue="" itemLabel="[Select One]" />
+										<f:selectItems var="otherRole" itemValue="#{otherRole.code}" itemLabel="#{otherRole.description}" value="#{roadCheckServiceAction.getOtherRoleList()}" />
+																				
+									</p:selectOneMenu>
+									</p:panel>
+							</p:column>
+							</p:row>
+						</p:panelGrid>
+				  	</p:column>
+				</p:row>	
+								
+				</p:panelGrid>
+				
+				</p:column>
+				
+				</p:row>
+				
+ 				  <p:watermark for="roadCheckInitiate:lName" value="LAST NAME" />
+				  <p:watermark for="roadCheckInitiate:fName" value="FIRST NAME" />
+				  <p:watermark for="roadCheckInitiate:middleInitial" value="MIDDLE NAME" />
+						  
+ 			</p:panelGrid>
+ 				
+       			
+  
+ 			<div class="wrapper" style="padding-left:25px;">
+ 				<div id ="one">
+ 				<p:panelGrid style="padding-left:15px; margin-bottom: 0 !important;" styleClass="responsivetable" >
+   			
+					 <p:row >
+					  <p:column colspan="4">
+					  	<h:outputText value="Address" styleClass="sub-label"/>	
+					 </p:column>
+					</p:row>
+					
+					<p:row >
+						 <p:column>
+						 <h:outputLabel value="Street Number: " />	
+						 </p:column>
+						 
+						  <p:column colspan="3">
+						  <p:inputText value="#{initiateView.addressView.streetNo}" id="sNum" size="20" maxlength="15"/>
+						 </p:column>
+					</p:row>
+						
+					<p:row >
+					 <p:column>
+					 <h:outputLabel value="Street Name:  " />	 
+					</p:column>
+					 
+					  <p:column colspan="3">
+					  <p:inputText value="#{initiateView.addressView.streetName}" id="sName" size="60" maxlength="25"/>
+					 </p:column>
+
+					</p:row>
+					
+					<p:row >
+					 <p:column>
+					 <h:outputLabel value="P.O. Box: " />	
+					</p:column>
+					 
+					  <p:column>
+					  <p:inputText value="#{initiateView.addressView.poBoxNo}" id="poBox" size="10" maxlength="6"/>
+					 </p:column>
+						
+						 <p:column style="padding-right:0px">
+					 <h:outputLabel value="P.O. Location: " />	
+					</p:column>
+					 
+					  <p:column>
+					  <p:inputText value="#{initiateView.addressView.poLocationName}" id="poLoc" size="21" maxlength="25"/>
+					 </p:column>
+	
+					</p:row>
+					<p:row >
+					 <p:column>
+					 <h:outputLabel value="Mark: " />	
+					</p:column>
+					 
+					  <p:column colspan="5">
+					  <p:inputText value="#{initiateView.addressView.markText}" id="mark" size="60" maxlength="40"/>
+					 </p:column>
+						
+					 
+					</p:row>
+					<p:row >
+					 <p:column>
+					 <h:outputLabel value="Parish: " />	<h:outputText value=" * " styleClass="required"/>  
+					</p:column>
+					 
+					  <p:column colspan="5">
+					<p:selectOneMenu 
+								id="comboParish" value="#{initiateView.addressView.parish}" required="true" requiredMessage="Parish is required.">
+								<f:selectItem itemValue="" itemLabel="[Select One]" />
+								<f:selectItems var="parish" itemValue="#{parish.parishCode}" itemLabel="#{parish.description}" value="#{parishList}" />
+									</p:selectOneMenu>
+					 </p:column>
+						
+					 
+					</p:row>
+					
+					
+		   
+		  	 </p:panelGrid>
+		  	 </div>
+		  	 
+		  	 <div id ="two">
+ 				<p:panelGrid style="padding-left:15px" styleClass="responsivetable" >
+   			
+					 <p:row >
+						<p:column colspan="2">
+					  	<h:outputText value="Contact Number" styleClass="sub-label"/>	
+					 </p:column>
+					</p:row>
+					
+					<p:row >
+						<p:column>
+						 <h:outputLabel value="Mobile: " />	
+						</p:column>
+						 
+						  <p:column>
+						  	<p:inputMask value="#{initiateView.mobilePhoneNo}" mask="(9?99)999-9999" size="15" onfocus="this.value = this.value==''?'876':this.value;" onblur="this.value = this.value=='(876)___-____'?'':this.value;"/>
+						</p:column>
+					</p:row>
+						
+					<p:row >
+						<p:column>
+						 <h:outputLabel value="Home: " />	
+						</p:column>
+						 
+						  <p:column>
+						 
+								<p:inputMask value="#{initiateView.homePhoneNo}" mask="(9?99)999-9999" size="15" onfocus="this.value = this.value==''?'876':this.value;" onblur="this.value = this.value=='(876)___-____'?'':this.value;"/>
+							
+						  
+						 </p:column>
+						</p:row>
+						
+						<p:row >
+						 
+					  <p:column>
+						 <h:outputLabel value="Work:" />	
+					  </p:column>
+					  <p:column>
+					  	
+					   			<p:inputMask value="#{initiateView.workPhoneNo}" mask="(9?99)999-9999" size="15" onfocus="this.value = this.value==''?'876':this.value;" onblur="this.value = this.value=='(876)___-____'?'':this.value;"/>
+						
+					 </p:column>
+					</p:row>
+		  	 </p:panelGrid>
+		 
+ 			</div>
+ 			</div>
+		
+		 <div style="clear:both;"></div>
+		   	<h2><span>Motor Vehicle Observed</span></h2>
+		   
+		  	   
+		   	  <p:panelGrid id="motorVehicleGrid" style="margin-left: 25px;margin-bottom: 0 !important;" styleClass="responsivetable">
+		   
+				<p:row >
+				 <p:column>
+				 <h:outputText value="Plate No.: " />	<h:outputText value=" * " styleClass="required"/>  
+				</p:column>
+				 
+				  <p:column>
+				  <p:inputText value="#{initiateView.plateRegNo}" id="plateNo" size="20" maxlength="20" disabled="#{initiateViewFromQuickQuery ne null}" style="text-transform: uppercase"/>
+				 	 <p:commandLink action="queryMV" id="searchMV" processIds="*" ajax="true" update=":roadCheckInitiate:motorVehicleGrid :roadCheckInitiate:msg" >
+  					 <p:focus context=":roadCheckInitiate:panelInit"/>
+  						<img id="nameearchIcon" src="${request.contextPath }/images/search-icon.gif"  alt="Input search criteria"></img>
+  					</p:commandLink>
+				 </p:column>
+				 
+				<p:column>
+				 <h:outputText value="Model: " />	<h:outputText value=" * " styleClass="required" rendered="#{!initiateView.disableMotorVehicleFields}"/> 
+				</p:column>
+				 
+				  <p:column >
+				  <p:inputText value="#{initiateView.model}" maxlength="30" id="model" size="20" disabled="#{initiateView.disableMotorVehicleFields}"/>
+				 </p:column>
+				 
+				 <p:column >
+				 	<h:outputText value="Road Licence Type: " rendered="#{initiateView.licenceType ne null and initiateView.licenceType ne '' }"/>	 
+				 </p:column>
+				 
+				  <p:column >
+				  	<p:inputText rendered="#{initiateView.rlQueryDone and (initiateView.roadLicNo != '' and initiateView.roadLicNo != null)}" value="#{initiateView.licenceType}" maxlength="30" id="licenceType" size="30" disabled="true"/>
+				  	<h:outputText rendered="#{initiateView.rlQueryDone and (initiateView.roadLicNo == '' or initiateView.roadLicNo == null)}" value="NO ROAD LICENCE FOUND" style="color:red;font-weight:bold"></h:outputText>
+				 </p:column>
+				 
+				</p:row>
+				
+				
+				<p:row >
+				 <p:column>
+				 <h:outputText value="Make: " />	<h:outputText value=" * " styleClass="required" rendered="#{!initiateView.disableMotorVehicleFields}"/> 
+				</p:column>
+				 
+				  <p:column >
+				  <p:inputText value="#{initiateView.makeDescription}" maxlength="30" id="make" size="20" disabled="#{initiateView.disableMotorVehicleFields}"/>
+				 </p:column>
+				
+				 <p:column>
+				 <h:outputText value="Colour: " />	<h:outputText value=" * " styleClass="required" rendered="#{!initiateView.disableMotorVehicleFields}"/> 
+				</p:column>
+				 
+				  <p:column >
+				  <p:inputText value="#{initiateView.colour}" maxlength="30"  id="colour" size="20" disabled="#{initiateView.disableMotorVehicleFields}"/>
+				 </p:column>
+				 
+					<p:column >
+					 <h:outputText rendered="#{initiateView.licenceType ne null and initiateView.licenceType ne '' }" value=" Road Licence Route: " />	
+					</p:column>
+					 
+					  <p:column>
+					  <p:inputText rendered="#{initiateView.licenceType ne null and initiateView.licenceType ne '' }" value="#{initiateView.routeStart.concat(' - ').concat(initiateView.routeEnd)}" maxlength="30" id="chassisNo" size="30" disabled="true"/>
+					 </p:column>
+				</p:row>
+		   
+		  		 <p:row >
+				 <p:column>
+				 <h:outputText value="Year: " />	<h:outputText value=" * " styleClass="required" rendered="#{!initiateView.disableMotorVehicleFields}"/> 
+				</p:column>
+				 
+				  <p:column >
+				  <p:inputMask value="#{initiateView.year}" mask="9999" disabled="#{initiateView.disableMotorVehicleFields}" onkeyup="restrictNumericFields(this);" onkeydown="restrictNumericFields(this);"/> 
+				 </p:column>
+					
+		  		<p:column>
+				 <h:outputText value="Type: " />	<h:outputText value=" * " styleClass="required" rendered="#{!initiateView.disableMotorVehicleFields}"/> 
+				</p:column>
+				 
+				  <p:column>
+				  <p:inputText value="#{initiateView.type}" maxlength="30" id="type" size="20" disabled="#{initiateView.disableMotorVehicleFields}"/>
+				 </p:column>
+				 
+				  <p:column>
+				 <h:outputText rendered="#{initiateView.licenceType ne null and initiateView.licenceType ne '' }" value="Road Licence Expiry Date: " />
+				</p:column>
+				 
+				  <p:column >
+				  <p:inputText rendered="#{initiateView.licenceType ne null and initiateView.licenceType ne '' }" size="30" value="#{initiateView.roadLicExpiryDate}" disabled="true" >
+				  </p:inputText>
+				   
+				 </p:column>
+				 
+		
+				
+				 
+				</p:row>
+				<p:row>
+					<p:column></p:column>
+					<p:column colspan="5">
+						<p:selectBooleanCheckbox id="checkBoxDisMotorVehFields" disabled="#{not initiateView.disableMotorVehicleFields}" itemLabel="The Motor Vehicle information returned from the query is different from what is observed."  value="#{initiateView.vehicleInfoDifferent}" >
+							<p:ajax update="checkBoxDisMotorVehFields" process="@form" global="false" />
+						</p:selectBooleanCheckbox>
+					</p:column>
+				</p:row>
+		   </p:panelGrid>
+		   
+		   
+		    	 <h2><span style=" text-align:left;">I wish to perform the selected Queries</span></h2>
+		  <p:panel id="panelQueries">
+		   <p:panelGrid style="margin-bottom: 0 !important;">
+		   <p:row>
+		   <p:column>
+		   <p:panelGrid>
+		   <p:row>	
+		   		 <p:column>  
+		   		   <p:selectBooleanCheckbox value="#{initiateView.dlQuery}" disabled="#{initiateView.dlQueryDone or initiateView.roleObserved eq 'T'}" itemLabel="Driver's Licence ">
+		   		  		 <p:ajax update="roadCheckInitiate:panelQueries roadCheckInitiate:panelbutton roadCheckInitiate:progressPanel" process="@form" global="false" />
+		   		   </p:selectBooleanCheckbox>
+		   		   </p:column>
+		   		   <p:column>  
+		   		   <h:outputText value="Driver's Licence #: " rendered="#{initiateView.dlQuery}"/><h:outputText value=" * " styleClass="required" rendered="#{initiateView.dlQuery}"/>    
+		   		   </p:column>
+		   		    <p:column>
+		   		    <p:inputMask value="#{initiateView.dlNo}" mask="9?99999999999999" maxlength="15" id="dlNo_dl" size="20" style="display:#{initiateView.dlQuery ? 'block' : 'none'}">		   		  	
+		   		   		 <p:ajax event="keyup" update="dlNo_cit,checkTTMSR" global="false" listener="#{roadCheckServiceAction.toggleTrafficTicketCheckAllowed(flowRequestContext)}"/>
+		   		  	</p:inputMask> 
+		   		  </p:column>
+		   </p:row>	
+		   
+		   <p:row>	
+		    <p:column>  
+		   		   <p:selectBooleanCheckbox value="#{initiateView.badgeQuery}" itemLabel="Badge " disabled="#{initiateView.badgeQueryDone or initiateView.roleObserved eq 'T'}">
+		   		   	<p:ajax update="roadCheckInitiate:panelQueries roadCheckInitiate:panelbutton roadCheckInitiate:progressPanel" process="@form" global="false" />
+		   		   </p:selectBooleanCheckbox>
+		   		   </p:column>		   		  
+		   		  <p:column>  
+		   		    <h:outputText value="Badge #: " rendered="#{initiateView.badgeQuery}"/>  <h:outputText value=" * " styleClass="required" rendered="#{initiateView.badgeQuery}" />  
+		   		   </p:column>
+		   		    <p:column>
+		   		  <p:inputText value="#{initiateView.badgeNo}" id="badgeNo" size="20" rendered="#{initiateView.badgeQuery}" maxlength="20">
+		   		   
+		   		  </p:inputText>  
+		   		  </p:column>
+		   </p:row>	
+		   <p:row>	  
+		    <p:column>
+		   		   <p:selectBooleanCheckbox value="#{initiateView.citationHistQuery}" itemLabel="Citation History " rendered="#{initiateView.showCitationHistQuery}" disabled="#{initiateView.citationHistQueryDone}">
+		   		   		<p:ajax update="roadCheckInitiate:panelQueries roadCheckInitiate:panelbutton roadCheckInitiate:progressPanel" listener="#{roadCheckServiceAction.selectQueriesToPerform}" 
+		   		   		 process="@form" global="false"/>
+		   		   </p:selectBooleanCheckbox>
+		   		   </p:column>
+		   		  <p:column rendered="#{!initiateView.dlQuery &amp;&amp; initiateView.citationHistQuery}">  
+		   		   <h:outputText value="Driver's Licence #: " rendered="#{!initiateView.dlQuery &amp;&amp; initiateView.citationHistQuery}"/>   
+		   		   </p:column>
+		   		    <p:column >
+		   		    <p:inputMask value="#{initiateView.dlNo}" mask="9?99999999999999" maxlength="15" id="dlNo_cit" size="20" style="display:#{!initiateView.dlQuery and initiateView.citationHistQuery ? 'block': 'none' }">		  
+		   		  		<p:ajax event="keyup" update="dlNo_dl,checkTTMSR" global="false" listener="#{roadCheckServiceAction.toggleTrafficTicketCheckAllowed(flowRequestContext)}"/>
+		   		  	</p:inputMask> 
+		   		  </p:column>
+		   		  <p:column rendered="#{initiateView.citationHistQuery}">
+		   		  		<p:selectBooleanCheckbox  value="#{initiateView.includeTTMSResults}" id="checkTTMSR" itemLabel="Include Traffic Ticket Results" disabled="#{initiateView.dlNo eq null or initiateView.dlNo eq ''}">
+		   		  			<p:ajax update="roadCheckInitiate:panelQueries" process="@form" global="false" />
+		   		  		</p:selectBooleanCheckbox>
+		   		  		
+		   		  </p:column>
+       </p:row>	
+       </p:panelGrid>
+		   </p:column>
+		  
+		   
+		   	<p:column>
+		   	 	<p:panel id="panelRequired" header="Required Information" rendered="#{initiateView.dlQuery || initiateView.badgeQuery || initiateView.roadLicQuery || initiateView.citationHistQuery}">
+		   			<p:panelGrid>
+		  
+		   <p:row>	
+		   		
+		   </p:row>	
+		   
+		   <p:row>	
+		    
+		   </p:row>	
+		   
+       </p:panelGrid>
+       
+		   		</p:panel>
+		   </p:column>
+		   </p:row>
+		   </p:panelGrid>
+		</p:panel>
+		  
+		   <p:panel id="panelbutton" >
+		   <p:panelGrid style="margin-left:auto; margin-right:auto;">
+		   <p:row>
+		   	<p:column>
+		   		  	<p:commandButton id="backBtn"  value="Back" action="back" processIds="*"  ajax="false" styleClass="blue" immediate="true"/>
+		   	</p:column>
+		   	<p:column>
+		   		  	<p:commandButton id="proceedBtn"  value="Proceed without Queries" action="proceedWithoutQuery" processIds="*"  ajax="false" rendered="#{!(initiateView.dlQuery || initiateView.badgeQuery || initiateView.badgeQuery || initiateView.citationHistQuery)}" styleClass="blue"/>
+		   		  	<p:commandButton id="performBtn"  value="Perform Queries" action="performQueries" processIds="*"  ajax="false" rendered="#{initiateView.dlQuery || initiateView.badgeQuery || initiateView.citationHistQuery}" styleClass="blue"/>
+		   	</p:column>
+		   	
+		   	<p:column>
+		   		  	<p:commandButton id="cancelBtn"  value="Cancel" action="cancel" processIds="*"  ajax="false" styleClass="blue" immediate="true"/>
+		   	</p:column>
+		   
+		   </p:row>
+		   
+		   </p:panelGrid>
+		   </p:panel>
+		    </p:outputPanel>  
+    				
+ 			
+ 		</p:panel>
+ 		<!-- Invisible Button used for Navigation -->
+		<p:commandButton style="display:none" action="back" id="backToInitiateLink" processIds="*" ajax="false" ></p:commandButton>
+		<p:commandButton style="display:none" action="backToRecordOffOutcome" id="backToRecordOffLink" processIds="*" ajax="false" ></p:commandButton>
+		<p:commandButton style="display:none" action="backToAddSupportingDet" id="backToAddSupDetLink" processIds="*" ajax="false"></p:commandButton>
+		<p:commandButton style="display:none" action="backToReviewSummary" id="backToReviewSumLink" processIds="*" ajax="false" ></p:commandButton>
+			 <!-- Step 5 is Never a link -->
+		<!-- end -->
+
+		</h:form>
+		</ui:fragment>
+		
+		<script type="text/javascript">
+			
+			$(document).ready( function() { 
+				  removeErrorBorder();
+				  
+	        	 $(".progtrckr li:has(a)").click(function() {
+	                  
+	               //TODO use if condition along with invisible buttons
+	               // alert($(this).attr('num'));//.click();
+	               if($(this).attr('num')== 1){
+	            	   $('button[id*=backToInitiateLink]').click(); 
+	               }if($(this).attr('num')== 2){
+	            	   $('button[id*=backToRecordOffLink]').click(); 
+	               } 
+	               else if($(this).attr('num')== 3){
+	                
+	            	   $('button[id*=backToAddSupDetLink]').click(); 
+	               }else if($(this).attr('num')== 4){
+	            	   $('button[id*=backToReviewSumLink]').click();
+	                	
+	               }// <!-- Step 5 is Never a link -->
+	               //else if($(this).attr('num')== 5){
+	            	   //$('button[id*=reviewIdLink]').click(); 
+	              // }
+	               
+	               });		
+	        	  
+	          });
+			function removeErrorBorder(){
+	
+	$('#roadCheckInitiate\\:comboParish').removeClass("ui-state-error");
+	$('#roadCheckInitiate\\:comboParish div').removeClass("ui-state-error");
+
+}
+			
+			</script>
+	</ui:define>
+</ui:composition>

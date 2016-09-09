@@ -1,0 +1,77 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	
+	<ui:fragment id="page">	
+				<div style="position: relative;z-index: 900;">
+					<h2><span>Road Check Details</span></h2>
+					<div style="float: right;position: absolute;top: 5px;right: 25px;background-color: #fff;z-index: 1000;font-size: 16px;">
+		    			<p:commandLink id="butEditRoadCheckDetails" widgetVar="butEditPersonDetails" style="width: 50px;padding-left:2px;padding-top:5px;text-decoration: none;"
+							disabled="#{roadCheckReviewSummaryBean.getDocViews() != null}" action="toStep1" ajax="false" rendered="#{! roadCheckReviewSummaryBean.isViewDetailsScreen()}">
+							<span class="icon icon-edit icon-large"></span>
+						</p:commandLink>
+						<p:tooltip for="butEditRoadCheckDetails" value="Edit road check details."/>
+		    		</div>
+	    		</div>
+				
+				<p:panel id="panelRoadCheckDetails" header="Road Check Details" styleClass="panelOffDetails">
+					<p:panelGrid style="width:100%;margin-top:5px" id="gridRCDetails" styleClass="gridOffDetails">  
+					    	    <p:row id="row1">
+								    	<p:column>
+								    		<b style="padding-left:1px;" class="sub-label">Road Check Information</b>
+								    		<div style="padding-top:5px">
+								    			<h:outputLabel  value="Inspector  :" style="/*white-space:pre;*/font-weight: bold"/>
+								    			<h:outputText value=" #{initiateView.taStaffBO.fullName}"/>
+								    		</div>
+								    		
+								    		<div style="padding-top:5px;">
+								    			<h:outputLabel  value="Offence Date  :&nbsp;" style="/*white-space:pre;*/font-weight: bold"/>
+								    			<h:outputText value="#{initiateView.offenceDate}">
+								    				 <fsl:dateTimeConverter showTime="true" />
+									  			</h:outputText>
+								    		
+								    		</div>
+								  
+								    		<div style="padding-top:5px;">
+								    			<h:outputLabel  rendered="#{initiateView.roadOperationBO ne null and initiateView.roadOperationBO.roadOperationId  ne null }" value="Operation Name  :" style="/*white-space:pre;*/font-weight: bold"/>
+								    			<h:outputText rendered="#{initiateView.roadOperationBO ne null and initiateView.roadOperationBO.roadOperationId  ne null}" value=" #{initiateView.roadOperationBO.operationName}"/>
+								    			<h:outputLabel  rendered="#{initiateView.roadOperationBO eq null or initiateView.roadOperationBO.roadOperationId  eq null}" value="Unscheduled Operation" style="font-weight: bold"/>
+								    		</div>
+								    		
+								    		
+								    	</p:column>
+								  		<p:column>
+								    		<b style="padding-left:1px;" class="sub-label">Location Information</b>
+								    		<div style="padding-top:5px">
+								    			<h:outputLabel  value="Artery  :" style="/*white-space:pre;*/font-weight: bold"/>
+								    			<h:outputText value=" #{initiateView.offencePlace.shortDescription}"/>
+								    		</div>
+								    		
+								    		<div style="padding-top:5px;display:#{initiateView.offencePlace.locationDescription ne null and initiateView.offencePlace.locationDescription ne ''?'block':'none'}">
+								    			<h:outputLabel  value="Location  :" style="/*white-space:pre;*/font-weight: bold"/>
+								    			<h:outputText value=" #{initiateView.offencePlace.locationDescription}">
+								    			</h:outputText>
+								    		</div>
+								  
+								    		<div style="padding-top:5px;">
+								    			<h:outputLabel  value="Parish  :" style="/*white-space:pre;*/font-weight: bold"/>
+								    			<h:outputText value=" #{initiateView.offencePlace.parishDescription}"/>
+								    		</div>
+								    		
+								    		
+								    	</p:column>  	
+								    </p:row>
+					</p:panelGrid>
+				</p:panel>
+	  	
+</ui:fragment>
+</ui:composition>

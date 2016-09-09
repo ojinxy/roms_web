@@ -1,0 +1,195 @@
+/********************************
+ *	Road Ops Related Stylesheet *
+ ********************************/
+
+td.rowHg, tr.ui-widget-content.ui-datatable-odd.ui-datatable-selectable.rowHg.ui-state-highlight,
+tr.ui-widget-content.ui-datatable-even.ui-datatable-selectable.rowHg.ui-state-highlight{
+		background: #049af7 !important;
+		color: white !important;
+		}
+
+
+.scheduling a
+{
+	color: white !important;
+	/*kpowell-addressed ROMS1.0 -097*/
+	background: #3E91C7;/* #ffbf00; */
+	
+	/*padding: 3px;
+	border-top-right-radius: 20px;
+	border-bottom-right-radius: 20px;
+	padding-right: 20px;*/
+	display: block;
+	width: 80px;
+}
+.scheduling a::after{
+	/*kpowell-addressed ROMS1.0 -094*/
+	background-color:#3E91C7;/* #ffbf00 */
+	}
+.completed a
+{
+	color: white !important;
+	/*kpowell-addressed ROMS1.0 -094*/
+	background: #02193F;/* orange */
+	
+	/*padding: 3px;
+	border-top-right-radius: 20px;
+	border-bottom-right-radius: 20px;
+	padding-right: 20px;*/
+	display: block;
+	width: auto;
+}
+.completed a::after{
+/*kpowell-addressed ROMS1.0 -094*/
+	background-color: #02193F;/* orange; */
+	}
+
+
+.started a
+{
+	color: white !important;
+	background: green;
+	/*padding: 3px;
+	border-top-right-radius: 20px;
+	border-bottom-right-radius: 20px;
+	padding-right: 20px;*/
+	display: block;
+	width: 80px;
+}
+.started a::after{background-color:green;}
+
+.closed a
+{
+	color: white !important;
+	background: red;
+	/*padding: 3px;
+	border-top-right-radius: 20px;
+	border-bottom-right-radius: 20px;
+	padding-right: 20px;*/
+	display: block;
+	width: 80px;
+}
+.closed a::after{background-color:red;}
+
+.noaction a
+{
+	color: red;
+	background: white;
+	/*padding: 3px;
+	border-top-right-radius: 20px;
+	border-bottom-right-radius: 20px;
+	padding-right: 20px;*/
+	display: block;
+	width: auto;
+	border: solid orange;
+}
+.noaction a::after{background-color:white;}
+
+.terminated a
+{
+	width: auto;
+	padding-left: 10px;
+	color: red;
+	vertical-align: super;
+}
+
+
+.cancelled a
+{
+	width: auto;
+	padding-left: 10px;
+	color: red;
+	vertical-align: super;
+}
+
+.unknown
+{
+	color: black;
+	background-color: white;
+	padding: 3px;
+	border-top-right-radius: 20px;
+	border-bottom-right-radius: 20px;
+	padding-right: 20px;
+	display: block;
+	width: 70px;
+	//border: solid blue;
+}
+
+.tblRoadOpHover
+{
+	/*background-color: #66FFFF;*/
+}
+
+
+.roadOpView:hover, .roadOpStart:hover
+{
+	border-bottom-color: green !important;	
+}
+
+ 
+/* .ui-picklist.p1 .ui-picklist-list{ */
+/* width: 300px; */
+/* } */
+
+
+.reviewDataTableDetails
+{
+	text-align:center;
+	/*font:message-box;*/
+	
+}
+
+
+.bubble 
+{
+position: relative;
+width: 185px;
+height: 165px;
+padding: 0px;
+background: #FFFFFF;
+border: #85B5D9 solid 12px;
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+}
+
+.bubble:after 
+{
+content: "";
+position: absolute;
+top: 67px;
+left: -15px;
+border-style: solid;
+border-width: 15px 15px 15px 0;
+border-color: transparent #FFFFFF;
+display: block;
+width: 0;
+z-index: 1;
+}
+
+.bubble:before 
+{
+content: "";
+position: absolute;
+top: 56px;
+left: -38px;
+border-style: solid;
+border-width: 26px 26px 26px 0;
+border-color: transparent #85B5D9;
+display: block;
+width: 0;
+z-index: 0;
+}
+
+.stop-scrolling 
+{
+  height: 100%;
+  overflow: hidden;
+}
+
+div[id*=reviewOperations] .ui-accordion-content{
+ 	position:static !important;	
+	
+}
+
+

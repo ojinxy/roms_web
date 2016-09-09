@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+>
+	
+	<secured attributes="ROLE_ROMS_ROAD_OP_SEARCH" />
+	<var name="mode" class="java.lang.String" />
+	<var name="saved" class="java.lang.String" />
+	<var name="screen" class="java.lang.String" />
+	<var name="officeRegionList" class="java.util.ArrayList" />
+	<var name="categoryList" class="java.util.ArrayList" />
+	<var name="statusList" class="java.util.ArrayList" />
+	<var name="criteria" class="fsl.ta.toms.roms.search.criteria.impl.RoadOperationCriteriaBO" />
+	<var name="dataTable" class="org.fsl.datatable.DataTableMemory" />
+	<var name="nameUtil" class="org.fsl.roms.util.NameUtil" />
+	<var name="teamLeadAdvSearch" class="fsl.ta.toms.roms.bo.StaffUserMappingBO" />
+	<var name="roadOpBO" class="fsl.ta.toms.roms.bo.RoadOperationBO" />
+	<var name="unattendedList" class="java.util.ArrayList" />
+	<var name="resourceMinReqMet" class="java.lang.String" />
+	
+	
+	<on-start>
+		<evaluate expression="roadOperationsServiceAction.getTAOfficeRegions"></evaluate>
+		<evaluate expression="roadOperationsServiceAction.getStatusList"></evaluate>
+		<evaluate expression="roadOperationsServiceAction.getCategoryList"></evaluate>
+		<evaluate expression="roadOperationsServiceAction.getStrategies"></evaluate>
+		<evaluate expression="roadOperationsServiceAction.getLocations"></evaluate>
+		<evaluate expression="roadOperationsServiceAction.getParishes"></evaluate>
+		<evaluate expression="nameUtil eq new org.fsl.roms.util.NameUtil()"></evaluate>
+		<set name="screen" value="'search'"></set>
+		<set name="flowScope.hasSpecialPermissions" value="roadOperationsServiceAction.hasSpecialPermissions()" type="java.lang.Boolean"/>
+		<evaluate expression="flowScope.criteria.setOfficeLocCode(roadOperationsServiceAction.hasSpecialPermissions() ? null :roadOperationsServiceAction.getRomsLoggedInUser().getLocationCode())"></evaluate>
+		<evaluate expression="flowScope.criteria.setCategoryId(roadOperationsServiceAction.hasSpecialPermissions() ? null :'REG')"></evaluate>
+		<set name="resourceMinReqMet" value="'yes'"></set>
+	</on-start>
+	
+	<view-state id="roadOperationSearch" redirect="false">
+
+		
+		<transition on="next" to="roadOperationSearch">
+			<evaluate expression="roadOperationsServiceAction.next"></evaluate>
+			<set name="flowScope.mode" value="'search'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+		</transition>
+		
+		<transition on="prev" to="roadOperationSearch">
+			<evaluate expression="roadOperationsServiceAction.prev"></evaluate>
+			<set name="flowScope.mode" value="'search'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+		</transition>
+		
+		<transition on="first" to="roadOperationSearch">
+			<evaluate expression="roadOperationsServiceAction.first"></evaluate>
+			<set name="flowScope.mode" value="'search'"></set>
+			<set name="flowScope.saved" value="'false'"></set>
+		</transition>
+		
+		<transition on="last" to="roadOperationSearch">
+			<evaluate expression="roadOperationsServiceAction.last"></evaluate>
+			<set name="flowScope.mode" value="'search'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+		</transition>
+		
+		<transition on="search" to="roadOperationSearch">
+			<evaluate expression="roadOperationsServiceAction.getResults"></evaluate>
+		</transition>
+		
+		<transition on="reset" to="endState" />	
+		
+		<transition on="clear" to="endState" />
+		
+		<transition on="sortOrderASC" to="roadOperationSearch" >
+			<evaluate expression="roadOperationsServiceAction.sortOrderASC"></evaluate>
+		</transition>
+		
+		<transition on="sortOrderDESC" to="roadOperationSearch" >
+			<evaluate expression="roadOperationsServiceAction.sortOrderDESC"></evaluate>
+		</transition>
+
+		<transition on="roadOperationStart" to="roadOperationStartAction" />
+		
+		<transition on="roadOperationComplete" to="roadOperationCompleteAction" />
+		
+		<transition on="viewOne" to="viewOneOperationSub">
+<!-- 			<evaluate expression="roadOperationsServiceAction.viewOneOperationSub(dataTable.pageElements.getSelectedRow(), flowRequestContext)"></evaluate> -->
+		</transition>
+		
+		
+		<transition on="authOne" to="authOneOperationSub"></transition>
+		
+		<transition on="close" to="roadOperationSearch"></transition>
+		
+	
+	</view-state>
+	
+	<action-state id="roadOperationStartAction">
+		<evaluate expression="roadOperationsServiceAction.startOperationLoadPopUp"></evaluate>
+		<evaluate expression="roadOperationsServiceAction.getRegionList"></evaluate>
+		<transition on="success" to="roadOperationStartView"></transition>
+		<transition on="error" to="roadOperationSearch"></transition>
+	</action-state>
+	
+	<action-state id="roadOperationCompleteAction">
+		<evaluate expression="roadOperationsServiceAction.startOperationLoadPopUp"></evaluate>
+		<transition on="success" to="roadOperationStartView"></transition>
+		<transition on="error" to="roadOperationSearch"></transition>
+	</action-state>
+	
+
+	<view-state id="roadOperationStartView"  redirect="false" view="roadOperationStart_view.xhtml">
+		<transition on="backToRoadOpSearch" to="roadOperationSearch"></transition>
+		<transition on="closeRoadOpStartPop" to="roadOperationSearch"/>
+		
+		<transition on="beforeStart">
+			<evaluate expression="roadOperationsServiceAction.getUnattendedResources"></evaluate>
+		</transition>
+		
+		<transition on="start">
+			<evaluate expression="roadOperationsServiceAction.startCompleteRoadOperation(flowRequestContext,roadOperationsServiceAction.ROAD_OPERATION_STARTED)"></evaluate>
+		</transition>
+		
+		<transition on="complete">
+			<evaluate expression="roadOperationsServiceAction.startCompleteRoadOperation(flowRequestContext,roadOperationsServiceAction.ROAD_OPERATION_COMPLETED)"></evaluate>
+		</transition>
+		
+		<transition on="roadOpPopCancel" to="roadOperationSearch"></transition>
+		
+		<transition on="startRoadOpCompleteMessage" to="roadOperationStartSuccessAction"/>			
+		
+		<transition on="updateResources" to="updateResourceSub"/>
+	</view-state>
+	
+	<action-state id="roadOperationStartSuccessAction">
+		<evaluate expression="roadOperationsServiceAction.startRoadOpCompleteMessage"></evaluate>
+		<transition on="success" to="roadOperationSearch"/>
+	</action-state>
+	
+	
+	<end-state id="endState" />
+	
+
+	<subflow-state id="updateResourceSub" subflow="road_operations/view_operation">
+		<input name="fromStart" value="'yes'"/>
+		<input name="fromWhere" value="'search'"/>
+		<input name="opStatus" value="roadOperationsServiceAction.getStatusOfSelectedOp(dataTable)"/>
+		<input name="theTable" value="dataTable" type="org.fsl.datatable.DataTableMemory"/>
+		<transition on="backToSearchScr" to="roadOperationSearch">
+			<evaluate expression="roadOperationsServiceAction.getResults"></evaluate>
+		</transition>
+	</subflow-state>
+	
+
+
+	<subflow-state id="viewOneOperationSub" subflow="road_operations/view_operation">
+		<input name="fromStart" value="'no'"/>
+		<input name="fromWhere" value="'search'"/>
+		<input name="opStatus" value="roadOperationsServiceAction.getStatusOfSelectedOp(dataTable)"/>
+		<input name="theTable" value="dataTable" type="org.fsl.datatable.DataTableMemory"/>
+		<transition on="backToSearchScr" to="roadOperationSearch">
+			<evaluate expression="roadOperationsServiceAction.getResults"></evaluate>
+		</transition>
+	</subflow-state>
+	
+	<subflow-state id="authOneOperationSub" subflow="road_operations/view_operation">
+		<input name="fromStart" value="'no'"/>
+		<input name="fromWhere" value="'search'"/>
+		<input name="specificAction" value="'authorize'"/>
+		<input name="opStatus" value="roadOperationsServiceAction.getStatusOfSelectedOp(dataTable)"/>
+		<input name="theTable" value="dataTable" type="org.fsl.datatable.DataTableMemory"/>
+		<transition on="backToSearchScr" to="roadOperationSearch"/>
+	</subflow-state>
+
+
+</flow>

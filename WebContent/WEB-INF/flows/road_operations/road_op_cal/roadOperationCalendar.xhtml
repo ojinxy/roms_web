@@ -1,0 +1,253 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:display="urn:jsptld:http://displaytag.sf.net"	
+	template="/WEB-INF/newTemplate.xhtml"
+	xmlns:fsl="http://org.fsl.com">
+	
+	<ui:define name="title">Road Operation Calendar</ui:define>
+	<ui:define name="pageHeader">
+		<link href="${request.contextPath}/theme/roadOpCal.css"	rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/theme/cssgrids-min.css"/>
+		<script type="text/javascript" src="${request.contextPath}/script/JQueryUI/jquery.balloon.js"></script>
+		<script type="text/javascript" src="${request.contextPath}/script/JQueryUI/jquery.fittext.js"></script>
+		<meta name="viewport" content="user-scalable=no,width=device-width,initial-scale=1.0,maximum-scale=1.0" />
+		<!-- CSS Used for Road Operation Screens -->
+		<link href="${request.contextPath}/theme/roadOp.css" rel="stylesheet" />
+	</ui:define>
+	<ui:define name="content">
+		<h:form styleClass="form" id="roadOperationCalendar" style="font-size:100%;">
+		<p:messages id="errorMessageMain" closable="true" autoUpdate="true"/>
+			<p:panel id="panel" header="Road Operation Calendar">
+					<div class="tabs"><a href="#">Road Operation Calendar</a></div>
+					<div class="main borders">
+					<span style="padding-bottom: 10px;vertical-align:top;display:none" id="actualDateSelection" >
+						<p:selectBooleanCheckbox value="#{roadOpCal.actualDateCrit}" style="margin-right:5px;" widgetVar="checkActDate">
+							<p:ajax onstart="hideBalloons();" oncomplete="refreshEvents();"/>
+						</p:selectBooleanCheckbox>
+						Actual Operation Date	&amp;					
+					</span>		
+					<div class="yui3-g">					
+							<div class="yui3-u-5-6">	
+								<p:schedule id="sch" columnFormat="dddd" value="#{roadOpCal.lazyScheduleModel}" widgetVar="widgetSchedule" draggable="false" resizable="false" 
+									leftHeaderTemplate="title" rightHeaderTemplate="today,prev,next" centerHeaderTemplate="month,agendaWeek,agendaDay">
+									<p:ajax event="eventSelect" global="false"  listener="#{roadOpCal.listenToCalEventClick}" update="errorMessageMain,eventDialog" oncomplete="eventClick();"/>
+									
+								</p:schedule>
+							</div>
+							<div id="divLegend" class="yui3-u" style="padding-top:150px;padding-left:7px">
+							<div class="legend">
+								<span class="eventSch legendKey"/>
+								Scheduled
+							</div>
+							<div class="legend">
+								<span class="eventSta legendKey"/>
+								Started
+							</div>
+							<div class="legend">
+								<span class="eventClo legendKey"/>
+								Closed
+							</div>
+							<div class="legend">
+								<span class="eventCom legendKey"/>
+								Completed
+							</div>
+							<div class="legend">
+								<span class="eventCan legendKey"/>
+								Canceled
+							</div>
+							<div class="legend">
+								<span class="eventTer legendKey"/>
+								Terminated
+							</div>
+							<div class="legend">
+								<span class="eventNoa legendKey"/>
+								No Action
+							</div>
+						</div>					
+					</div>
+				</div>
+			</p:panel>
+			<div id="dummyDiv"/>
+			<p:outputPanel id="eventDialog" >
+					<div  title="Road Operation Details" id="divPopup" style="width: auto;height: auto;overflow: hidden;padding:10px;display: none;">
+						
+						<p:outputLabel styleClass="balloonHeader" value="#{opName} ( #{opStatus} )" />
+						<a href="javaScript:void(0);" class="closeBalloon" style="color:gray;float: right;text-decoration: none;" onclick="closeBalloon();">X</a>
+						<hr class="balHeader"/>
+						Scheduled
+						<span style="white-space: nowrap;padding-top:5px;display:block">
+							<b>Start Date:</b> <h:outputText value=" #{roadOperationsServiceAction.formatDate(opSchStartDate)}" ></h:outputText>
+						</span>
+						<span style="white-space: nowrap;padding-top:5px;display:block;">
+							<b>End Date:</b> <p:outputLabel value=" #{roadOperationsServiceAction.formatDate(opSchEndDate)}" />
+						</span>
+						<div id="divActualDetails" style="display:#{opActStartDate != null ?'':'none'};padding-top:10px">
+							Actual
+								<span style="white-space: nowrap;padding-top:5px;display:block">
+									<b>Start Date:</b> <p:outputLabel value=" #{roadOperationsServiceAction.formatDate(opActStartDate)}" />
+								</span>
+								<span style="white-space: nowrap;padding-top:5px;display:block">
+									<b>End Date:</b> <p:outputLabel value=" #{roadOperationsServiceAction.formatDate(opActEndDate)}" />
+								</span>
+							<br/>
+						</div>
+						<span style="text-align: right;display: block; width: 90%;padding-top:8px;">
+						
+							<sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_OP_START">
+							<sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_OP_AUTH">
+								<f:subview rendered="#{(operation.validUserToScheduleOp)and((roadOp.statusDescription.trim().equalsIgnoreCase('scheduling') or roadOp.statusDescription.trim().equalsIgnoreCase('no Action') )and not roadOp.authorized.equals('N'))}"	>
+									<p:commandLink id="butStart" action="roadOperationStart" ajax="false" style="padding-right:20px;">
+										<h:graphicImage value="/resources/images/startRoadOp.png" styleClass="roadOpStart" style="border-bottom: white 4px solid;"/>
+									</p:commandLink>
+								</f:subview>
+							</sec:authorize>	
+							</sec:authorize>
+							
+							
+							<p:commandLink id="butView" action="viewOne" ajax="false" processIds="*" >
+									<h:graphicImage value="/resources/images/viewRoadOp.png" styleClass="roadOpView" style="border-bottom: white 4px solid;" />
+							</p:commandLink>
+						</span>
+						<br/>
+					</div>
+					<input type="hidden" id="txtSelectedDay" value="#{selectedDay}" />
+					<input type="hidden" id="txtSelectedMonth" value="#{selectedMonth}" />
+					<input type="hidden" id="txtSelectedYear" value="#{selectedYear}" />
+				</p:outputPanel>
+
+<!-- 						<p:dialog id="dlgRoadOpStart" modal="true" widgetVar="dlgRoadOpStart" header="Road Operation Start Details" update="panelRoadOpSearch"> -->
+<!-- 			  				<p:outputPanel rendered="#{roadOpBO != null }"> -->
+<!-- 								<ui:include src="../roadOperationStart.xhtml"></ui:include> -->
+<!-- 							</p:outputPanel> -->
+<!-- 						</p:dialog> -->
+				<p:remoteCommand name="setDataTableForViewOne" action="setDataTableForViewOne"  />
+			<script type="text/javascript">
+			//<![CDATA[
+       
+			           
+			           
+		        $(document).ready( function() {
+		        	
+		        	$('.fc-header-left').find('.fc-header-title').prepend('<img src="/ROMS-WEB/resources/images/Objects-Tear-of-calendar-icon.png" style="float:left;padding-right:10px;width:15%"/>')
+		        	
+		        	var checked = checkActDate.input.is( ':checked');
+		        	
+		        	var valueForChecked = '';
+		        	
+		        	if(checked == true)
+		        		valueForChecked = 'checked';
+		        		
+		        	$('.fc-header-title').append('<input type="checkbox" name="vehicle" onclick="clickActDate()" ' + valueForChecked + '/>Actual Operation Date')
+		        	
+		        	$('.fc-header-left').find('.fc-header-title').css('font-size','80%');
+		        	$('.fc-header-left').find('.fc-header-title').fitText(1.3);
+		        	
+		        	/*Do this to hide balloon pop up on entry of screen.*/
+		        	$("#dummyDiv").hideBalloon({contents:$('div[id*=eventDialog]'),classname:"balloonCss",showDuration: 0, hideDuration: 0});
+		        	
+		        	$('#divPopup').css('display','none');
+		        	
+		        	/*Watch for all event clicks and store html elment each time.*/
+		        	$(document).click(function(event) {
+		        		if($(event.target).hasClass('closeBalloon') || $(event.target).closest( '[class^="fc-event"]' ).length > 0){
+			        		$.prevClicked = $.lastClicked;
+			        		$.lastClicked = event.target;
+		        		}
+		        	});
+		        	
+		        
+		        	$("span[class*='fc-button-month']").bind('click',function(){hideBalloons()});
+		        	$("span[class*='fc-button-agendaWeek']").bind('click',function(){hideBalloons()});
+		        	$("span[class*='fc-button-agendaDay']").bind('click',function(){hideBalloons()});
+		        	$("span[class*='fc-button-today']").bind('click',function(){hideBalloons()});
+		        	$("span[class*='fc-button-prev']").bind('click',function(){hideBalloons()});
+		        	$("span[class*='fc-button-next']").bind('click',function(){hideBalloons()});
+		        	
+		        	
+				  });   
+		        
+		        function refreshEvents(){
+		        	
+		        	widgetSchedule.jqc.fullCalendar('removeEvents');
+		        	
+		        	widgetSchedule.jqc.fullCalendar('refetchEvents');
+		        }
+
+				function eventClick()
+				{
+					$('#divPopup').css('display','');
+					
+					if( $($.lastClicked).closest( '[class*="eventMor"]' ).length < 1){
+					
+						/*Show event as the selected item is NOT More Component.*/
+						/*Use stored html element to show ballon.*/
+						
+						$($.prevClicked).hideBalloon({contents:$('div[id*=eventDialog]'),classname:"balloonCss",showDuration: 0, hideDuration: 0});
+						
+						$($.lastClicked).showBalloon({contents:$('div[id*=eventDialog]'),classname:"balloonCss",showDuration: 0, hideDuration: 0});
+					}
+					else{
+					
+						/*More is selected so go to the agendaDay of the date selected.*/
+						
+						$('div[id*=eventDialog]').hide()
+						
+						widgetSchedule.jqc.fullCalendar('removeEvents');
+						
+						widgetSchedule.jqc.fullCalendar('changeView','agendaDay');
+						
+						var date = new Date($('#txtSelectedYear').val(),$('#txtSelectedMonth').val(), $('#txtSelectedDay').val());
+						
+						widgetSchedule.jqc.fullCalendar( 'gotoDate',date);
+						
+						widgetSchedule.jqc.fullCalendar('refetchEvents');
+						
+						
+					}
+					
+					setDataTableForViewOne();
+					
+					
+				}
+				
+				function closeBalloon()
+				{
+				
+					$($.lastClicked).hideBalloon({contents:$('div[id*=eventDialog]'),classname:"balloonCss",showDuration: 0, hideDuration: 0});
+				}
+				
+				function hideBalloons()
+				{
+					$("div[class*='balloonCss']").hide();
+				}
+				
+				function displayAttendancePop()
+				{
+					
+					closeBalloon();
+					
+					PF('dlgRoadOpStart').show();
+				}
+				
+				
+				function clickActDate(){
+					checkActDate.toggle();
+				}
+				
+		
+			//]]>
+  			</script>
+  
+		</h:form>
+		
+	</ui:define>
+</ui:composition>

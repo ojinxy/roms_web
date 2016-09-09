@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+	    http://www.springframework.org/schema/beans
+       	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+
+	<!-- Message Bundle -->
+
+<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="messages" />
+	</bean>
+	
+	<!-- Service Factory -->
+	<bean id="serviceFactory" class="fsl.ta.toms.roms.service.impl.SpringAwareServiceFactory" />
+
+
+	<!-- Scheduler -->
+	<bean id="schedulerService" class="fsl.ta.toms.roms.service.impl.SchedulerServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+		<property name="serviceFactory" ref="serviceFactory" />
+	</bean>
+
+	<!-- Event Audit -->
+	<bean id="eventAuditService" class="fsl.ta.toms.roms.service.impl.EventAuditServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+	</bean>
+
+	<!-- Road Compliancy -->
+	<bean id="roadCompliancyService" class="fsl.ta.toms.roms.service.impl.RoadCompliancyServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+	</bean>
+
+	<!-- Reference Code -->
+	<bean id="referenceCodeService" class="fsl.ta.toms.roms.service.impl.ReferenceCodeServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+	</bean>
+
+	<!-- Staff User Mapping -->
+	<bean id="staffUserMappingService"
+		class="fsl.ta.toms.roms.service.impl.StaffUserMappingServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+		<property name="serviceFactory" ref="serviceFactory" />
+	</bean>
+
+	<!-- Authorization -->
+	<bean id="authorizationService" class="fsl.ta.toms.roms.service.impl.AuthorizationServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+	</bean>
+
+	<!-- Recording Court Outcome -->
+	<bean id="recordingCourtOutcomeService"
+		class="fsl.ta.toms.roms.service.impl.RecordingCourtOutcomeServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+	</bean>
+
+	<!-- Road Operation -->
+	<bean id="roadOperationService" class="fsl.ta.toms.roms.service.impl.RoadOperationServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+		<property name="serviceFactory" ref="serviceFactory" />
+	</bean>
+
+	<!-- Summons -->
+	<bean id="summonsService" class="fsl.ta.toms.roms.service.impl.SummonsServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+	</bean>
+
+	<!-- Trial -->
+	<bean id="courtAppearanceService" class="fsl.ta.toms.roms.service.impl.CourtAppearanceServiceImpl">
+
+	</bean>
+
+	<!-- Court Case -->
+	<bean id="courtCaseService" class="fsl.ta.toms.roms.service.impl.CourtCaseServiceImpl">
+		
+	</bean>
+
+	<!-- LMIS Service -->
+	<bean id="LMISService" class="fsl.ta.toms.roms.service.impl.LMISServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+	</bean>
+
+	<!-- Warning Notice -->
+	<bean id="warningNoticeService" class="fsl.ta.toms.roms.service.impl.WarningNoticeServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+	</bean>
+	
+	<!-- Warning No Prosecution -->
+	<bean id="warningNoProsecutionService" class="fsl.ta.toms.roms.service.impl.WarningNoProsecutionServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+	</bean>
+
+	<!-- BMIS Service -->
+	<bean id="BIMSService" class="fsl.ta.toms.roms.service.impl.BIMSServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+	</bean>
+
+	<!-- Ticket Service -->
+	<bean id="ticketService" class="fsl.ta.toms.roms.service.impl.TicketServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+	</bean>
+	
+	<!-- TTMS Code Service -->
+	<bean id="ttmsCodeService" class="fsl.ta.toms.roms.service.impl.TTMSCodeServiceImpl">
+		<property name="daoFactory" ref="daoFactory"/>
+	</bean>
+	
+	<!-- Report Service -->
+	<bean id="reportService" class="fsl.ta.toms.roms.service.impl.ReportServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+	</bean>
+
+	<bean id="itaExaminerService" class="fsl.ta.toms.roms.service.impl.ITAExaminerServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+		<property name="serviceFactory" ref="serviceFactory" />
+	</bean>
+
+	<bean id="jpService" class="fsl.ta.toms.roms.service.impl.JPServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+		<property name="serviceFactory" ref="serviceFactory" />
+	</bean>
+	<!-- Reference Code Services -->
+	<bean id="wreckingCompanyService"
+		class="fsl.ta.toms.roms.service.impl.WreckingCompanyServiceImpl">
+	</bean>
+
+	<bean id="poundService" class="fsl.ta.toms.roms.service.impl.PoundServiceImpl">
+	</bean>
+
+	<bean id="parishService" class="fsl.ta.toms.roms.service.impl.ParishServiceImpl">
+	</bean>
+
+	<bean id="arteryService"
+		class="fsl.ta.toms.roms.service.impl.ArteryServiceImpl">
+	</bean>
+
+	<bean id="courtService" class="fsl.ta.toms.roms.service.impl.CourtServiceImpl">
+	</bean>
+
+	<bean id="locationService" class="fsl.ta.toms.roms.service.impl.LocationServiceImpl">
+	</bean>
+	
+	<bean id="governingLawService" class="fsl.ta.toms.roms.service.impl.GoverningLawServiceImpl">
+	</bean>
+
+	<bean id="configurationService" class="fsl.ta.toms.roms.service.impl.ConfigurationServiceImpl">
+	</bean>
+
+	<bean id="holidayExceptionsService" class="fsl.ta.toms.roms.service.impl.HolidayExceptionsServiceImpl">
+	</bean>
+
+	<!-- End Reference Code Services -->
+
+	<bean id="taVehicleService" class="fsl.ta.toms.roms.service.impl.TAVehicleServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+		<property name="serviceFactory" ref="serviceFactory" />
+	</bean>
+
+	<!-- TRN Web Service Bean -->
+	<bean id="TRNWebServiceConfiguration" class="fsl.ta.toms.roms.service.impl.TRNServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+	</bean>
+
+	<bean id="trnService"
+		class="org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean">
+		<property name="wsdlDocumentUrl"
+			value="#{TRNWebServiceConfiguration.getTRNWebServiceURL()}"></property>
+		<property name="serviceName" value="TrnValidatorService"></property>
+		<property name="portName" value="TrnValidator"></property>
+		<property name="serviceInterface"
+			value="fsl.ta.toms.roms.trnwebservice.TrnValidatorSEI"></property>
+		<property name="namespaceUri"
+			value="http://services.TRNValidator.webservices.fsl.org"></property>
+		 <property name="customProperties">
+     		 <ref local="jaxwsCustomProperties"/>
+   		</property>
+   		<property name="lookupServiceOnStartup" value="false" />
+	</bean>	
+
+	
+	<util:map id="jaxwsCustomProperties">
+	   <entry key="mtom-enabled" value="false"/>
+	</util:map>
+
+	<!-- AMVS Web Service Bean -->
+	<bean id="AMVSWebServiceConfiguration" class="fsl.ta.toms.roms.service.impl.AMVSServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+	</bean>
+
+	<bean id="amvsWebService"
+		class="org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean">
+		<property name="wsdlDocumentUrl"
+			value="#{AMVSWebServiceConfiguration.getAMVSWebServiceUrl()}"></property>
+		<property name="serviceName" value="FslMotorVehicleService"></property>
+		<property name="portName" value="FslMotorVehicle"></property>
+		<property name="serviceInterface"
+			value="fsl.ta.toms.roms.amvswebservice.FslMotorVehicle"></property>
+		<property name="namespaceUri" value="http://vehicle.ws.fsl.org"></property>
+		 <property name="lookupServiceOnStartup" value="false" />
+	</bean>
+ 
+	
+	<!-- Driver Licence Web Service Bean -->
+	<bean id="DLWebServiceConfiguration" class="fsl.ta.toms.roms.service.impl.DLServiceImpl">
+		<property name="daoFactory" ref="daoFactory" />
+	</bean>
+
+	<bean id="dlWebService"
+		class="org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean">
+		<property name="wsdlDocumentUrl"
+			value="#{DLWebServiceConfiguration.getDLWebServiceURL()}"></property>
+		<property name="serviceName" value="FslDriversLicenceService"></property>
+		<property name="portName" value="FslDriversLicence"></property>
+		<property name="serviceInterface"
+			value="fsl.ta.toms.roms.dlwebservice.FslDriversLicence"></property>
+		<property name="namespaceUri" value="http://dl.ws.fsl.org"></property>
+		 <property name="lookupServiceOnStartup" value="false" />
+	</bean>
+	
+	<bean id="offenceService" class="fsl.ta.toms.roms.service.impl.OffenceServiceImpl">
+		<property name="daoFactory" ref="daoFactory"/>
+		<property name="serviceFactory" ref="serviceFactory" />
+	</bean>
+	
+	<bean id="reasonService" class="fsl.ta.toms.roms.service.impl.ReasonServiceImpl">
+		<property name="daoFactory" ref="daoFactory"/>
+		<property name="serviceFactory" ref="serviceFactory" />
+	</bean>
+	
+	<bean id="strategyService" class="fsl.ta.toms.roms.service.impl.StrategyServiceImpl">
+		<property name="daoFactory" ref="daoFactory"/>
+		<property name="serviceFactory" ref="serviceFactory" />
+	</bean>
+		
+	<bean id="scannedDocService" class="fsl.ta.toms.roms.service.impl.ScannedDocServiceImpl">
+	</bean>
+	
+	<bean id="userService" class="fsl.ta.toms.roms.service.impl.UserServiceImpl">
+	</bean>
+	
+	<bean id="personService" class="fsl.ta.toms.roms.service.impl.PersonServiceImpl">
+	</bean>
+   
+</beans>

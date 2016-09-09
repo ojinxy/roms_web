@@ -1,0 +1,208 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/WEB-INF/newTemplate.xhtml"
+	xmlns:fsl="http://org.fsl.com">
+	
+	<ui:define name="title">Road Check Review</ui:define>
+	<ui:define name="pageHeader">Review Road Check
+		<script type="text/javascript" 	src="${request.contextPath}/script/roadCheckSummaryReview.js" />
+		
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/theme/roadCheckReview.css"/>
+		
+		<style type="text/css">
+				
+			.ui-row-toggler
+			{
+				float: right;
+				
+			}
+				
+			
+			div[id*=Panel], div[id*=panel], div[id*=roadCheckReview] .ui-widget-content, div[id*=roadCheckVerifyIdentity] table .ui-widget-content
+			{
+				background: white !important;
+			}
+			
+			
+			.ui-datatable .ui-datatable-header, .ui-datatable .ui-datatable-footer
+			{
+				padding: 10px 10px !important; 
+			}
+			
+		</style>		
+	</ui:define>
+	<ui:define name="content">
+	
+		<h:form styleClass="form" id="roadCheckReview">
+			<input type="hidden" name="_currentState" value="criteria"/>
+			<p:panel id="panelRoadCheckReview" >
+				<p:messages id="errorMessages" closable="true" autoUpdate="true"/>
+				<div style="padding-bottom:40px;display:#{roadCheckReviewSummaryBean.isViewDetailsScreen()?'none':'block' }">
+               	<p:panel id="progressPanel">
+		              <ol class="progtrckr" data-progtrckr-steps="5">
+		              <c:if test="${initiateView.completeReviewSummary}">
+						  	<li class="progtrckr-done" num="1">Initiate Road Check</li>
+						  	<li class="progtrckr-done" num="2">Record Offences &amp; Outcomes</li>
+						</c:if>
+		               
+			    			<li class="progtrckr-done" num="1">
+			    				<p:commandLink action="backToInitiate" id="backToInititate" processIds="*" ajax="false" rendered="#{!initiateView.completeReviewSummary}">
+			    				Initiate Road Check
+			    				</p:commandLink>
+			    			</li>
+			    		
+						    <li class="progtrckr-done" num="2">
+						    	<p:commandLink action="backToRecordOffOutcome" id="backToRecOffOutcome" processIds="*" ajax="false" rendered="#{!initiateView.completeReviewSummary}">	
+						    	Record Offences &amp; Outcomes
+						    	</p:commandLink>
+						    </li>
+						
+							  <c:if test="${!(initiateView.completeReviewSummary) &amp;&amp; initiateView.completeRecordOffOutcome}">
+						    <li class="progtrckr-done" num="3">
+						    	 <p:commandLink action="backToAddSupportingDet" id="backToAddSupDet" processIds="*" ajax="false" rendered="#{!(initiateView.completeReviewSummary) &amp;&amp; initiateView.completeRecordOffOutcome}">   
+						    	 Add Supporting Details
+						    	 </p:commandLink>
+						    </li>
+						    </c:if>
+						    
+						    
+						     <c:if test="${initiateView.completeRecordOffOutcome &amp;&amp; initiateView.completeReviewSummary}">
+						  	<li class="progtrckr-done" num="3">Add Supporting Details</li>
+							</c:if>
+						    
+						    <c:if test="${!initiateView.completeRecordOffOutcome}">
+						  	<li class="progtrckr-todo" num="3">Add Supporting Details</li>
+							</c:if>
+							
+							 
+						    
+						    <li class="progtrckr-current" num="4">Review Summary</li>
+						    
+					
+				 	
+						  <li class="progtrckr-todo" num="5">Prepare &amp; Print Documents</li>
+					
+						    
+						 
+					 </ol>
+					 </p:panel>
+	            
+				</div>   
+				<div style="color:gray;text-align:left;padding-bottom: 10px;display:#{roadCheckReviewSummaryBean.isViewDetailsScreen()?'none':'block' }">
+					<!-- <h3>Step 4: Review Summary</h3> -->
+					<br/>
+					<h:outputText value="Step 4: Review Summary - " styleClass="progress-label"/> 
+					    <h:outputText value="#{nameUtil.getLastNameCapsFirstNameMiddleName(initiateView.firstName, initiateView.lastName , initiateView.middleName)}" id="Name"  styleClass="progress-label-key"/>
+						 <f:subview rendered="#{!initiateView.trn.trim().equalsIgnoreCase('')}"	 >
+							 <h:outputText value="["  styleClass="progress-label-key"/><h:outputText value="#{initiateView.trn}" id="trn" styleClass="progress-label-key"/> 
+							 <h:outputText value="]"  styleClass="progress-label-key"/>
+					   </f:subview>
+				</div>
+				<ui:include src="person_details.xhtml"></ui:include>
+				
+				<ui:include src="road_check_details.xhtml"></ui:include>
+			
+				<ui:include src="queries_performed.xhtml"></ui:include>
+				
+				<p:selectBooleanButton value="#{roadCheckReviewSummaryBean.expandAllAccordTabs}" onLabel="Expand All Tabs" offLabel="Contract All Tabs" onIcon="ui-icon-check" offIcon="ui-icon-close">  
+		            <p:ajax update="inputExpandAllAccordTabs" oncomplete="expandAllAccordTabs()"/>  
+		        </p:selectBooleanButton>
+		        <p:inputText style="display:none" value="#{roadCheckReviewSummaryBean.expandAllAccordTabs}" id="inputExpandAllAccordTabs" widgetVar="inputExpandAllAccordTabsWidget"></p:inputText> 
+				<p:accordionPanel multiple="true" id="accordOffences" widgetVar="accordOffencesWidget" activeIndex="1">
+					<p:tab title="Offences/ Outcomes Observed">
+						<ui:include src="offences_observed.xhtml"></ui:include>
+					</p:tab>
+					<p:tab title="Associated Documents">
+						<ui:include src="associated_documents.xhtml"></ui:include>
+					</p:tab>
+					<p:tab title="Supporting Details" id="tabSupportingDetails" >
+						<ui:include src="supporting_details.xhtml"></ui:include>
+					</p:tab>
+				</p:accordionPanel>
+				<br/>
+				<div style="text-align:center;width:100%">
+					<p:commandButton value="Back" style="width:250px" id="butBack" styleClass="blue" widgetVar="butBack"
+						disabled="#{roadCheckReviewSummaryBean.getDocViews() != null}" action="toStep3" ajax="false" rendered="#{! roadCheckReviewSummaryBean.isViewDetailsScreen() }">
+					</p:commandButton>
+					<p:commandButton value="Back" style="width:250px" id="butBackToSearch" styleClass="blue" widgetVar="butBackToSearch"
+						 action="backToSearch" ajax="false" rendered="#{roadCheckReviewSummaryBean.isViewDetailsScreen() and not fromRoadCheck}">
+					</p:commandButton>
+					<p:tooltip for="butBackToSearch" value="Back to Road Check Search."></p:tooltip>
+					<p:commandButton value="Back" style="width:250px" id="butBackToRoadCheck" styleClass="blue" widgetVar="butBackToRoadCheck"
+						 action="endReviewFromRoadCheck" ajax="false" rendered="#{fromRoadCheck }">
+					</p:commandButton>
+					<sec:authorize ifAnyGranted="ROLE_ROMS_DOC_MAN_SERVE">
+						<p:commandButton value="Serve Documents" style="width:250px" id="butServed" styleClass="blue" widgetVar="butServedWidget"
+							action="serveRoadCheck" ajax="false" rendered="#{(roadCheckReviewSummaryBean.getDocViews() != null) and roadCheckServiceAction.showServed()}" >
+						</p:commandButton>
+						<p:tooltip for="butServed" value="Serve All Documents."></p:tooltip>
+					</sec:authorize>
+					<sec:authorize ifAnyGranted="ROLE_ROMS_DOC_MAN_VERIFY">
+						<p:commandButton value="Verify Documents" style="width:250px" id="butVerify" styleClass="blue" widgetVar="butVerifyWidget"
+							action="verifyRoadCheck" ajax="false" rendered="#{(roadCheckReviewSummaryBean.getDocViews() != null and not roadCheckServiceAction.isHandHeldNoFlow())and roadCheckServiceAction.showVerify()}" >
+						</p:commandButton>
+						<p:tooltip for="butVerify" value="Verify All Documents."></p:tooltip>
+					</sec:authorize>
+					<sec:authorize ifAnyGranted="ROLE_ROMS_DOC_MAN_CANCEL,ROLE_ROMS_DOC_MAN_WITHDRAW">
+						<p:commandButton value="Cancel Road Check" style="width:250px" id="butCancel" styleClass="blue" widgetVar="butCancel"
+							action="cancelRoadCheck" ajax="false" rendered="#{roadCheckReviewSummaryBean.getDocViews() != null and not roadCheckServiceAction.isHandHeldNoFlow() and roadCheckServiceAction.showCancel()}" >
+						</p:commandButton>
+						<p:tooltip for="butCancel" value="Cancel Road Check."></p:tooltip>
+					</sec:authorize>
+					<p:commandButton value="Complete Road Check" rendered="#{roadCheckReviewSummaryBean.getDocViews() == null and ! roadCheckReviewSummaryBean.isViewDetailsScreen()}" style="width:250px" id="butCompleteRoadCheck" ajax="false" styleClass="blue" action="completeRoadCheck"  
+						 widgetVar="butCompleteRoadCheck"  onclick="startCompleteRoadCheck();">
+					</p:commandButton>
+<!-- 					<p:commandButton value="Documents" rendered="#{roadCheckReviewSummaryBean.getDocViews().size() != null and ! roadCheckReviewSummaryBean.isViewDetailsScreen()}" style="width:180px" id="butDocuments" ajax="false" styleClass="blue" action="toStep5"  /> -->
+					
+					
+				</div>
+	  		</p:panel>
+	  		<!-- Invisible Button used for Navigation -->
+		<p:commandButton style="display:none" action="backToInitiate" id="backToInitiateLink" processIds="*" ajax="false" ></p:commandButton>
+		<p:commandButton style="display:none" action="backToRecordOffOutcome" id="backToRecordOffLink" processIds="*" ajax="false" ></p:commandButton>
+		<p:commandButton style="display:none" action="backToAddSupportingDet" id="backToAddSupDetLink" processIds="*" ajax="false"></p:commandButton>
+		<p:commandButton style="display:none" action="backToReviewSummary" id="backToReviewSumLink" processIds="*" ajax="false" ></p:commandButton>
+			 <!-- Step 5 is Never a link -->
+		<!-- end -->
+	  </h:form>
+		<script type="text/javascript">
+			
+			$(document).ready( function() { 
+				
+	        	 $(".progtrckr li:has(a)").click(function() {
+	                  
+	               //TODO use if condition along with invisible buttons
+	              //  alert($(this).attr('num'));//.click();
+	               if($(this).attr('num')== 1){
+	            	   $('button[id*=backToInitiateLink]').click(); 
+	               }if($(this).attr('num')== 2){
+	            	   $('button[id*=backToRecordOffLink]').click(); 
+	               } 
+	               else if($(this).attr('num')== 3){
+	                
+	            	   $('button[id*=backToAddSupDetLink]').click(); 
+	               }else if($(this).attr('num')== 4){
+	            	   $('button[id*=backToReviewSumLink]').click();
+	                	
+	               }// <!-- Step 5 is Never a link -->
+	               //else if($(this).attr('num')== 5){
+	            	   //$('button[id*=reviewIdLink]').click(); 
+	              // }
+	               
+	               });		
+	        	  
+	          });
+	
+			
+			</script>
+       
+	</ui:define>
+</ui:composition>

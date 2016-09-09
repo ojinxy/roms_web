@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://exceptions.ws.fsl.org" version="1.0" xmlns:tns="http://exceptions.ws.fsl.org">
+
+  <xs:element name="FslWebServiceException" nillable="true" type="tns:FslWebServiceException"/>
+
+  <xs:complexType name="FslWebServiceException">
+    <xs:sequence>
+      <xs:element name="errorCode" nillable="true" type="xs:string"/>
+      <xs:element name="errorDescription" nillable="true" type="xs:string"/>
+      <xs:element name="variables" nillable="true" type="tns:ArrayOf_873062395_nillable_string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ArrayOf_873062395_nillable_string">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="string" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://object.vehicle.ws.fsl.org" version="1.0" xmlns:tns="http://object.vehicle.ws.fsl.org">
+
+  <xs:complexType name="Vehicle">
+    <xs:sequence>
+      <xs:element name="vehInfo" nillable="true" type="tns:VehInfo"/>
+      <xs:element name="vehFitness" nillable="true" type="tns:VehFitness"/>
+      <xs:element name="vehInsurance" nillable="true" type="tns:VehInsurance"/>
+      <xs:element name="vehOwners" nillable="true" type="tns:ArrayOfVehOwner"/>
+      <xs:element name="vehMvrc" nillable="true" type="tns:VehMvrc"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="VehInfo">
+    <xs:sequence>
+      <xs:element name="motorVehicleID" nillable="true" type="xs:string"/>
+      <xs:element name="plateRegistrationNo" nillable="true" type="xs:string"/>
+      <xs:element name="chassisNo" nillable="true" type="xs:string"/>
+      <xs:element name="engineNo" nillable="true" type="xs:string"/>
+      <xs:element name="vehicleStatusCode" nillable="true" type="xs:string"/>
+      <xs:element name="vehicleStatusDesc" nillable="true" type="xs:string"/>
+      <xs:element name="plateTypeCode" nillable="true" type="xs:string"/>
+      <xs:element name="plateTypeDesc" nillable="true" type="xs:string"/>
+      <xs:element name="vehicleYear" nillable="true" type="xs:string"/>
+      <xs:element name="vehicleModel" nillable="true" type="xs:string"/>
+      <xs:element name="vehicleColour" nillable="true" type="xs:string"/>
+      <xs:element name="vehicleTypeCode" nillable="true" type="xs:string"/>
+      <xs:element name="vehicleTypeDesc" nillable="true" type="xs:string"/>
+      <xs:element name="vehicleMakeCode" nillable="true" type="xs:string"/>
+      <xs:element name="vehicleMakeDesc" nillable="true" type="xs:string"/>
+      <xs:element name="vehicleBodyTypeCode" nillable="true" type="xs:string"/>
+      <xs:element name="vehicleBodyTypeDesc" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="VehFitness">
+    <xs:sequence>
+      <xs:element name="fitnessNo" nillable="true" type="xs:string"/>
+      <xs:element name="examDepot" nillable="true" type="xs:string"/>
+      <xs:element name="issueDate" nillable="true" type="xs:string"/>
+      <xs:element name="expDate" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="VehInsurance">
+    <xs:sequence>
+      <xs:element name="policyNo" nillable="true" type="xs:string"/>
+      <xs:element name="compName" nillable="true" type="xs:string"/>
+      <xs:element name="issueDate" nillable="true" type="xs:string"/>
+      <xs:element name="expDate" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ArrayOfVehOwner">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="VehOwner" nillable="true" type="tns:VehOwner"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="VehOwner">
+    <xs:sequence>
+      <xs:element name="trnNo" nillable="true" type="xs:string"/>
+      <xs:element name="trnBranch" nillable="true" type="xs:string"/>
+      <xs:element name="firstName" nillable="true" type="xs:string"/>
+      <xs:element name="lastName" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="VehMvrc">
+    <xs:sequence>
+      <xs:element name="mvrcNo" nillable="true" type="xs:string"/>
+      <xs:element name="mvrcIssueDate" nillable="true" type="xs:string"/>
+      <xs:element name="mvrcExpiryDate" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

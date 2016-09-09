@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:faces="http://www.springframework.org/schema/faces"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+           http://www.springframework.org/schema/faces
+           http://www.springframework.org/schema/faces/spring-faces-2.2.xsd">
+
+    <faces:resources />
+
+
+    <bean class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping">
+		<property name="flowRegistry" ref="flowRegistry" />
+		<property name="defaultHandler">
+		<!--If no flow match, map path to a view to render; e.g. the "/intro" path would map to the view named "intro" 		-->
+		<bean class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />
+		</property>
+	</bean>
+	
+	<!--
+	 Maps logical view names to Facelet templates in /WEB-INF (e.g. 'search' to '/WEB-INF/search.xhtml' 
+	-->
+	    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="mediaTypes">
+            <map>
+                 <entry key="html" value="text/html"/>
+                 <entry key="json" value="application/json"/>
+            </map>
+        </property>
+        <property name="viewResolvers">
+            <list>
+              	<bean id="faceletsViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+					<property name="viewClass" value="org.springframework.faces.mvc.JsfView"/>
+					<property name="prefix" value="/WEB-INF/" />
+					<property name="suffix" value=".xhtml" />
+				</bean>
+            </list>
+        </property>
+        <property name="defaultViews">
+		    <list>
+		      <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
+		      </bean>
+		    </list>
+	  </property>
+    </bean>
+    	
+
+	<!--
+	 Dispatches requests mapped to org.springframework.web.servlet.mvc.Controller implementations 
+	-->
+	<bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
+	<!--
+	 Dispatches requests mapped to flows to FlowHandler implementations 
+	-->
+	<bean class="org.springframework.webflow.mvc.servlet.FlowHandlerAdapter">
+		<property name="flowExecutor" ref="flowExecutor" />
+	</bean>
+
+	
+	<!-- HANDLE EXCEPTIONS -->
+	<bean
+		class="org.fsl.roms.spring.security.ROMSSimpleExceptionHandler">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="java.net.ConnectException" >error</prop> 
+				<prop key="org.springframework.security.access.AccessDeniedException" >accessDenied</prop>
+				     <prop key="org.springframework.webflow.core.FlowException" >accessDenied</prop>
+				<prop key="org.springframework.webflow.conversation.NoSuchConversationException" >error</prop>
+		        <prop key="org.springframework.webflow.execution.ActionExecutionException" >error</prop>          
+                <prop key="org.springframework.webflow.execution.FlowExecutionException" >error</prop>
+                <prop key="org.springframework.dao.DataAccessException" >error</prop>
+				<prop key="java.sql.SQLException" >error</prop>
+				<prop key="java.lang.RuntimeException">error</prop>
+				<prop key="java.lang.Exception" >error</prop>
+				<prop key="java.lang.NoClassDefFoundError" >error</prop>  
+				<prop key="java.lang.NullPointerException" >error</prop>
+			</props>
+		</property>
+		<property name="defaultErrorView" value="error" />		
+	</bean>
+	
+
+	
+
+
+</beans>
+

@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OperationSummaryReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="440cfd6e-e676-421c-9ea4-0fcab9ddcab2">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="17"/>
+	<property name="ireport.y" value="186"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="userName" class="java.lang.String"/>
+	<parameter name="systemName" class="java.lang.String"/>
+	<parameter name="searchDates" class="java.lang.String"/>
+	<parameter name="location" class="java.lang.String"/>
+	<parameter name="printDate" class="java.lang.String"/>
+	<parameter name="status" class="java.lang.String"/>
+	<parameter name="searchCriteria" class="java.lang.String"/>
+	<field name="operationCreateDate" class="java.lang.String"/>
+	<field name="scheduledEndDateTime" class="java.lang.String"/>
+	<field name="scheduledStartDateTime" class="java.lang.String"/>
+	<field name="actualStartDateTime" class="java.lang.String"/>
+	<field name="actualEndDateTime" class="java.lang.String"/>
+	<field name="operationStatus" class="java.lang.String"/>
+	<field name="operationCategory" class="java.lang.String"/>
+	<field name="operationName" class="java.lang.String"/>
+	<field name="countSummonsIssued" class="java.lang.String"/>
+	<field name="countWaningNoticesIssued" class="java.lang.String"/>
+	<field name="countVehiclesSeized" class="java.lang.String"/>
+	<field name="countCompliancyActivitiesCommited" class="java.lang.String"/>
+	<field name="countMotorVehiclesChecked" class="java.lang.String"/>
+	<field name="countDrivesLicenceChecked" class="java.lang.String"/>
+	<field name="countBadgesChecked" class="java.lang.String"/>
+	<field name="countCitationChecks" class="java.lang.String"/>
+	<field name="countRoadLicencesChecked" class="java.lang.String"/>
+	<field name="countOtherChecks" class="java.lang.String"/>
+	<field name="durationOfOperationInMinutes" class="java.lang.String"/>
+	<field name="countAbsentMembers" class="java.lang.String"/>
+	<field name="operationId" class="java.lang.String"/>
+	<field name="countTeamMembers" class="java.lang.String"/>
+	<field name="warningsForProcecution" class="java.lang.String"/>
+	<field name="countWarningNoProsecutions" class="java.lang.String"/>
+	<field name="countJPs" class="java.lang.String"/>
+	<field name="countITAExaminers" class="java.lang.String"/>
+	<field name="countTAInspectors" class="java.lang.String"/>
+	<field name="countPoliceOfficers" class="java.lang.String"/>
+	<field name="TAOfficeRegion" class="java.lang.String">
+		<fieldDescription><![CDATA[TAOfficeRegion]]></fieldDescription>
+	</field>
+	<field name="TAOfficeRegionDescription" class="java.lang.String">
+		<fieldDescription><![CDATA[TAOfficeRegionDescription]]></fieldDescription>
+	</field>
+	<field name="countAbsentJP" class="java.lang.String"/>
+	<field name="countAbsentITA" class="java.lang.String"/>
+	<field name="countAbsentTAStaff" class="java.lang.String"/>
+	<field name="countAbsentPolice" class="java.lang.String"/>
+	<variable name="TAOfficeRegionDescription1" class="java.lang.Integer" resetType="Group" resetGroup="RegionGroup" calculation="Count">
+		<variableExpression><![CDATA[$F{TAOfficeRegionDescription}]]></variableExpression>
+	</variable>
+	<group name="RegionGroup" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{TAOfficeRegionDescription}]]></groupExpression>
+		<groupHeader>
+			<band height="41">
+				<textField>
+					<reportElement x="101" y="0" width="155" height="20" uuid="73c06e9f-8d7b-46a7-a595-ef32403c0cec"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TAOfficeRegionDescription}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="1" y="0" width="100" height="20" uuid="0117138f-5e96-4b42-a3fe-5f2e817522fb"/>
+					<textElement>
+						<font size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Created In Region:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="1" y="20" width="100" height="20" uuid="07db0e3b-45a2-41b6-95dd-89a743289f35"/>
+					<textElement>
+						<font size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Operation Category:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="101" y="20" width="155" height="20" uuid="2dd0f76e-45fd-4ca1-a731-9f460f7bebe6"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{operationCategory}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="24">
+				<textField>
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="5" y="0" width="470" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="5f68c0fe-0c0f-432d-bf6f-c3b802d52164"/>
+					<box padding="0" topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single" lineSpacingSize="1.0" firstLineIndent="0" leftIndent="0" rightIndent="0" spacingBefore="0" spacingAfter="0" tabStopWidth="40"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total No. of Operations Created in " + $F{TAOfficeRegionDescription} + " : "+$V{TAOfficeRegionDescription1}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="category" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{operationCategory}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="145" splitType="Stretch">
+			<staticText>
+				<reportElement x="5" y="4" width="40" height="20" uuid="3ef0b37c-482e-4180-b606-899153ad56f0"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[User:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="25" width="40" height="20" uuid="4c82ec0f-9c91-401c-a847-15827f6eee62"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Location:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="159" y="4" width="436" height="20" uuid="ec9a2237-acae-44fe-8595-384126512c29"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{systemName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="159" y="23" width="436" height="19" uuid="d3e2fb55-a28f-4c0a-8c5f-c0739132dbf9"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Operation Summary Report]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="159" y="41" width="436" height="20" uuid="65513edc-5b29-46a0-a33f-ee888623d679"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{searchDates}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="595" y="4" width="48" height="20" uuid="1ce04653-db2d-49d5-b06f-e76aaa08568b"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Print Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="595" y="23" width="29" height="20" uuid="997b27d9-605e-42a1-840f-76ecb7174a61"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Page: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="45" y="4" width="100" height="20" uuid="8645519b-7992-4fd6-8443-32c3d792b25d"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{userName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="45" y="25" width="100" height="20" uuid="6535c7e9-7f84-4c1c-8d74-df4dd4ecc62c"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{location}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="643" y="4" width="132" height="20" uuid="95388b4f-ee8a-4d73-8f2e-a686dc359d8a"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{printDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="624" y="23" width="42" height="20" uuid="a87dcd71-8d24-4d86-95d5-0d43c9ca030b"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER} + " of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="669" y="23" width="66" height="20" uuid="7b8e6374-1415-49f4-9724-e403ab506b7b"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="6" y="84" width="69" height="20" uuid="d7cb8e8a-cdd0-4337-b20a-d6284255c4fb"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Search Criteria:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="75" y="84" width="678" height="20" uuid="a0089a85-c1bf-477e-8553-4df57418d693"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{searchCriteria}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="118" width="99" height="20" uuid="0b7db9ee-5f58-4142-8898-e3ffb80e5bee"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Operation Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="109" y="118" width="101" height="20" uuid="c8805988-ae1e-4093-9336-dffe22cd3904"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Actual Start Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="217" y="118" width="93" height="20" uuid="4b3d45b1-b77d-48ad-b0d8-3806b18a80db"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Actual End Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="317" y="118" width="134" height="20" uuid="7a2a1e39-151e-4af0-a7a1-1a80917e4f2f"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Team Members]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="455" y="118" width="101" height="20" uuid="1782737e-8809-43ba-b92d-1abad011f81b"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Absentee]]></text>
+			</staticText>
+			<line>
+				<reportElement x="2" y="140" width="797" height="1" uuid="d4922ebb-e6e2-4b45-aa67-f4bb9d9f3d2f"/>
+			</line>
+			<staticText>
+				<reportElement x="559" y="118" width="157" height="20" uuid="e4bf422b-18bd-4c07-9f0c-ec02e4fbf955"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Operation Outcome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="726" y="118" width="76" height="20" uuid="96e47991-db48-4398-93ee-14000c9b4a73"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<line>
+				<reportElement x="2" y="112" width="797" height="1" uuid="75f21294-a7ee-4f7a-93a6-76b12890139f"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="183" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="1" y="0" width="100" height="20" uuid="dba99756-7b4a-47fd-91f3-d769b5fc1d79"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{operationName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="217" y="0" width="93" height="20" uuid="811c6968-50bb-4667-91bd-5c4f5047cff0"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{actualEndDateTime}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="474" y="0" width="40" height="20" uuid="acd693bb-90cf-4a9e-8de0-322a4ad9d7ea"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countAbsentITA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="381" y="80" width="33" height="20" uuid="04aa7c8d-7980-4a54-aa84-8711485fb8a5"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countTeamMembers}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="694" y="0" width="34" height="20" uuid="d4d9e584-73b2-4016-9de8-226cba3e7567"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countBadgesChecked}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="557" y="0" width="137" height="20" uuid="e810454a-e8ae-475c-976f-c8e1e216c1aa"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Badge Check:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="694" y="20" width="34" height="20" uuid="6d0e4f2b-5628-49e6-950c-71feaeda47cc"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countCitationChecks}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="557" y="20" width="137" height="20" uuid="a00430a6-601b-43a9-a3e3-4884a8080216"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Citation Check:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="694" y="40" width="34" height="20" uuid="32906813-3049-482a-af13-fca801010d42"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countDrivesLicenceChecked}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="557" y="40" width="137" height="20" uuid="f79a1d78-f44c-4200-af48-a5a8708a0d26"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Driver's Licence Check:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="694" y="60" width="34" height="20" uuid="bc70d602-5fc5-42d6-a0fb-e9d9bf77dccb"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countMotorVehiclesChecked}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="557" y="60" width="137" height="32" uuid="72418556-8f0b-4b1c-abef-d8c3f22a0b89"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Motor Vehicle/Road Licence Check:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="694" y="92" width="34" height="20" uuid="e33314dd-acc7-4fa8-aeb0-f9f7bb6b16bd"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countSummonsIssued}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="557" y="92" width="137" height="20" uuid="bf4cfd43-d33f-4523-9d6a-c7934a112979"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Summons:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="694" y="112" width="34" height="20" uuid="859c2571-13aa-4be3-83ad-866d10b8e407"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countWaningNoticesIssued}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="557" y="112" width="137" height="20" uuid="966e7d53-4188-4d0e-b2ef-f5e1afe8a8b4"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Warning Notice:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="694" y="131" width="34" height="20" uuid="0a910cfa-bf0f-471c-8283-7d73d4dcdf54"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countWarningNoProsecutions}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="557" y="131" width="137" height="20" uuid="70611b20-634f-433f-a416-562f68516aea"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Warning No Prosecution:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="381" y="20" width="33" height="20" uuid="3ad628b2-e0c2-4a08-ae1e-da5eef1aea6f"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countJPs}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="381" y="0" width="33" height="20" uuid="ffdf75d1-9eea-487e-b5c0-6e37437c369a"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countITAExaminers}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="381" y="60" width="33" height="20" uuid="3a8f683c-f29b-4f32-a2ac-f540008dfc27"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countTAInspectors}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="381" y="40" width="33" height="20" uuid="d73bfd34-eae7-428a-840a-407adc1fafb9"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countPoliceOfficers}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="324" y="0" width="48" height="20" uuid="7cd606a2-26e9-4a6e-812e-e9a8121000f5"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[ITA Ex:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="20" width="48" height="20" uuid="557b7065-49e0-4fe8-a34b-3840dad44973"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[JPs:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="40" width="48" height="20" uuid="5669ccfd-7d98-47ce-81e6-e68e667f253c"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Police:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="60" width="48" height="20" uuid="e6968735-415d-4f06-92e3-4a0613c44033"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[TA Insp:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="80" width="48" height="20" uuid="e9fe261b-6ae1-4cd4-8924-d2f634ee0cdd"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="726" y="0" width="76" height="20" isPrintWhenDetailOverflows="true" uuid="f0fb8abd-20ab-4c59-90ec-a8f952d79a0d"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{operationStatus}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="109" y="0" width="93" height="20" uuid="2c8b9f0a-ad92-4150-902a-8f5442636a29"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{actualStartDateTime}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="474" y="20" width="40" height="20" uuid="a1d4e79f-f8dc-41da-8354-3b0888d5b6ce"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countAbsentJP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="474" y="40" width="40" height="20" uuid="269fff74-5b13-46a5-aabe-2a302f9c2421"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countAbsentPolice}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="474" y="60" width="40" height="20" uuid="19ea496e-5ab7-4cbb-83cd-1e5d1e407da2"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countAbsentTAStaff}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="474" y="80" width="40" height="20" uuid="eb3528fd-807f-4d04-9282-1c0122d0345b"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}.valueOf( $F{countAbsentJP} ) +  $V{PAGE_NUMBER}.valueOf( $F{countAbsentITA} ) + $V{PAGE_NUMBER}.valueOf( $F{countAbsentTAStaff} ) + $V{PAGE_NUMBER}.valueOf( $F{countAbsentPolice} )]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="381" y="80" width="33" height="1" uuid="6e545580-ff77-4e96-8c14-1f0243af691e"/>
+			</line>
+			<line>
+				<reportElement x="381" y="100" width="33" height="1" uuid="a3eb6d62-7e9b-4043-93ee-4f2f5d87a5cd"/>
+			</line>
+			<line>
+				<reportElement x="381" y="102" width="33" height="1" uuid="cff56ff7-6264-4ed7-bda0-574ec3f68e82"/>
+			</line>
+			<line>
+				<reportElement x="474" y="79" width="40" height="1" uuid="05c7fe06-f52f-4397-aa6e-da98a92cfb28"/>
+			</line>
+			<line>
+				<reportElement x="474" y="100" width="40" height="1" uuid="93b50888-6020-48b7-8366-a891db66957f"/>
+			</line>
+			<line>
+				<reportElement x="474" y="102" width="40" height="1" uuid="359399dd-d997-4cf2-a7d4-7dccbee48325"/>
+			</line>
+		</band>
+		<band/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="5" y="1" width="470" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="77dd2cc3-ea41-4956-93e3-17a87bc3b2e5"/>
+				<box padding="0" topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single" lineSpacingSize="1.0" firstLineIndent="0" leftIndent="0" rightIndent="0" spacingBefore="0" spacingAfter="0" tabStopWidth="40"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total No. of Operations: "+$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

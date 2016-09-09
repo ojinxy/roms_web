@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd" start-state="gotoWhereCheck1">
+
+	<secured attributes="ROLE_ROMS_ROAD_OP_SCHEDULE" />
+	<var name="operation" class="org.fsl.roms.view.RoadOperationView"/>
+	<var name="categoryList" class="java.util.ArrayList" />
+	<var name="courtList" class="java.util.ArrayList" />
+	<var name="possibleTeamLeads" class="java.util.ArrayList"/>
+	<var name="regionList" class="java.util.ArrayList" />
+	<var name="currentTab" class="java.lang.String"/>
+	<var name="parishList" class="java.util.ArrayList"/>
+	<var name="locationList" class="java.util.ArrayList"/>
+	<var name="arteryList" class="java.util.ArrayList"/>
+	<var name="arteryDataList" class="java.util.ArrayList"/>
+	<var name="selection" class="java.lang.String"/>
+	<var name="categories" class="java.util.ArrayList"/>
+	<var name="strategyRules" class="java.util.ArrayList"/>
+	<var name="teamMode" class="java.lang.String"/>
+	<var name="closeTeamPopup" class="java.lang.String" />
+	<var name="errorMsg" class="java.lang.String"/>
+	<var name="reasonIdVar" class="java.lang.String" />
+	<var name="commentVar" class="java.lang.String"/>
+	<var name="resourcesRetrieved" class="java.lang.String"/>
+	<var name="completeOpDetails" class="java.lang.String"/>
+	<var name="completeOpStrategy" class="java.lang.String"/>
+	<var name="completeOpResource" class="java.lang.String"/>
+	<var name="completeOpCourtDetails" class="java.lang.String"/>
+	<var name="completeOpReview" class="java.lang.String"/>
+	<var name="saveOrUpdate" class="java.lang.String" />
+	<var name="listOfSelectedVehID" class="java.lang.String" />
+	<var name="opNameChanged" class="java.lang.String" />
+	<var name="cancelBtn" class="java.lang.String"/>
+	<var name="screen" class="java.lang.String" />
+	<var name="listArteryDesc" class="java.lang.String"/>
+	<var name="listDistance" class="java.lang.String"/>
+	<var name="listStrtLat" class="java.lang.String"/>
+	<var name="listStrtLon" class="java.lang.String"/>
+	<var name="listEndLat" class="java.lang.String"/>
+	<var name="listEndLon" class="java.lang.String"/>
+	<var name="listPoints" class="java.lang.String"/>
+	<var name="roadOpBO" class="fsl.ta.toms.roms.bo.RoadOperationBO" />
+	<var name="oldCategoryId" class="java.lang.String"/>
+	
+	<input name="fromStart"/>
+	<input name="fromWhere"/>
+	<input name="specificAction"/>
+	<input name="theTable"/>
+	<input name="opStatus"/>
+	
+	
+	
+	<on-start>
+	<!-- 	<set name="flowScope.operation.statusId" value="'NONE'"/> -->
+		<evaluate expression="roadOperationsServiceAction.initializeOperationDetails"></evaluate>
+		<evaluate expression="roadOperationsServiceAction.getCategoryList"></evaluate>
+		<evaluate expression="roadOperationsServiceAction.getRegionList"></evaluate>
+		<evaluate expression="roadOperationsServiceAction.getAvailableStrategiesList"></evaluate>
+		<evaluate expression="roadOperationsServiceAction.getReasons"></evaluate>
+		<set name="flowScope.closeTeamPopup" value="'Y'" />
+		<set name="flowScope.resourcesRetrieved" value="'false'"/>
+		<set name="flowScope.completeOpDetails" value="'false'"/>
+		<set name="flowScope.completeOpStrategy" value="'false'"/> 
+		<set name="flowScope.completeOpResource" value="'false'"/>
+		<set name="flowScope.completeOpCourtDetails" value="'false'"/> 
+		<set name="flowScope.completeOpReview" value="'false'"/>
+		<!-- <set name="flowScope.saveOrUpdate" value="'save'" />-->
+		<set name="flowScope.warnAbtJPMessages" value="'N'" />
+		<set name="flowScope.opNameChanged" value="'N'" />
+		<set name="flowScope.openStartPopup" value="'N'"/>
+		<set name="screen" value="'review'"></set>
+		<set name="flowScope.cancelBtn" value="''"/>
+	</on-start>
+	
+	
+	<decision-state id="gotoWhereCheck1">
+		<if then="resources" test="roadOperationsServiceAction.goToResources(flowScope.fromStart)" else="gotoWhere"/>
+	</decision-state>
+	
+	<decision-state id="gotoWhere">
+		<if then="review" test="roadOperationsServiceAction.goToReview(flowScope.opStatus, flowScope.specificAction)" else="operation_details"/>
+	</decision-state>
+
+
+	<view-state id="operation_details" redirect="false">
+		<on-entry>
+			<set name="flowScope.currentStage" value="'operation_details'"/>
+			<evaluate expression="roadOperationsServiceAction.getCategoryList"></evaluate>
+		<evaluate expression="roadOperationsServiceAction.getRegionList"></evaluate>
+		<evaluate expression="roadOperationsServiceAction.getActiveCourts"></evaluate>
+		</on-entry>
+		<transition on="continueFromOpDetails" to="continueFromOpDetailsAction">
+			<render fragments="operationDetails"></render>
+		</transition>
+		<transition on="setRegion" to="operation_details">
+			<evaluate expression="roadOperationsServiceAction.setRegions"></evaluate>
+
+		</transition>
+		<transition on="backFromOpDetails" to="goBacktoWhere"/>
+		<!--  <transition on="strategy" to="strategy"/>
+		<transition on="resources" to="resources"/>
+		<transition on="court_details" to="court_details"/>
+		<transition on="review" to="review"/>-->
+		
+		<transition on="strategy" to="continueFromOpDetailsAction"/>
+		<transition on="resources" to="continueFromOpDetailsToResourcesAction"/>
+		<transition on="court_details" to="continueFromOpDetailsToCourtDetailsAction"/>
+		<transition on="review" to="continueFromOpDetailsToReviewAction"/>
+
+	</view-state>
+	
+	
+	<decision-state id="goBacktoWhere">
+		<if then="backToSearchScr" test="flowScope.fromWhere == 'search'" else="backToDashboard"/>
+	</decision-state>
+	
+	<action-state id="continueFromOpDetailsAction">
+		<evaluate expression="roadOperationsServiceAction.validateOperationDetails"></evaluate>
+		<transition on="error" to="operation_details"></transition>
+		<transition on="success" to="strategy">
+			<set name="flowScope.completeOpDetails" value="'true'"/>
+			<set name="flowScope.oldCategoryId" value="operation.categoryId"/>
+		</transition>
+	</action-state>
+	
+	<action-state id="continueFromOpDetailsToResourcesAction">
+		<evaluate expression="roadOperationsServiceAction.validateOperationDetails"></evaluate>
+		<transition on="error" to="operation_details"></transition>
+		<transition on="success" to="resources">
+			<set name="flowScope.completeOpDetails" value="'true'"/> 
+		</transition>
+	</action-state>
+	
+	<action-state id="continueFromOpDetailsToCourtDetailsAction">
+		<evaluate expression="roadOperationsServiceAction.validateOperationDetails"></evaluate>
+		<transition on="error" to="operation_details"></transition>
+		<transition on="success" to="court_details">
+			<set name="flowScope.completeOpDetails" value="'true'"/> 
+		</transition>
+	</action-state>
+	
+	<action-state id="continueFromOpDetailsToReviewAction">
+		<evaluate expression="roadOperationsServiceAction.validateOperationDetails"></evaluate>
+		<transition on="error" to="operation_details"></transition>
+		<transition on="success" to="review">
+			<set name="flowScope.completeOpDetails" value="'true'"/> 
+		</transition>
+	</action-state>
+	
+	
+	<decision-state id="decideWhereToGo">
+		<if then="strategy" test="flowScope.toWhere == 'strategy'" else="operation_details"/>
+	</decision-state>
+	
+	<view-state id="strategy">
+		<on-entry>
+			<set name="flowScope.currentStage" value="'strategy'"/>
+			<evaluate expression="roadOperationsServiceAction.populateStrategyTarget"></evaluate>					
+			<evaluate expression="roadOperationsServiceAction.getAvailableResources"></evaluate>
+		</on-entry>
+		<transition on="continueFromStrategy" to="continueFromStrategyAction"></transition>
+		<transition on="back" to="backToOperationDetailsAction"></transition>
+		
+		<!-- <transition on="back" to="operation_details"></transition>-->		
+		<!-- <transition on="resources" to="resources"/>
+		<transition on="court_details" to="court_details"/>
+		<transition on="review" to="review"/>-->		
+		<!-- <transition on="operation_details" to="continueFromStrategyToOperationDetailsAction"></transition>-->
+		
+		<transition on="operation_details" to="backToOperationDetailsAction"></transition>
+		
+		<transition on="resources" to="continueFromStrategyAction"/>
+		<transition on="court_details" to="continueFromStrategyToCourtDetailsAction"/>
+		<transition on="review" to="continueFromStrategyToReviewAction"/>
+	
+		
+		<transition on="handleStategyTransfer">
+			<evaluate expression="roadOperationsServiceAction.onStrategyTransfer"></evaluate>
+		</transition>
+	</view-state>
+	
+	<decision-state id="backToOperationDetailsAction">
+		<if then="continueFromStrategyToOperationDetailsAction" test="flowScope.completeOpStrategy=='true'" else="operation_details"/>
+	</decision-state>	
+
+
+	<action-state id="continueFromStrategyAction">
+		<!-- <evaluate expression="roadOperationsServiceAction.getAvailableResources"></evaluate>-->
+		<evaluate expression="roadOperationsServiceAction.getStrategyRules"></evaluate>
+		<evaluate expression="roadOperationsServiceAction.validateOperationDetails"></evaluate>
+		<transition on="error" to="strategy"></transition>
+		<transition on="success" to="resources">
+		<!-- 	<evaluate expression="roadOperationsServiceAction.getParishList"></evaluate>
+			<evaluate expression="roadOperationsServiceAction.getArteryList"></evaluate>
+			<evaluate expression="roadOperationsServiceAction.getLocationList"></evaluate>-->
+			<set name="flowScope.completeOpStrategy" value="'true'"/> 
+		</transition>
+	</action-state>
+	
+	
+	<action-state id="continueFromStrategyToOperationDetailsAction">
+		<evaluate expression="roadOperationsServiceAction.getStrategyRules"></evaluate>
+		<evaluate expression="roadOperationsServiceAction.validateOperationDetails"></evaluate>
+		<transition on="error" to="strategy"></transition>
+		<transition on="success" to="operation_details">
+			<set name="flowScope.completeOpStrategy" value="'true'"/> 
+		</transition>
+	</action-state>
+	
+	<action-state id="continueFromStrategyToCourtDetailsAction">
+		<evaluate expression="roadOperationsServiceAction.getStrategyRules"></evaluate>
+		<evaluate expression="roadOperationsServiceAction.validateOperationDetails"></evaluate>
+		<transition on="error" to="strategy"></transition>
+		<transition on="success" to="court_details">
+			<set name="flowScope.completeOpStrategy" value="'true'"/> 
+		</transition>
+	</action-state>
+	
+		<action-state id="continueFromStrategyToReviewAction">
+		<evaluate expression="roadOperationsServiceAction.getStrategyRules"></evaluate>
+		<evaluate expression="roadOperationsServiceAction.validateOperationDetails"></evaluate>
+		<transition on="error" to="strategy"></transition>
+		<transition on="success" to="review">
+			<set name="flowScope.completeOpStrategy" value="'true'"/> 
+		</transition>
+	</action-state>
+	
+
+	<view-state id="resources" redirect="false">
+		<on-entry>
+			<set name="flowScope.currentStage" value="'resources'"/>
+			<set name="flowScope.operation.allTeamsSelected" value="false"/> 
+			<!-- added getAvailable resource to resources tab | temp fix -->	
+			<evaluate expression="roadOperationsServiceAction.getAvailableResources"></evaluate>
+			<evaluate expression="roadOperationsServiceAction.getParishList"></evaluate>
+			<evaluate expression="roadOperationsServiceAction.getArteryList"></evaluate>
+			<evaluate expression="roadOperationsServiceAction.getLocationList"></evaluate>
+			<evaluate expression="roadOperationsServiceAction.getPoliceStations"></evaluate>
+		</on-entry>
+		<transition on="addNewTeam">	
+			<set name="flowScope.teamMode" value="'ADD'"/>
+			<set name="flowScope.currentStage" value="'add_team'"/>
+			<evaluate expression="roadOperationsServiceAction.resetTeamPopup"></evaluate>
+			<render fragments="resourceDetails" />
+		</transition>
+		<transition on="viewOneTeam">
+			<set name="flowScope.teamMode" value="'VIEW'"/>
+			<set name="flowScope.currentStage" value="'add_team'"/>
+			<evaluate expression="roadOperationsServiceAction.viewOneTeam"></evaluate>
+			<render fragments="resourceDetails" />
+		</transition>
+		
+		<transition on="selectAllTeams">
+			<evaluate expression="roadOperationsServiceAction.selectAllTeams"></evaluate>
+		</transition>
+		
+		<transition on="showLocationsForParish">
+			<evaluate expression="roadOperationsServiceAction.populateLocationList"></evaluate>
+		</transition>
+		<transition on="continueFromResources" to="continueFromResourcesAction"></transition>
+		<transition on="deleteTeams" to="deleteTeamAction"/>
+		<transition on="back" to="backToStrategyAction">
+		</transition>
+		<transition on="addTeam" to="addTeamAction">
+<!-- 			<evaluate expression="roadOperationsServiceAction.addTeam"></evaluate> -->
+		</transition>
+		<transition on="exitTeamWindow"> 
+			<set name="flowScope.currentStage" value="'resources'"/>			
+			<!-- <evaluate expression="roadOperationsServiceAction.resetTeamPopup"></evaluate>-->
+			<evaluate expression="roadOperationsServiceAction.resetAvailableResourcesAfterCancel"></evaluate>
+			<!-- <evaluate expression="roadOperationsServiceAction.resetTeamPopupAfterExit"></evaluate>-->
+		</transition>
+		<transition on="handleStaffTransfer">
+			<evaluate expression="roadOperationsServiceAction.onTAStaffTransfer"></evaluate>
+		</transition>
+		<transition on="buttHandleJPTransfer">
+			<evaluate expression="roadOperationsServiceAction.onJPTransfer"></evaluate>
+		</transition>
+		<!-- <transition on="operation_details" to="operation_details"/>
+		<transition on="court_details" to="court_details"/>
+		<transition on="review" to="review"/> -->
+		
+		<transition on="operation_details" to="continueFromResourcesBackToOperationDetails"/>
+		<transition on="strategy" to="backToStrategyAction"/>
+		<transition on="court_details" to="continueFromResourcesAction"/>
+		<transition on="review" to="continueFromResourcesReviewAction"/>
+		<transition on="filterPoliceOfficer">
+			<evaluate expression="roadOperationsServiceAction.getPoliceListFilter"></evaluate>
+		</transition>
+		<transition on="clearPoliceFilter">
+			<evaluate expression="roadOperationsServiceAction.clearPoliceFilter"></evaluate>
+		</transition>
+	</view-state>	
+	
+	<decision-state id="backToStrategyAction">
+		<if then="continueFromResourcesToStrategyAction" test="flowScope.completeOpResource=='true'" else="strategy"/>
+	</decision-state>
+	
+	<decision-state id="continueFromResourcesBackToOperationDetails">
+		<if then="continueFromResourcesToOperationDetailsAction" test="flowScope.completeOpResource=='true'" else="operation_details"/>
+	</decision-state>
+
+  <action-state id="addTeamAction">
+		<evaluate expression="roadOperationsServiceAction.addTeam"></evaluate>
+		<transition on="error" to="resources">
+			<set name="flowScope.closeTeamPopup" value="'N'" />
+			
+		</transition>
+		<transition on="success" to="resources">
+			<set name="flowScope.closeTeamPopup" value="'Y'" />
+			<render fragments="resourceDetails" />
+		</transition>
+	</action-state>
+	
+
+	<action-state id="continueFromResourcesAction">
+		<on-entry>
+			<set name="flowScope.currentStage" value="'resources'"/>
+			<evaluate expression="roadOperationsServiceAction.populateStrategyTarget"></evaluate>					
+			<evaluate expression="roadOperationsServiceAction.getAvailableResources"></evaluate>
+			<evaluate expression="roadOperationsServiceAction.getStrategyRules"></evaluate>
+			
+		</on-entry>
+		<evaluate expression="roadOperationsServiceAction.validateOperationDetails"></evaluate>
+		<transition on="error" to="resources"></transition>
+		<transition on="success" to="courtDecision">
+			<set name="flowScope.completeOpResource" value="'true'"/>
+		</transition>
+		
+	</action-state>
+	
+	<action-state id="continueFromResourcesToOperationDetailsAction">
+		<on-entry>
+			<set name="flowScope.currentStage" value="'resources'"/>
+		</on-entry>
+		<evaluate expression="roadOperationsServiceAction.validateOperationDetails"></evaluate>
+		<transition on="error" to="resources"></transition>
+		<transition on="success" to="operation_details">
+			<set name="flowScope.completeOpResource" value="'true'"/>
+		</transition>
+	</action-state>
+	
+	<action-state id="continueFromResourcesToStrategyAction">
+		<on-entry>
+			<set name="flowScope.currentStage" value="'resources'"/>
+		</on-entry>
+		<evaluate expression="roadOperationsServiceAction.validateOperationDetails"></evaluate>
+		<transition on="error" to="resources"></transition>
+		<transition on="success" to="strategy">
+			<set name="flowScope.completeOpResource" value="'true'"/>
+		</transition>
+	</action-state>
+	
+	<action-state id="continueFromResourcesReviewAction">
+		<on-entry>
+			<set name="flowScope.currentStage" value="'resources'"/>
+		</on-entry>
+		<evaluate expression="roadOperationsServiceAction.validateOperationDetails"></evaluate>
+		<transition on="error" to="resources"></transition>
+		<transition on="success" to="review">
+			<set name="flowScope.completeOpResource" value="'true'"/>
+		</transition>
+	</action-state>
+
+	<decision-state id="courtDecision">
+		<if then="court_details" test="flowScope.operation.categoryId == 'REG' AND flowScope.currentStage == 'resources'" else="review"/>
+	</decision-state>
+	
+	<decision-state id="courtDecision2">
+		<if then="court_details" test="flowScope.operation.categoryId == 'REG' AND flowScope.currentStage == 'review'" else="resources"/>
+	</decision-state>
+
+	<decision-state id="backFromReviewDecision">
+		<if then="backToSearchScr" test="flowScope.fromWhere == 'search'" else="courtDecision2"/>
+	</decision-state>
+	<decision-state id="backFromReviewUsingOpStatus">
+		<if then="backToDashboard" test="(operation.statusId != 'RO_SCH' and operation.statusId != 'NONE' and operation.statusId != 'RO_NOA')  and flowScope.fromWhere != 'search'" else="backFromReviewDecision"/>
+	</decision-state>
+	
+	<action-state id="deleteTeamAction" >
+		<evaluate expression="roadOperationsServiceAction.deleteTeams"></evaluate>
+		<transition on="success" to="resources"></transition>
+		<transition on="error" to="resources"></transition>
+	</action-state>
+	
+
+
+
+	<view-state id="court_details">
+		<on-entry>
+			<set name="flowScope.currentStage" value="'court'"/>
+			<evaluate expression="roadOperationsServiceAction.getActiveCourtsByParish"></evaluate>
+		</on-entry>
+		<transition on="continueFromCourt" to="continueFromCourtAction">
+			
+		</transition>
+		<transition on="back" to="backToResourceAction"></transition>
+		<!-- <transition on="operation_details" to="operation_details"/>
+		<transition on="strategy" to="strategy"/>
+		<transition on="review" to="review"/>
+		 -->
+		
+		<transition on="operation_details" to="continueFromCourtBackToOperationDetails"/>
+		<transition on="strategy" to="continueFromCourtBackToStrategy"/>
+		<transition on="resources" to="backToResourceAction"/>
+		<transition on="review" to="continueFromCourtAction"/>
+	</view-state>
+	
+	<decision-state id="backToResourceAction">
+		<if then="continueFromCourtToResourceAction" test="flowScope.completeOpCourtDetails=='true'" else="resources"/>
+	</decision-state>
+	
+	<decision-state id="continueFromCourtBackToStrategy">
+		<if then="continueFromCourtToStrategyAction" test="flowScope.completeOpCourtDetails=='true'" else="strategy"/>
+	</decision-state>
+	
+	<decision-state id="continueFromCourtBackToOperationDetails">
+		<if then="continueFromCourtToOperationDetailsAction" test="flowScope.completeOpCourtDetails=='true'" else="operation_details"/>
+	</decision-state>
+	
+	<action-state id="continueFromCourtAction" >
+		<evaluate expression="roadOperationsServiceAction.validateOperationDetails"></evaluate>
+		<transition on="success" to="review">
+			<set name="flowScope.completeOpCourtDetails" value="'true'"/>
+		</transition>
+		<transition on="error" to="court_details">
+		</transition>
+	</action-state>
+	
+	<action-state id="continueFromCourtToOperationDetailsAction" >
+		<evaluate expression="roadOperationsServiceAction.validateOperationDetails"></evaluate>
+		<transition on="success" to="operation_details">
+			<set name="flowScope.completeOpCourtDetails" value="'true'"/>
+		</transition>
+		<transition on="error" to="court_details">
+		</transition>
+	</action-state>
+	
+	<action-state id="continueFromCourtToStrategyAction" >
+		<evaluate expression="roadOperationsServiceAction.validateOperationDetails"></evaluate>
+		<transition on="success" to="strategy">
+			<set name="flowScope.completeOpCourtDetails" value="'true'"/>
+		</transition>
+		<transition on="error" to="court_details">
+		</transition>
+	</action-state>
+	
+	<action-state id="continueFromCourtToResourceAction" >
+		<evaluate expression="roadOperationsServiceAction.validateOperationDetails"></evaluate>
+		<transition on="success" to="resources">
+			<set name="flowScope.completeOpCourtDetails" value="'true'"/>
+		</transition>
+		<transition on="error" to="court_details">
+		</transition>
+	</action-state>
+	
+	
+	<view-state id="review" redirect="false">
+		<on-entry>
+			<evaluate expression="roadOperationsServiceAction.prepareReviewScreen"></evaluate>
+			<set name="flowScope.currentStage" value="'review'"/>
+			<set name="flowScope.openStartPopup" value="'N'"/>
+			<set name="flowScope.operation.confirmStartPopup" value="'N'"/>
+			<evaluate expression="roadOperationsServiceAction.setCompleteValuesFormSearch"></evaluate>
+			<evaluate expression="roadOperationsServiceAction.populateStrategyTarget"></evaluate>
+		</on-entry>
+		<transition on="saveOperation" to="saveOperationAction">
+			<render fragments="reviewOperations"></render>
+		</transition>
+		<transition on="startOperation" to="roadOperationStart"></transition>
+		<transition on="start">
+			<evaluate expression="roadOperationsServiceAction.startCompleteRoadOperation(flowRequestContext,roadOperationsServiceAction.ROAD_OPERATION_STARTED)"></evaluate>
+		</transition>
+		<transition on="complete">
+			<evaluate expression="roadOperationsServiceAction.startCompleteRoadOperation(flowRequestContext,roadOperationsServiceAction.ROAD_OPERATION_COMPLETED)"></evaluate>
+		</transition>
+		<transition on="startRoadOpCompleteMessage">
+			<evaluate expression="roadOperationsServiceAction.synchronizeStartedRoadOp"></evaluate>
+		</transition>
+		<transition on="roadOpPopCancel" to="review"></transition>
+		<!--  <transition on="completeOperation" to="roadOperationComplete"></transition>-->
+		<transition on="completeOperation">
+			<evaluate expression="roadOperationsServiceAction.startOperationLoadPopUp"></evaluate>
+		</transition>
+		<transition on="startFromCompleteRoadOp">
+			<set name="flowScope.operation.statusId" value="'RO_STA'"/>
+			<evaluate expression="roadOperationsServiceAction.saveOperation"></evaluate>
+		</transition>
+		<transition on="closeFromCompleteRoadOp"></transition>
+		<transition on="cancelOperation">
+				<evaluate expression="roadOperationsServiceAction.test"></evaluate>			
+		</transition>
+		<transition on="terminateOperationPopup">
+				<evaluate expression="roadOperationsServiceAction.terminateOperationPopup"></evaluate>			
+		</transition>
+		<transition on="test">
+			<evaluate expression="roadOperationsServiceAction.test"></evaluate>
+		</transition>
+		<transition on="editResources" to="resources"></transition>
+		<transition on="editCourt" to="court_details"></transition>
+		<transition on="editStrategy" to="strategy"></transition>
+		<transition on="editSchedule" to="operation_details"></transition>
+		<transition on="back" to="backFromReviewUsingOpStatus"></transition>
+		<transition on="cancelOp" to="review">
+			<set name="flowScope.operation.statusId" value="'RO_CAN'"/>
+			<set name="flowScope.opStatus" value="'RO_CAN'"/>
+			<set name="flowScope.operation.reasonId" value="flowScope.reasonIdVar"/>			
+			<set name="flowScope.operation.comment" value="flowScope.commentVar"/>	
+			<set name="flowScope.cancelBtn" value="'cancelled'"/>	
+			<evaluate expression="roadOperationsServiceAction.cancelRoadOp(flowRequestContext)"></evaluate>
+		</transition>
+		<transition on="closeOp" to="review">
+			<set name="flowScope.operation.statusId" value="'RO_CLO'"/>
+			<evaluate expression="roadOperationsServiceAction.saveOperation"></evaluate>
+		</transition>
+		<transition on="completeOp" to="review">
+			<set name="flowScope.operation.statusId" value="'RO_COM'"/>
+			<evaluate expression="roadOperationsServiceAction.saveOperation"></evaluate>
+		</transition>
+		<transition on="terminateOp" to="review">
+			<set name="flowScope.operation.statusId" value="'RO_TER'"/>
+			<evaluate expression="roadOperationsServiceAction.terminateRoadOp(flowRequestContext)"></evaluate>
+		</transition>
+		<transition on="authorizeOp" to="review">
+			<evaluate expression="roadOperationsServiceAction.authorizeOperation"></evaluate>
+		</transition>
+		<transition on="court_details" to="court_details"/>
+		<transition on="operation_details" to="operation_details"/>
+		<transition on="strategy" to="strategy"/>
+		<transition on="resources" to="resources"/>
+		<transition on="openStartPopup" to="roadOperationStartView">
+			<set name="flowScope.openStartPopup" value="'Y'"/>
+			<set name="flowScope.operation.confirmStartPopup" value="'Y'"/>
+			<evaluate expression="roadOperationsServiceAction.startOperationLoadPopUp(flowRequestContext,flowScope.operation.getRoadOperationId())"></evaluate>
+			<!-- <render fragments="reviewOperations"></render>-->
+		</transition>
+	</view-state>
+	
+	
+	<view-state id="roadOperationStartView"  redirect="false" view="../roadOperationStart_view.xhtml">
+		<!-- <transition on="backToRoadOpSearch" to="roadOperationSearch"></transition>-->
+		<transition on="closeRoadOpStartPop" to="review"/>
+		
+		<transition on="beforeStart">
+			<evaluate expression="roadOperationsServiceAction.getUnattendedResources"></evaluate>
+		</transition>
+		
+		<transition on="start">
+			<evaluate expression="roadOperationsServiceAction.startCompleteRoadOperation(flowRequestContext,roadOperationsServiceAction.ROAD_OPERATION_STARTED)"></evaluate>
+		</transition>
+		
+		<transition on="complete" >
+			<evaluate expression="roadOperationsServiceAction.startCompleteRoadOperation(flowRequestContext,roadOperationsServiceAction.ROAD_OPERATION_COMPLETED)"></evaluate>
+		</transition> 
+		<transition on="roadOpPopCancel" to="review"></transition>
+		
+		<transition on="startRoadOpCompleteMessage" to="roadOperationStartSuccessAction"/>			
+		
+		<transition on="updateResources" to="resources"/>
+		
+	</view-state>
+	
+
+	<action-state id="roadOperationStartSuccessAction">
+		<evaluate expression="roadOperationsServiceAction.startRoadOpCompleteMessage"></evaluate>
+		<transition on="success" to="review"/>
+	</action-state>
+	
+	<action-state id="saveOperationAction">
+		<evaluate expression="roadOperationsServiceAction.saveOperation"></evaluate>
+		<transition on="error" to="review">
+			<render fragments="reviewOperations"></render>
+		</transition>
+		<transition on="success" to="review">
+			<set name="flowScope.completeOpReview" value="'true'"/>
+			<render fragments="reviewOperations"></render>
+		</transition>
+	</action-state>
+	
+
+	<view-state id="roadOperationStart" view="roadOperationStart.xhtml" popup="true" >
+		<on-entry>
+			<evaluate expression="roadOperationsServiceAction.startOperationLoadPopUp"></evaluate>
+			<render fragments="roadOperationStart"></render>
+		</on-entry>
+		<transition on="roadOpPopCancel" to="review"></transition>
+		<transition on="start" to="start"></transition>
+		<transition on="close" to="review"></transition>
+	
+	</view-state>
+	
+
+	
+	
+	<view-state id="roadOperationComplete" view="roadOperationComplete.xhtml" popup="true" >
+		<on-entry>
+			<evaluate expression="roadOperationsServiceAction.startOperationLoadPopUp"></evaluate>
+			<render fragments="roadOperationComplete"></render>
+		</on-entry>
+		<transition on="roadOpPopCancel" to="review"></transition>
+		<transition on="start" to="start"></transition>
+		<transition on="close" to="review"></transition>
+	
+	</view-state>
+	
+
+	<end-state id="backToSearchScr" ></end-state>
+	<subflow-state id="backToDashboard" subflow="home"></subflow-state>
+	
+</flow>

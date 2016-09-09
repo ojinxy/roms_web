@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://webservices.roms.toms.ta.fsl/" version="1.0" xmlns:ns1="http://object.vehicle.ws.fsl.org" xmlns:tns="http://webservices.roms.toms.ta.fsl/">
+
+  <xs:import namespace="http://object.vehicle.ws.fsl.org" schemaLocation="AMVSWebService_schema2.xsd"/>
+
+  <xs:element name="getVehicleBOByPlateNumber" type="tns:getVehicleBOByPlateNumber"/>
+
+  <xs:element name="getVehicleBOByPlateNumberResponse" type="tns:getVehicleBOByPlateNumberResponse"/>
+
+  <xs:element name="getVehicleByPlateNumber" type="tns:getVehicleByPlateNumber"/>
+
+  <xs:element name="getVehicleByPlateNumberResponse" type="tns:getVehicleByPlateNumberResponse"/>
+
+  <xs:complexType name="getVehicleBOByPlateNumber">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="plateNumber" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getVehicleBOByPlateNumberResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:vehicleBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vehicleBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="chassisNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="colour" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUserName" type="xs:string"/>
+      <xs:element minOccurs="0" name="engineNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="makeDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="model" type="xs:string"/>
+      <xs:element minOccurs="0" name="ownerName" type="xs:string"/>
+      <xs:element minOccurs="0" name="plateRegNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="typeDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="vehicleId" type="xs:int"/>
+      <xs:element minOccurs="0" name="year" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getVehicleByPlateNumber">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="plateNumber" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getVehicleByPlateNumberResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="ns1:Vehicle"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,123 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces" xmlns:hx="http://www.ibm.com/jsf/html_extended" xmlns:sec="http://www.springframework.org/security/tags" xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com" xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
+	<ui:fragment id="page">
+		<p:dialog id="wtddialogid" header="Withdraw ${flowScope.document.documentTypeName}" rendered="#{flowScope.mode == 'withdraw'}" visible="true" widgetVar="wtddialog" resizable="false" modal="true"
+			width="55%" height="570px" 
+			onShow="$('body').addClass('stop-scrolling')" onHide="$('body').removeClass('stop-scrolling')"
+		>
+			<p:messages autoupdate="true" closable="true"></p:messages>
+			<p:fieldset label="Please provide the following details:">
+				<p:panel>
+					<strong><h:outputText value="Witness Details:" /> </strong>
+					<table>
+						<tr>
+							<td><h:outputText styleClass="outputText" value="TRN #:" /> <h:outputText value=" * " styleClass="required" /></td>
+							<td><p:inputText onkeyup="restrictNumericFields(this);" onkeydown="restrictNumericFields(this);" value="#{flowScope.summons.dischargeWitness.trnNbr}" id="trnNbr" maxlength="9"
+									style="width:65%"
+								/> <p:commandLink action="searchTrn" id="searchTrnLink" processIds="*" ajax="false">
+									<img id="trnSearchIcon" src="${request.contextPath}/images/search-icon.gif" alt="Input search criteria"></img>
+								</p:commandLink>
+							</td>
+							<td><h:outputText styleClass="outputText" value="Occupation:" /> <h:outputText value=" * " styleClass="required" /></td>
+							<td><p:inputText value="#{flowScope.summons.dischargeWitness.occupation}" id="occup" maxlength="40" onkeyup="restrictAlphaNumericDashFieldsWithSpace(this);" onkeydown="restrictAlphaNumericDashFieldsWithSpace(this);"/></td>
+						</tr>
+						<tr>
+							<td><h:outputText styleClass="outputText" value="Name:" /> <h:outputText value=" * " styleClass="required" /></td>
+							<td><p:inputText value="#{flowScope.summons.dischargeWitness.lastName}" id="lastName" maxlength="40" style="text-align: left" disabled="true" /> <p:watermark
+									for="documentManagerView:lastName" value="Last Name"
+								/>
+							</td>
+							<td><p:inputText value="#{flowScope.summons.dischargeWitness.firstName}" id="firstName" maxlength="40" style="text-align: left" disabled="true" /> <p:watermark
+									for="documentManagerView:firstName" value="First Name"
+								/></td>
+							<td><p:inputText value="#{flowScope.summons.dischargeWitness.middleName}" id="middleName" maxlength="25" style="text-align: left" disabled="true" /> <p:watermark
+									for="documentManagerView:middleName" value="Middle Name"
+								/></td>
+						</tr>
+						<tr>
+							<td><h:outputText styleClass="outputText" value="Street Number:" /></td>
+							<td><p:inputText value="#{flowScope.summons.dischargeWitness.streetNo}" id="streetNo" maxlength="15" style="text-align: right;width: 94%;" onkeyup="restrictAlphaNumericDashFields(this);" onkeydown="restrictAlphaNumericDashFields(this);"/></td>
+							<td><h:outputText styleClass="outputText" value="Street Name:" /> </td>
+							<td><p:inputText value="#{flowScope.summons.dischargeWitness.streetName}" id="streetName" maxlength="25" style="text-align: left" /></td>
+						</tr>
+						<tr>
+							<td><h:outputText styleClass="outputText" value="P.O. Box#:" />
+							</td>
+							<td><p:inputText value="#{flowScope.summons.dischargeWitness.poBoxNo}" id="poBoxNo" maxlength="6" style="text-align: right;width: 94%;" />
+							</td>
+							<td nowrap="nowrap"><h:outputText styleClass="outputText" value="P.O. Location:" /></td>
+							<td><p:inputText value="#{flowScope.summons.dischargeWitness.poLocationName}" id="poLocationName" maxlength="25" style="text-align: left" /></td>
+						</tr>
+						<tr>
+							<td><h:outputText styleClass="outputText" value="Mark Text:" />
+							</td>
+							<td colspan="3"><p:inputText value="#{flowScope.summons.dischargeWitness.markText}" id="markText" maxlength="40" style="text-align: left;width: 94%;" />
+							</td>
+						</tr>
+						<tr>
+							<td><h:outputText styleClass="outputText" value="Parish:" /> <h:outputText value=" * " styleClass="required" /></td>
+							<td><p:selectOneMenu value="#{flowScope.summons.dischargeWitness.parishCode}" id="parishCode">
+									<f:selectItem itemValue="" itemLabel="[Select One]" />
+									<f:selectItems value="#{parishList}" />
+								</p:selectOneMenu>
+							</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><h:outputText styleClass="outputText" value="Telephone #:" /><h:outputText value=" *" styleClass="required" /></td>
+							<td><h:outputText value="(Home)" styleClass="outputText"/><p:inputMask value="#{flowScope.summons.dischargeWitness.telephoneHome}" id="telephoneHome" mask="(9?99)999-9999" style="text-align: center;
+width: 64%;font-size: 90% !important;" onfocus="this.value = this.value==''?'876':this.value;" onblur="this.value = this.value=='(876)___-____'?'':this.value;"/>
+								<p:watermark for="documentManagerView:telephoneHome" value="(###)###-####" /></td>
+							<td><h:outputText styleClass="outputText" value="(Cell)" /> <p:inputMask value="#{flowScope.summons.dischargeWitness.telephoneCell}" id="telephoneCell" mask="(9?99)999-9999" style="text-align: center;
+width: 64%;font-size: 90% !important;" onfocus="this.value = this.value==''?'876':this.value;" onblur="this.value = this.value=='(876)___-____'?'':this.value;"/> <p:watermark for="documentManagerView:telephoneCell" value="(###)###-####" /></td>
+							<td><h:outputText styleClass="outputText" value="(Work)" /> <p:inputMask value="#{flowScope.summons.dischargeWitness.telephoneWork}" id="telephoneWork" mask="(9?99)999-9999" style="text-align: center;
+width: 64%;font-size: 90% !important;" onfocus="this.value = this.value==''?'876':this.value;" onblur="this.value = this.value=='(876)___-____'?'':this.value;"/> 
+								<p:watermark for="documentManagerView:telephoneWork" value="(###)###-####" /></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td colspan="3"><strong><h:outputText value="Other Details:" /> </strong></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><h:outputText value="Withdrawal Reason:" /> <h:outputText value="*" styleClass="required" /></td>
+							<td><p:selectOneMenu id="comboReason" value="${flowScope.summons.reasonCode}">
+									<f:selectItem itemValue="" itemLabel="[Select One]" />
+									<f:selectItems value="#{reasonList}" var="s" itemLabel="#{s.label}" itemValue="#{s.value}" />
+								</p:selectOneMenu></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><h:outputText value="Comments:" /> <h:outputText value="*" styleClass="required" /></td>
+							<td colspan="3"><p:inputTextarea rows="6" style="width:100%;font-weight:bold;" value="${flowScope.summons.newComment}" maxlength="250" /></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</table>
+				</p:panel>
+				<div style="text-align: center;">
+					<span style="margin: 0 10px;"><p:commandButton id="save2" value="Save" processIds="*" action="withdraw" ajax="false" onerror="PF('wtddialog').show();" onsuccess="PF('wtddialog').hide();"
+							styleClass="blue"
+						/> </span> <span style="margin: 0 10px;"><p:commandButton id="print1" value="Print Release &amp; Discharge Form" processIds="*" action="printDischargeForm" ajax="false"
+							onerror="PF('wtddialog').show();" onsuccess="PF('wtddialog').hide();" rendered="#{flowScope.document.statusId == 'DOC_WI'}" styleClass="blue"
+						/> </span> <span style="margin: 0 10px;"><p:commandButton id="cancel2" value="Cancel" processIds="*" action="cancelAction" ajax="false" onerror="PF('wtddialog').show();"
+							onsuccess="PF('wtddialog').hide();" styleClass="blue"
+						/> </span>
+				</div>
+			</p:fieldset>
+			<p:ajax event="close" listener="#{documentManagerServiceAction.handleDialogClose}" />
+		</p:dialog>
+	</ui:fragment>
+</ui:composition>

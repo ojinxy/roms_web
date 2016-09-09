@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+    
+    <secured attributes="ROLE_ROMS_REF_STRATEGY_SEARCH" />
+        
+    <var name="mode" class="java.lang.String" />
+	<var name="saved" class="java.lang.String" />
+	<var name="strategy" class="fsl.ta.toms.roms.bo.StrategyBO" />
+	<var name="strategies" class="org.fsl.roms.view.StrategyTableBean" />
+	<var name="criteria" class="fsl.ta.toms.roms.search.criteria.impl.StrategyCriteriaBO" />
+	<var name="strategyrule" class="fsl.ta.toms.roms.bo.StrategyRuleBO" />
+	<var name="strategyrules" class="java.util.ArrayList" />
+	<var name="savehideBtn" class="java.lang.String" />
+	<var name="updatehideBtn" class="java.lang.String" />
+	<var name="errorMes" class="java.lang.String" />
+	<var name="hideActive" class="java.lang.String"/>
+	<view-state id="strategyMaintenanceSearch" redirect="false" view="strategymaintenanceSearch.xhtml">
+		<transition on="search" >
+			<evaluate expression="strategyMaintenanceServiceAction.search(flowRequestContext)"></evaluate>
+			<!--<set name="flowScope.mode" value="'search'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+			 <render fragments="strategyResults" /> -->
+		</transition>
+		
+		<transition on="select">
+			<evaluate expression="strategyMaintenanceServiceAction.select(flowRequestContext)"></evaluate>
+			<set name="flowScope.savehideBtn" value="'none'"></set>
+			<set name="flowScope.updatehideBtn" value="''"></set>
+			<set name="flowScope.hideActive" value="'true'"></set>
+		</transition>
+		
+		<transition on="reset">
+			<evaluate expression="strategyMaintenanceServiceAction.reset(flowRequestContext)"></evaluate>
+		</transition>
+	
+		<transition on="view" to="view">
+			<set name="flowScope.mode" value="'view'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	  
+			<set name="flowScope.strategy" value="flowScope.strategies.selectedRow" />
+		</transition>
+
+		<transition on="add" >
+			<evaluate expression="strategyMaintenanceServiceAction.add(flowRequestContext)"></evaluate>
+			<set name="flowScope.updatehideBtn" value="'none'"></set>
+			<set name="flowScope.savehideBtn" value="''"></set>
+			<set name="flowScope.hideActive" value="'false'"></set>
+		</transition>
+		
+		<transition on="save" to="savestrategy" />
+		
+		<!-- Sort the values on the screen -->
+		<transition on="sort" to="strategyMaintenanceSearch">
+			<set name="criteria.sortOn" value="requestParameters.sortOn"/>
+			<evaluate expression="strategyMaintenanceServiceAction.sort" />	
+			<set name="flowScope.strategies" value="flowScope.datatable.pageElements" />					
+			<render fragments="strategyMaintenanceSearch,strategyResults" />
+		</transition>
+		
+		<!-- Next action on datatable -->
+		<transition on="next" to="strategyMaintenanceSearch">
+			<evaluate expression="strategyMaintenanceServiceAction.next" />	
+			<set name="flowScope.strategies" value="flowScope.datatable.pageElements" />	
+			<render fragments="strategyMaintenanceSearch,strategyResults" />
+		</transition>
+		
+		<!-- previous action on datatable -->
+		<transition on="previous" to="strategyMaintenanceSearch">
+			<evaluate expression="strategyMaintenanceServiceAction.previous" />	
+			<set name="flowScope.strategies" value="flowScope.datatable.pageElements" />				
+			<render fragments="strategyMaintenanceSearch,strategyResults" />
+		</transition>
+		
+		<!-- first action on datatable -->
+		<transition on="first" to="strategyMaintenanceSearch">
+			<evaluate expression="strategyMaintenanceServiceAction.first" />	
+			<set name="flowScope.strategies" value="flowScope.datatable.pageElements" />				
+			<render fragments="strategyMaintenanceSearch,strategyResults" />
+		</transition>
+		
+		<!-- last action on datatable -->
+		<transition on="last" to="strategyMaintenanceSearch">
+			<evaluate expression="strategyMaintenanceServiceAction.last" />	
+			<set name="flowScope.strategies" value="flowScope.datatable.pageElements" />				
+			<render fragments="strategyMaintenanceSearch,strategyResults" />
+		</transition>
+		
+		<transition on="cancel" to="strategyMaintenanceSearch">
+			<evaluate expression="strategyMaintenanceServiceAction.back(flowRequestContext)" />	
+			<set name="flowScope.saved" value="'false'"></set>	
+			<!-- <render fragments="strategySearch" /> -->
+		</transition>
+		
+		<transition on="clear" to="endState" />
+	
+	</view-state>
+
+	<view-state id="strategyMaintenanceDetails">
+
+		<transition on="delete" to="delete">
+			<set name="flowScope.mode" value="'view'"></set>
+			<set name="flowScope.saved" value="'false'"></set>
+			<render fragments="strategyDetails" />
+		</transition>
+
+		<transition on="cancelUpdate" to="strategyMaintenanceSearch">
+			<set name="flowScope.saved" value="'false'"></set>
+			<evaluate expression="strategyMaintenanceServiceAction.search"></evaluate>
+			<render fragments="strategySearch" />
+		</transition>
+		
+		<transition on="cancel" to="strategyMaintenanceSearch">
+			<evaluate expression="strategyMaintenanceServiceAction.back(flowRequestContext)" />	
+			<set name="flowScope.saved" value="'false'"></set>
+			<render fragments="strategySearch" />
+		</transition>
+
+		<transition on="initEditMode" to="strategyMaintenanceDetails">
+			<set name="flowScope.mode" value="'update'"></set>
+		</transition>		
+			
+		<transition on="add" to="strategyMaintenanceDetails">
+			<evaluate expression="strategyMaintenanceServiceAction.initAddMode(flowRequestContext)" />
+			<set name="flowScope.strategyrules" value="flowScope.strategyrules"></set>
+		</transition>
+
+		<transition on="success" to="strategyMaintenanceDetails">
+		</transition>
+
+		<transition on="error" to="strategyMaintenanceDetails">
+		</transition>
+
+		<transition on="save" to="savestrategy" />
+
+		<transition on="update" to="updatestrategy" />
+	</view-state>
+				
+
+	<action-state id="search">
+		<evaluate expression="strategyMaintenanceServiceAction.search"></evaluate>
+		<transition on="success" to="strategyMaintenanceSearch"></transition>
+		<transition on="error" to="strategyMaintenanceSearch" />
+		<transition on="yes" to="strategyMaintenanceDetails">
+			<set name="flowScope.mode" value="'view'"></set>
+		</transition>
+	</action-state>
+	
+	<action-state id="view">
+		<evaluate expression="strategyMaintenanceServiceAction.getStrategyRule" />
+		<transition on="success" to="strategyMaintenanceDetails"></transition>
+		<transition on="error" to="strategyMaintenanceSearch" />
+		<transition on="yes" to="strategyMaintenanceDetails">
+			<set name="flowScope.mode" value="'view'"></set>
+		</transition>
+	</action-state>
+	
+	<action-state id="delete">
+		<evaluate expression="strategyMaintenanceServiceAction.delete"></evaluate>
+		<transition on="success" to="strategyMaintenanceDetails">
+			<set name="flowScope.mode" value="'view'"></set>
+			<set name="flowScope.strategyrule" value="flowScope.strategyrules.selectedRow" />
+		</transition>
+	</action-state>
+
+	<action-state id="savestrategy">
+		<evaluate expression="strategyMaintenanceServiceAction.save(flowRequestContext)" />		
+		<transition on="success" to="strategyMaintenanceSearch">
+			<set name="flowScope.saved" value="'true'"></set>
+			<set name="flowScope.mode" value="'view'"></set>
+			<set name="flowScope.errorVal" value="''"></set>
+		</transition>
+		<transition on="error" to="strategyMaintenanceSearch">
+			<set name="flowScope.errorVal" value="'true'"></set>
+		</transition>
+	</action-state>
+
+	<action-state id="updatestrategy">
+		<evaluate expression="strategyMaintenanceServiceAction.updatestrategy(flowRequestContext)" />
+		<transition on="success" to="strategyMaintenanceSearch">
+			<set name="flowScope.errorVal" value="''"></set>
+		</transition>
+
+		<transition on="error" to="strategyMaintenanceSearch">
+			<set name="flowScope.errorVal" value="'true'"></set>
+		</transition>
+
+	</action-state>
+	
+	<end-state id="endState" />
+	
+</flow>
+
+
+
+
+

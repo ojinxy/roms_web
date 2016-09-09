@@ -1,0 +1,91 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/sessTemplate.xhtml"
+	xmlns:fsl="http://org.fsl.com">
+	<ui:define name="title">Logged Out</ui:define>
+	<ui:define name="pageHeader">				
+	</ui:define>
+	<ui:define name="script">
+		<script type="text/javascript" >
+			function closeWindow(){
+				//window.open("","login_landing");
+				window.close();				
+			}
+		
+		</script>
+	
+	</ui:define>
+	<ui:define name="content">
+
+	
+		<p:panel style="border-style:solid">
+			<form id="pgform" name="f"
+			style="padding: 50px 0; margin: 0 auto; width: 35%;"
+			action="${request.contextPath}/spring/login?logged_out=true" method="get">
+		<div
+			style="text-align: center; padding: 0.5em 1em !important; margin: 0 auto !important; color: black; font-size: 16px; margin: auto; border: 1px solid gray;">
+
+		<table border="0" cellspacing="0" align="center"
+			style="background-color: white; width: 100%;">
+			<tr>
+				<td colspan="2" class="pageHeader"
+					style="text-align: center; padding: 0.5em 1em !important; margin: 0 auto !important; color: black; font-size: 20px; margin: auto;">Session
+				Information</td>
+			</tr>
+
+			<tr>
+				<td colspan="2" >			
+			
+				<div class="messages" >
+				
+					<div class="timeoutMessages" style="margin-top: 0px !important;">Your Session has ended.</div>
+
+					
+				</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="label" align="right" style="padding-bottom: 10px;"
+					height="10%"></td>
+				<td
+					style="padding-left: 10px; padding-bottom: 10px; padding-top: 10px;">
+ 
+			</td>
+			</tr>
+			
+
+		</table>
+		<div class="buttons"
+			style="float: none; margin: 0 auto; text-align: center; width: 30%; padding: 10px;"><input
+			name="submit" type="submit" value="OK"  onclick="closeWindow();"/></div>
+
+		</div>
+
+		</form>
+		</p:panel>
+
+
+
+	</ui:define>
+</ui:composition>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

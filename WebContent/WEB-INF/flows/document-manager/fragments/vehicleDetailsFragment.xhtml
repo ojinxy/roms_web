@@ -1,0 +1,619 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces" xmlns:hx="http://www.ibm.com/jsf/html_extended" xmlns:sec="http://www.springframework.org/security/tags" xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com" xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
+	<ui:define name="title">Summons Details</ui:define>
+	<ui:define name="pageHeader">Summons Details</ui:define>
+	<ui:fragment id="page">
+		<p:panelGrid id="panelSD6" header="Motor
+						Vehicle Details" rendered="#{flowScope.docType == 'SUM' }">
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="4">Motor Vehicle Details</p:column>
+				</p:row>
+			</f:facet>
+			<p:row>
+				<p:column style="width:152px">
+					<h:outputLabel for="mam" value="Make-Model:" styleClass="lbl-display" />
+				</p:column>
+				<p:column style="width: 30%">	
+					<h:outputText value="#{flowScope.summons.vehicle.makeDescription} - #{flowScope.summons.vehicle.model}" id="mam" />
+				</p:column>
+				<p:column style="width:152px">
+					<h:outputLabel for="chn" value="Chassis No.:" styleClass="lbl-display" />
+				</p:column>
+				<p:column>	
+					<h:outputText value="#{flowScope.summons.vehicle.chassisNo}" id="chn" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputLabel for="pno" value="Plate No.:" styleClass="lbl-display" />
+				</p:column>
+				<p:column>	
+					<h:outputText value="#{flowScope.summons.vehicle.plateRegNo}" id="pno" />
+				</p:column>
+				<p:column>
+					<h:outputLabel for="eng" value="Engine No.:" styleClass="lbl-display" />
+				</p:column>
+				<p:column>	
+					<h:outputText value="#{flowScope.summons.vehicle.engineNo}" id="eng" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputLabel for="col" value="Colour:" styleClass="lbl-display" />
+				</p:column>
+				<p:column>	
+					<h:outputText value="#{flowScope.summons.vehicle.colour}" id="col" />
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+		<p:panelGrid id="panelSD6" header="Road Licence Details" rendered="#{flowScope.docType == 'SUM' }">
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="4">Road Licence Details</p:column>
+				</p:row>
+			</f:facet>
+			<c:choose>
+				<c:when test="#{!(empty flowScope.summons.roadLicence.licenceNo)}">
+					<p:row>
+						<p:column style="width:152px">
+							<h:outputLabel for="lty" value="Licence Type:" styleClass="lbl-display" />
+						</p:column>
+						<p:column style="width: 30%">	
+							<h:outputText value="#{flowScope.summons.roadLicence.licType}" id="lty" />
+						</p:column>
+						<p:column style="width:152px">
+							<h:outputLabel for="lno" value="Licence No.:" styleClass="lbl-display" />
+						</p:column>
+						<p:column>	
+							<h:outputText value="#{flowScope.summons.roadLicence.licenceNo}" id="lno" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel for="ida" value="Issue Date:" styleClass="lbl-display" />
+						</p:column>
+						<p:column>	
+							<h:outputText value="#{flowScope.summons.roadLicence.issueDate}" id="ida">
+								<fsl:dateTimeConverter showTime="false" />
+							</h:outputText>
+						</p:column>
+						<p:column>
+							<h:outputLabel for="eda" value="Expiry Date:" styleClass="lbl-display" />
+						</p:column>
+						<p:column>	
+							<h:outputText value="#{flowScope.summons.roadLicence.expiryDate}" id="eda">
+								<fsl:dateTimeConverter showTime="false" />
+							</h:outputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel for="lst" value="Licence Status:" styleClass="lbl-display" />
+						</p:column>
+						<p:column>	
+							<h:outputText value="#{flowScope.summons.roadLicence.statusDesc}" id="lst" />
+						</p:column>
+						<p:column>
+							<h:outputLabel for="rde" value="Route Description:" styleClass="lbl-display" />
+						</p:column>
+						<p:column>	
+							<h:outputText value="#{flowScope.summons.roadLicence.routeDesc}" id="rde" />
+						</p:column>
+					</p:row>
+				</c:when>
+				<c:otherwise>
+					<p:row>
+						<p:column colspan="4">
+							<h:outputLabel value="No road licence exists for this vehicle." />
+						</p:column>
+					</p:row>
+				</c:otherwise>
+			</c:choose>
+		</p:panelGrid>
+		<p:panelGrid rendered="#{flowScope.docType == 'SUM' }">
+			<f:facet name="header">
+				<p:row>
+					<p:column>Vehicle Owners</p:column>
+				</p:row>
+			</f:facet>
+			<c:choose>
+				<c:when test="#{!(empty flowScope.summons.listOfVehicleOwners) }">
+					<p:row>
+						<p:column>
+							<p:dataList value="#{flowScope.summons.listOfVehicleOwners}" var="owner" style="width:50%;" type="ordered">
+								#{owner.lastName} , #{owner.firstName} - #{owner.trnNbr}
+							</p:dataList>
+						</p:column>
+					</p:row>
+				</c:when>
+				<c:otherwise>
+					<p:row>
+						<p:column>
+							<h:outputLabel value="No information on owners exist." />
+						</p:column>
+					</p:row>
+				</c:otherwise>
+			</c:choose>
+		</p:panelGrid>
+		<p:panelGrid id="panelSD6b" header="Motor
+						Vehicle Details" rendered="#{flowScope.docType == 'WNP' }">
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="4">Motor Vehicle Details</p:column>
+				</p:row>
+			</f:facet>
+			<p:row>
+				<p:column style="width:152px">
+					<h:outputLabel for="mam" value="Make-Model:" styleClass="lbl-display" />
+				</p:column>
+				<p:column style="width:30%">	
+					<h:outputText value="#{flowScope.warningNoProsecution.vehicle.makeDescription} - #{flowScope.warningNoProsecution.vehicle.model}" id="mam" />
+				</p:column>
+				<p:column style="width:152px">
+					<h:outputLabel for="chn" value="Chassis No.:" styleClass="lbl-display" />
+				</p:column>	
+				<p:column style="width:30%">	
+					<h:outputText value="#{flowScope.warningNoProsecution.vehicle.chassisNo}" id="chn" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputLabel for="pno" value="Plate No.:" styleClass="lbl-display" />
+				</p:column>	
+				<p:column>	
+					<h:outputText value="#{flowScope.warningNoProsecution.vehicle.plateRegNo}" id="pno" />
+				</p:column>
+				<p:column>
+					<h:outputLabel for="eng" value="Engine No.:" styleClass="lbl-display" />
+				</p:column>	
+				<p:column>	
+					<h:outputText value="#{flowScope.warningNoProsecution.vehicle.engineNo}" id="eng" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputLabel for="col" value="Colour:" styleClass="lbl-display" />
+				</p:column>	
+				<p:column>	
+					<h:outputText value="#{flowScope.warningNoProsecution.vehicle.colour}" id="col" />
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+		<p:panelGrid id="panelSD6" header="Road Licence Details" rendered="#{flowScope.docType == 'WNP' }">
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="4">Road Licence Details</p:column>
+				</p:row>
+			</f:facet>
+			<c:choose>
+				<c:when test="#{!(empty flowScope.warningNoProsecution.roadLicence.licenceNo)}">
+					<p:row>
+						<p:column style="width:152px">
+							<h:outputLabel for="lty" value="Licence Type:" styleClass="lbl-display" />
+						</p:column>	
+						<p:column style="width:30%">	
+							<h:outputText value="#{flowScope.warningNoProsecution.roadLicence.licType}" id="lty" />
+						</p:column>
+						<p:column style="width:152px">
+							<h:outputLabel for="lno" value="Licence No.:" styleClass="lbl-display" />
+						</p:column>	
+						<p:column style="width:30%">	
+							<h:outputText value="#{flowScope.warningNoProsecution.roadLicence.licenceNo}" id="lno" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel for="ida" value="Issue Date:" styleClass="lbl-display" />
+						</p:column>	
+						<p:column>	
+							<h:outputText value="#{flowScope.warningNoProsecution.roadLicence.issueDate}" id="ida">
+								<fsl:dateTimeConverter showTime="true" />
+							</h:outputText>
+						</p:column>
+						<p:column>
+							<h:outputLabel for="eda" value="Expiry Date:" styleClass="lbl-display" />
+						</p:column>	
+						<p:column>	
+							<h:outputText value="#{flowScope.warningNoProsecution.roadLicence.expiryDate}" id="eda">
+								<fsl:dateTimeConverter showTime="true" />
+							</h:outputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel for="lst" value="Licence Status:" styleClass="lbl-display" />
+						</p:column>	
+						<p:column>	
+							<h:outputText value="#{flowScope.warningNoProsecution.roadLicence.statusDesc}" id="lst" />
+						</p:column>
+						<p:column>
+							<h:outputLabel for="rde" value="Route Description:" styleClass="lbl-display" />
+						</p:column>	
+						<p:column>	
+							<h:outputText value="#{flowScope.warningNoProsecution.roadLicence.routeDesc}" id="rde" />
+						</p:column>
+					</p:row>
+				</c:when>
+				<c:otherwise>
+					<p:row>
+						<p:column colspan="2">
+							<h:outputLabel value="No road licence exists for this vehicle." />
+						</p:column>
+					</p:row>
+				</c:otherwise>
+			</c:choose>
+		</p:panelGrid>
+		<p:panelGrid rendered="#{flowScope.docType == 'WNP' }">
+			<f:facet name="header">
+				<p:row>
+					<p:column>Vehicle Owners</p:column>
+				</p:row>
+			</f:facet>
+			<c:choose>
+				<c:when test="#{!(empty flowScope.warningNoProsecution.listOfVehicleOwners) }">
+					<p:row>
+						<p:column>
+							<p:dataList value="#{flowScope.warningNoProsecution.listOfVehicleOwners}" var="owner" style="width:50%;" type="ordered">	
+								#{owner.lastName} , #{owner.firstName} - #{owner.trnNbr}
+							</p:dataList>
+						</p:column>
+					</p:row>
+				</c:when>
+				<c:otherwise>
+					<p:row>
+						<p:column>
+							<h:outputLabel value="No information on owners exist." />
+						</p:column>
+					</p:row>
+				</c:otherwise>
+			</c:choose>
+		</p:panelGrid>
+		<p:panelGrid id="panelSD6c" header="Motor
+						Vehicle Details" rendered="#{flowScope.docType == 'WNO' }">
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="4">Motor Vehicle Details</p:column>
+				</p:row>
+			</f:facet>
+			<p:row>
+				<p:column style="width:152px">
+					<h:outputLabel for="mam" value="Make-Model:" styleClass="lbl-display" />
+				</p:column>	
+				<p:column style="width: 30%">	
+					<h:outputText value="#{flowScope.warningNotice.vehicle.makeDescription} - #{flowScope.warningNotice.vehicle.model}" id="mam" />
+				</p:column>
+				<p:column style="width:152px">
+					<h:outputLabel for="chn" value="Chassis No.:" styleClass="lbl-display" />
+				</p:column>	
+				<p:column>	
+					<h:outputText value="#{flowScope.warningNotice.vehicle.chassisNo}" id="chn" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputLabel for="pno" value="Plate No.:" styleClass="lbl-display" />
+				</p:column>	
+				<p:column>	
+					<h:outputText value="#{flowScope.warningNotice.vehicle.plateRegNo}" id="pno" />
+				</p:column>
+				<p:column>
+					<h:outputLabel for="eng" value="Engine No.:" styleClass="lbl-display" />
+				</p:column>	
+				<p:column>	
+					<h:outputText value="#{flowScope.warningNotice.vehicle.engineNo}" id="eng" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputLabel for="col" value="Colour:" styleClass="lbl-display" />
+				</p:column>	
+				<p:column>	
+					<h:outputText value="#{flowScope.warningNotice.vehicle.colour}" id="col" />
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+		<p:panelGrid id="panelSD6" header="Road Licence Details" rendered="#{flowScope.docType == 'WNO' }">
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="4">Road Licence Details</p:column>
+				</p:row>
+			</f:facet>
+			<c:choose>
+				<c:when test="#{!(empty flowScope.warningNotice.roadLicence.licenceNo) }">
+					<p:row>
+						<p:column style="width:152px">
+							<h:outputLabel for="lty" value="Licence Type:" styleClass="lbl-display" />
+						</p:column>	
+						<p:column style="width: 30%">	
+							<h:outputText value="#{flowScope.warningNotice.roadLicence.licType}" id="lty" />
+						</p:column>
+						<p:column style="width:152px">
+							<h:outputLabel for="lno" value="Licence No.:" styleClass="lbl-display" />
+						</p:column>	
+						<p:column>	
+							<h:outputText value="#{flowScope.warningNotice.roadLicence.licenceNo}" id="lno" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel for="ida" value="Issue Date:" styleClass="lbl-display" />
+						</p:column>	
+						<p:column>	
+							<h:outputText value="#{flowScope.warningNotice.roadLicence.issueDate}" id="ida">
+								<fsl:dateTimeConverter showTime="true" />
+							</h:outputText>
+						</p:column>
+						<p:column>
+							<h:outputLabel for="eda" value="Expiry Date:" styleClass="lbl-display" />
+						</p:column>	
+						<p:column>
+							<h:outputText value="#{flowScope.warningNotice.roadLicence.expiryDate}" id="eda">
+								<fsl:dateTimeConverter showTime="true" />
+							</h:outputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel for="lst" value="Licence Status:" styleClass="lbl-display" />
+						</p:column>	
+						<p:column>	
+							<h:outputText value="#{flowScope.warningNotice.roadLicence.statusDesc}" id="lst" />
+						</p:column>
+						<p:column>
+							<h:outputLabel for="rde" value="Route Description:" styleClass="lbl-display" />
+						</p:column>	
+						<p:column>	
+							<h:outputText value="#{flowScope.warningNotice.roadLicence.routeDesc}" id="rde" />
+						</p:column>
+					</p:row>
+				</c:when>
+				<c:otherwise>
+					<p:row>
+						<p:column colspan="2">
+							<h:outputLabel value="No road licence exists for this vehicle." />
+						</p:column>
+					</p:row>
+				</c:otherwise>
+			</c:choose>
+		</p:panelGrid>
+		<p:panelGrid rendered="#{flowScope.docType == 'WNO'}">
+			<f:facet name="header">
+				<p:row>
+					<p:column>Vehicle Owners</p:column>
+				</p:row>
+			</f:facet>
+			<c:choose>
+				<c:when test="#{!(empty flowScope.warningNotice.listOfVehicleOwners) }">
+					<p:row>
+						<p:column>
+							<p:dataList value="#{flowScope.warningNotice.listOfVehicleOwners}" var="owner" style="width:50%;" type="ordered">
+								#{owner.lastName} , #{owner.firstName} - #{owner.trnNbr}
+							</p:dataList>
+						</p:column>
+					</p:row>
+				</c:when>
+				<c:otherwise>
+					<p:row>
+						<p:column>
+							<h:outputLabel value="No information on owners exist." />
+						</p:column>
+					</p:row>
+				</c:otherwise>
+			</c:choose>
+		</p:panelGrid>
+		<p:panelGrid id="panelSD7" header="Vehicle
+						Seizure Details" rendered="#{flowScope.docType == 'WNO' }">
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="4">Vehicle Seizure</p:column>
+				</p:row>
+			</f:facet>
+			<p:row>
+				<p:column colspan="2">
+					<h:outputLabel value="POUND DETAILS"  />
+				</p:column>
+				<p:column colspan="2">
+					<h:outputLabel value="WRECKER COMPANY DETAILS"  rendered="#{!(empty flowScope.warningNotice.wreckingCompanyBO.companyName)}" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:152px">
+					<h:outputLabel for="pound" value="Name:" styleClass="lbl-display" />
+				</p:column>	
+				<p:column style="width: 30%">	
+					<h:outputText value="#{flowScope.warningNotice.poundBO.poundName}" id="pound" />
+				</p:column>
+				<p:column style="width:152px">
+					<h:outputLabel for="wre" value="Company:" styleClass="lbl-display" rendered="#{!(empty flowScope.warningNotice.wreckingCompanyBO.companyName)}" />
+				</p:column>	
+				<p:column>	
+					<h:outputText value="#{flowScope.warningNotice.wreckingCompanyBO.companyName}" id="wre" rendered="#{!(empty flowScope.warningNotice.wreckingCompanyBO.companyName)}" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="padding-bottom:18px" >
+					<h:outputLabel style="padding-left:1px;width: 150px;display: inline-block; vertical-align: top;" for="pad" value="Address :" styleClass="lbl-display" />
+				</p:column>	
+				<p:column>	
+					<h:outputText style="display:inline-block" escape="false" value="#{fn:replace(flowScope.warningNotice.poundAddressNL,'\\n','&lt;br/&gt;&#9;')}" id="pad" >
+					</h:outputText>
+					<br />
+				</p:column>
+				<p:column style="padding-bottom:18px">
+					<h:outputLabel style="padding-left:1px;width: 150px;display: inline-block;vertical-align: top;" for="wad" value="Address :" styleClass="lbl-display" rendered="#{!(empty flowScope.warningNotice.wreckingCompanyBO.companyName)}" />
+				</p:column>	
+				<p:column>	
+					<h:outputText style="display: inline-block;" escape="false" value="#{fn:replace(flowScope.warningNotice.wreckingCompanyAddressNL,'\\n','&lt;br/&gt;&#9;')}" id="wad"
+						rendered="#{!(empty flowScope.warningNotice.wreckingCompanyBO.companyName)}"
+					></h:outputText>
+					<br />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputLabel for="pph" value="Phone :" styleClass="lbl-display" />
+				</p:column>	
+				<p:column>	
+					<h:outputText value="#{flowScope.warningNotice.poundBO.telephoneWork}" id="pph"></h:outputText>
+				</p:column>
+				<p:column>
+					<h:outputLabel for="wph" value="Phone :" styleClass="lbl-display" rendered="#{!(empty flowScope.warningNotice.wreckingCompanyBO.companyName)}" />
+				</p:column>	
+				<p:column>	
+					<h:outputText value="#{flowScope.warningNotice.wreckingCompanyBO.telephoneWork}" id="wph" rendered="#{!(empty flowScope.warningNotice.wreckingCompanyBO.companyName)}"></h:outputText>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputLabel for="pco" value="# of Lots:" styleClass="lbl-display" />
+				</p:column>	
+				<p:column>	
+					<h:outputText value="#{flowScope.warningNotice.poundBO.numberOfLots}" id="pco"></h:outputText>
+				</p:column>
+				<p:column>
+					<h:outputLabel for="wcco" value="Contact Person :" styleClass="lbl-display" rendered="#{!(empty flowScope.warningNotice.wreckingCompanyBO.companyName)}" />
+				</p:column>	
+				<p:column>	
+					<h:outputText id="wcco"
+						value="${nameUtil.getLastNameCapsFirstNameMiddleName(flowScope.warningNotice.wreckingCompanyBO.contactPersonLastName,flowScope.warningNotice.wreckingCompanyBO.contactPersonFirstName,flowScope.warningNotice.wreckingCompanyBO.contactPersonMiddleName)}"
+						rendered="#{!(empty flowScope.warningNotice.wreckingCompanyBO.companyName)}"
+					></h:outputText>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputLabel for="spac" value="Parking Spaces :" styleClass="lbl-display" />
+				</p:column>	
+				<p:column>	
+					<h:outputText value="#{flowScope.warningNotice.poundBO.numberOfParkingSpaces}" id="spac" />
+				</p:column>
+				<p:column>
+						</p:column>
+			</p:row>
+		</p:panelGrid>
+		<p:panelGrid style="margin-top:5px;width:100%" id="gridWreckerVehicleDetails" rendered="#{!(empty flowScope.warningNotice.wreckerVehicleBO.plateRegNo)}">
+			<p:row>
+				<p:column colspan="4">
+					<h3 class="ui-widget-header header-removed page-sub-header">Wrecker Vehicle Information</h3>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:152px">
+					<h:outputLabel for="wpn" value="Plate Number :" styleClass="lbl-display" />
+				</p:column>	
+				<p:column style="width: 30%">	
+					<h:outputText value="#{flowScope.warningNotice.wreckerVehicleBO.plateRegNo}" id="wpn"></h:outputText>
+				</p:column>
+				<p:column style="width:152px">
+					<h:outputLabel for="wmd" value="Make Description :" styleClass="lbl-display" />
+				</p:column>	
+				<p:column>	
+					<h:outputText id="wmd" value="#{flowScope.warningNotice.wreckerVehicleBO.makeDescription}"></h:outputText>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputLabel for="wmm" value="Model :" styleClass="lbl-display" />
+				</p:column>	
+				<p:column>	
+					<h:outputText id="wmm" value="#{flowScope.warningNotice.wreckerVehicleBO.model}"></h:outputText>
+				</p:column>
+				<p:column>
+					<h:outputLabel for="wen" value="Engine Number :" styleClass="lbl-display" />
+				</p:column>	
+				<p:column>	
+					<h:outputText id="wen" value="#{flowScope.warningNotice.wreckerVehicleBO.engineNo}" escape="false"></h:outputText>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputLabel for="wcol" value="Colour :" styleClass="lbl-display" />
+				</p:column>	
+				<p:column>	
+					<h:outputText id="wcol" value="#{flowScope.warningNotice.wreckerVehicleBO.colour}"></h:outputText>
+				</p:column>
+				<p:column>
+					<h:outputLabel for="wccn" value="Chassis Number :" styleClass="lbl-display" />
+				</p:column>	
+				<p:column>	
+					<h:outputText id="wccn" value="#{flowScope.warningNotice.wreckerVehicleBO.chassisNo}"></h:outputText>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputLabel for="wyea" value="Year :" styleClass="lbl-display" />
+				</p:column>	
+				<p:column>	
+					<h:outputText id="wyea" value="#{flowScope.warningNotice.wreckerVehicleBO.year}"></h:outputText>
+				</p:column>
+				<p:column>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+		<p:panelGrid style="margin-top:5px;width:100%" id="gridVehicleMoverOTWDDetails"
+			rendered="#{flowScope.warningNotice.vehicleMoverPersonType eq 'WD' or flowScope.warningNotice.vehicleMoverPersonType eq 'OT'  and flowScope.warningNotice.vehicleMoverBO ne null}"
+		>
+			<p:row>
+				<p:column colspan="4">
+					<h3 class="ui-widget-header header-removed page-sub-header">
+						<c:if test="#{flowScope.warningNotice.vehicleMoverPersonType eq 'WD'}">
+										Wrecker Driver Information
+									</c:if>
+						<c:if test="#{flowScope.warningNotice.vehicleMoverPersonType eq 'OT'}">
+										Vehicle Mover Information
+									</c:if>
+					</h3>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:152px">
+					<b style="padding-left: 1px; width: 150px; display: inline-block;"><h:outputText value="Driver's Licence #:"></h:outputText> </b>
+				</p:column>	
+				<p:column style="width: 30%">	
+					<h:outputText value="#{flowScope.warningNotice.vehicleMoverBO.dlNo}"></h:outputText>
+				</p:column>
+				<p:column style="width:152px">
+					<b style="padding-left: 1px; width: 150px; display: inline-block;"><h:outputText value="Name :"></h:outputText> </b>
+				</p:column>	
+				<p:column style="width:30%">	
+					<h:outputText value="#{flowScope.warningNotice.vehicleMoverBO.fullName}"></h:outputText>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+		<p:panelGrid style="margin-top:5px;width:100%" id="gridVehicleMoverDetails"
+			rendered="#{flowScope.warningNotice.vehicleMoverPersonType eq 'IE' or flowScope.warningNotice.vehicleMoverPersonType eq 'TA' or flowScope.warningNotice.vehicleMoverPersonType eq 'PO' and flowScope.warningNotice.vehicleMoverBO ne null}"
+		>
+			<p:row>
+				<p:column colspan="4">
+					<h3 class="ui-widget-header header-removed page-sub-header">Vehicle Mover Information</h3>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:152px">
+					<b style="padding-left: 1px; width: 150px; display: inline-block;"><h:outputText value="Team Position:"></h:outputText> </b>
+				</p:column>	
+				<p:column style="width:30%">
+					<c:if test="#{flowScope.warningNotice.vehicleMoverPersonType eq 'PO'}">
+										Police Officer
+								</c:if>
+					<c:if test="#{flowScope.warningNotice.vehicleMoverPersonType eq 'IE'}">
+										ITA Examiner
+								</c:if>
+					<c:if test="#{flowScope.warningNotice.vehicleMoverPersonType eq 'TA'}">
+										Transport Authority Inspector
+								</c:if>
+				</p:column>
+				<p:column style="width:152px">
+					<b style="padding-left: 1px; width: 150px; display: inline-block;"><h:outputText value="Name :"></h:outputText> </b>
+				</p:column>	
+				<p:column style="width:30%">	
+					<h:outputText value="#{flowScope.warningNotice.vehicleMoverBO.fullName}"></h:outputText>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</ui:fragment>
+</ui:composition>

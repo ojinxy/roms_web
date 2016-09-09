@@ -1,0 +1,108 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui" xmlns:fsl="http://org.fsl.com"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/WEB-INF/newTemplate.xhtml" >
+
+	<ui:define name="title">Event Audit Report</ui:define>
+	<ui:define name="pageHeader">Event Audit Report</ui:define>
+	<ui:define name="content" >
+		<div class="main">
+			<p:messages id="errorMessages" closable="true"/>
+			<p:panel id="panelMain" header="Report" prependId="false">
+				  
+				<h:form id="eventAuditReport">
+					
+					<table>
+						<tr>
+							<td>
+								<h:outputLabel value="Event Date:" />
+								<h:outputText value=" * " styleClass="required" />
+							</td>
+							<td>
+								<p:calendar value="#{criteria.startDate}"
+									id="eventDateStart" readonlyInput="true" showOn="button"
+									maxlength="10" pattern="yyyy-MM-dd" navigator="true">
+									
+								</p:calendar> 
+							</td>
+							<td>-</td>
+							<td>
+								<p:calendar value="#{criteria.endDate}"
+									id="eventDateEnd" readonlyInput="true" showOn="button"
+									maxlength="10" pattern="yyyy-MM-dd" navigator="true">
+									
+								</p:calendar>
+							</td>
+						</tr>
+						
+						<tr>
+							<td><h:outputLabel value="User:" /></td>
+							<td colspan = "3">
+								<p:selectOneMenu  id="comboStaff"
+									value="#{criteria.createUserName}">
+									<f:selectItem itemValue="" itemLabel="[ALL]" />
+									<f:selectItems value="#{staffDropDown}" />
+								</p:selectOneMenu>
+							</td>
+						</tr>
+						
+						<tr>
+							<td><h:outputLabel value="Event:" /></td>
+							<td colspan = "3">
+								<p:selectOneMenu  id="comboEvent"
+									value="#{criteria.eventCode}">
+									<f:selectItem itemValue="" itemLabel="[ALL]" />
+									<f:selectItems value="#{eventTypeList}" />
+								</p:selectOneMenu>
+							</td>
+						</tr>
+						
+						<tr>
+							<td><h:outputLabel value="Region:" /></td>
+							<td colspan = "3">
+								<p:selectManyMenu showCheckbox="true" id="regionList" var="reg" value="#{flowScope.taOfficeRegion}"
+	                   				converter="regionConverter" filter="true" filterMatchMode="contains" style="height:200px;width:100%;border-bottom:solid #79b7e7 1px;" >
+	                   				<f:selectItems value="#{regionList}" var="r" itemLabel="#{r.description}" itemValue="#{r}" />
+	                   				<p:column>
+										#{reg.description}
+									</p:column>
+                   				</p:selectManyMenu>
+							</td>
+						</tr>
+						
+						<tr>
+							<td valign="bottom"><h:outputLabel value="Sort By:" /></td>
+							<td colspan="3" valign="top">
+								<p:selectOneRadio id="sortBy" value="#{criteria.sortBy}">  
+						            <f:selectItem itemLabel="Event Date" itemValue="eventdtime" />  
+						            <f:selectItem itemLabel="Event" itemValue="event" />  
+						            <f:selectItem itemLabel="Staff" itemValue="user" />
+						            <f:selectItem itemLabel="Location" itemValue="location" />  
+						        </p:selectOneRadio>
+							</td>
+						</tr>
+					</table>
+					
+					<div id="buttons"  style="text-align: center">
+		               <p:commandButton styleClass ="blue"  id="generateAuditReport" value="Generate" action="generateAuditReport" processIds="*" ajax="false" />
+		               <p:commandButton styleClass ="blue"  id="clearAuditReport" value="Clear" action="clear" processIds="*" ajax="false" />
+		            </div>
+	            </h:form>
+	             
+	             <f:subview id="pdfView" rendered="#{flashScope.openReportWindow == 'true'}">
+			     	<script type="text/javascript">openNewWindowWithName('${request.contextPath}/view/pdf/?buffered=true');</script>
+		       	</f:subview> 
+	       
+			</p:panel>
+		</div>
+		
+
+	</ui:define>
+</ui:composition>

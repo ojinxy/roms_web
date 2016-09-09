@@ -1,0 +1,1507 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Form 18" pageWidth="612" pageHeight="1008" columnWidth="504" leftMargin="54" rightMargin="54" topMargin="72" bottomMargin="72" uuid="ddc3c72c-cb39-43b3-852a-115b89e228f8">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="39"/>
+	<property name="ireport.y" value="2751"/>
+	<field name="servedParish" class="java.lang.String"/>
+	<field name="excerpt" class="java.lang.String"/>
+	<field name="offenceLocation" class="java.lang.String"/>
+	<field name="taStaffFirstName" class="java.lang.String"/>
+	<field name="taStaffLastName" class="java.lang.String"/>
+	<field name="offenderFirstName" class="java.lang.String"/>
+	<field name="offenderLastName" class="java.lang.String"/>
+	<field name="jpFirstName" class="java.lang.String"/>
+	<field name="jpLastName" class="java.lang.String"/>
+	<field name="offenceDay" class="java.lang.String"/>
+	<field name="offenceDayWord" class="java.lang.String"/>
+	<field name="offenceYearWord" class="java.lang.String"/>
+	<field name="offenceTime" class="java.lang.String"/>
+	<field name="offenceParish" class="java.lang.String"/>
+	<field name="offenceDtime" class="java.lang.String"/>
+	<field name="offenceMonth" class="java.lang.String"/>
+	<field name="courtName" class="java.lang.String"/>
+	<field name="courtLocation" class="java.lang.String"/>
+	<field name="courtTime" class="java.lang.String"/>
+	<field name="courtAddress" class="java.lang.String"/>
+	<field name="courtDay" class="java.lang.String"/>
+	<field name="courtMonth" class="java.lang.String"/>
+	<field name="courtYear" class="java.lang.String"/>
+	<field name="offenderAddressParish" class="java.lang.String"/>
+	<field name="offenderAddress" class="java.lang.String"/>
+	<field name="offenceYear" class="java.lang.String"/>
+	<field name="courtDayWord" class="java.lang.String"/>
+	<field name="summonsId" class="java.lang.Integer"/>
+	<field name="servedAddress" class="java.lang.String"/>
+	<field name="offenceExcerpt" class="java.lang.String"/>
+	<field name="jpParish" class="java.lang.String"/>
+	<field name="referenceNo" class="java.lang.String"/>
+	<field name="offenderMiddleName" class="java.lang.String"/>
+	<field name="offenderTRN" class="java.lang.String"/>
+	<field name="offenceDescription" class="java.lang.String"/>
+	<variable name="OFFENCE_YEAR_WORD" class="java.lang.String">
+		<variableExpression><![CDATA[$F{offenceYearWord}.equalsIgnoreCase("15")? "Two Thousand and Fifteen" :
+$F{offenceYearWord}.equalsIgnoreCase("16")? "Two Thousand and Sixteen" :
+$F{offenceYearWord}.equalsIgnoreCase("17")? "Two Thousand and Seventeen" :
+$F{offenceYearWord}.equalsIgnoreCase("18")? "Two Thousand and Eighteen" :
+$F{offenceYearWord}.equalsIgnoreCase("19")? "Two Thousand and Nineteen" :
+$F{offenceYearWord}.equalsIgnoreCase("20")? "Two Thousand and Twenty" :
+$F{offenceYearWord}.equalsIgnoreCase("21")? "Two Thousand and Twenty One" :
+$F{offenceYearWord}.equalsIgnoreCase("22")? "Two Thousand and Twenty Two" :
+$F{offenceYearWord}.equalsIgnoreCase("23")? "Two Thousand and Twenty Three" :
+$F{offenceYearWord}.equalsIgnoreCase("24")? "Two Thousand and Twenty Four" :
+$F{offenceYearWord}.equalsIgnoreCase("25")? "Two Thousand and Twenty Five" :
+$F{offenceYearWord}.equalsIgnoreCase("26")? "Two Thousand and Twenty Six" :
+"                                                                                                          "]]></variableExpression>
+	</variable>
+	<variable name="COURT_YEAR_WORD" class="java.lang.String">
+		<variableExpression><![CDATA[$F{courtYear}.equalsIgnoreCase("2015")? "Two Thousand and Fifteen" :
+$F{courtYear}.equalsIgnoreCase("2016")? "Two Thousand and Sixteen" :
+$F{courtYear}.equalsIgnoreCase("2017")? "Two Thousand and Seventeen" :
+$F{courtYear}.equalsIgnoreCase("2018")? "Two Thousand and Eighteen" :
+$F{courtYear}.equalsIgnoreCase("2019")? "Two Thousand and Nineteen" :
+$F{courtYear}.equalsIgnoreCase("2020")? "Two Thousand and Twenty" :
+$F{courtYear}.equalsIgnoreCase("2021")? "Two Thousand and Twenty One" :
+$F{courtYear}.equalsIgnoreCase("2022")? "Two Thousand and Twenty Two" :
+$F{courtYear}.equalsIgnoreCase("2023")? "Two Thousand and Twenty Three" :
+$F{courtYear}.equalsIgnoreCase("2024")? "Two Thousand and Twenty Four" :
+$F{courtYear}.equalsIgnoreCase("2025")? "Two Thousand and Twenty Five" :
+$F{courtYear}.equalsIgnoreCase("2026")? "Two Thousand and Twenty Six" :
+"                                                                                                          "]]></variableExpression>
+	</variable>
+	<variable name="TA_INSPECTOR" class="java.lang.String">
+		<variableExpression><![CDATA[$F{taStaffFirstName}+ " " + $F{taStaffLastName}]]></variableExpression>
+	</variable>
+	<variable name="OFFENDER_FULL_NAME" class="java.lang.String">
+		<variableExpression><![CDATA[$F{offenderFirstName}.toUpperCase() + " " + ( $F{offenderMiddleName} != null ? $F{offenderMiddleName}.toUpperCase()+" ": "" ) + $F{offenderLastName}.toUpperCase()]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="864" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="0" y="459" width="501" height="40" uuid="af43dbed-59e2-438b-a118-ed9e4b8bbbec"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[	Given under my hand this             day of                                       in the year of Our Lord Two Thousand and                                     at the parish aforesaid.]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="278" y="608" width="223" height="1" uuid="97ec523f-8740-4936-9a05-3767c962d19c"/>
+			</line>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="103" y="103" width="182" height="20" uuid="dc903f28-473d-416c-ada6-c0b50c6a8805"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{OFFENDER_FULL_NAME} + ( $F{offenderTRN} != null ? " - " + $F{offenderTRN} : "" )]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="331" y="38" width="169" height="20" uuid="50e94ec1-6f71-4553-81c5-176c15864643"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Summons to Person Charged]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="58" width="200" height="20" uuid="60c46469-1be8-4af9-b154-894f3c01ab47"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[JAMAICA   SS.]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="255" y="636" width="244" height="20" uuid="965401f2-5b71-421e-8330-8da61a2baa66"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["for the Parish of " +  ( $F{offenceParish} != null  ? $F{offenceParish} : "" )]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="47" y="83" width="51" height="20" uuid="a7ea6ed8-cc03-4fd8-bdd9-f6fc2408f9ae"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Parish of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="361" width="503" height="20" uuid="bed7ad29-2564-45f9-8f3e-9b047e6a8471"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Lady the Queen, Her Crown and Dignity.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="342" width="505" height="20" uuid="e6b57030-45dc-415b-b553-bea0300227ce"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[against the form of the Statute in such case made and provided and against the Peace of Our Sovereign]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="127" width="97" height="20" uuid="42b50ce8-ba1b-4038-95e6-49cff35b7b8b"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[of the said parish]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="103" width="51" height="20" uuid="a7cb4245-18ae-4f77-8187-f67ed1585ec3"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[To]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="285" y="83" width="20" height="71" uuid="e41f828a-4c67-492e-959a-c7955959e3cb"/>
+				<textElement rotation="None">
+					<font fontName="Times New Roman" size="48" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[}]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="103" y="83" width="179" height="20" uuid="1578e1c9-63f4-4453-9944-2e50363b1eb2"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offenceParish}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="254" y="614" width="243" height="22" uuid="218aae1b-48d9-411e-9cde-0960ec0618dc"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="12" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Justice of the Peace or Clerk of the Courts]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="305" y="103" width="197" height="51" uuid="3bd55c38-682b-4824-8cdd-bbe071c3e5a9"/>
+				<textElement rotation="None">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offenderAddress}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="212" y="13" width="100" height="19" uuid="5a4049a2-1968-4241-b5c9-4572000a879f"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[18]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="263" width="503" height="67" uuid="0658d0be-0966-4ca3-821b-9d7844312d9c"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="html">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{excerpt}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="382" width="502" height="72" uuid="5d838936-796d-4558-b980-5a64597db0d9"/>
+				<textElement markup="styled">
+					<font fontName="Times New Roman" size="12" isBold="false" pdfFontName="Times-Bold"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["	These are therefore, to require you, in Her Majesty's name, to be and appear on "+"<style isBold='true'>"+$F{courtDayWord}+"</style>"+" the "+"<style isBold='true'>"+$F{courtDay}+"</style>"+" day of "+"<style isBold='true'>"+$F{courtMonth}+" </style>"+"<style isBold='true'>"+$V{COURT_YEAR_WORD}+"</style>"+" at ten o'clock in the forenoon at the Court House, at "+"<style isBold='true'>"+$F{courtAddress}+"</style>" + " before such Justice of the Peace for the said parish of "+"<style isBold='true'>"+$F{offenceParish}+"</style>"+" as may then be there to answer to the said Complaint and to be further dealt with according to Law."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="38" width="202" height="20" backcolor="#000000" uuid="b74de91c-c0ad-4506-b9a3-7c340c2f2055"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PETTY SESSIONS -FORM Y.]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="103" y="127" width="148" height="20" uuid="7fb0e51a-c051-4b79-9d2b-68c003a09ab4"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offenderAddressParish}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="177" width="502" height="74" uuid="9de1685c-2ecd-49b0-b416-35ffd3164277"/>
+				<textElement markup="styled">
+					<font fontName="Times New Roman" size="12" isBold="false" pdfFontName="Times-Bold"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Whereas Information hath this day been laid before the undersigned, one of Her Majesty's Justices of the Peace in and for the said parish of "+"<style isBold='true'>"+$F{offenceParish}+"</style>"+" that you "+"<style isBold='true'>"+$V{OFFENDER_FULL_NAME}+"</style>"+" on "+"<style isBold='true'>"+$F{offenceDayWord}+"</style>"+" the "+"<style isBold='true'>"+$F{offenceDay}+"</style>"+" day of "+"<style isBold='true'>"+$F{offenceMonth}+"</style>"+" in the year of Our Lord "+"<style isBold='true'>"+$V{OFFENCE_YEAR_WORD}+"</style>"+" at the said Parish of "+"<style isBold='true'>"+$F{offenceParish}+"</style>"+" and within my jurisdiction."]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="33" y="123" width="174" height="1" forecolor="#FFFFFF" uuid="00690c68-862a-459c-8884-ec830557e185"/>
+			</line>
+		</band>
+		<band height="864" splitType="Stretch">
+			<elementGroup>
+				<elementGroup>
+					<staticText>
+						<reportElement x="2" y="651" width="18" height="165" uuid="2326e482-eb0d-428d-80fd-536825e41788"/>
+						<textElement textAlignment="Left" verticalAlignment="Top" rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[20]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="352" y="709" width="18" height="103" uuid="5211da98-13e2-42a5-986a-6868911b2d5d"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[noon at]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="169" y="614" width="18" height="114" uuid="5a89972c-af76-490b-95c5-e9e3508ff2a0"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[At the time I served]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="38" y="651" width="18" height="165" uuid="dcd542f0-eefb-4c07-af9d-487db64a8bb9"/>
+						<textElement textAlignment="Left" verticalAlignment="Top" rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[in the parish of]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="1" y="721" width="120" height="91" uuid="676bb573-2b42-4c2d-9127-423b51a58665"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="100"/>
+						</textElement>
+						<text><![CDATA[}]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="186" y="634" width="18" height="132" uuid="cf36cc0b-4d02-4ff1-9b5b-f49ba4b48ca0"/>
+						<textElement textAlignment="Right" rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[against the said]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="186" y="540" width="18" height="114" uuid="224c8c09-4529-41f5-87dd-14a20472204c"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[therein named]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="352" y="540" width="18" height="85" uuid="170b56ee-10ea-4405-a479-c6124b07795c"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[at]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="389" y="540" width="18" height="226" uuid="1ddf4b16-4608-4bd0-abdf-a764a3ff6224"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[Constable, do swear that on]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="371" y="699" width="18" height="103" uuid="c824e3a3-a3f2-4afe-96b3-28fc9610ec47"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[, 20]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="133" y="540" width="18" height="246" uuid="6e8d7372-857e-4907-ab37-aa96f95ae461"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[I read over the within Summons to him]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="2" y="540" width="18" height="175" uuid="6424a4f8-3d5e-43e3-8967-1a7344dc5c7b"/>
+						<textElement textAlignment="Left" verticalAlignment="Top" rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[day of]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="115" y="540" width="18" height="175" uuid="ba36fab6-f467-406c-9402-686f3d8f147d"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[Before the day of the said]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="459" y="540" width="20" height="261" uuid="8b5a2669-6f87-48cd-9d98-1f7acd73f838"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[JAMAICA SS.]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="371" y="590" width="18" height="85" uuid="91a0a40f-a84c-40c9-bc58-52299fc3e13f"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[day of]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="426" y="540" width="18" height="261" uuid="53ac0209-49e5-4ec2-a159-c533cbe198c0"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[PARISH OF]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="97" y="540" width="18" height="175" uuid="96c3be61-0aee-4ead-80e6-c3dc7cb72822"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[service I]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="78" y="540" width="18" height="175" uuid="c2e8c6dd-d60b-4ec6-8877-a6b28732eb60"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[personally.]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="352" y="614" width="18" height="85" uuid="5d0e3d01-c59f-40a4-8048-09a92420f61b"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[o'clock in the]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="295" y="540" width="18" height="125" uuid="6c0001c4-5306-4067-82b9-a4b201b78926"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[of the parish of]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="20" y="651" width="18" height="165" uuid="485bbef0-d245-46a3-b687-dd4554d29353"/>
+						<textElement textAlignment="Left" verticalAlignment="Top" rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[this]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="313" y="540" width="18" height="85" uuid="265ffc82-2191-4ddb-9a41-dc11a7023686"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[I served upon]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="482" y="563" width="20" height="261" uuid="48bd73a5-ea8e-46cc-9184-e1e4d68adbc0"/>
+						<textElement textAlignment="Center" rotation="Right">
+							<font fontName="Times New Roman" size="12" isBold="true"/>
+						</textElement>
+						<text><![CDATA[AFFIDAVIT OF SERVICE OF SUBPOENA]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="97" y="674" width="18" height="142" uuid="879fc9e6-f0ed-45f2-8477-91757e4e97b8"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[the said]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="204" y="590" width="18" height="176" uuid="e164e14b-befc-45fc-898d-54afa925aa34"/>
+						<textElement textAlignment="Right" rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[on the information of the]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="55" y="540" width="18" height="175" uuid="e0dfa231-0d21-47bf-9abf-dd2c2bb4f198"/>
+						<textElement textAlignment="Left" verticalAlignment="Top" rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[Taken and sworn to before me at]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="152" y="540" width="18" height="175" uuid="359092dc-4769-470c-95e6-b3965e85df43"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[the said copy Summons on the said]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="407" y="565" width="18" height="85" uuid="3d282685-54b2-473b-a485-b97a22444bbd"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[I, ]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="371" y="540" width="18" height="85" uuid="2cc8036a-f789-4e4e-b013-ce8a7ca29c0b"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[the]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="334" y="683" width="18" height="103" uuid="e8d545f3-56ac-4858-af02-10ccce6c6e09"/>
+						<textElement rotation="Right">
+							<font fontName="Times New Roman" size="12"/>
+						</textElement>
+						<text><![CDATA[in the parish of]]></text>
+					</staticText>
+				</elementGroup>
+			</elementGroup>
+			<staticText>
+				<reportElement x="276" y="540" width="18" height="276" uuid="10506e75-2b2e-4b1a-99aa-fb152e6832c7"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[a copy of the  within Summons (now marked) dated the]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="258" y="540" width="18" height="125" uuid="ad494e9e-ce49-4ebd-9757-e9d4f4bf6676"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="258" y="700" width="18" height="116" uuid="57df3903-baa4-4a61-b0bc-ffa40a61a796"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[, 20]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="258" y="590" width="18" height="125" uuid="b95439fb-e8c6-41b0-bf3d-9165616d9dce"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[day of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="540" width="18" height="125" uuid="d89981ef-40fd-4534-9996-015bbcef9a0a"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[and issued by ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="222" y="540" width="18" height="295" uuid="b3a5123a-f9f0-44f4-8e38-778909b9ed26"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Esquire, Clerk of the Courts of the parish of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="367" y="69" width="20" height="214" uuid="e183a151-abf3-44f4-bbd0-d4f47c13d451"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[against]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="311" y="259" width="142" height="178" uuid="5c703adb-0ad4-49b5-bee9-bdf341a4e51b"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="120"/>
+				</textElement>
+				<text><![CDATA[}]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="478" y="102" width="20" height="266" uuid="4c94dcc7-f31d-43ea-a67c-10ea36ec09da"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{courtName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="402" y="69" width="20" height="214" uuid="be42074c-6856-43e0-8a88-f70f669725e5"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REGINA.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="357" y="311" width="20" height="173" uuid="b1e16363-6d18-4beb-a212-667ff28b3253"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Summons]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="478" y="70" width="20" height="173" uuid="0620d9e3-d1c7-4276-b153-3952eb293093"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[In the ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="243" y="69" width="109" height="214" uuid="b3d8cfe7-7e6c-431d-99d6-edacfceb54d5"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{OFFENDER_FULL_NAME} +  ( $F{offenderTRN} != null ? " - " + $F{offenderTRN} : "" )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="240" y="311" width="111" height="213" uuid="31943390-7e3c-4f56-9cd1-5dba6864d692"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TA_INSPECTOR}+ " (Inspector)"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="262" y="69" width="15" height="444" isPrintWhenDetailOverflows="true" uuid="cd90998f-0512-45a7-8456-d25a5df349db"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[For breaches of Road Traffic Act and Transport Authority Act]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="186" y="69" width="73" height="299" isPrintWhenDetailOverflows="true" uuid="cd62b17c-55e2-4a4a-b129-5a0edabb11d7"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offenceDescription}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="143" y="69" width="20" height="142" uuid="2dbaddc2-ca21-42c2-8ede-5816601365a2"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Served personally by me this]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="143" y="246" width="20" height="37" uuid="32df83ed-9223-4415-9789-4b431b303424"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[day of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="125" y="69" width="20" height="40" uuid="962eab9f-fe1b-4519-a7ca-dd4a680e5d4f"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[about]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="125" y="171" width="20" height="20" uuid="a41a1bbd-11e0-48bf-93e2-8c7d952d8ea4"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[at]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="91" y="69" width="20" height="299" uuid="d74b4d64-b68c-49b9-a723-750fcd78ea4e"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[defendant whom I knew personally before the date of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="74" y="69" width="20" height="299" uuid="896bc343-410d-4fff-ba9a-a41603078418"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[service (or whom I did not know before the date of service,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="58" y="69" width="20" height="299" uuid="d092a525-a859-432f-aeb0-586326a625aa"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[but who was pointed out to me) I read over the summons]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="42" y="69" width="20" height="74" uuid="6a9c12bb-7cf7-42ab-9c4c-499472aaf51c"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[to him/her]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="8" y="69" width="20" height="142" uuid="322b65d6-db78-47df-babc-3e8e3542bb31"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Signed________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="8" y="234" width="20" height="125" uuid="47d0f913-d16f-4ba0-91d4-f1b90107f7ff"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Date____________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="125" y="326" width="20" height="37" uuid="1e910eb4-209e-4c5b-a0d3-8d7758835540"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[in the]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="108" y="69" width="20" height="52" uuid="8f469d74-d7fc-4bf5-bc6d-3f4a5359ffaf"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[parish of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="108" y="239" width="20" height="108" uuid="e4c5bc8b-af3b-45c3-892e-d3881934740f"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[to the within named]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="143" y="334" width="20" height="16" uuid="b1f64f57-0513-4eb0-b2dd-957b86b41128"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[20]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="459" y="70" width="20" height="455" uuid="6cea6dfc-0d7e-4ba0-8e4b-9215c89f890b"/>
+				<textElement rotation="Right" markup="styled">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Court of Petty Sessions holden the "+"<style isBold='true'>"+$F{courtDay}+"</style>"+" day of "+"<style isBold='true'>"+$F{courtMonth}+"</style>"+" "+"<style isBold='true'>"+$F{courtYear}+"</style>"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="864" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="103" y="167" width="182" height="20" uuid="f750b46c-b683-4272-85e6-b90df14fc33d"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{OFFENDER_FULL_NAME} + ( $F{offenderTRN} != null ? " - " + $F{offenderTRN} : "" )]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="425" width="503" height="20" uuid="a7129789-d431-4348-9488-d73cf7534a7a"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Lady the Queen, Her Crown and Dignity.]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="103" y="193" width="148" height="20" uuid="ab182111-f940-43ed-9ed5-899412a8003d"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offenderAddressParish}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="241" width="502" height="74" uuid="95492451-45f1-410e-9cc0-f1ca358c00a7"/>
+				<textElement markup="styled">
+					<font fontName="Times New Roman" size="12" isBold="false" pdfFontName="Times-Bold"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Whereas Information hath this day been laid before the undersigned, one of Her Majesty's Justices of the Peace in and for the said parish of "+"<style isBold='true'>"+$F{offenceParish}+"</style>"+" that you "+"<style isBold='true'>"+$V{OFFENDER_FULL_NAME}+"</style>"+" on "+"<style isBold='true'>"+$F{offenceDayWord}+"</style>"+" the "+"<style isBold='true'>"+$F{offenceDay}+"</style>"+" day of "+"<style isBold='true'>"+$F{offenceMonth}+"</style>"+" in the year of Our Lord "+"<style isBold='true'>"+$V{OFFENCE_YEAR_WORD}+"</style>"+" at the said Parish of "+"<style isBold='true'>"+$F{offenceParish}+"</style>"+" and within my jurisdiction."]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="103" y="147" width="179" height="20" uuid="8b038d92-456f-4887-9d36-5f086eb15b9d"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offenceParish}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="255" y="700" width="244" height="20" uuid="beca6fd0-374e-417d-a344-f4c53d8dfb94"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["for the Parish of " +  ( $F{offenceParish} != null  ? $F{offenceParish} : "" )]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="406" width="505" height="20" uuid="381e7bbd-e14e-4a16-a8f5-50d69b0d44c0"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[against the form of the Statute in such case made and provided and against the Peace of Our Sovereign]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="523" width="501" height="40" uuid="35ce5070-3926-4d88-a748-1533944bf91d"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[	Given under my hand this             day of                                       in the year of Our Lord Two Thousand and                                     at the parish aforesaid.]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="327" width="503" height="67" uuid="a9a354dd-9b4e-4fbf-b6f4-8ac205f2363f"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="html">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{excerpt}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="47" y="167" width="51" height="20" uuid="828e40a9-022c-4939-9fe8-4d2ff8c5c97b"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[To]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="331" y="102" width="169" height="20" uuid="fb7cef1e-4fe3-4871-8ea1-6ab1960173d4"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Summons to Person Charged]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="212" y="77" width="100" height="19" uuid="bcba8cbc-341e-4445-b7b7-7eebceb86125"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[18]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="305" y="167" width="197" height="51" uuid="6ef05d05-a7bb-464f-8281-203bcb28c80c"/>
+				<textElement rotation="None">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offenderAddress}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="193" width="97" height="20" uuid="965a7207-95ab-4d47-a345-daff25db809a"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[of the said parish]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="278" y="672" width="223" height="1" uuid="ed6692ff-0f9d-44b8-8684-476b0d64aa05"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="122" width="200" height="20" uuid="18a0d683-e6bd-4d52-8425-37b87ccd7d11"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[JAMAICA   SS.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="285" y="147" width="20" height="71" uuid="45ad8f57-1385-41a7-8441-b0e3e0c6be73"/>
+				<textElement rotation="None">
+					<font fontName="Times New Roman" size="48" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[}]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="147" width="51" height="20" uuid="23d3962a-6615-4f5b-9c26-35ef61df9910"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Parish of]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="446" width="502" height="72" uuid="b83a942a-8330-40a0-a15c-43bd19fc99d2"/>
+				<textElement markup="styled">
+					<font fontName="Times New Roman" size="12" isBold="false" pdfFontName="Times-Bold"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["	These are therefore, to require you, in Her Majesty's name, to be and appear on "+"<style isBold='true'>"+$F{courtDayWord}+"</style>"+" the "+"<style isBold='true'>"+$F{courtDay}+"</style>"+" day of "+"<style isBold='true'>"+$F{courtMonth}+" </style>"+"<style isBold='true'>"+$V{COURT_YEAR_WORD}+"</style>"+" at ten o'clock in the forenoon at the Court House, at "+"<style isBold='true'>"+$F{courtAddress}+"</style>" + " before such Justice of the Peace for the said parish of "+"<style isBold='true'>"+$F{offenceParish}+"</style>"+" as may then be there to answer to the said Complaint and to be further dealt with according to Law."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="254" y="678" width="243" height="22" uuid="2cd661b9-be20-4c6a-8d65-9f1c2660b951"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="12" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Justice of the Peace or Clerk of the Courts]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="102" width="202" height="20" backcolor="#000000" uuid="d95d2373-fd40-49fd-b3c9-ecdc6850dd11"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PETTY SESSIONS -FORM Y.]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="57" y="188" width="100" height="1" forecolor="#FFFFFF" uuid="2304c986-7b94-4474-b69e-a286ca1ffbfa"/>
+			</line>
+		</band>
+		<band height="864" splitType="Stretch">
+			<staticText>
+				<reportElement x="314" y="539" width="18" height="85" uuid="3ad289a9-702b-4ff4-a855-91e607e4ce0e"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[I served upon]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="460" y="539" width="20" height="261" uuid="b5cc7a8b-c99f-4931-ad88-cd47209b670a"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[JAMAICA SS.]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="479" y="105" width="20" height="266" uuid="10d4fb06-e86e-41fc-a9ae-31afd8a079c4"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{courtName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="364" y="73" width="20" height="214" uuid="8e058ad1-8a0e-4aad-8cc3-31e08ccc2ad3"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[against]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="650" width="18" height="165" uuid="0370fa70-379c-4e39-82dc-22f7f90f7b55"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[this]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="650" width="18" height="165" uuid="7decf04c-419f-46a4-81e7-fb1f51b3bed3"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[20]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="354" y="315" width="20" height="173" uuid="cc51ec07-94d6-4237-9252-88efaedab1d9"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Summons]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="427" y="539" width="18" height="261" uuid="380222cd-87af-45ed-aaad-7049af400ca8"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[PARISH OF]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="308" y="263" width="142" height="178" uuid="9b7e3227-b885-4b8c-8bd3-47fef50c81a6"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="120"/>
+				</textElement>
+				<text><![CDATA[}]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="187" y="633" width="18" height="132" uuid="58a4cf42-49b8-4131-ad83-5204511be3a0"/>
+				<textElement textAlignment="Right" rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[against the said]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="390" y="539" width="18" height="226" uuid="9f223159-c502-4793-b895-741eb4c90a95"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Constable, do swear that on]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="483" y="562" width="20" height="261" uuid="c0f0a43b-554d-4b36-af32-17427321155f"/>
+				<textElement textAlignment="Center" rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AFFIDAVIT OF SERVICE OF SUBPOENA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="259" y="589" width="18" height="125" uuid="8ee69b54-9f39-4c38-b724-f343e84e3720"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[day of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="335" y="682" width="18" height="103" uuid="ab5cda34-c32e-42b5-a006-546c511df2db"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[in the parish of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="116" y="539" width="18" height="175" uuid="6128b73b-310a-4e81-8c41-71722561d972"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Before the day of the said]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="223" y="539" width="18" height="295" uuid="ce10e7c2-6a95-42ad-8ca1-5de6c818f6d4"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Esquire, Clerk of the Courts of the parish of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="479" y="73" width="20" height="173" uuid="b39c48aa-13cb-4385-a8cb-663e1d286408"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[In the ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="720" width="120" height="91" uuid="810c4681-16a4-47a6-883e-2b4f9ce0d2d6"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="100"/>
+				</textElement>
+				<text><![CDATA[}]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="187" y="539" width="18" height="114" uuid="e5fdce1d-6a4f-4ea7-b3e5-978814ec27fb"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[therein named]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="296" y="539" width="18" height="125" uuid="8fcbb021-cb06-4028-9d72-7316bbb7b297"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[of the parish of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="372" y="539" width="18" height="85" uuid="e9e2ab57-351d-4fa1-bda6-8e667beafcfc"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[the]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="353" y="708" width="18" height="103" uuid="4b275b9f-0439-4f34-b177-5f45d22a9512"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[noon at]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="353" y="539" width="18" height="85" uuid="1b334610-3043-4e45-aeff-b59777730387"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[at]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="98" y="539" width="18" height="175" uuid="4504233e-c655-4a51-82c8-282fca68864e"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[service I]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="259" y="699" width="18" height="116" uuid="70cd8d4f-f637-4b13-8453-f33de11b4a95"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[, 20]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="98" y="673" width="18" height="142" uuid="cb79f17c-6d3b-413a-98fc-c45b2c32ae87"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[the said]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="399" y="73" width="20" height="214" uuid="fc3279fd-c5d6-4d67-8b8a-2946212b7ae9"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REGINA.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="205" y="589" width="18" height="176" uuid="be4bdc43-9719-4df4-9612-6a588868aadd"/>
+				<textElement textAlignment="Right" rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[on the information of the]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="241" y="539" width="18" height="125" uuid="320c043e-4c69-4a08-a99c-6895f454f861"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[and issued by ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="240" y="315" width="111" height="213" uuid="3c8aba91-5eaf-4b4f-8e9e-c8b380aefe31"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TA_INSPECTOR}+ " (Inspector)"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="353" y="613" width="18" height="85" uuid="314270d9-4c76-41f0-8feb-1b3d02d83525"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[o'clock in the]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="56" y="539" width="18" height="175" uuid="04532733-6f88-4330-b47e-a925865ca446"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Taken and sworn to before me at]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="79" y="539" width="18" height="175" uuid="5679fde2-b762-433c-a43d-ef9b840609ea"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[personally.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="372" y="698" width="18" height="103" uuid="f04a577c-888f-4351-97ed-bcb48c3ea3aa"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[, 20]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="259" y="539" width="18" height="125" uuid="07af84f8-211e-4238-b03a-03a66e05c549"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="134" y="539" width="18" height="246" uuid="6e3cd398-1779-42a3-b1da-230a7120684a"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[I read over the within Summons to him]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="240" y="73" width="109" height="214" uuid="ba195ddd-d023-4092-9348-2619e963c71a"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{OFFENDER_FULL_NAME} +  ( $F{offenderTRN} != null ? " - " + $F{offenderTRN} : "" )]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="39" y="650" width="18" height="165" uuid="8b625175-bf0b-4724-8b2c-d7f45e274ce5"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[in the parish of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="277" y="539" width="18" height="276" uuid="72211fc0-74d6-431a-b087-4bedbbac4fd7"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[a copy of the  within Summons (now marked) dated the]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="613" width="18" height="114" uuid="ff23e606-022c-4b1b-98f8-ebb7f9343ad5"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[At the time I served]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="372" y="589" width="18" height="85" uuid="af7ad432-fd86-4002-8379-b0e4022f563f"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[day of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="539" width="18" height="175" uuid="ab47f3ed-b83a-4e13-9cac-9bfab5f923d0"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[day of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="408" y="564" width="18" height="85" uuid="b3b17c63-6f15-4a88-b85e-be5c6b64177f"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[I, ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="153" y="539" width="18" height="175" uuid="3e3aa13a-fead-4199-9867-254ab8be6ca6"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[the said copy Summons on the said]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="259" y="73" width="15" height="415" isPrintWhenDetailOverflows="true" uuid="7290ff03-8edd-4ea9-8fbb-a6a7a5049425"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[For breaches of Road Traffic Act and Transport Authority Act]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="187" y="73" width="69" height="324" isPrintWhenDetailOverflows="true" uuid="f415c82b-e56e-4e8c-87f1-20abda227068"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offenceDescription}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="74" y="73" width="20" height="299" uuid="2cdb3e46-cb16-4c64-ba03-5f77c7031d07"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[service (or whom I did not know before the date of service,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="143" y="247" width="20" height="37" uuid="e3295fb6-02e2-4430-83f3-180b2607816b"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[day of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="125" y="330" width="20" height="37" uuid="63bfdfa7-d5cb-4dc0-9704-7e423b1f1663"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[in the]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="58" y="73" width="20" height="299" uuid="70ef4f56-ea54-4bdb-ba7e-0e09c4f33e45"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[but who was pointed out to me) I read over the summons]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="8" y="73" width="20" height="142" uuid="268304e3-4179-436d-a277-4e2f483a6268"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Signed________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="42" y="73" width="20" height="74" uuid="0d226269-443a-42ba-9c5f-a8f7ad1a446e"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[to him/her]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="143" y="73" width="20" height="142" uuid="b75e6925-8bc7-467d-81db-c9acb170e9f3"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Served personally by me this]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="91" y="73" width="20" height="299" uuid="cf55041b-8550-44bb-a642-d05d944a0b0c"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[defendant whom I knew personally before the date of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="8" y="238" width="20" height="125" uuid="b01ed883-e37a-4ad9-8dc4-5b7f20dcbd71"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Date____________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="125" y="175" width="20" height="20" uuid="3dbb6ae4-d4f0-43e1-ab57-641fde691dd1"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[at]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="108" y="243" width="20" height="108" uuid="dd6bcdc9-37f2-429a-a974-76df9fa42e7d"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[to the within named]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="108" y="73" width="20" height="52" uuid="75160a88-eb19-4228-9015-76dc5356fdf0"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[parish of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="125" y="73" width="20" height="40" uuid="6fda91e0-5785-4830-b419-8d6bc8b5def6"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[about]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="143" y="337" width="20" height="16" uuid="c72cc51b-58bf-4c29-84e4-13ea909ff18a"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[20]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="460" y="73" width="20" height="455" uuid="7f8daa50-65d3-4b1a-8c12-0228fbd6267e"/>
+				<textElement rotation="Right" markup="styled">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Court of Petty Sessions holden the "+"<style isBold='true'>"+$F{courtDay}+"</style>"+" day of "+"<style isBold='true'>"+$F{courtMonth}+"</style>"+" "+"<style isBold='true'>"+$F{courtYear}+"</style>"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="864" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="49" y="144" width="252" height="20" uuid="8d92325a-dbff-4110-a700-0a346cca10bf"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offenceParish}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="262" y="533" width="240" height="22" uuid="fbbcd50c-6e76-4521-9a41-80ab9e53124c"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="12" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Justice of the Peace or Clerk of the Courts]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="219" y="120" width="96" height="19" uuid="33a84562-172b-4819-8986-dbefe1c2cac6"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[INFORMATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="144" width="49" height="20" uuid="46c1fb28-4984-4840-aaae-b2e503049855"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Parish of]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="284" y="527" width="220" height="1" uuid="0c37e28e-54a5-4191-9996-e0405d8f206c"/>
+			</line>
+			<textField evaluationTime="Auto">
+				<reportElement positionType="Float" x="261" y="555" width="244" height="20" uuid="eba0f056-cda0-417e-9ecf-adeb3967747f"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["for the Parish of " +  ( $F{offenceParish} != null  ? $F{offenceParish} : "" )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="255" width="503" height="67" uuid="1cdc711e-cf3a-43e4-a621-b6ef9da533f2"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="html">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{excerpt}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="254" y="101" width="14" height="19" uuid="3eed0575-246b-432a-9d89-3b53ee02c571"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<text><![CDATA[I]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="164" width="502" height="80" uuid="1a48aa4a-e47f-4752-9a5b-b7d27332209d"/>
+				<textElement markup="styled">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["	The Information and Complaint of "+"<style isBold='true'>"+$V{TA_INSPECTOR}+ " (Inspector)"+"</style>"+" of the parish of "+"<style isBold='true'>"+$F{offenceParish}+"</style>"+" made and taken upon oath before the undersigned this                   day of                                                    in the year of Our Lord " + $V{OFFENCE_YEAR_WORD} + " who saith that on the "+"<style isBold='true'>"+$F{offenceDay}+"</style>"+" day of "+"<style isBold='true'>"+$F{offenceMonth}+"</style>"+" in the year aforesaid one "+"<style isBold='true'>"+$V{OFFENDER_FULL_NAME}+"</style>"+" of the said parish of "+"<style isBold='true'>"+$F{offenderAddressParish}+"</style>"+" with force at "+"<style isBold='true'>"+$F{offenceLocation}+"</style>"+" and within the jurisdiction."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="0" y="332" width="503" height="55" uuid="69f8f6cd-88e4-477e-940b-6389e2b2f351"/>
+				<textElement markup="styled">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["against the form of the Statute in such case made and provided, and against the Peace of Our Sovereign  Lady the Queen Her Crown and Dignity, and thereupon the said Complainant prays that the said "+"<style isBold='true'>"+$V{OFFENDER_FULL_NAME}+"</style>"+" defendant may be summoned to answer unto the said Complaint according to Law."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="0" y="398" width="503" height="62" uuid="8ed744a4-0a75-40d9-918d-b000cefdfef5"/>
+				<textElement markup="styled">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["	Taken and sworn to before me at                                                                                                    in the parish of                                                        this            day of                                                       Two Thousand and                                     "]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="864" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="308" y="234" width="23" height="168" isPrintWhenDetailOverflows="true" uuid="78a858ad-4a19-4712-8ca8-d6e8ca27531a"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Information of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="343" y="44" width="16" height="299" isPrintWhenDetailOverflows="true" uuid="45a00375-b9b2-4338-a64a-25b2df6d3e2c"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REGINA]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="184" y="233" width="123" height="221" isPrintWhenDetailOverflows="true" uuid="630f20ab-13ed-4b16-a460-304b7336b45d"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TA_INSPECTOR} + " (Inspector)"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="320" y="65" width="23" height="163" isPrintWhenDetailOverflows="true" uuid="74361ac9-0739-4f4c-a8f4-c5822a231c06"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[vs]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="434" y="127" width="19" height="211" isPrintWhenDetailOverflows="true" uuid="4cad3c32-35c0-4ba9-97ea-3770de43c603"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offenceParish}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="438" y="44" width="15" height="222" isPrintWhenDetailOverflows="true" uuid="979acebf-f785-4cb5-87bb-b0653487b1e9"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[In the parish of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="238" y="198" width="149" height="181" isPrintWhenDetailOverflows="true" uuid="ffaa2950-a8f8-4355-91af-59a178b2bc64"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="90"/>
+				</textElement>
+				<text><![CDATA[}]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="59" y="468" width="29" height="255" isPrintWhenDetailOverflows="true" uuid="5fa2ef7c-3c0c-497d-874a-c83d7a07754f"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Sentence]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="297" y="674" width="20" height="173" isPrintWhenDetailOverflows="true" uuid="e5227498-a144-4b9e-ae51-0b2aa886430c"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Information of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="468" width="19" height="329" isPrintWhenDetailOverflows="true" uuid="9d1ea081-8fd8-4c59-89ba-20de4e178f62"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[*Here fill in place at which Court was held]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="164" y="491" width="25" height="322" isPrintWhenDetailOverflows="true" uuid="94dcfaa0-efe7-46ec-8a53-745bf878ea0c"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{OFFENDER_FULL_NAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="110" y="468" width="29" height="171" isPrintWhenDetailOverflows="true" uuid="e0a780ac-af94-4366-a924-597ca3d3130b"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[before]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="427" y="552" width="27" height="224" isPrintWhenDetailOverflows="true" uuid="9ddac63b-7c9a-4aff-80e7-bcf04ca5eafd"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offenceParish}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="207" y="673" width="88" height="189" isPrintWhenDetailOverflows="true" uuid="8e8f5445-cda6-46b9-b187-1c517cf810dd"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TA_INSPECTOR} + " (Inspector)"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="241" y="637" width="132" height="176" isPrintWhenDetailOverflows="true" uuid="e2cc621c-1ba3-4747-bc07-6f5d82edc406"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="90"/>
+				</textElement>
+				<text><![CDATA[}]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="329" y="468" width="22" height="152" isPrintWhenDetailOverflows="true" uuid="7ef2205a-0573-4c24-8f2a-032b10e300d4"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REGINA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="604" width="29" height="192" isPrintWhenDetailOverflows="true" uuid="666280c6-7ea9-4d44-81fa-c9c8e7eb4ab7"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Guilty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="427" y="468" width="27" height="224" isPrintWhenDetailOverflows="true" uuid="a3d83955-aa6a-4ee7-bd66-79b71154bcc2"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[In the parish of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="139" y="468" width="26" height="195" isPrintWhenDetailOverflows="true" uuid="3f36f99a-c052-482b-9eec-ae5be2ad4d08"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Tried on]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="164" y="468" width="25" height="27" isPrintWhenDetailOverflows="true" uuid="7375f47e-845b-447e-852b-564a156a8b21"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[For ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="495" width="23" height="94" isPrintWhenDetailOverflows="true" uuid="bc293c3d-a834-4559-8997-0414413efc4c"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[vs]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="206" y="468" width="106" height="185" isPrintWhenDetailOverflows="true" uuid="8bcad9b8-2757-41ae-9054-b388f2e34811"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{OFFENDER_FULL_NAME} + ( $F{offenderTRN} != null ? " - " + $F{offenderTRN} : "" )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="171" y="44" width="154" height="172" isPrintWhenDetailOverflows="true" uuid="139e7ce0-fcc7-4582-a168-2553ee79d8be"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{OFFENDER_FULL_NAME} + ( $F{offenderTRN} != null ? " - " + $F{offenderTRN} : "" )]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="222" y="44" width="15" height="376" isPrintWhenDetailOverflows="true" uuid="395be1f8-aaad-4510-94f0-543097ec170f"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[For breaches of Road Traffic Act and Transport Authority Act]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="120" y="44" width="99" height="298" isPrintWhenDetailOverflows="true" uuid="887009db-f884-4d3a-b6f6-2c80b98fddf5"/>
+				<textElement rotation="Right">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offenceDescription}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

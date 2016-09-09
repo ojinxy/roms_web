@@ -1,0 +1,81 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fsl="http://org.fsl.com">
+
+	<ui:fragment id="pageRoadOpAuth">	
+								<p:messages id="authMsg" autoupdate="true" closable="true"></p:messages >
+							
+								
+								
+								 <div style="padding-top:10px">
+								 	<h:graphicImage value="/resources/images/authorize_ico.png" alt="" />
+								 	<strong ><h:outputText value="You are about to authorize a BackDated Road Operation" /></strong>
+								 </div>
+								
+								<br></br>
+								<br></br> 
+	 
+								<div style="text-align:center" id="authDetail" > 
+									<strong><h:outputText value="Username:" style="font-weight:bold;text-transform:uppercase;min-width:30%" maxlength="20" />
+									</strong>
+									<p:inputText value="${operation.authorizedUserName}" id="usernamevr" autocomplete="off" widgetVar="usernamevr"/>
+									<br /> <br /> <strong><h:outputText value="Password:" style="font-weight:bold;text-transform:uppercase;min-width:30%" maxlength="20" />
+									</strong>
+									<p:password value="${operation.authorizedUserPassword}" id="passwordvr" autocomplete="off" widgetVar="passwordvr"/>
+									<br /> <br />
+									
+								</div>
+									<script>
+
+										$('div[id*="authDetail"]').on('show', doDelayClear);
+									
+										function doDelayClear(){
+											alert("do delay");
+											setTimeout(function(){
+													clearCache();
+													$('#usernamevr').val("");
+												}
+											, tmout);
+										}
+									</script>		
+								 
+									 <div style="text-align: center;">
+								
+<!-- 											<p:commandButton  style="margin: 0 10px;display:#{operation.authorizeConfirm eq 'Y'?'block':'none'}" styleClass ="blue" id="authOpId" value="Authorize Operation" processIds="*" action="authorizeOp"  -->
+<!-- 							 				ajax="true" onerror="PF('authorizedialog').show();" onsucces="PF('authorizedialog').hide();"/> -->
+
+											<script>
+												function validate()
+												{
+													var Zee = "#{errorMsg}";
+													return Zee;
+												}
+									 		</script>
+<!-- 											<p:commandButton  style="margin:0 10px 0 10px;display:#{operation.cancelConfirm eq 'Y'?'inline':'none'}" styleClass ="blue" id="cancelOpId" value="Cancel Operation" processIds="*" action="cancelOp"  -->
+<!-- 							 				ajax="true" oncomplete="if(validate() == 'error'){PF('canceldialog').show();}" update="msg"/> -->
+
+
+							 		
+							 		<p:commandButton  style="margin: 0 10px;" styleClass ="blue" id="authOpId" value="Authorize Operation" processIds="*" action="authorizeOp" 
+							 				ajax="true" oncomplete="if(args.validationFailed){PF('authorizedialog').show();}else {PF('authorizedialog').hide(); }loadMapDetails(); buildTooltipIcons();" update="authMsg :reviewOperations:progressBar :reviewOperations:panelButtons :reviewOperations:accordion  :reviewOperations:panelHiddenButtons :reviewOperations:headerPanel"/>
+							 		
+									
+											<p:commandButton  styleClass ="blue" id="exitAuthorizeID" value="Exit"
+							 				ajax="true" onerror="PF('authorizedialog').show();" onsuccess="PF('authorizedialog').hide();"  process="@this"
+							 				oncomplete="PF('authorizedialog').hide();setUpProgressBar();">
+							 				 <p:resetInput target="pageRoadOpAuth" />
+							 				</p:commandButton>
+							 		
+									</div>
+								
+
+	</ui:fragment>
+</ui:composition>

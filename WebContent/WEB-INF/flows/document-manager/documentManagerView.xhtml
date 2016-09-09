@@ -1,0 +1,214 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:sf="http://www.springframework.org/tags/faces" xmlns:hx="http://www.ibm.com/jsf/html_extended" xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui" xmlns:fsl="http://org.fsl.com" template="/WEB-INF/newTemplate.xhtml"
+>	
+<ui:define name="title">Document Manager</ui:define>
+	<ui:define name="pageHeader">
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/theme/docManager.css" />
+		<script type="text/javascript">
+			/* <![CDATA[ */
+
+			$(document).ready(
+					function() {
+						//$('button[id*=dyna]`').find('span[class*=ui-button-text]').addClass('menu-icon');
+						$('table[id*=documentManagerView]').find(
+								'[class*=ui-widget-header]').addClass(
+								'header-removed');
+
+						$('form[id*=documentManagerView]').find(
+								'td[class*=ui-widget-header]').addClass(
+								'header-removed');
+
+						$('form[id*=documentManagerView]').find(
+								'tr[class*=ui-widget-header]').addClass(
+								'header-removed');
+						
+						//$('#trnNbr').mask('999999999',{placeholder:""});
+						
+						$('#scannedDocDatatable').forceDatatablePagin();
+						
+						//for the menu, if there are no options then hide button
+						if ($('#pMenu ul li').length === 0){
+							$('#dynaButton').remove();
+						}
+					});
+			/* ]]> */
+		</script>
+	</ui:define>
+	<ui:define name="content">
+		<h:form styleClass="form" id="documentManagerView" prependId="false">
+			<p:messages id="errorMessages" closable="true" />
+			<div class="tabs">
+				<a href="#">${flowScope.document.documentTypeName} Details</a>
+				<p:commandButton id="dynaButton" value="" styleClass="icon-cog-menu icon-large" style="float:right;margin-top: 25px;" rendered="#{flowScope.document.statusId != 'DOC_CL'}" />
+				<p:menu overlay="true" trigger="dynaButton" my="left top" at="left bottom" id="pMenu">
+					<sec:authorize ifAnyGranted="ROLE_ROMS_DOC_MAN_EDIT">
+						<p:menuitem value="Edit" action="initEditMode" ajax="false"
+							rendered="#{( flowScope.document.statusId != 'DOC_CL' &amp;&amp;  flowScope.document.statusId != 'DOC_CA' &amp;&amp; flowScope.document.statusId != 'DOC_WI' &amp;&amp; flowScope.document.statusId != 'DOC_SE')}"
+						/>
+						<sec:authorize ifAnyGranted="ROLE_ROMS_DOC_MAN_VERIFY">
+						<p:menuitem value="Verify Document Edits" action="initVerifyEditsMode" ajax="false"
+							rendered="#{(flowScope.document.statusId != 'DOC_CL' &amp;&amp; flowScope.document.statusId != 'DOC_CA' &amp;&amp; flowScope.document.statusId != 'DOC_WI' &amp;&amp; flowScope.document.authorizedFlag == 'N' &amp;&amp; flowScope.document.verificationRequired != 'Y')}"
+						/>
+					</sec:authorize>
+					<sec:authorize ifAnyGranted="ROLE_ROMS_DOC_MAN_VERIFY">
+						<p:menuitem value="Verify Document Details" action="initVerifyDetailsMode" ajax="false"
+							rendered="#{(flowScope.document.statusId != 'DOC_CL' &amp;&amp; flowScope.document.statusId != 'DOC_CA' &amp;&amp; flowScope.document.statusId != 'DOC_WI' &amp;&amp; flowScope.document.verificationRequired == 'Y')}"
+						/>
+					</sec:authorize>
+					<sec:authorize ifAnyGranted="ROLE_ROMS_DOC_MAN_JP_VERIFY">
+						<p:menuitem value="Verify JP Details" onclick="PF('vrfyuserdialogjp').show();" rendered="false" />
+					</sec:authorize>
+					</sec:authorize>
+					<sec:authorize ifAnyGranted="ROLE_ROMS_DOC_MAN_SERVE">
+						<c:if test="#{flowScope.docType == 'SUM'}">
+						<p:menuitem value="Serve" action="initServeMode" ajax="false"
+							rendered="#{(flowScope.document.statusId != 'DOC_CL' &amp;&amp; flowScope.document.statusId == 'DOC_PR' &amp;&amp; flowScope.document.authorizedFlag != 'N' &amp;&amp; !(empty flowScope.document.jpRegNumber)  &amp;&amp; flowScope.document.verificationRequired != 'Y')}"
+						/>
+						</c:if>
+						<c:if test="#{flowScope.docType != 'SUM'}">
+						<p:menuitem value="Serve" action="initServeMode" ajax="false"
+							rendered="#{(flowScope.document.statusId != 'DOC_CL' &amp;&amp; flowScope.document.statusId == 'DOC_PR' &amp;&amp; flowScope.document.authorizedFlag != 'N' &amp;&amp; flowScope.document.verificationRequired != 'Y')}"
+						/>
+						</c:if>
+					</sec:authorize>
+					<sec:authorize ifAnyGranted="ROLE_ROMS_DOC_MAN_CANCEL">
+						<p:menuitem value="Cancel"
+							rendered="#{(flowScope.document.statusId != 'DOC_CL' &amp;&amp; flowScope.document.statusId != 'DOC_CA' &amp;&amp; flowScope.document.statusId != 'DOC_WI' &amp;&amp; flowScope.document.statusId != 'DOC_SE' &amp;&amp; flowScope.document.authorizedFlag != 'N' &amp;&amp; flowScope.document.verificationRequired != 'Y')}"
+							action="initCancelMode"  ajax="false"
+						/>
+					</sec:authorize>
+					<sec:authorize ifAnyGranted="ROLE_ROMS_DOC_MAN_WITHDRAW">
+						<p:menuitem value="Withdraw"
+							rendered="#{flowScope.document.statusId != 'DOC_CL' &amp;&amp; flowScope.docType == 'SUM' &amp;&amp;  (flowScope.document.statusId != 'DOC_CA' &amp;&amp; flowScope.document.statusId != 'DOC_WI' &amp;&amp; flowScope.document.statusId == 'DOC_SE'  &amp;&amp; flowScope.document.authorizedFlag != 'N' &amp;&amp; flowScope.document.verificationRequired != 'Y')}"
+							action="initWithdrawMode"  ajax="false"
+						/>
+					</sec:authorize>
+					<sec:authorize ifAnyGranted="ROLE_ROMS_DOC_MAN_WITHDRAW">
+						<c:if test="#{flowScope.associatedWarningNotice != null}">
+						<p:menuitem value="Print Release &amp; Discharge Form"
+							rendered="#{flowScope.document.statusId != 'DOC_CL' &amp;&amp;  flowScope.document.statusId == 'DOC_WI' &amp;&amp; flowScope.document.authorizedFlag != 'N' &amp;&amp; flowScope.document.verificationRequired != 'Y'}"
+							action="printDischargeForm"  ajax="false"
+						/>
+						</c:if>
+					</sec:authorize>
+					
+					<sec:authorize ifAnyGranted="ROLE_ROMS_DOC_MAN_UPLOAD">
+						<p:menuitem value="Upload Document" action="initUploadMode"
+							rendered="#{flowScope.document.statusId != 'DOC_CL' &amp;&amp; flowScope.document.authorizedFlag != 'N'  &amp;&amp; flowScope.document.allowUpload != 'N' &amp;&amp; flowScope.document.verificationRequired != 'Y'}"
+							 ajax="false"
+						/>
+					</sec:authorize>
+					<sec:authorize ifAnyGranted="ROLE_ROMS_DOC_MAN_PRINT">
+						<p:menuitem value="Print"
+							rendered="#{(flowScope.document.statusId != 'DOC_CL' &amp;&amp; flowScope.document.statusId != 'DOC_CA' &amp;&amp; flowScope.document.statusId != 'DOC_WI' &amp;&amp;  flowScope.document.statusId != 'DOC_SE' &amp;&amp; empty flowScope.document.manualSerialNo &amp;&amp; flowScope.document.authorizedFlag != 'N' &amp;&amp; flowScope.document.verificationRequired != 'Y' &amp;&amp; (flowScope.document.printCount == 0 || (empty flowScope.document.printCount)))}"
+							action="print" ajax="false"
+						/>
+					</sec:authorize>
+					<sec:authorize ifAnyGranted="ROLE_ROMS_DOC_MAN_PRINT">
+						<p:menuitem value="Re-Print"
+							rendered="#{(flowScope.document.statusId != 'DOC_CL' &amp;&amp; flowScope.document.statusId != 'DOC_CA' &amp;&amp; flowScope.document.statusId != 'DOC_WI' &amp;&amp;  flowScope.document.statusId != 'DOC_SE' &amp;&amp; empty flowScope.document.manualSerialNo &amp;&amp; flowScope.document.authorizedFlag != 'N' &amp;&amp; flowScope.document.verificationRequired != 'Y' &amp;&amp; flowScope.document.printCount > 0)}"
+							action="initRePrintMode" ajax="false"
+						/>
+					</sec:authorize>
+				</p:menu>
+				<p:tooltip for="dynaButton" value="Click to See Menu" hideEffect="fade" />
+			</div>
+			<!-- End Menu -->
+			<!-- insert document -->
+			<c:if test="#{flowScope.docType == 'SUM'}">
+				<ui:include src="summonsDetails.xhtml"></ui:include>
+			</c:if>
+			<c:if test="#{flowScope.docType == 'WNO'}">
+				<ui:include src="warningNoticeDetails.xhtml"></ui:include>
+			</c:if>
+			<c:if test="#{flowScope.docType == 'WNP'}">
+				<ui:include src="warningNoProsecutionDetails.xhtml"></ui:include>
+			</c:if>
+			<!-- Scanned Doc Frag -->
+			<div class="tabs">
+				<a href="#">Documents Attached</a>
+			</div>
+			<div class="main borders">
+				<p:panel id="scanDocPanel">
+					<ui:include src="fragments/scanneddocFragment.xhtml"></ui:include>
+				</p:panel>
+			</div>
+			<br />
+			<div align="center">
+				<p:commandButton rendered="#{documentFromRoadCheck == null}" id="back" style="padding-rght:1em;" value="Back" processIds="*" action="back" ajax="false" styleClass="blue" />
+				<p:commandButton rendered="#{documentFromRoadCheck != null}" id="backToRoadCheck" style="padding-rght:1em;" value="Back" processIds="*" action="endStateBackToRoadCheck" ajax="false"
+					styleClass="blue"
+				/>
+			</div>
+			<!-- Verify Document Details -->
+			<!-- <p:panel id="verifyDocPanel">
+				<ui:include src="fragments/verifyDocFragment.xhtml"></ui:include>
+			</p:panel> -->
+			<!-- Reprint  -->
+			<p:panel id="reDocPanel">
+				<ui:include src="fragments/reprintDocFragment.xhtml"></ui:include>
+			</p:panel>
+			<!-- Reprint Scanned Doc  -->
+			<p:panel id="reprintSDPanel">
+				<ui:include src="fragments/reprintScannedDocFragment.xhtml"></ui:include>
+			</p:panel>
+			<!-- Serve Document -->
+			<p:panel id="serveDocPanel">
+				<ui:include src="fragments/serveDocFragment.xhtml"></ui:include>
+			</p:panel>
+			<!-- Override  -->
+			<p:panel id="overrideDocPanel">
+				<ui:include src="fragments/overrideDocFragment.xhtml"></ui:include>
+			</p:panel>
+			<!-- Edit Document -->
+			<p:panel id="editDocPanel">
+				<ui:include src="fragments/editDocFragment.xhtml"></ui:include>
+			</p:panel>
+			<!-- Verify Edited Details  -->
+			<p:panel id="verifyEditsDocPanel">
+				<ui:include src="fragments/verifyUserCredentialsFragment.xhtml"></ui:include>
+			</p:panel>
+			<!-- Verify Details Details  -->
+			<p:panel id="verifyDetailsDocPanel">
+				<ui:include src="fragments/verifyUserCredentialsFragmentJP.xhtml"></ui:include>
+			</p:panel>
+			<!-- Cancel -->
+			<p:panel id="cancelDocPanel">
+				<ui:include src="fragments/cancelDocFragment.xhtml"></ui:include>
+			</p:panel>
+			<!-- This is used  -->
+			<p:commandLink id="editCaseNum" action="resetPrintWindows" style="display:none" />
+		</h:form>
+		<!-- Upload New Document -->
+		<p:panel id="uploadDocPanel">
+			<ui:include src="fragments/uploadDocFragment.xhtml"></ui:include>
+		</p:panel>
+		<f:subview id="view1">
+			<h:panelGroup rendered="#{flowScope.openReportWindow == 'true'  }">
+				<h:inputText value="#{flowScope.documentId}" id="documentId" style="display:none" />
+				<h:inputText value="#{flowScope.printDocType}" id="documentType" style="display:none" />
+				<script type="text/javascript">
+					myWin = openNewWindowWithName('#{request.contextPath}/GenerateDocument?documentId='
+							+ document.getElementById("view1:documentId").value
+							+ "&amp;documentType="
+							+ document.getElementById("view1:documentType").value);
+
+					checkWinStillOpen(myWin);
+				</script>
+			</h:panelGroup>
+		</f:subview>
+		<f:subview id="view2">
+			<h:panelGroup rendered="#{flowScope.viewScannedDoc == 'true'}">
+				<h:inputText value="#{flowScope.scannedDocId}" id="scannedDocId" style="display:none" />
+				<script type="text/javascript">
+					myWin = openNewWindowWithName('#{request.contextPath}/ViewScannedDoc?scannedDocId='
+							+ document.getElementById("view2:scannedDocId").value);
+
+					checkWinStillOpen(myWin);
+				</script>
+			</h:panelGroup>
+		</f:subview>
+	</ui:define>
+</ui:composition>

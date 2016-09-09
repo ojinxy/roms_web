@@ -1,0 +1,518 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/WEB-INF/newTemplate.xhtml">
+	
+	
+	
+	
+	<ui:define name="title">Artery Maintenance</ui:define>
+	<ui:define name="pageHeader">
+		<!-- div id="tabs">Artery Maintenance</div-->
+	</ui:define>
+    
+   <ui:define name="content">
+   <!-- <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script> -->
+   <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false" ></script>
+   
+	<script src="${request.contextPath}/script/js/StyledMarker.js" ></script>
+	<script src="${request.contextPath}/script/js/TAMap 1.0.0.js" ></script>
+    	<!--<ui:fragment id="messages">
+			<div id="messagesInsertionPoint"><h:messages errorClass="error"
+				infoClass="info" layout="list" /></div>
+		</ui:fragment> -->
+	<script>
+
+		
+		//google.maps.event.addDomListener(window, 'load', initialize);
+		var tamap;
+		var pathOptions ;
+		//$.noConflict();
+		$("document").ready( function(){
+			///alert('ready');
+			mapFunct();
+			$('#javax_faces_developmentstage_messages').css('display','none');
+			
+			$('#arteryMaintenanceSearch\\:searchResults').forceDatatablePagin();
+		});
+		
+		function refreshDatatable(){
+			$('#arteryMaintenanceSearch\\:searchResults').forceDatatablePagin();
+			
+		}
+		
+		function mapFunct()
+		{
+			if(typeof google == 'undefined'){
+				$("#divMapCanv").hide();
+				$("#divDistance").hide();
+				$("#divGoogleNotConnect").show();				
+				return;
+			}else{
+				$("#divMapCanv").show();
+				$("#divDistance").show();
+				$("#divGoogleNotConnect").hide();	
+			}
+		//jQuery( document ).ready(function( $ ) {
+			
+			//initialize();
+			//codeAddress();
+			var pathOptions = new Array();
+			var nextpathOptions = new Array();
+				
+			
+			
+			//alert(pathOptions[0].points);
+			tamap = new TAMap();
+			//tamap.codeAddress();
+			//tamap.showPaths(pathOptions);
+			
+			//tamap.modifyPaths(editPathOptions1);
+			
+			//tamap.removePaths(nextpathOptions);
+			
+			//tamap.addPaths(nextpathOptions);
+			
+			
+			}
+		function showAddress()
+		{
+			var address = $("#address").val();
+			originalAddress = address;
+			//alert(originalAddress);
+			tamap.showLocation(address);
+		}
+		
+		
+		function calcRoute(y)
+		{
+			if(typeof google == 'undefined'){
+				$("#divMapCanv").hide();
+				$("#divDistance").hide();
+				$("#divGoogleNotConnect").show();				
+				return;
+			}else{
+				$("#divMapCanv").show();
+				$("#divDistance").show();
+				$("#divGoogleNotConnect").hide();	
+			}
+			var address = $("#arteryMaintenanceDetails\\:locationId2").find("option:selected").text();
+			//var parish = $("#arteryMaintenanceDetails\\:parishId").find("option:selected").text();
+			var x = $("#arteryMaintenanceDetails\\:locationId2").find("option:selected").val();
+			
+			//var editPathOptions1 = jQuery.parseJSON('{"ID":13,"name":"Downtown, Kingston","address":"Spanish Town Rd, Downtown, Kingston","color":"red","start_location":{"lat":17.972137823934258,"lng":-76.79377915794981},"end_location":{"lat":18.025564896975517,"lng":-76.85539486343993},"points":"_eulBhxusMOJGVKxAW~FQdGK`@w@fAcEvEgCvC]f@oDzDyAhBSZqDhE}BjC}AbB}C`D}AdB_EzDSVu@t@aFdF]`@iBnBaDbDwGvG}EdFmEpFgDdEc@l@sAxAq@~@o@t@EL[ZIPwBvCu@x@kA`Bw@bAW`@y@|@eFzGo@n@cCbDqBdCaAz@cInI_E~DcG`GaDfDaOtPqAzA{DnEaCbCwMzNmFfGuElFkAfAiMhNqGnHyFvG}DlE}DjE}EpFWRgBbCeGjHgD|DwL`NqC`DkFvFcHzH}@vAaAz@kA|AWj@","distance":8894}');//alert("address: " + address + "val " + x);
+			//originalAddress = address;
+			//alert(originalAddress);
+			//tamap.showLocation(address);
+			tamap = new TAMap();
+			//tamap.codeAddress();
+			var id = $("#arteryMaintenanceDetails\\:arteryIdDlg").val();
+			var name = $("#arteryMaintenanceDetails\\:dlgName").val();
+			var parish = $('#arteryMaintenanceDetails\\:parishId_label').text();
+			var parName = $("#arteryMaintenanceDetails\\:shortDescription").val();
+			var startLat =	$("#arteryMaintenanceDetails\\:dlgStartLat").val();
+			var startLon =	$("#arteryMaintenanceDetails\\:dlgStartLong").val();
+			var endLat = $("#arteryMaintenanceDetails\\:dlgEndLat").val();
+			var endLon = $("#arteryMaintenanceDetails\\:dlgEndLong").val();
+			var points = $("#arteryMaintenanceDetails\\:dlgPoints").val();
+			var distance = $("#arteryMaintenanceDetails\\:dlgDistanceBx2").val();
+			//alert("distance "+distance);
+			//alert(parish);
+			$("#arteryMaintenanceDetails\\:dlgDistanceBx").val(distance);
+			//$("#arteryMaintenanceDetails\\:dlgDistanceBx").val(distance);
+			//alert("address! "+address + " points  start "+startLat + "Name " + name +" X "+y);
+			if(y != 'edit')
+			{
+				//alert("if");
+				if(parish != "[Select One]" &amp;&amp; address == "[Select One]")
+					{
+						if(tamap.showLocation(parish) == "true"){
+							tamap.showLocation(parish);
+						}else{
+							tamap.showLocation(address);
+						}
+					
+					}else if(address != "[Select One]")
+					{//alert(tamap.showLocation(address));
+							if(tamap.showLocation(address) == "true")
+								tamap.showLocation(address);
+							else
+								tamap.showLocation(parish);
+					}
+			}
+			else{
+				//alert("else");
+				var stripName = name.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' ');
+				var stripPoints = points.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '');
+				//alert(stripPoints);
+				 var editPathOptions = jQuery.parseJSON('{"ID":'+id+',"name":"'+stripName+','+parish+'","address":"'+parish+'","color":"red","start_location":{"lat":'+startLat+',"lng":'+startLon+'},"end_location":{"lat":'+endLat+',"lng":'+endLon+'},"points":"","distance":'+ distance*1000 +'}');
+				 editPathOptions.points = points;
+				//alert(JSON.stringify(editPathOptions));
+				tamap.modifyPaths(editPathOptions); 
+			}
+			//tamap.showPaths(pathOptions);
+			
+		}
+		
+		function editMap()
+		{
+			if(typeof google == 'undefined'){
+				$("#divMapCanv").hide();
+				$("#divDistance").hide();
+				$("#divGoogleNotConnect").show();				
+				return;
+			}else{
+				$("#divMapCanv").show();
+				$("#divDistance").show();
+				$("#divGoogleNotConnect").hide();	
+			}
+			var pathArr = new Array();
+			//var editPath = pathArr.push(jQuery.parseJSON('{"ID":14,"name":"Downtown, Kingston","address":"Spanish Town Rd, Downtown, Kingston","color":"red","start_location":null,"end_location":null,"points":"","distance":8894}'));
+			//var p=jQuery.parseJSON('{"ID":#{artery.arteryId},"name":"#{artery.shortDescription}, #{artery.parishDescription}","address":"#{artery.arteryDescription}, #{artery.shortDescription}, #{artery.parishDescription}","color":"red","start_location":{"lat":#{artery.startlatitude},"lng":#{artery.startlongitude}},"end_location":{"lat":#{artery.endlatitude},"lng":#{artery.endlongitude}},"points":#{artery.points},"distance":#{artery.distance}}');
+			//tamap = new TAMap();
+			//tamap.modifyPaths(p);
+			//tamap.addPaths(editPath);
+			//var paths = tamap.getPaths();
+			//tamap.showPaths(editPath);		
+		}
+		
+		function validate()
+		{
+		
+			var val = $("#arteryMaintenanceSearch\\:locationId3").find("option:selected").text(); 
+			
+			if(val == "")
+			{
+				$('#arteryMaintenanceSearch\\:msgCon').click();
+			}
+		}
+		
+		function checkIfErrorsInMsg2(){
+			var messages = $('[id*=msg2] [class*="ui-messages-error "]');
+			
+			if(messages != null &amp;&amp; messages.size() > 0){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		
+		
+	</script>
+	<style type="text/css">
+		.ui-growl {
+			z-index:1050 !important;
+			/* background:#dedede; */
+			border: 1px solid #666666;
+			background: #aaaaaa;
+			background: #aaaaaa linear-gradient(top, rgba(0,0,0,0.25), rgba(0,0,0,0));
+			background: #aaaaaa -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.25)), to(rgba(0,0,0,0)));
+			background: #aaaaaa -moz-linear-gradient(top, rgba(0,0,0,0.25), rgba(0,0,0,0)); 
+			color: #ffffff;
+			text-shadow: 1px 1px 1px #333333;
+			}
+			
+			.stop-scrolling 
+			{
+			  height: 100%;
+			  overflow: hidden;
+			}
+			
+			.dialog{
+				height:auto !important;
+				min-height: 50% !important;
+				max-height: 98% !important;
+				overflow-y:auto !important;
+			}
+	</style>
+	
+	   
+		<h:form styleClass="form" id="arteryMaintenanceSearch" >
+		<div class="tabs"><a href="#">Artery Maintenance</a></div>
+   		<div class="main borders">
+		<fieldset>
+		 <p:messages autoupdate="true" id="msg" for="msg" globalOnly="true" closable="true"/>
+
+		 
+			<div>
+				<div style="float:left;width:45%;">
+					<div style="margin:0px 0 0 13px;display: inline-block;">
+					<h:outputText styleClass="outputText" value="Parish: " style="margin-right:10px;"/> 
+					<p:selectOneMenu value="#{criteria.parishCode}" id="parishCodeId" style="width:200px;">
+							<p:ajax event="change" listener="#{arteryMaintenanceServiceAction.getLocationListfrmSearchParish()}" update=":arteryMaintenanceSearch:locationId3" />
+							<f:selectItem itemValue=""  itemLabel="All"/>
+    						<f:selectItems value="#{parishList}"  />
+						</p:selectOneMenu>
+					</div>
+					<div style="margin:10px 0 0 0;">
+						<h:outputText styleClass="outputText" value="Location: " />
+						<p:selectOneMenu value="#{criteria.locationId}"
+								id="locationId3" style="margin-left:10px;width:200px;">
+								<f:selectItem itemValue="" itemLabel="All" />
+								<f:selectItems value="#{locationList}" />
+						</p:selectOneMenu>
+					</div>
+					</div>	
+					<div style="float:right;width:45%;">
+						<div style="margin:0px 0 0 0;">
+						<h:outputText styleClass="outputText" value="Artery: " />
+						<!-- <p:inputText value="#{criteria.shortDescription}" id="arteryDescription" maxlength="100" 
+								size="33" style="text-align: left;margin-left:10px;" cols="25"/> -->
+						<p:autoComplete id="arteryDescription" scrollHeight="200" size="27" cache="true" style="margin-left:10px;width:180px;" cacheTimeout="30000" value="#{criteria.shortDescription}" completeMethod="#{arteryMaintenanceServiceAction.ArteryAutoComplete}" >
+							<p:ajax event="query" global="false"></p:ajax>						
+						</p:autoComplete>
+						<!-- <p:watermark for="arteryDescription" value="[auto-complete]" /> -->
+						</div>
+						<div style="margin:10px 0 0 0;">
+						<h:outputText styleClass="outputText" value="Status: " style="margin-right:10px;"/>
+						<p:selectOneMenu value="#{criteria.statusId}" id="statusSel" style="width:200px;">
+							<f:selectItem itemValue="" itemLabel="All"></f:selectItem>
+							<f:selectItem itemValue="ACT" itemLabel="ACTIVE"></f:selectItem>
+							<f:selectItem itemValue="INA" itemLabel="INACTIVE"></f:selectItem>
+						</p:selectOneMenu>
+						</div>
+						<!-- <p:inputText value="#{criteria.statusId}" id="statusId"
+								maxlength="6" size="11" style="text-align: left;margin-left:10px;width:325px;" /> -->
+					</div>		
+					
+				
+				</div>
+				
+				<div id="buttons" style="width:100%;float:left;text-align:center;margin-top:10px;">
+				<sec:authorize ifAnyGranted="#{constants.ROLE_ROMS_REF_ART_SEARCH}">
+					<p:commandButton styleClass="blue blue-icon icon-search icon-af" value="Search" action="search" processIds="*" update="searchResults" onclick="validate();" ajax="false"/>
+				</sec:authorize>
+				<sec:authorize ifAnyGranted="#{constants.ROLE_ROMS_REF_ART_ADD}">	
+					<p:commandButton styleClass="blue blue-icon icon-plus icon-af" value="Add" action="add" processIds="*" update=":arteryMaintenanceDetails:modalDialog" oncomplete="mapFunct();PF('dlg2').show();" ajax="true"/>
+				</sec:authorize>	
+					<!-- <p:commandButton styleClass="blue" value="Add!" action="add" processIds="*" ajax="true" update=":arteryMaintenanceSearch:modalDialog" oncomplete="PF('dlg2').show();"/> --> 
+					<p:commandButton styleClass="blue blue-icon icon-refresh icon-af" id="butReset1" style="padding-rght:1em;" value="Clear" processIds="*" action="clear" ajax="false" />
+				
+					
+				</div>
+				 
+				</fieldset>
+				</div>
+				
+				
+			
+				<div style="margin-top:20px;">
+				  		<p:outputPanel id="play" >
+						    <p:dataTable id="searchResults" value="#{arteries.arteryList}" var="obj"  
+						    paginator="true" rows="10" paginatorPosition="bottom" widgetVar="objTable"
+						 selectionMode="single" rowKey="#{obj.arteryId}" selection="#{arteries.selectedArtery}"
+						 rendered="#{arteries.arteryList.size()>0}" rowsPerPageTemplate="10,50,100" styleClass="myTable"
+							currentPageReportTemplate="Results: {startRecord}-{endRecord} of {totalRecords} " rowIndexVar="rowIndex"
+						 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">  
+						       
+						       	<f:facet name="header">  
+						           Arteries
+						        </f:facet> 
+						      <sec:authorize ifAnyGranted="#{constants.ROLE_ROMS_REF_ART_EDIT}">	
+							       <p:ajax event="rowSelect" oncomplete="selectArtery();" >
+	                    		   </p:ajax>
+                    		   </sec:authorize>
+                    			<p:ajax event="rowSelect" />
+                    			   
+                    		<!-- 	<p:tooltip for="@(tr[role=row][data-ri=#{rowIndex}])" value="Click to edit record." showEffect="fade" hideEffect="fade" 
+						            shared="true" atPosition="top center" myPosition="bottom center" showDelay="500"/> -->
+                    			
+						        <p:column sortBy="shortDescription" headerText="Artery">  
+						           <h:outputText value="#{obj.shortDescription}" />  
+						           
+						            <!--  <p:tooltip value="This is row number #{rowIndex}" forSelector=".myTable tr[role=row][data-ri=#{rowIndex}]"
+            							shared="true" atPosition="top center" myPosition="bottom center" showDelay="500" /> -->	
+						        </p:column>  
+						  
+						        <p:column sortBy="locationDescription" headerText="Location">  
+						            <h:outputText value="#{obj.locationDescription}" />  
+						        </p:column>
+						  		
+						  		<p:column sortBy="parishDescription" headerText="Parish">  
+						            <h:outputText value="#{obj.parishDescription}" />  
+						        </p:column>
+						  		
+						  		<p:column headerText="Length (km)">  
+						            <h:outputText value="#{obj.distance}" />  
+						        </p:column>
+						  		
+						  		<p:column sortBy="statusDescription" headerText="Status">  
+						            <h:outputText value="#{obj.statusDescription}" />  
+						        </p:column>
+						  		
+						        <p:column headerText="Last Updated">  
+						            <h:outputText value="#{arteryMaintenanceServiceAction.formatDate(obj.auditEntryBO.updateDTime!=null?obj.auditEntryBO.updateDTime:obj.auditEntryBO.createDTime)}" >
+						 </h:outputText>  
+						        </p:column>  
+						  
+						        <p:column headerText="Updated By">  
+						           <p:tooltip for="@(tr[role=row][data-ri=#{rowIndex}])" value="Click row to edit record." showEffect="fade" hideEffect="fade" 
+						            shared="false" showDelay="500" style="margin-left:200px;"/> 
+						            <h:outputText value="#{obj.auditEntryBO.updateUsername!=null?obj.auditEntryBO.updateUsername:obj.auditEntryBO.createUsername}" />
+						               
+						        </p:column>  
+						    </p:dataTable>  
+					  </p:outputPanel>
+				
+				</div>
+						 <!-- <p:confirmDialog id="msgDlgId" widgetVar="msgdlg" global="true" showEffect="fade" hideEffect="explode">  
+					       <p:commandButton id="msgBtn" value="OK" type="button" style="text-align:center !important;" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+					    </p:confirmDialog>   -->
+			
+		 </h:form>
+			
+			
+			
+		
+		
+		<h:form styleClass="form" id="arteryMaintenanceDetails">
+		<p:dialog id="modalDialog" header="#{displaySaveBtn == 'none'?'Edit Artery':'Add Artery'}" widgetVar="dlg2" modal="true" styleClass="dialog"  resizable="false"
+			onShow="$('body').addClass('stop-scrolling')" onHide="$('body').removeClass('stop-scrolling')">  
+    		<p:ajax event="close" onclick="cancel();"/>
+    		<p:messages autoupdate="true" id="msg2" globalOnly="true" closable="true"/>
+    		 <!-- <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> -->
+    		<!-- <p:growl id="growl" showSummary="true" sticky="false" /> -->  
+					<p:inputText id="arteryIdDlg" value="#{artery.arteryId}" style="display:none;"/>
+			<p:panelGrid style="margin-top:0px;margin-bottom:0px;width:100%;" id="gridVehicleDetails">
+					<p:row>
+						<p:column >
+							<span style="padding-left:1px;width: 90px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Name:" />
+							<h:outputText value="*" styleClass="required" />
+							</span>
+							<p:inputText value="#{artery.shortDescription}" id="dlgName" maxlength="100" 
+									size="50" style="margin-left: 0px; text-align: left; margin-bottom: 0px;width:200px;" cols="25"/>
+						</p:column>
+						<p:column >
+							<span style="padding-left:1px;width: 70px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Parish:" />
+							<h:outputText value="*" styleClass="required" />
+							</span>
+								<p:selectOneMenu value="#{artery.parishCode}"
+									id="parishId" style="margin-left:0px;width:200px;margin-bottom:0px;text-align:left;">
+									<p:ajax event="change"  oncomplete="calcRoute();PF('dlg2').show();" listener="#{arteryMaintenanceServiceAction.getLocationList()}" update=":arteryMaintenanceDetails:locationId2" />
+									<f:selectItem itemValue="" itemLabel="[Select One]" />
+									<f:selectItems value="#{parishList}" />
+								</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<span style="padding-left:1px;width: 90px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Description:" />
+							<h:outputText value="*" styleClass="required" />
+							</span>
+							<p:inputText value="#{artery.arteryDescription}" id="dlgDescription" maxlength="100" 
+									size="50" style="text-align: left;margin-left:0px;width:200px;" cols="25"/>
+						</p:column>
+						<p:column>
+							<span style="padding-left:1px;width: 70px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Location:" />
+							<h:outputText value="*" styleClass="required" />
+							</span>
+							<p:selectOneMenu  value="#{artery.locationId}"
+									id="locationId2" style="margin-left:0px;width:200px;margin-bottom:0px;text-align:left;" onchange="calcRoute();">
+									<f:selectItem itemValue="" itemLabel="[Select One]" />
+									<f:selectItems value="#{locationList}" />
+								</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					
+			</p:panelGrid>	
+				<hr style="width:100%;float:left;margin-top:0px;margin-bottom:5px;"></hr>
+				
+				<!-- <i class="fa fa-map-marker"></i>
+				 -->
+				 <div style="float: left; margin-bottom: 5px;" id="divMapCanv">
+				 		<h:outputLink id="fade" value="#">	
+				 			<img src="${request.contextPath}/images/pushpin.png" alt="" style="width:25px;height:24px;margin-left:10px;"/>
+				 		 </h:outputLink>  
+				    	<p:tooltip for="fade" value="Select a location from the drop-down list then drag 
+				    	the pushpins located on the map inplace to add start and end points." showEffect="fade" hideEffect="fade" style="width:400px;"/>  
+				 		<h:outputText styleClass="outputText" value="Indicate Artery Start and End point" />
+				 		<h:outputText value="*" styleClass="required" />	 
+						<div id="map-canvas"  style="margin-top:5px; margin-left:10px;width:600px; height:400px; border:black 1px solid"></div>
+        		</div>  
+        		<div id="divGoogleNotConnect">
+					<h:outputText style="color:red !important;" value="* Unable to retrieve Google Maps information" />
+				</div>
+				<div style="text-align: left; padding-top: 0px; margin: 0px 0px 10px 10px;" id="divDistance">
+				<span style="padding-left:1px;width: 100px;display: inline-block;">
+					<h:outputText styleClass="outputText" value="Length (Km):" />
+				</span>	
+					<h:inputText value="" id="dlgDistanceBx" maxlength="100" size="30" style="margin-left:0px;" readonly="true"/>
+					<h:inputHidden value="#{artery.distance}" id="dlgDistanceBx2" maxlength="100" size="30" style="margin-left:0px;" /> 
+				</div>
+				
+				<div>
+					<h:inputHidden value="#{artery.startlatitude}" id="dlgStartLat" maxlength="100" size="30" />
+					<h:inputHidden value="#{artery.startlongitude}" id="dlgStartLong" maxlength="100" 
+								size="30"  />
+					<h:inputHidden value="#{artery.endlatitude}" id="dlgEndLat" maxlength="100" 
+								size="30" />
+					<h:inputHidden value="#{artery.endlongitude}" id="dlgEndLong" maxlength="100" 
+								size="30" />
+					<h:inputHidden value="#{artery.points}" id="dlgPoints" maxlength="100" 
+								size="30" />
+				</div>
+				
+				<div id="buttonsId" style="width:100%;margin: 0 auto;text-align:center;">
+					<!-- <p:commandButton styleClass="blue" value="Save" action="save" processIds="*" ajax="false" /> -->
+					<!-- <p:commandButton styleClass="blue" value="Save" action="save" processIds="*" ajax="false" style="display:#{displaySaveBtn}"/>
+					<p:commandButton styleClass="blue" value="Update" action="update" processIds="*" ajax="false" style="display:#{displayUpdateBtn}"/> -->
+					<script>
+						
+						function emptyLocation(){
+							 //var x = $("#arteryMaintenanceDetails\\:parishId").find("option:selected").val();
+							//alert("p" + x);
+							//$("#arteryMaintenanceDetails\\:parishId").find("option:selected").val("");
+							//$('#arteryMaintenanceDetails\\:parishId_input option:contains("[Select One]")').prop('selected', true);
+							//$('#arteryMaintenanceSearch\\:parishCodeId option:contains("All")').prop('selected', true);
+							//var z = $('#arteryMaintenanceDetails\\:parishId_input option:selected').text();
+							//var y = $('#arteryMaintenanceDetails\\:parishId').find("option:selected").text();
+							//alert("Y" + y + "z " + z);  
+							//alert();
+							$("button[id*='resetLoc']").click();	
+						}
+						
+						
+						function cancel()
+						{
+							$("button[id*='cancel']").click();
+						}
+					</script>
+					<p:commandButton styleClass="blue" value="Save" action="save" oncomplete="if(args.validationFailed){calcRoute();PF('dlg2').show();}else{$('body').removeClass('stop-scrolling');} refreshDatatable();" update=":arteryMaintenanceDetails:modalDialog,:arteryMaintenanceSearch:searchResults,:arteryMaintenanceDetails:msg2,:arteryMaintenanceSearch:msg" processIds="*" ajax="true" style="display:#{displaySaveBtn}"/>			
+					<p:commandButton styleClass="blue" value="Save" action="update"  oncomplete="if(checkIfErrorsInMsg2()){calcRoute();PF('dlg2').show();}else{$('body').removeClass('stop-scrolling');} refreshDatatable();" processIds="*" update=":arteryMaintenanceDetails:modalDialog,:arteryMaintenanceSearch:searchResults,:arteryMaintenanceDetails:msg2,:arteryMaintenanceSearch:msg,:arteryMaintenanceSearch:play" ajax="true" style="display:#{displayUpdateBtn}"/>
+					<p:commandButton styleClass="blue" value="Clear" process="@this" actionListener="#{arteryMaintenanceServiceAction.add(flowRequestContext)}" update="modalDialog" ajax="true" oncomplete="calcRoute();PF('dlg2').show();" style="display:#{displaySaveBtn}">
+						<p:resetInput target="modalDialog" />
+					</p:commandButton>  
+				     
+					<p:commandButton id="cancel" styleClass="blue" value="Back" action="cancel" processIds="*" onclick="emptyLocation();PF('dlg').hide;" />
+					<!-- <p:commandButton wigetVar="btnSel" id="resetLoc" value="Do select" action="clear"  style="" processIds="*" ajax="false" onclick="calcRoute();PF('dlg2').show();"  update=":arteryMaintenanceSearch:locationId3,:arteryMaintenanceDetails:locationId2">
+			 		</p:commandButton> - -->
+				</div> 
+			
+			
+		
+			 <p:commandButton wigetVar="btnSel" id="selectBtn" value="Do select" style="display:none" processIds="*" action="edit" 
+			 ajax="true" oncomplete="mapFunct();calcRoute('edit');PF('dlg2').show();"
+			 update=":arteryMaintenanceDetails:modalDialog" ></p:commandButton>
+			 <script>
+			 	function selectArtery(){
+			 	$("button[id*='selectBtn']").click()			 	
+			 	}
+			 </script>
+		</p:dialog>
+		</h:form>
+		
+			
+	</ui:define>
+
+</ui:composition>

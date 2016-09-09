@@ -1,0 +1,40 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces" xmlns:hx="http://www.ibm.com/jsf/html_extended" xmlns:sec="http://www.springframework.org/security/tags" xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com" xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
+	<ui:fragment id="page">
+		<p:dialog id="vrfydialog" header="Verify ${flowScope.document.documentTypeName} Edits" widgetVar="vrfydialog" rendered="#{flowScope.mode == 'verify'}" visible="true" resizable="false" modal="true"
+			width="40%"
+		>
+			<p:messages autoupdate="true" closable="true"></p:messages>
+			<p:fieldset label="Please provide the following details:">
+				<div>
+					<strong><h:outputText value="Additional Comment:" style="font-weight:bold;text-transform:uppercase;min-width:30%" />
+					</strong> <br /> <br />
+					<c:choose>
+						<c:when test="#{ flowScope.docType == 'SUM'}">
+							<p:inputTextarea id="adcom" rows="6" cols="50" value="#{flowScope.summons.newComment}" maxlength="250" />
+						</c:when>
+						<c:when test="#{flowScope.docType == 'WNO' }">
+							<p:inputTextarea id="adcom" rows="6" cols="50" value="#{flowScope.warningNotice.newComment}" maxlength="250" />
+						</c:when>
+						<c:when test="#{flowScope.docType == 'WNP' }">
+							<p:inputTextarea id="adcom" rows="6" cols="50" value="#{flowScope.warningNoProsecution.newComment}" maxlength="250" />
+						</c:when>
+					</c:choose>
+				</div>
+				<div style="text-align: center;">
+					<span style="margin: 0 10px;"><p:commandButton id="save3" value="Confirm Verification" processIds="*" action="verifyDetails" ajax="false" onerror="PF('vrfydialog').show();"
+							onsuccess="PF('vrfydialog').hide();" styleClass="blue"
+						/>
+					</span> <span style="margin: 0 10px;"><p:commandButton icon="ui-icon-refresh" id="cancel3" value="Cancel" processIds="*" action="cancelAction" ajax="false" onerror="PF('vrfydialog').show();"
+							onsuccess="PF('vrfydialog').hide();" styleClass="blue"
+						/>
+					</span>
+				</div>
+			</p:fieldset>
+				<p:ajax event="close"  listener="#{documentManagerServiceAction.handleDialogClose}"/>
+		</p:dialog>
+	</ui:fragment>
+</ui:composition>

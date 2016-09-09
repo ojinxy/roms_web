@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://webservices.roms.toms.ta.fsl/" version="1.0" xmlns:tns="http://webservices.roms.toms.ta.fsl/">
+
+  <xs:element name="RequiredFieldMissingException" type="tns:RequiredFieldMissingException"/>
+
+  <xs:element name="findUser" type="tns:findUser"/>
+
+  <xs:element name="findUserGroups" type="tns:findUserGroups"/>
+
+  <xs:element name="findUserGroupsResponse" type="tns:findUserGroupsResponse"/>
+
+  <xs:element name="findUserPermissionStrings" type="tns:findUserPermissionStrings"/>
+
+  <xs:element name="findUserPermissionStringsResponse" type="tns:findUserPermissionStringsResponse"/>
+
+  <xs:element name="findUserPermissions" type="tns:findUserPermissions"/>
+
+  <xs:element name="findUserPermissionsResponse" type="tns:findUserPermissionsResponse"/>
+
+  <xs:element name="findUserResponse" type="tns:findUserResponse"/>
+
+  <xs:element name="hasPermision" type="tns:hasPermision"/>
+
+  <xs:element name="hasPermisionResponse" type="tns:hasPermisionResponse"/>
+
+  <xs:element name="userLogIn" type="tns:userLogIn"/>
+
+  <xs:element name="userLogInResponse" type="tns:userLogInResponse"/>
+
+  <xs:element name="userLogOut" type="tns:userLogOut"/>
+
+  <xs:element name="userLogOutResponse" type="tns:userLogOutResponse"/>
+
+  <xs:element name="validOverride" type="tns:validOverride"/>
+
+  <xs:element name="validOverrideResponse" type="tns:validOverrideResponse"/>
+
+  <xs:element name="validUser" type="tns:validUser"/>
+
+  <xs:element name="validUserResponse" type="tns:validUserResponse"/>
+
+  <xs:complexType name="userLogIn">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userNameTxt" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="userLogInResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="RequiredFieldMissingException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findUserPermissionStrings">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findUserPermissionStringsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="validOverride">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userNameTxt" type="xs:string"/>
+      <xs:element minOccurs="0" name="passwordTxt" type="xs:string"/>
+      <xs:element minOccurs="0" name="permission" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="validOverrideResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findUserPermissions">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="groupId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findUserPermissionsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:lmisGroupPermissionsViewBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lmisGroupPermissionsViewBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="groupName" type="xs:string"/>
+      <xs:element minOccurs="0" name="resourceKey" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="hasPermision">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userNameTxt" type="xs:string"/>
+      <xs:element minOccurs="0" name="permission" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="hasPermisionResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findUserGroups">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userNameTxt" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findUserGroupsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:lmisGroupViewBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lmisGroupViewBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="groupName" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="userLogOut">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userNameTxt" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="userLogOutResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="validUser">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userNameTxt" type="xs:string"/>
+      <xs:element minOccurs="0" name="passwordTxt" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="validUserResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findUser">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userNameTxt" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findUserResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:lmisUserViewBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lmisUserViewBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="currentRoadOperationEndDateNTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="currentRoadOperationId" type="xs:int"/>
+      <xs:element minOccurs="0" name="currentRoadOperationLocation" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentRoadOperationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentRoadOperationStartDateNTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="locationCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="locationDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="passwordHash" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="permissions" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="xs:string"/>
+      <xs:element minOccurs="0" name="username" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,144 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/WEB-INF/newTemplate.xhtml">
+
+	<ui:define name="title">Strategy Maintenance </ui:define>
+	<ui:define name="pageHeader">Strategy Maintenance </ui:define>
+    
+    <ui:define name="content">
+    	<ui:fragment id="messages">
+			<div id="messagesInsertionPoint"><h:messages errorClass="error"
+				infoClass="info" layout="list" /></div>
+		</ui:fragment>
+		<h:form styleClass="form" id="strategyMaintenanceDetails">
+			<fieldset><legend title="strategyMaintenanceDetails">Strategy Details</legend>
+				<table align="center" width="60%">
+					<tr>
+						<td><h:outputText styleClass="outputText" value="Strategy ID" />
+							<h:outputText value="*" styleClass="asterisk" /></td>
+						<td><h:inputText value="#{strategy.strategyId}" id="strategyId" 
+							style="text-align: right" maxlength="10" size="12" required="true"/></td> 
+					</tr>
+					<tr>
+						<td><h:outputText styleClass="outputText" value="Description" />
+							<h:outputText value="*" styleClass="asterisk" /></td>
+						<td><h:inputText value="#{strategy.strategyDescription}" id="strategyDescription" maxlength="30"
+							size="32" style="text-align: left" required="true"/></td>
+					</tr>
+					<tr>
+						<td><h:outputText styleClass="outputText" value="Vehicle Required" />
+							<h:outputText value="*" styleClass="asterisk" /></td>
+						<td><h:inputText value="#{strategy.vehicleRequired}" id="vehicleRequired" maxlength="10"
+							size="12" style="text-align: left" required="true"/></td>
+					</tr>
+					<tr>
+						<td><h:outputText styleClass="outputText" value="Artery Required" />
+							<h:outputText value="*" styleClass="asterisk" /></td>
+						<td><h:inputText value="#{strategy.arteryRequired}" id="arteryRequired" 
+							maxlength="10" size="12" style="text-align: left" required="true"/></td>
+					</tr>
+					<tr>
+						<td><h:outputText styleClass="outputText" value="Status ID" />
+							<h:outputText value="*" styleClass="asterisk" /></td>
+						<td><h:inputText value="#{strategy.statusId}" id="statusId" maxlength="6"
+							size="8" style="text-align: left" required="true"/></td>
+					</tr>
+					
+				</table>
+				
+				<div id="buttons">
+					<sf:commandButton styleClass="g-button g-button-submit" value="Save" action="save" processIds="*" />
+					<sf:commandButton styleClass="g-button g-button-submit" value="Update" action="update" processIds="*" />
+					<sf:commandButton styleClass="g-button g-button-submit" value="Cancel" action="cancel" processIds="*" />
+				</div>
+			</fieldset>
+		</h:form>
+		
+		<h:form id="strategyRuleResults" >
+			<ui:fragment id="strategyRuleResultsFragment">
+				<div id="dataTableDiv" class="dataTableResults" style="height: 200px;" >
+
+					<h:dataTable
+					border="0" styleClass="appTable" style="width: 100%"
+					footerClass="footerClass" rowClasses="even,odd" cellpadding="0"
+					cellspacing="0" id="searchResults" rendered="true" rows="10"
+					value="#{strategyrules}" var="obj">
+					<h:column id="idCol">
+						<f:facet name="header">
+							<h:panelGroup id="pnlfst">
+								<sf:commandLink id="sortByIdLink" action="sort"
+									value="Strategy ID"  processIds="*"
+									styleClass="commandHdrLink">
+									<f:param name="sortOn" value="strategyId" id="prmfst" />									
+									<f:param name="sortOrder" value="" id="srdr1" />
+								</sf:commandLink>
+							</h:panelGroup>
+						</f:facet>
+						
+							<h:inputText id="idValue" value="#{obj.strategyId}" size="20" rendered="true"></h:inputText>
+						
+					</h:column>
+					<h:column id="personTypeIdCol">
+						<f:facet name="header">
+							<h:panelGroup id="pnlsec">
+								<sf:commandLink id="sortByPerTypeIdLink" action="sort"
+									value="Person Type ID" styleClass="commandHdrLink" processIds="*">
+									<f:param name="sortOn" value="personTypeId" id="prmsec" />
+									<f:param name="sortOrder" value="" id="srdr2" />
+								</sf:commandLink>
+							</h:panelGroup>
+						</f:facet>
+						<h:inputText id="typeIdValue" value="#{obj.personTypeId}" size="20" rendered="true"></h:inputText>
+					</h:column>
+					<h:column id="minimumCol">
+						<f:facet name="header">
+							<h:panelGroup id="pnltrd">
+								<sf:commandLink id="sortByMinLink" action="sort"
+									value="Minimum" styleClass="commandHdrLink" processIds="*">
+									<f:param name="sortOn" value="minimum" id="prmthir" />
+									<f:param name="sortOrder" value="" id="srdr3" />
+								</sf:commandLink>
+							</h:panelGroup>
+						</f:facet>
+						<h:inputText id="minValue" value="#{obj.minimum}" size="20" rendered="true"></h:inputText>
+					</h:column>
+					<h:column id="maximumCol">
+						<f:facet name="header">
+							<h:panelGroup id="pnlfrth">
+								<sf:commandLink id="sortByMaxLink" action="sort"
+									value="Maximum" styleClass="commandHdrLink" processIds="*">
+									<f:param name="sortOn" value="maximum" id="prmfrth" />
+									<f:param name="sortOrder" value="" id="srdr4" />
+								</sf:commandLink>
+							</h:panelGroup>
+						</f:facet>
+						<h:inputText id="maxValue" value="#{obj.maximum}" size="20" rendered="true"></h:inputText>
+					</h:column>
+					<!-- <h:column id="action">
+						<h:commandLink title="click to delete" id="delete" action="delete">
+							<h:outputText id="Delete" value="Delete" size="20" rendered="true"></h:outputText>
+						</h:commandLink>
+					</h:column> -->
+				</h:dataTable>
+				
+				<sf:commandButton styleClass="g-button g-button-submit" value="Add" action="add" processIds="*" />
+				
+				<div class="footerClass"><div class="resultClass">Results #{datatable.indexOfFirstItem + 1} - ${pagerBaseAction.pageSize  > datatable.pageElements.rowCount ? datatable.totalNumberOfElements : datatable.indexOfLastItem} of  #{datatable.totalNumberOfElements}</div>
+					<div class="pagingClass">[<sf:commandLink action="first" processIds="*" id="first" disabled="#{datatable.currentPageNumber == 1}">First</sf:commandLink>| <sf:commandLink action="previous" processIds="*" id="previous" disabled="#{datatable.currentPageNumber == 1}">Prev</sf:commandLink>]
+					&#160; &#160; [<sf:commandLink action="next" processIds="*"	id="next" disabled="#{datatable.currentPageNumber == datatable.totalPages }">Next</sf:commandLink>	| <sf:commandLink action="last" processIds="*" id="last" disabled="#{datatable.currentPageNumber == datatable.totalPages }">Last</sf:commandLink> ]</div>
+					
+			</div>
+				</div>
+				</ui:fragment>
+		</h:form>
+		
+	</ui:define>
+
+</ui:composition>

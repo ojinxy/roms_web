@@ -1,0 +1,231 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"	
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/WEB-INF/newTemplate.xhtml">
+
+	<ui:define name="title">Location Maintenance</ui:define>
+	<ui:define name="pageHeader"></ui:define>
+	
+	<ui:define name="content">
+    	<script>
+    		$("document").ready(function(){
+    			
+    			$('#javax_faces_developmentstage_messages').css('display','none');
+    			refreshDatatable();
+    		});
+    		function refreshDatatable(){
+    			$('#locationSearch\\:searchResults').forceDatatablePagin();
+    		}
+    	</script>
+		
+		<h:form styleClass="form" id="locationSearch">
+			 
+			 <div class="tabs"><a href="#">Location Maintenance</a></div>
+   		<div class="main borders">
+   			<p:messages autoupdate="true" id="msg" closable="true"/>
+			<p:panelGrid style="margin-top:0px;margin-bottom:0px;width:100%;" id="gridVehicleDetails">
+				<p:row>
+					<p:column >
+						<span style="padding-left:1px;width: 90px;display: inline-block;">
+						<h:outputText styleClass="outputText" value="Parish:" />
+						</span>
+							<p:selectOneMenu value="#{criteria.parishCode}" id="parishCode" style="margin-left:10px;width:200px;">
+								<p:ajax event="change"  listener="#{locationMaintenanceServiceAction.cascadeLocations()}" update=":locationSearch:locationId" />
+								<f:selectItem itemValue=""  itemLabel="All"/>
+	    						<f:selectItems value="#{parishList}" />
+							</p:selectOneMenu>
+					</p:column>
+					<p:column>
+					<span style="padding-left:1px;width: 50px;display: inline-block;">	
+					<h:outputText styleClass="outputText" value="Status:" />
+					</span>
+					<p:selectOneMenu value="#{criteria.statusId}" id="statusSel" style="margin-left:25px;width:200px;">
+							<f:selectItem itemValue="" itemLabel="All"></f:selectItem>
+							<f:selectItem itemValue="ACT" itemLabel="ACTIVE"></f:selectItem>
+							<f:selectItem itemValue="INA" itemLabel="INACTIVE"></f:selectItem>
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				
+				<p:row>
+					<p:column colspan="2">
+						<span style="padding-left:1px;width: 90px;display: inline-block;">
+						<h:outputText styleClass="outputText" value="Location: " />
+						</span>
+						<p:selectOneMenu value="#{criteria.locationId}"
+								id="locationId" style="margin-left:10px;width:200px;">
+								<f:selectItem itemValue="" itemLabel="All" />
+								<f:selectItems value="#{locationList}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>	
+				
+			<p:row>
+				<p:column colspan="2" style="padding-top:20px;text-align:center;">
+				<sec:authorize ifAnyGranted="#{constants.ROLE_ROMS_REF_LOC_SEARCH}">
+					<p:commandButton styleClass="blue blue-icon icon-search icon-af" value="Search" action="search" processIds="*" ajax="false"/>
+				</sec:authorize>
+				<sec:authorize ifAnyGranted="#{constants.ROLE_ROMS_REF_LOC_ADD}">	
+					<p:commandButton styleClass="blue blue-icon icon-plus icon-af" value="Add" action="add" processIds="*" ajax="true" update=":locationDetails:modalDialog" oncomplete="PF('dlgLocation').show();"/>
+				</sec:authorize>	
+					<p:commandButton styleClass="blue blue-icon icon-refresh icon-af" id="butReset1" style="padding-rght:1em;" value="Clear" processIds="*" action="clear" ajax="false" />
+				</p:column>
+			</p:row>
+		
+		</p:panelGrid>
+			</div>
+			
+		<!-- </h:form>
+		
+		<h:form id="locationResults" > 
+			<ui:fragment id="locationResultsFragment">-->
+				<div id="dataTableDiv" class="dataTableResults" style="height:auto;" >
+
+					<p:dataTable
+					
+					id="searchResults" 
+					value="#{locations.locationList}" var="obj" paginator="true" rows="10" paginatorPosition="bottom" 
+						 selectionMode="single" rowKey="#{obj.locationId}"  selection="#{locations.selectedLocation}"
+						 rendered="#{locations.locationList.size()>0}" rowsPerPageTemplate="10,50,100" rowIndexVar="rowIndex"
+						currentPageReportTemplate="Results: {startRecord}-{endRecord} of {totalRecords}"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+					 
+					 <sec:authorize ifAnyGranted="#{constants.ROLE_ROMS_REF_LOC_EDIT}">
+						<p:ajax event="rowSelect" oncomplete="clickBtn();" >
+                   		</p:ajax>
+                   	</sec:authorize>
+                  <!--  	 <p:ajax event="page"  oncomplete="paginate();"/> 	  -->
+					<f:facet name="header">
+						 Location(s)
+					</f:facet>
+					
+					<p:column id="nameCol" headerText="Location" sortBy="shortDesc">
+						
+							<h:outputText id="idValue" value="#{obj.shortDesc}"></h:outputText>
+						
+					</p:column>
+					
+					<p:column id="parishCol" sortBy="parishDescription" headerText="Parish">
+						
+						<h:outputText id="parishValue" value="#{obj.parishDescription}"></h:outputText>
+					</p:column>
+					<p:column id="statCol" sortBy="statusDescription" headerText="Status">
+						<h:outputText id="statValue" value="#{obj.statusDescription}"></h:outputText>
+					</p:column>
+					<p:column id="LUpdate" headerText="Last Updated">
+						
+						<h:outputText value="#{locationMaintenanceServiceAction.formatDate(obj.auditEntryBO.updateDTime!=null?obj.auditEntryBO.updateDTime:obj.auditEntryBO.createDTime)}" >
+						 </h:outputText>
+					</p:column>
+					<p:column id="UpdateBy" headerText="Updated By">
+						<h:outputText  value="#{obj.auditEntryBO.updateUsername!=null?obj.auditEntryBO.updateUsername:obj.auditEntryBO.createUsername}"></h:outputText>
+						 <p:tooltip for="@(tr[role=row][data-ri=#{rowIndex}])" value="Click row to edit record." showEffect="fade" hideEffect="fade" 
+						            shared="false" showDelay="500" style="margin-left:200px;"/> 
+					</p:column>
+				</p:dataTable>
+			
+				</div>
+				<!-- </ui:fragment> -->
+				<script>
+					function clickBtn()
+						{
+						
+							$("button[id*='editBtn']").click();
+							
+						}
+					function paginate()
+			 	{
+			 		$("button[id*='pageBtn']").click();
+			 	}
+			 	
+			 	function cancel()
+				{
+					$("button[id*='cancel']").click();
+				}
+								
+				</script>
+			
+			 <p:commandButton wigetVar="btnSel" id="pageBtn" value="Do select" style="display:none" processIds="*" update=":locationSearch:searchResults" 
+			 ajax="false" ></p:commandButton>
+			 
+				 <p:commandButton wigetVar="btnSel" id="editBtn" value="Do select" style="display:none" processIds="*" action="edit" oncomplete="PF('dlgLocation').show();"
+			 ajax="true" update=":locationDetails:modalDialog"></p:commandButton> 
+		</h:form>
+		
+		
+		<h:form styleClass="form" id="locationDetails">
+		<p:dialog id="modalDialog" header="#{savehideBtn == 'none'?'Edit Location':'Add Location'}" widgetVar="dlgLocation" modal="true" style="width:596px;height:380px;">
+			
+			<p:ajax event="close" onclick="cancel();"/>
+			<fieldset><legend title="locationDetails">Location Details</legend>
+			
+			 <p:messages autoupdate="true" id="msg2" closable="true"/>
+			<table width="70%">
+				<tr style="padding:10px 0 0 40px;">
+					<td><h:outputText styleClass="outputText" value="Name: " />
+						<h:outputText value="*" styleClass="required" /></td>
+					<td><p:inputText value="#{location.shortDesc}" id="shortDesc" maxlength="30"
+						size="32" style="text-align: left"/></td>
+					
+				</tr>
+				<tr>
+					<td><h:outputText styleClass="outputText" value="Description: " />
+						<h:outputText value="*" styleClass="required" /></td>
+					<td ><p:inputTextarea value="#{location.locationDescription}" id="locationDescription" maxlength="100"
+						size="102" rows="5" cols="60" style="text-align: left"/></td>
+				</tr>
+				<tr>
+					<td><h:outputText styleClass="outputText" value="Parish: " />
+						<h:outputText value="*" styleClass="required" /></td>
+					<td>
+						<p:selectOneMenu value="#{location.parishCode}" id="parishCodeId" style="width:200px;">
+							<f:selectItem itemValue=""  itemLabel="[Select One]"/>
+    						<f:selectItems value="#{parishList}"  />
+						</p:selectOneMenu>
+					</td>
+				</tr>
+				<tr>	
+						<td><h:outputText styleClass="outputText" value="Status: " />
+						<h:outputText value="*" styleClass="required" /></td>
+					<td>
+					<c:choose>
+					<c:when test="#{hideActive == true}">
+					<p:selectOneMenu value="#{location.statusId}" id="statusSelID" style="width:200px;">
+							<f:selectItem itemValue="ACT" itemLabel="ACTIVE"></f:selectItem>
+							<f:selectItem itemValue="INA" itemLabel="INACTIVE"></f:selectItem>
+					</p:selectOneMenu>
+					</c:when>
+					<c:otherwise>
+							<p:inputText value="" id="statId" style="text-align: left; margin-left: 0px;width:120px;background:#dddddd;" readonly="true"/>
+							<p:watermark for="statId" value="Active" />
+					</c:otherwise>
+					</c:choose>
+					</td>
+				</tr>
+			</table>
+			
+			<div id="buttonsId" style="text-align:center;">
+				<script>
+						
+				</script>
+				<p:commandButton styleClass="blue" value="Save" action="save" oncomplete="if(args.validationFailed){PF('dlgLocation').show();}refreshDatatable();" update=":locationSearch:searchResults,:locationDetails:modalDialog,:locationDetails:msg2,:locationSearch:msg,:locationSearch:locationId" processIds="*" ajax="true" style="display:#{savehideBtn}"/>			
+				<p:commandButton styleClass="blue" value="Save" action="update" oncomplete="if(args.validationFailed){PF('dlgLocation').show();}refreshDatatable();" update=":locationSearch:searchResults,:locationDetails:modalDialog,:locationDetails:msg2,:locationSearch:msg,:locationSearch:locationId" processIds="*" ajax="true" style="display:#{updatehideBtn}"/>
+				<p:commandButton styleClass="blue" value="Clear" processIds="*" actionListener="#{locationMaintenanceServiceAction.add(flowRequestContext)}" update=":locationDetails:modalDialog" ajax="true" oncomplete="PF('dlgLocation').show();" style="display:#{savehideBtn}"/>
+				<p:commandButton id="cancel" styleClass="blue" value="Back" action="cancel" processIds="*" ajax="false" oncomplete="PF('dlgLocation').hide();"/>
+			</div>
+			
+			</fieldset>
+			</p:dialog>
+		</h:form>
+		
+	</ui:define>
+	
+
+</ui:composition>

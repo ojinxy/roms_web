@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+       <secured attributes="ROLE_ROMS_ROAD_CHK_PERFORM" /> 
+        
+       
+     <var name="verifyIdView" class="org.fsl.roms.view.RoadCheckVerifyIdView" />
+     <var name="badges" class="org.fsl.roms.view.BadgeTableBean" />
+     <var name="initiateView" class="org.fsl.roms.view.RoadCheckInitiateView" />
+     <var name="parishList" class="java.util.ArrayList" />
+     <var name="poundList" class="java.util.ArrayList" />
+     <var name="wreckingList" class="java.util.ArrayList" />
+      <var name="staffList" class="java.util.ArrayList" />
+      <var name="courtList" class="java.util.ArrayList" />
+     <var name="offencePlaceList" class="java.util.ArrayList" />
+     <var name="roadOperationList" class="java.util.ArrayList" />
+     <var name="offMandatoryOutcomeList" class="java.util.ArrayList" />
+     <var name="offMandatoryOutcomeIntegerList" class="java.util.ArrayList" />
+     <var name="dlOffenceList" class="java.util.ArrayList" />
+      <var name="mvOffenceList" class="java.util.ArrayList" />
+      <var name="rlOffenceList" class="java.util.ArrayList" />
+      <var name="bdgOffenceList" class="java.util.ArrayList" />
+      <var name="chOffenceList" class="java.util.ArrayList" />
+      <var name="otherOffenceList" class="java.util.ArrayList" />
+     <var name="dlResult" class="fsl.ta.toms.roms.bo.DLCheckResultBO" />
+     <var name="mvResult" class="fsl.ta.toms.roms.bo.VehicleCheckResultBO" />
+     <var name="rlResult" class="fsl.ta.toms.roms.bo.RoadLicCheckResultBO" />
+     <var name="badgeResult" class="fsl.ta.toms.roms.bo.BadgeCheckResultBO" />
+     <var name="taVehicleOffences" class="java.util.ArrayList" />
+     <var name="taPersonOffences" class="java.util.ArrayList" />
+     <var name="ttmsOffences" class="java.util.ArrayList" />
+  	<var name="mvOffenceOutcomes" class="java.util.ArrayList" />
+  	<var name="dlOffenceOutcomes" class="java.util.ArrayList" />
+  	<var name="rlOffenceOutcomes" class="java.util.ArrayList" />
+  	<var name="bdgOffenceOutcomes" class="java.util.ArrayList" />
+  	<var name="chOffenceOutcomes" class="java.util.ArrayList" />
+  	<var name="otOffenceOutcomes" class="java.util.ArrayList" />
+ 	<var name="offenceOutcomesSelected" class="java.util.ArrayList" />
+ 	<var name="recordOffenceOutcomeView" class="org.fsl.roms.view.RecordOffenceOutcomeView" />
+ 	<var name="supportingDetailsView" class="org.fsl.roms.view.SupportingDetailsView" />
+ 	<var name="officeRegionList" class="java.util.ArrayList" />
+	<var name="statusList" class="java.util.ArrayList" />
+	<var name="criteria" class="fsl.ta.toms.roms.search.criteria.impl.RoadCompliancyCriteriaBO" />
+	<var name="dataTable" class="org.fsl.datatable.DataTableMemory" />
+	<var name="nameUtil" class="org.fsl.roms.util.NameUtil" />
+	<var name="currentOffenceOutcomeList" class="java.util.ArrayList" />
+	<var name="roadCheckReviewSummaryBean" class="org.fsl.roms.view.RoadCheckReviewSummaryBean" />
+	<var name="errorMsg" class="java.lang.String" />
+	<var name="offenceParamList" class="java.util.ArrayList" />
+	
+	<!-- Input value for an incomplete compliance object -->
+ 	<input name="complianceBO" required="false" type="fsl.ta.toms.roms.bo.ComplianceBO"/>
+ 	
+ 	<!-- Input value for initateView from Quick Query -->
+ 	<input name="initiateViewFromQuickQuery" required="false" type="org.fsl.roms.view.RoadCheckInitiateView"/>
+ 	 	
+ 	 <on-start>
+		<evaluate expression="nameUtil eq new org.fsl.roms.util.NameUtil()"></evaluate>
+		<evaluate expression="roadCheckServiceAction.isHandHeld(flowRequestContext)"></evaluate>
+		<evaluate expression="roadCheckServiceAction.getParishList"></evaluate> 
+		<evaluate expression="roadCheckServiceAction.findActiveOperationForUser"></evaluate> 
+		<evaluate expression="roadCheckServiceAction.getVehcileMoversList(flowRequestContext)"></evaluate>
+		<evaluate expression="roadCheckServiceAction.getOperationList"></evaluate>
+	</on-start>
+	
+	<action-state id="begin">
+	    <evaluate expression="flowScope.complianceBO != null"/>
+	    <transition on="yes" to="roadCheckInitiate">
+	    	<evaluate expression="roadCheckServiceAction.continueRoadCheck"></evaluate>
+	    </transition>
+	    <transition on="no" to="roadCheckVerifyIdentity">
+	    </transition>
+	</action-state>
+     
+    <view-state id="roadCheckVerifyIdentity" redirect="false" >
+	
+		<transition on="clear" to="roadCheckVerifyIdentity">
+			<evaluate expression="roadCheckServiceAction.clearRoadCheckVerifyIdView"></evaluate>
+		</transition>
+		
+		<transition on="searchTrn" to="initiateRoadCheckTrn">
+		</transition>
+		
+		 <transition on="searchName" to="initiateRoadCheckName"/>
+			
+		<transition on="selectBadge" to="roadCheckInitiate">
+			<evaluate expression="roadCheckServiceAction.selectBadge"></evaluate>
+		</transition>
+		
+		<transition on="initiate" to="initiateRoadCheck"/>
+	
+		
+		<!-- <transition on="searchName" to="nameSearchResults"/> -->
+	
+	
+	</view-state>
+	
+	<action-state id="initiateRoadCheckTrn" >
+			<evaluate expression="roadCheckServiceAction.searchTrn"></evaluate>
+			<transition on="success" to="roadCheckInitiate"></transition>
+			<transition on="error" to="roadCheckVerifyIdentity"></transition>
+	</action-state>
+	
+	<action-state id="initiateRoadCheckName" >
+			<evaluate expression="roadCheckServiceAction.searchBIMS"></evaluate>
+			<transition on="success" to="roadCheckInitiate"></transition>
+			<transition on="error" to="roadCheckVerifyIdentity"></transition>
+	</action-state>
+	
+	<action-state id="initiateRoadCheck" >
+			<evaluate expression="roadCheckServiceAction.initiate"></evaluate>
+			<transition on="success" to="roadCheckInitiate"></transition><!-- need to change back to  roadCheckInitiate-->
+			<transition on="error" to="roadCheckVerifyIdentity"></transition>
+	</action-state>
+	
+	
+
+ 	<view-state id="roadCheckInitiate" redirect="false">
+ 	<on-entry>
+		 <!-- <evaluate expression="roadCheckServiceAction.getParishList"></evaluate> 
+		  <evaluate expression="roadCheckServiceAction.initializeInitiateViegetListsForOperationw"></evaluate>  
+		   <evaluate expression="roadCheckServiceAction.getOffencePlaceList"></evaluate> -->
+		    <!--  <evaluate expression="roadCheckServiceAction.getOperationList"></evaluate>-->
+		    <evaluate expression="roadCheckServiceAction.getListsForOperationMobile()"></evaluate>
+		    <evaluate expression="roadCheckServiceAction.setDriversLicenceAndBadge"></evaluate>
+		    <evaluate expression="roadCheckServiceAction.getListsForOperation(true)"></evaluate> 
+		    <evaluate expression="roadCheckServiceAction.fromQuickQuery"></evaluate> 
+	</on-entry>
+     
+	
+		<transition on="changeOperation" to="roadCheckInitiate">
+			<evaluate expression="roadCheckServiceAction.getListsForOperation(false)"></evaluate>
+		</transition>
+		<transition on="queryMV" to="roadCheckInitiate">
+			<evaluate expression="roadCheckServiceAction.queryMV"></evaluate>
+		</transition>
+		
+		<!-- <transition on="back" to="roadCheckVerifyIdentity"/> -->
+		
+		<!-- <transition on="cancel" to="roadCheckVerifyIdentity">
+			<evaluate expression="roadCheckServiceAction.cancelRoadCheck"></evaluate>
+		</transition>
+	 -->
+	 <transition on="back" to="backFromInitiateRoadCheck"/>
+	 <transition on="cancel" to="cancelRoadCheck"/>
+	 
+		<transition on="performQueries" to="performQueryAction"/>
+		<transition on="proceedWithoutQuery" to="proceedAction"/>
+		
+		<!-- <transition on="backToRecordOffOutcome" to="recordOffenceOutcome"/> 
+		<transition on="backToAddSupportingDet" to="addSupportingDetails">
+		<transition on="backToReviewSummary" to="roadCheckReview"/>
+		-->
+		<transition on="backToRecordOffOutcome" to="backToStep2FromStep1"/>
+		<transition on="backToAddSupportingDet" to="backToStep3FromStep1">
+				<evaluate expression="roadCheckServiceAction.proceedToSupportingDetails"></evaluate>
+		</transition>
+		<transition on="backToReviewSummary" to="backToStep4FromStep1"/>
+	
+	</view-state>
+	
+	<action-state id="backToStep2FromStep1" >
+			<evaluate expression="roadCheckServiceAction.validateInitiate"></evaluate>
+			<transition on="success" to="recordOffenceOutcome"></transition>
+			<transition on="error" to="roadCheckInitiate"></transition>
+	</action-state>
+	
+	<action-state id="backToStep3FromStep1" >
+			<evaluate expression="roadCheckServiceAction.validateInitiate"></evaluate>
+			<transition on="success" to="addSupportingDetails"></transition>
+			<transition on="error" to="roadCheckInitiate"></transition>
+	</action-state>
+	
+	<action-state id="backToStep4FromStep1" >
+			<evaluate expression="roadCheckServiceAction.validateInitiate"></evaluate>
+			<transition on="success" to="roadCheckReview"></transition>
+			<transition on="error" to="roadCheckInitiate"></transition>
+	</action-state>
+	
+	<action-state id="cancelRoadCheck" >
+			<evaluate expression="roadCheckServiceAction.cancelRoadCheck"></evaluate>
+			<transition on="success" to="endState"></transition>
+			<transition on="error" to="roadCheckVerifyIdentity"></transition>
+	</action-state>
+	
+	<action-state id="backFromInitiateRoadCheck" >
+			<evaluate expression="roadCheckServiceAction.backFromInititate"></evaluate>
+			<transition on="success" to="endState"></transition>
+			<transition on="error" to="roadCheckVerifyIdentity"></transition>
+	</action-state>
+	
+	<subflow-state id="subFlowRoadCheckSearch" subflow="road-check/search_road_check"/>
+	
+	<action-state id="performQueryAction" >
+			<evaluate expression="roadCheckServiceAction.performQueries"></evaluate>
+			<transition on="success" to="recordOffenceOutcome"></transition>
+			<transition on="error" to="roadCheckInitiate"></transition>
+	</action-state>
+	
+	<action-state id="proceedAction" >
+			<evaluate expression="roadCheckServiceAction.proceedWithoutQuery"></evaluate>
+			<transition on="success" to="recordOffenceOutcome"></transition>
+			<transition on="error" to="roadCheckInitiate"></transition>
+	</action-state>
+	
+
+	<view-state id="recordOffenceOutcome" redirect="false">
+	 <on-entry>
+		 <evaluate expression="roadCheckServiceAction.initializeOffenceList"></evaluate>
+		<!--  <evaluate expression="roadCheckServiceAction.clearSuportingDetails"></evaluate>   -->
+	</on-entry> 
+		<transition on="testIndicateActionMV" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.testIndicateActionMV(flowRequestContext)"></evaluate>
+		</transition>
+	<transition on="indicateActionMV" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.indicateActionMV"></evaluate>
+		</transition>
+		<transition on="dlAddOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.addDLRow"></evaluate>
+			<evaluate expression="roadCheckServiceAction.clearSuportingDetails"></evaluate>
+		</transition>
+		<transition on="dlDeleteOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.deleteDLRow"></evaluate>
+			<evaluate expression="roadCheckServiceAction.clearSuportingDetails"></evaluate>
+		</transition>
+		<transition on="mvAddOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.addMVRow"></evaluate>
+			<evaluate expression="roadCheckServiceAction.clearSuportingDetails"></evaluate>
+		</transition>
+		<transition on="mvDeleteOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.deleteMVRow"></evaluate>
+			<evaluate expression="roadCheckServiceAction.clearSuportingDetails"></evaluate>
+		</transition>
+		<transition on="rlAddOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.addRLRow"></evaluate>
+			<evaluate expression="roadCheckServiceAction.clearSuportingDetails"></evaluate>
+		</transition>
+		<transition on="chAddOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.addCHRow"></evaluate>
+			<evaluate expression="roadCheckServiceAction.clearSuportingDetails"></evaluate>
+		</transition>
+		
+		<transition on="rlDeleteOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.deleteRLRow"></evaluate>
+			<evaluate expression="roadCheckServiceAction.clearSuportingDetails"></evaluate>
+		</transition>
+		<transition on="bdgAddOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.addBdgRow"></evaluate>
+			<evaluate expression="roadCheckServiceAction.clearSuportingDetails"></evaluate>
+		</transition>
+		<transition on="bdgDeleteOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.deleteBdgRow"></evaluate>
+			<evaluate expression="roadCheckServiceAction.clearSuportingDetails"></evaluate>
+		</transition>
+		<transition on="otherAddOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.addOtherRow"></evaluate>
+			<evaluate expression="roadCheckServiceAction.clearSuportingDetails"></evaluate>
+		</transition>
+		<transition on="otherDeleteOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.deleteOtherRow"></evaluate>
+			<evaluate expression="roadCheckServiceAction.clearSuportingDetails"></evaluate>
+		</transition>
+		
+		<transition on="chDeleteOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.deleteCHRow"></evaluate>
+			<evaluate expression="roadCheckServiceAction.clearSuportingDetails"></evaluate>
+		</transition>
+		<transition on="dlSelectAllOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.selectAllDLOffenceOutcomes"></evaluate>
+		</transition>
+		<transition on="mvSelectAllOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.selectAllMVOffenceOutcomes"></evaluate>
+		</transition>
+		<transition on="rlSelectAllOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.selectAllRLOffenceOutcomes"></evaluate>
+		</transition>
+		<transition on="bdgSelectAllOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.selectAllBdgOffenceOutcomes"></evaluate>
+		</transition>
+		<transition on="otherSelectAllOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.selectAllOtherOffenceOutcomes"></evaluate>
+		</transition>
+		
+		<transition on="chSelectAllOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.selectAllChOffenceOutcomes"></evaluate>
+		</transition>
+		
+		<transition on="mvSelectRowOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.selectMvOffenceOutcomes"></evaluate>
+		</transition>
+		
+		<transition on="dlSelectRowOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.selectDlOffenceOutcomes"></evaluate>
+		</transition>
+		
+		<transition on="rlSelectRowOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.selectRlOffenceOutcomes"></evaluate>
+		</transition>
+		
+		<transition on="bdgSelectRowOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.selectBdgOffenceOutcomes"></evaluate>
+		</transition>
+		
+		<transition on="otSelectRowOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.selectOtOffenceOutcomes"></evaluate>
+		</transition>
+		
+		<transition on="chSelectRowOffenceOutcome" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.selectChOffenceOutcomes"></evaluate>
+		</transition>
+		
+		<transition on="selectWN" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.selectWarningNotice"></evaluate>
+		</transition>
+		
+		<transition on="proceed" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.proceedToSupportingDetails"></evaluate>
+			<set name="flowScope.supportingDetailsExists" value="true"></set>
+		</transition>
+		
+		<transition on="complete" to="recordOffenceOutcome">
+			<evaluate expression="roadCheckServiceAction.completeAndProceedToReview"></evaluate>
+		</transition>
+		
+		<!-- <transition on="proceed" to="proceedToSupportingDeatils"/>
+		<transition on="complete" to="completeProceedToReview"/> -->
+		<transition on="proceedToSupDetails" to="addSupportingDetails"/>
+		<transition on="completeProceedToReviewSum" to="roadCheckReview"/>
+		
+		<transition on="back" to="roadCheckInitiate"/>
+		<!-- <transition on="cancel" to="roadCheckVerifyIdentity">
+			<evaluate expression="roadCheckServiceAction.cancelRoadCheck"></evaluate>
+		</transition>	
+		 -->
+		<transition on="cancel" to="cancelRoadCheck"/>
+		
+		<transition on="backToAddSupportingDet" to="addSupportingDetails">
+			<evaluate expression="roadCheckServiceAction.proceedToSupportingDetails"></evaluate>
+		</transition>
+		<transition on="backToReviewSummary" to="roadCheckReview"/>
+	</view-state>
+	
+	<action-state id="completeProceedToReview" >
+			<evaluate expression="roadCheckServiceAction.completeAndProceedToReview"></evaluate>
+			<transition on="success" to="roadCheckReview"></transition>
+			<transition on="error" to="recordOffenceOutcome"></transition>
+	</action-state>
+	
+	<action-state id="proceedToSupportingDeatils" >
+			<evaluate expression="roadCheckServiceAction.proceedToSupportingDetails"></evaluate>
+			<transition on="success" to="addSupportingDetails">
+							
+			</transition>
+			<transition on="error" to="recordOffenceOutcome">
+			</transition>
+	</action-state>
+	
+	<view-state id="addSupportingDetails" redirect="false">
+	<on-entry>
+		 <evaluate expression="roadCheckServiceAction.getPoundParishList"></evaluate>
+		 <evaluate expression="roadCheckServiceAction.getPoundList"></evaluate> 
+		 <evaluate expression="roadCheckServiceAction.getWreckingList"></evaluate> 
+		 <evaluate expression="roadCheckServiceAction.getWreckingParishList"></evaluate>
+		 <evaluate expression="roadCheckServiceAction.getCourtList"></evaluate>
+		 <evaluate expression="roadCheckServiceAction.getSupportingDetailsForVehicleMoverList"></evaluate> 
+	</on-entry> 
+		<transition on="reviewSummary" to="proceedToReview"/>
+	
+		<transition on="backToInitiate" to="roadCheckInitiate"/>
+		
+		<transition on="back" to="recordOffenceOutcome"/>
+		
+		<!-- <transition on="cancel" to="roadCheckVerifyIdentity">
+			<evaluate expression="roadCheckServiceAction.cancelRoadCheck"></evaluate>
+		</transition>	
+		 -->
+		<transition on="cancel" to="cancelRoadCheck"/>
+		
+		<!-- <transition on="addOwner" to="supportingDetailsOwner">
+			<evaluate expression="roadCheckServiceAction.addFirstWitness"></evaluate>
+		</transition> -->		
+		 
+		<transition on="addFirstWitness" to="supportingDetailsWitness">
+			<evaluate expression="roadCheckServiceAction.addFirstWitness"></evaluate>
+		</transition>
+		
+		<transition on="saveWitness" to="addSupportingDetails">
+			<evaluate expression="roadCheckServiceAction.saveWitness"></evaluate>
+		</transition>
+		
+		<transition on="cancelWitness" to="addSupportingDetails">
+			<evaluate expression="roadCheckServiceAction.cancelWitness"></evaluate>
+		</transition>
+		
+		<transition on="selectAllWitness" to="addSupportingDetails">
+			<evaluate expression="roadCheckServiceAction.selectAllWitness"></evaluate>
+		</transition>
+		
+		<transition on="deleteWitness" to="addSupportingDetails">
+			<evaluate expression="roadCheckServiceAction.deleteWitness"></evaluate>
+		</transition>
+		
+		<transition on="selectWitnessRow" to="supportingDetailsWitness">
+			<evaluate expression="roadCheckServiceAction.selectWitnessRow"></evaluate>
+		</transition>
+		
+		<!-- <transition on="backToReviewSummary" to="roadCheckReview"/> -->
+		<transition on="backToReviewSummary" to="proceedToReview"/>
+		
+		<transition on="searchWreckerDLN" to="addSupportingDetails">
+			<evaluate expression="roadCheckServiceAction.getVehicleMoverFromDLN"></evaluate>
+		</transition>
+		
+		<transition on="searchWreckerVehcile" to="addSupportingDetails">
+			<evaluate expression="roadCheckServiceAction.searchWreckerVehcile"></evaluate>
+		</transition>
+	</view-state>
+	
+	<!-- <view-state id="supportingDetailsOwner" redirect="false">
+	
+		<transition on="saveOwner" to="saveOwnerAction"/>
+		
+		<transition on="cancelOwner" to="addSupportingDetails">
+			<evaluate expression="roadCheckServiceAction.cancelOwner"></evaluate>
+		</transition>
+	</view-state> -->
+	
+	
+	<view-state id="supportingDetailsWitness" redirect="false">
+	
+		<transition on="saveWitness" to="saveWitnessAction"/>
+		
+		<transition on="cancelWitness" to="addSupportingDetails">
+			<evaluate expression="roadCheckServiceAction.cancelWitness"></evaluate>
+		</transition>
+	</view-state>
+	
+	
+	<action-state id="saveWitnessAction" >
+			<evaluate expression="roadCheckServiceAction.saveWitness"></evaluate>
+			<transition on="success" to="addSupportingDetails"></transition>
+			<transition on="error" to="supportingDetailsWitness"></transition>
+	</action-state>
+	
+	
+	<action-state id="proceedToReview" >
+			<evaluate expression="roadCheckServiceAction.proceedToReviewSummary"></evaluate>
+			<transition on="success" to="roadCheckReview"></transition>
+			<transition on="error" to="addSupportingDetails"></transition>
+	</action-state>
+	
+
+	
+	<view-state id="roadCheckReview" redirect="false" view="review_road_check/roadCheckReview.xhtml">
+		<on-entry>
+			<evaluate expression="roadCheckServiceAction.combineOffenceOutcomes(flowRequestContext)"></evaluate>
+		</on-entry>
+		<transition on="printAssociatedDocs" to="roadCheckReview">
+			<evaluate expression="roadCheckServiceAction.printAssociatedDocs()"></evaluate>
+		</transition>
+		<transition on="uploadAssociatedDoc" to="uploadAssociatedDoc_view">
+			<evaluate expression="roadCheckServiceAction.uploadAssociatedDoc(flowRequestContext)"></evaluate>
+		</transition>
+		<transition on="completeRoadCheck" to="completeRoadCheck">
+		</transition>
+		<transition on="toStep5" to="prepareAndPrint"/>
+		<transition on="toStep3" to="decideFromReview"/>
+		<transition on="toStep1" to="roadCheckInitiate"/>
+		<transition on="toStep2" to="recordOffenceOutcome"/>
+		<transition on="cancelUploadDoc" to="roadCheckReview">
+			<evaluate expression="roadCheckServiceAction.cancelUploadDoc(flowRequestContext)"></evaluate>
+		</transition>
+		<transition on="backToInitiate" to="roadCheckInitiate"/>
+		<transition on="backToRecordOffOutcome" to="recordOffenceOutcome"/>
+		<transition on="backToAddSupportingDet" to="addSupportingDetails">
+				<evaluate expression="roadCheckServiceAction.proceedToSupportingDetails"></evaluate>
+		</transition>
+		<transition on="backToPrepareAndPrint" to="prepareAndPrint"/>
+	</view-state>
+	
+	<decision-state id="decideFromReview">
+		<if then="addSupportingDetails" test="flowScope.supportingDetailsExists" else="recordOffenceOutcome"/>
+	</decision-state>
+	
+	
+	
+	<view-state id="uploadAssociatedDoc_view" redirect="false" view="review_road_check/upload_document_view.xhtml">
+		<transition on="uploadDoc">
+			<evaluate expression="roadCheckServiceAction.uploadDoc(flowRequestContext)"></evaluate>
+		</transition>
+		<transition on="backToRoadCheckReview" to="roadCheckReview"/>
+		<transition on="cancelUploadDoc">
+			<evaluate expression="roadCheckServiceAction.cancelUploadDoc(flowRequestContext)"></evaluate>
+		</transition>
+	</view-state>
+	
+	<action-state id="completeRoadCheck" >
+		<evaluate expression="roadCheckServiceAction.completeRoadCheck(flowRequestContext)"></evaluate>
+		<transition on="success" to="prepareAndPrint"></transition>
+		<transition on="error" to="roadCheckReview"></transition>
+		<transition on="terminated_road_op" to="roadCheckReview"></transition>
+		<transition on="terminated_road_op_from_search" to="roadCheckReview"></transition>
+	</action-state>
+	
+	<view-state id="prepareAndPrint" redirect="false"  view="review_road_check/prepareAndPrint.xhtml" >
+		<transition on="printDocs" to="verifyJP">
+			<evaluate expression="roadCheckServiceAction.checkDocumentsFromPrepareAndPrint(flowRequestContext)"></evaluate>
+		</transition>
+		<transition on="backToStep4" to="roadCheckReview"></transition>
+		<transition on="toRoadCheckReview" to="subFlowReviewRoadCheck"/>
+		<transition on="endState" to="endState"/>
+	</view-state>
+	
+	<view-state id="verifyJP" redirect="false" view="review_road_check/jp_print_entry_view.xhtml">
+		<transition on="verifyJP_Trans" to="verifyJP_TransAction">
+		</transition>
+		<transition on="cancelVerifyJP" to="prepareAndPrint">
+		</transition>
+		<transition on="finishedPrinting" to="prepareAndPrint">
+			<set name="flowScope.roadCheckReviewSummaryBean.alreadyPrinted" value="true"></set>
+		</transition>
+	</view-state>
+	
+	<action-state id="verifyJP_TransAction">
+		<evaluate expression="roadCheckServiceAction.verifyJP(flowRequestContext)"></evaluate>
+		<transition on="success" to="verifyJP">
+			
+		</transition>
+		<transition on="error" to="verifyJP"></transition>	
+	</action-state>
+	
+	<subflow-state id="subFlowReviewRoadCheck" subflow="road-check/search_road_check" >
+		<input name="fromRoadCheck" required="true" value="true" type="java.lang.Boolean"/>
+		<input name="complianceBO" required="true" value="flowScope.complianceBO" type="fsl.ta.toms.roms.bo.ComplianceBO"/>
+		<transition on="endState" to="endState"/>
+	</subflow-state>
+	
+	<end-state id="endState" />
+	
+</flow>

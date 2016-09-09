@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://webservices.roms.toms.ta.fsl/" version="1.0" xmlns:tns="http://webservices.roms.toms.ta.fsl/">
+
+  <xs:element name="ErrorSavingException" type="tns:ErrorSavingException"/>
+
+  <xs:element name="InvalidFieldException" type="tns:InvalidFieldException"/>
+
+  <xs:element name="NoRecordFoundException" type="tns:NoRecordFoundException"/>
+
+  <xs:element name="RequiredFieldMissingException" type="tns:RequiredFieldMissingException"/>
+
+  <xs:element name="UserMappingException" type="tns:UserMappingException"/>
+
+  <xs:element name="getAllROMSStaff" type="tns:getAllROMSStaff"/>
+
+  <xs:element name="getAllROMSStaffResponse" type="tns:getAllROMSStaffResponse"/>
+
+  <xs:element name="getStaffByUsername" type="tns:getStaffByUsername"/>
+
+  <xs:element name="getStaffByUsernameResponse" type="tns:getStaffByUsernameResponse"/>
+
+  <xs:element name="isStaffMapped" type="tns:isStaffMapped"/>
+
+  <xs:element name="isStaffMappedResponse" type="tns:isStaffMappedResponse"/>
+
+  <xs:element name="isUserMapped" type="tns:isUserMapped"/>
+
+  <xs:element name="isUserMappedResponse" type="tns:isUserMappedResponse"/>
+
+  <xs:element name="isValidUsernameTAStaffRegionMapping" type="tns:isValidUsernameTAStaffRegionMapping"/>
+
+  <xs:element name="isValidUsernameTAStaffRegionMappingResponse" type="tns:isValidUsernameTAStaffRegionMappingResponse"/>
+
+  <xs:element name="lookupActiveStaff" type="tns:lookupActiveStaff"/>
+
+  <xs:element name="lookupActiveStaffResponse" type="tns:lookupActiveStaffResponse"/>
+
+  <xs:element name="lookupActiveUnmappedStaff" type="tns:lookupActiveUnmappedStaff"/>
+
+  <xs:element name="lookupActiveUnmappedStaffResponse" type="tns:lookupActiveUnmappedStaffResponse"/>
+
+  <xs:element name="lookupActiveUnmappedUsers" type="tns:lookupActiveUnmappedUsers"/>
+
+  <xs:element name="lookupActiveUnmappedUsersResponse" type="tns:lookupActiveUnmappedUsersResponse"/>
+
+  <xs:element name="lookupActiveUsers" type="tns:lookupActiveUsers"/>
+
+  <xs:element name="lookupActiveUsersResponse" type="tns:lookupActiveUsersResponse"/>
+
+  <xs:element name="lookupAllStaff" type="tns:lookupAllStaff"/>
+
+  <xs:element name="lookupAllStaffResponse" type="tns:lookupAllStaffResponse"/>
+
+  <xs:element name="lookupAllUnmappedStaff" type="tns:lookupAllUnmappedStaff"/>
+
+  <xs:element name="lookupAllUnmappedStaffResponse" type="tns:lookupAllUnmappedStaffResponse"/>
+
+  <xs:element name="lookupAllUnmappedUsers" type="tns:lookupAllUnmappedUsers"/>
+
+  <xs:element name="lookupAllUnmappedUsersByCriteria" type="tns:lookupAllUnmappedUsersByCriteria"/>
+
+  <xs:element name="lookupAllUnmappedUsersByCriteriaExceptSpecificUser" type="tns:lookupAllUnmappedUsersByCriteriaExceptSpecificUser"/>
+
+  <xs:element name="lookupAllUnmappedUsersByCriteriaExceptSpecificUserResponse" type="tns:lookupAllUnmappedUsersByCriteriaExceptSpecificUserResponse"/>
+
+  <xs:element name="lookupAllUnmappedUsersByCriteriaResponse" type="tns:lookupAllUnmappedUsersByCriteriaResponse"/>
+
+  <xs:element name="lookupAllUnmappedUsersResponse" type="tns:lookupAllUnmappedUsersResponse"/>
+
+  <xs:element name="lookupAllUsers" type="tns:lookupAllUsers"/>
+
+  <xs:element name="lookupAllUsersResponse" type="tns:lookupAllUsersResponse"/>
+
+  <xs:element name="lookupBIMSStaffType" type="tns:lookupBIMSStaffType"/>
+
+  <xs:element name="lookupBIMSStaffTypeResponse" type="tns:lookupBIMSStaffTypeResponse"/>
+
+  <xs:element name="lookupLMISUser" type="tns:lookupLMISUser"/>
+
+  <xs:element name="lookupLMISUserResponse" type="tns:lookupLMISUserResponse"/>
+
+  <xs:element name="lookupStaffUserMappings" type="tns:lookupStaffUserMappings"/>
+
+  <xs:element name="lookupStaffUserMappingsResponse" type="tns:lookupStaffUserMappingsResponse"/>
+
+  <xs:element name="lookupTAStaff" type="tns:lookupTAStaff"/>
+
+  <xs:element name="lookupTAStaffResponse" type="tns:lookupTAStaffResponse"/>
+
+  <xs:element name="lookupUsersByCriteria" type="tns:lookupUsersByCriteria"/>
+
+  <xs:element name="lookupUsersByCriteriaResponse" type="tns:lookupUsersByCriteriaResponse"/>
+
+  <xs:element name="saveOrUpdateStaffUserMapping" type="tns:saveOrUpdateStaffUserMapping"/>
+
+  <xs:element name="saveOrUpdateStaffUserMappingResponse" type="tns:saveOrUpdateStaffUserMappingResponse"/>
+
+  <xs:element name="saveStaffUserMapping" type="tns:saveStaffUserMapping"/>
+
+  <xs:element name="saveStaffUserMappingResponse" type="tns:saveStaffUserMappingResponse"/>
+
+  <xs:element name="staffExists" type="tns:staffExists"/>
+
+  <xs:element name="staffExistsResponse" type="tns:staffExistsResponse"/>
+
+  <xs:element name="taStaffExistWithTRN" type="tns:taStaffExistWithTRN"/>
+
+  <xs:element name="taStaffExistWithTRNResponse" type="tns:taStaffExistWithTRNResponse"/>
+
+  <xs:element name="updateStaffUserMapping" type="tns:updateStaffUserMapping"/>
+
+  <xs:element name="updateStaffUserMappingResponse" type="tns:updateStaffUserMappingResponse"/>
+
+  <xs:complexType name="lookupAllUnmappedUsers">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="lookupAllUnmappedUsersResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:lmisUserViewBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lmisUserViewBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="currentRoadOperationEndDateNTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="currentRoadOperationId" type="xs:int"/>
+      <xs:element minOccurs="0" name="currentRoadOperationLocation" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentRoadOperationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentRoadOperationStartDateNTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="locationCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="locationDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="passwordHash" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="permissions" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="xs:string"/>
+      <xs:element minOccurs="0" name="username" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="NoRecordFoundException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getStaffByUsername">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="username" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getStaffByUsernameResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:taStaffBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="taStaffBO">
+    <xs:complexContent>
+      <xs:extension base="tns:attendanceDetailsBO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+          <xs:element minOccurs="0" name="fullName" type="xs:string"/>
+          <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+          <xs:element minOccurs="0" name="loginUsername" type="xs:string"/>
+          <xs:element minOccurs="0" name="middleName" type="xs:string"/>
+          <xs:element minOccurs="0" name="officeLocationCode" type="xs:string"/>
+          <xs:element minOccurs="0" name="personId" type="xs:int"/>
+          <xs:element name="scheduled" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="staffId" type="xs:string"/>
+          <xs:element minOccurs="0" name="staffTypeCode" type="xs:string"/>
+          <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="attendanceDetailsBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="attended" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="RequiredFieldMissingException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupLMISUser">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="username" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupLMISUserResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:lmisUserViewBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupBIMSStaffType">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="lookupBIMSStaffTypeResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:taStaffTypeBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="taStaffTypeBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="staffTypeCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="staffTypeDesc" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="staffExists">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="staffId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="staffExistsResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupActiveUnmappedUsers">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="lookupActiveUnmappedUsersResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:lmisUserViewBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupAllStaff">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="lookupAllStaffResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:bimsStaffViewBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="bimsStaffViewBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="badgeStatusCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="badgeUpdateDTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="fullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="genderCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="inspRegNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="locationCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="middleName" type="xs:string"/>
+      <xs:element minOccurs="0" name="staffId" type="xs:string"/>
+      <xs:element minOccurs="0" name="staffType" type="xs:string"/>
+      <xs:element minOccurs="0" name="staffUpdateDTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="trnNbr" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupAllUsers">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="lookupAllUsersResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:lmisUserViewBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupAllUnmappedUsersByCriteriaExceptSpecificUser">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="term" type="xs:string"/>
+      <xs:element minOccurs="0" name="staffId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupAllUnmappedUsersByCriteriaExceptSpecificUserResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:lmisUserViewBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="saveOrUpdateStaffUserMapping">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="staffUserMappingBO" type="tns:staffUserMappingBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="staffUserMappingBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntryBO" type="tns:auditEntryBO"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="fullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="midName" type="xs:string"/>
+      <xs:element minOccurs="0" name="officeLocation" type="xs:string"/>
+      <xs:element minOccurs="0" name="staffId" type="xs:string"/>
+      <xs:element minOccurs="0" name="staffType" type="xs:string"/>
+      <xs:element minOccurs="0" name="staffUsername" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="auditEntryBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="createDTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="createUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="updateDTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="updateUsername" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="saveOrUpdateStaffUserMappingResponse">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="InvalidFieldException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ErrorSavingException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupActiveUsers">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="lookupActiveUsersResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:lmisUserViewBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupAllUnmappedUsersByCriteria">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="term" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupAllUnmappedUsersByCriteriaResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:lmisUserViewBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupActiveUnmappedStaff">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="lookupActiveUnmappedStaffResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:bimsStaffViewBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupStaffUserMappings">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="staffUserMappingCriteriaBO" type="tns:staffUserMappingCriteriaBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="staffUserMappingCriteriaBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="loginUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="midName" type="xs:string"/>
+      <xs:element minOccurs="0" name="officeLocationCode" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="selectedRegions" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="staffId" type="xs:string"/>
+      <xs:element minOccurs="0" name="staffType" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupStaffUserMappingsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:staffUserMappingBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getAllROMSStaff">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="getAllROMSStaffResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:taStaffBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupTAStaff">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="staffUserMappingCriteriaBO" type="tns:staffUserMappingCriteriaBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupTAStaffResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:staffUserMappingBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupUsersByCriteria">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="term" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupUsersByCriteriaResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:lmisUserViewBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="taStaffExistWithTRN">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="trnNbr" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="taStaffExistWithTRNResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupActiveStaff">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="lookupActiveStaffResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:bimsStaffViewBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="saveStaffUserMapping">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="staffUserMappingBO" type="tns:staffUserMappingBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="saveStaffUserMappingResponse">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="updateStaffUserMapping">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="staffUserMappingBO" type="tns:staffUserMappingBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="updateStaffUserMappingResponse">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="lookupAllUnmappedStaff">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="lookupAllUnmappedStaffResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:bimsStaffViewBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="isValidUsernameTAStaffRegionMapping">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="staffId" type="xs:string"/>
+      <xs:element minOccurs="0" name="username" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="isValidUsernameTAStaffRegionMappingResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="UserMappingException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="isUserMapped">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="username" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="isUserMappedResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="isStaffMapped">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="staffId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="isStaffMappedResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

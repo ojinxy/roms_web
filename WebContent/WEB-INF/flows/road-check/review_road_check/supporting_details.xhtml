@@ -1,0 +1,432 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	
+<ui:fragment id="page">	
+		<p:panelGrid style="margin-top:5px;width:100%" id="gridSupportingDetails" >  
+		    <p:row id="row1" rendered="#{roadCheckReviewSummaryBean.pound != null}">
+		  
+				<p:column>
+					<h3 class="ui-widget-header header-removed page-sub-header">Pound Information</h3>
+					<p:panelGrid style="margin-top:5px;width:100%" id="gridPoundDetails">
+
+								
+
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Name :"></h:outputText></b>
+					  			<h:outputText value="#{roadCheckReviewSummaryBean.pound.poundName}"></h:outputText>
+							</p:column>
+							<p:column>
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Description :"></h:outputText></b>
+					  			<h:outputText value="#{roadCheckReviewSummaryBean.pound.shortDesc}"></h:outputText>
+							</p:column>
+						</p:row>
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Number of Lots :"></h:outputText></b>
+					  			<h:outputText value="#{roadCheckReviewSummaryBean.pound.numberOfLots}"></h:outputText>
+							</p:column>
+							<p:column>
+								<b style="padding-left:1px;width: 153px;display: inline-block;"><h:outputText value="Number of Parking Spaces :"></h:outputText></b>
+					  			<h:outputText value="#{roadCheckReviewSummaryBean.pound.numberOfParkingSpaces}"></h:outputText>
+							</p:column>
+						</p:row>
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Address Line 1 :"></h:outputText></b>
+					  			<h:outputText value="#{roadCheckServiceAction.getAddressLine1(roadCheckReviewSummaryBean.pound.streetName,roadCheckReviewSummaryBean.pound.markText,
+					  				roadCheckReviewSummaryBean.pound.streetNo)}"></h:outputText>
+							</p:column>
+							<p:column>
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Address Line 2 :"></h:outputText></b>
+					  			<h:outputText  value="#{roadCheckServiceAction.getAddressLine1(roadCheckReviewSummaryBean.pound.poBoxNo,roadCheckReviewSummaryBean.pound.poLocationName,
+					  				roadCheckReviewSummaryBean.pound.parishName)}" escape="false"></h:outputText>
+							</p:column>
+						</p:row>
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Mobile :"></h:outputText></b>
+					  			<h:outputText value="#{roadCheckReviewSummaryBean.pound.telephoneCell}"></h:outputText>
+							</p:column>
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Work :"></h:outputText></b>
+					  			<h:outputText value="#{roadCheckReviewSummaryBean.pound.telephoneWork}"></h:outputText>
+							</p:column>
+							<!-- <p:column>
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Home :"></h:outputText></b>
+					  			<h:outputText value="#{roadCheckReviewSummaryBean.pound.telephoneHome}"></h:outputText>
+							</p:column> -->
+						</p:row>
+						   
+					</p:panelGrid>
+				</p:column>
+		    </p:row>
+			<p:row id="row2" rendered="#{roadCheckReviewSummaryBean.wreckingCompany != null}">
+				<p:column>
+						<h3 class="ui-widget-header header-removed page-sub-header">Wrecker Company Information</h3>
+					<p:panelGrid style="margin-top:5px;width:100%" id="gridWreckinConpanyDetails">
+	
+						
+
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Name :"></h:outputText></b>
+					  			<h:outputText value="#{roadCheckReviewSummaryBean.wreckingCompany.companyName}"></h:outputText>
+							</p:column>
+							<p:column>
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Description :"></h:outputText></b>
+					  			<h:outputText value="#{roadCheckReviewSummaryBean.wreckingCompany.shortDesc}"></h:outputText>
+							</p:column>
+						</p:row>
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Address Line 1 :"></h:outputText></b>
+					  			<h:outputText value="#{roadCheckServiceAction.getAddressLine1(roadCheckReviewSummaryBean.wreckingCompany.streetName,roadCheckReviewSummaryBean.wreckingCompany.markText,
+					  				roadCheckReviewSummaryBean.wreckingCompany.streetNo)}"></h:outputText>
+							</p:column>
+							<p:column>
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Address Line 2 :"></h:outputText></b>
+					  			<h:outputText  value="#{roadCheckServiceAction.getAddressLine1(roadCheckReviewSummaryBean.wreckingCompany.poBoxNo,roadCheckReviewSummaryBean.wreckingCompany.poLocationName,
+					  				roadCheckReviewSummaryBean.wreckingCompany.parishName)}" escape="false"></h:outputText>
+							</p:column>
+						</p:row>
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Mobile :"></h:outputText></b>
+					  			<h:outputText value="#{roadCheckReviewSummaryBean.wreckingCompany.telephoneCell}"></h:outputText>
+							</p:column>
+							<p:column>
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Contact Person :"></h:outputText></b>
+					  			<h:outputText value="#{nameUtil.getLastNameCapsFirstNameMiddleName(roadCheckReviewSummaryBean.wreckingCompany.contactPersonLastName,roadCheckReviewSummaryBean.wreckingCompany.contactPersonFirstName,roadCheckReviewSummaryBean.wreckingCompany.contactPersonMiddleName)}"></h:outputText>
+							</p:column>
+							<!-- <p:column>
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Home :"></h:outputText></b>
+					  			<h:outputText value="#{roadCheckReviewSummaryBean.wreckingCompany.telephoneHome}"></h:outputText>
+							</p:column> -->
+						</p:row>
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Work :"></h:outputText></b>
+					  			<h:outputText value="#{roadCheckReviewSummaryBean.wreckingCompany.telephoneWork}"></h:outputText>
+							</p:column>
+							
+						</p:row>           
+					</p:panelGrid>
+				</p:column>
+		    </p:row>
+		    <p:row id="row8" rendered="#{supportingDetailsView.wreckerVehicleBO != null and supportingDetailsView.wreckerVehicleBO.plateRegNo != null and supportingDetailsView.wreckerVehicleBO.plateRegNo != ''}">
+				<p:column>
+					<h3 class="ui-widget-header header-removed page-sub-header">Wrecker Vehicle Information</h3>
+					<p:panelGrid style="margin-top:5px;width:100%" id="gridWreckerVehicleDetails">
+		
+							
+
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Plate Number :"></h:outputText></b>
+					  			<h:outputText value="#{supportingDetailsView.wreckerVehicleBO.plateRegNo}"></h:outputText>
+							</p:column>
+							<p:column>
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Make Description :"></h:outputText></b>
+					  			<h:outputText value="#{supportingDetailsView.wreckerVehicleBO.makeDescription}"></h:outputText>
+							</p:column>
+						</p:row>
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Model :"></h:outputText></b>
+					  			<h:outputText value="#{supportingDetailsView.wreckerVehicleBO.model}"></h:outputText>
+							</p:column>
+							<p:column>
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Engine Number :"></h:outputText></b>
+					  			<h:outputText  value="#{supportingDetailsView.wreckerVehicleBO.engineNo}" escape="false"></h:outputText>
+							</p:column>
+						</p:row>
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Colour :"></h:outputText></b>
+					  			<h:outputText value="#{supportingDetailsView.wreckerVehicleBO.colour}"></h:outputText>
+							</p:column>
+							<p:column>
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Chassis Number :"></h:outputText></b>
+					  			<h:outputText value="#{supportingDetailsView.wreckerVehicleBO.chassisNo}"></h:outputText>
+							</p:column>
+						</p:row>
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Year :"></h:outputText></b>
+					  			<h:outputText value="#{supportingDetailsView.wreckerVehicleBO.year}"></h:outputText>
+							</p:column>
+							<p:column>
+							</p:column>
+						</p:row>           
+					</p:panelGrid>
+				</p:column>
+		    </p:row>
+		    <p:row id="row9" rendered="#{supportingDetailsView.vehicleMoverType eq 'WD' or supportingDetailsView.vehicleMoverType eq 'OT'  and supportingDetailsView.vehicleMoverBO ne null}">
+				<p:column>
+					<h3 class="ui-widget-header header-removed page-sub-header">
+						<c:if test="#{supportingDetailsView.vehicleMoverType eq 'WD'}">
+							Wrecker Driver Information
+						</c:if>
+						<c:if test="#{supportingDetailsView.vehicleMoverType eq 'OT'}">
+							Vehicle Mover Information
+						</c:if>
+					</h3>
+					<p:panelGrid style="margin-top:5px;width:100%" id="gridVehicleMoverOTWDDetails" >
+
+
+	
+						<p:row >
+						<p:column>
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Driver's Licence #:"></h:outputText></b>
+					  			<h:outputText value="#{supportingDetailsView.vehicleMoverBO.dlNo}"></h:outputText>
+							</p:column>
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Name :"></h:outputText></b>
+					  			<h:outputText value="#{supportingDetailsView.vehicleMoverBO.fullName}" rendered="#{supportingDetailsView.vehicleMoverBO.dlNo ne null and supportingDetailsView.vehicleMoverBO.dlNo ne ''}"></h:outputText>
+							</p:column>
+						</p:row>           
+					</p:panelGrid>
+				</p:column>
+		    </p:row>
+		    <p:row id="row10" rendered="#{supportingDetailsView.vehicleMoverType eq 'IE' or supportingDetailsView.vehicleMoverType eq 'TA' or supportingDetailsView.vehicleMoverType eq 'PO' and supportingDetailsView.vehicleMoverBO ne null}">
+				<p:column>
+				<h3 class="ui-widget-header header-removed page-sub-header">Vehicle Mover Information</h3>
+				
+					<p:panelGrid style="margin-top:5px;width:100%" id="gridVehicleMoverDetails" >
+			
+								
+						<p:row >
+						<p:column>
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Team Position:"></h:outputText></b>
+					  			<c:if test="#{supportingDetailsView.vehicleMoverType eq 'PO'}">
+										Police Officer
+								</c:if>
+								<c:if test="#{supportingDetailsView.vehicleMoverType eq 'IE'}">
+										ITA Examiner
+								</c:if>
+								<c:if test="#{supportingDetailsView.vehicleMoverType eq 'TA'}">
+										Transport Authority Inspector
+								</c:if>
+							</p:column>
+							<p:column style="width:50%" rendered="#{supportingDetailsView.vehicleMoverType ne 'PO'}">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Name :"></h:outputText></b>
+					  			<h:outputText value="#{supportingDetailsView.vehicleMoverBO.fullName}"></h:outputText>
+							</p:column>
+							<p:column style="width:50%" rendered="#{supportingDetailsView.vehicleMoverType eq 'PO'}">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Name :"></h:outputText></b>
+					  			<h:outputText value="#{roadCheckServiceAction.getPoliceOfficerNameForDisplay(supportingDetailsView.vehicleMoverBO.getPersonId())}"></h:outputText>
+							</p:column>
+						</p:row>           
+					</p:panelGrid>
+				</p:column>
+		    </p:row>
+		    <p:row id="row3" rendered="#{initiateView.plateRegNo != null and initiateView.plateRegNo.trim() != ''}">
+				<p:column>
+					<h3 class="ui-widget-header header-removed page-sub-header">Motor Vehicle Information</h3>
+					<p:panelGrid style="margin-top:5px;width:100%" id="gridVehicleDetails">
+
+							
+		
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Plate Number :"></h:outputText></b>
+					  			<h:outputText value="#{initiateView.plateRegNo}" style="text-transform: uppercase"></h:outputText>
+							</p:column>
+							<p:column>
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Make Description :"></h:outputText></b>
+					  			<h:outputText value="#{initiateView.makeDescription}"></h:outputText>
+							</p:column>
+						</p:row>
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Model :"></h:outputText></b>
+					  			<h:outputText value="#{initiateView.model}"></h:outputText>
+							</p:column>
+							<p:column>
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Engine Number :"></h:outputText></b>
+					  			<h:outputText  value="#{initiateView.engineNo}" escape="false"></h:outputText>
+							</p:column>
+						</p:row>
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Colour :"></h:outputText></b>
+					  			<h:outputText value="#{initiateView.colour}"></h:outputText>
+							</p:column>
+							<p:column>
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Chassis Number :"></h:outputText></b>
+					  			<h:outputText value="#{initiateView.chassisNo}"></h:outputText>
+							</p:column>
+						</p:row>
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Year :"></h:outputText></b>
+					  			<h:outputText value="#{initiateView.year}"></h:outputText>
+							</p:column>
+							<p:column>
+							</p:column>
+						</p:row>           
+					</p:panelGrid>
+				</p:column>
+		    </p:row>
+		    <p:row id="row4" rendered="#{supportingDetailsView.directiveParam ne null or supportingDetailsView.inspectorParam ne null or supportingDetailsView.allegation ne null or supportingDetailsView.noOfPassengers}">
+				<p:column>
+				<h3 class="ui-widget-header header-removed page-sub-header">Other Information</h3>
+					<p:panelGrid style="margin-top:5px;width:100%" columns="4" id="gridOtherDetails" columnClasses="smallLbl,,smallLbl">							
+							<p:column  rendered="#{supportingDetailsView.directiveParam ne null and supportingDetailsView.directiveParam ne '' }">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Directive of Inspector :"></h:outputText></b>
+							</p:column>
+							<p:column  rendered="#{supportingDetailsView.directiveParam ne null and supportingDetailsView.directiveParam ne '' }">
+					  			<h:outputText value="#{supportingDetailsView.directiveParam}"></h:outputText>
+							</p:column>
+							<p:column  rendered="#{supportingDetailsView.inspectorParam ne null and  supportingDetailsView.inspectorParam.fullName ne null and supportingDetailsView.inspectorParam.fullName ne ''}">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Inspector Threatened :"></h:outputText></b>
+							</p:column>
+							<p:column  rendered="#{supportingDetailsView.inspectorParam ne null and  supportingDetailsView.inspectorParam.fullName ne null and supportingDetailsView.inspectorParam.fullName ne ''}">
+					  			<h:outputText value="#{supportingDetailsView.inspectorParam.fullName}"></h:outputText>
+							</p:column>
+							<p:column  rendered="#{supportingDetailsView.allegation ne null and supportingDetailsView.allegation ne '' }">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Allegation :"></h:outputText></b>
+							</p:column>
+							<p:column  rendered="#{supportingDetailsView.allegation ne null and supportingDetailsView.allegation ne '' }">
+					  			<h:outputText value="#{supportingDetailsView.allegation}"></h:outputText>
+							</p:column>
+							<p:column  rendered="#{supportingDetailsView.noOfPassengers ne null}">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="No. of Passengers: "></h:outputText></b>
+							</p:column>
+							<p:column  rendered="#{supportingDetailsView.noOfPassengers ne null}">
+					  			<h:outputText value="#{supportingDetailsView.noOfPassengers}"></h:outputText>
+							</p:column>
+
+          					<p:column >
+									<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText style="visibility:hidden" value="Allegation :"></h:outputText></b>
+							</p:column>
+							<p:column >
+						  			
+							</p:column>
+
+					</p:panelGrid>
+				</p:column>
+		    </p:row>
+		    <p:row id="row5" rendered="#{roadCheckReviewSummaryBean.court != null}">
+				<p:column>
+					<h3 class="ui-widget-header header-removed page-sub-header">Court Information</h3>
+					<p:panelGrid style="margin-top:5px;width:100%" id="gridCourtDetails">
+		
+								
+
+
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Initial Court Date :"></h:outputText></b>
+					  			<h:outputText value="#{supportingDetailsView.courtDateTime}">
+					  				<fsl:dateTimeConverter showTime="true" />
+					  			</h:outputText>
+							</p:column>
+							<p:column>
+								<b style="padding-left:1px;width: 60px;display: inline-block;"><h:outputText value="Court :"></h:outputText></b>
+					  			<h:outputText value="#{roadCheckReviewSummaryBean.court.shortDescription}"></h:outputText>
+							</p:column>
+						</p:row>
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Location :"></h:outputText></b>
+					  			<h:outputText value="#{roadCheckReviewSummaryBean.court.parishName}"></h:outputText>
+							</p:column>
+							<p:column>
+							</p:column>
+						</p:row>          
+					</p:panelGrid>
+				</p:column>
+		    </p:row>
+		    
+		    <p:row id="row8" rendered="#{supportingDetailsView.issueToOwner}">
+				<p:column>
+					<h3 class="ui-widget-header header-removed page-sub-header">Owner Information</h3>
+					<p:panelGrid style="margin-top:5px;width:100%" id="gridOwnerDetails">
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="TRN :"></h:outputText></b>
+					  			<h:outputText value="#{supportingDetailsView.owner.trnNbr}"></h:outputText>
+							</p:column>
+							<p:column>
+							</p:column>
+						</p:row>    
+						<p:row >
+							<p:column style="width:50%">
+								<b style="padding-left:1px;width: 150px;display: inline-block;"><h:outputText value="Owner Name :"></h:outputText></b>
+					  			<h:outputText value="#{supportingDetailsView.owner.firstName} #{supportingDetailsView.owner.lastName}"></h:outputText>
+							</p:column>
+							<p:column>
+							</p:column>
+						</p:row>  					          
+					</p:panelGrid>
+				</p:column>
+		    </p:row>
+		    
+		    <p:row id="row6" rendered="#{(supportingDetailsView.witnessList != null or supportingDetailsView.witnessList.size gt 0) &amp;&amp; recordOffenceOutcomeView.warningNoticeSelected}">
+				<p:column>
+					<h3 class="ui-widget-header header-removed page-sub-header">Witness Information</h3>
+					<p:dataTable value="#{supportingDetailsView.witnessList }" var="witness" rowIndexVar="index" id="tableWitnesses"
+					rows="10" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom" 
+					currentPageReportTemplate="Results: {startRecord}-{endRecord} of {totalRecords}" rowsPerPageTemplate="10, 50, 100"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+						 <f:facet name="header">
+							<!-- Witness(es)-->
+						 </f:facet>
+				 		<p:column headerText="Name">
+				         			<h:outputText value="#{nameUtil.getLastNameCapsFirstNameMiddleName(witness.firstName,witness.lastName,witness.middleName)}"/>
+				         </p:column>
+		         		<p:column headerText="Address">
+					  			<h:outputText value="#{roadCheckServiceAction.getAddressLine1(witness.addressView.streetName,witness.addressView.markText,
+					  				witness.addressView.streetNo)}"></h:outputText>
+					  			<h:outputText value=", " rendered="#{roadCheckServiceAction.getAddressLine1(witness.addressView.streetName,witness.addressView.markText,
+					  				witness.addressView.streetNo) ne ''}"/>
+					  			<h:outputText  value="#{roadCheckServiceAction.getAddressLine2(witness.addressView.poBoxNo,witness.addressView.poLocationName,
+					  				witness.parishDesc)}" escape="false"></h:outputText>
+						</p:column>
+						<p:column headerText="Phone Number">
+										
+							  	<h:outputText value="#{roadCheckServiceAction.withnessPhoneNumber(witness)}"></h:outputText>
+						</p:column>	
+				
+					</p:dataTable>
+					
+				</p:column>
+		    </p:row>
+		    <p:row id="row7" rendered="#{supportingDetailsView.comment != null and supportingDetailsView.comment.trim() !=''}">
+				<p:column>
+					<h3 class="ui-widget-header header-removed page-sub-header">Additional Comments</h3>
+					<p:panelGrid style="margin-top:5px;width:100%" id="gridAdditionalComments">
+			
+							
+		
+						<p:row>
+							<p:column style="width: 130px;"> 
+								<b style="padding-left:1px;width: 130px;display: inline-block;"><h:outputText value="Comment :"></h:outputText></b>
+							</p:column>
+							<p:column colspan="2"> 
+					  			<h:outputText value="#{supportingDetailsView.comment}"></h:outputText>
+							</p:column>
+						</p:row>           
+					</p:panelGrid>
+				</p:column>
+		    </p:row>
+		</p:panelGrid>  
+		<p:commandLink id="butEditSupportDetails" widgetVar="butEditSupportDetails" style="width: 50px;float: right;"
+			disabled="#{roadCheckReviewSummaryBean.getDocViews() != null}" action="toStep3" ajax="false" rendered="#{! roadCheckReviewSummaryBean.isViewDetailsScreen()}">
+			<span class="icon icon-edit icon-large"></span>
+		</p:commandLink>
+		<p:tooltip for="butEditSupportDetails" value="Edit supporting details."/>
+</ui:fragment>
+</ui:composition>

@@ -1,0 +1,397 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/WEB-INF/newTemplate.xhtml">
+
+	<ui:define name="title">Offence Maintenance </ui:define>
+	<ui:define name="pageHeader"></ui:define>
+    
+    <ui:define name="content">
+    	
+    	<script>
+    	//<![CDATA[
+    	function  replaceText(source, find, replace)
+    	{
+    		try
+    		{
+    		var reg = new RegExp("[Drivers_Name]");
+			source = source.replace(reg,replace);
+			
+			reg = null;
+			}catch(e)
+			{
+				//alert(e);
+			}
+			
+			//return source;
+    	
+    	}
+    	
+    	
+    	
+		var ids = new Array();
+		//Params 
+		var paramValues = 
+					[
+			   
+			   {
+			        "VehicleType":["[Vehicle_Type]","<span class='param'>Motor Bus</span>"],
+			        "PlateNumber": ["[Plate_Number]","<span class='param'>PQ1051</span>"],
+			        "Route": ["[Route]","<span class='param'>Kingston to May Pen via Spanish Town Road</span>"],
+			        "ParishCommitted": ["[Parish_of_Offence]","<span class='param'>St. Andrew</span>"],
+			       	"RouteStart": ["[Route_Start]","<span class='param'>Kingston</span>"],
+			        "RouteEnd": ["[Route_End]","<span class='param'>May Pen</span>"],
+			        "Artery": ["[Artery]","<span class='param'>Marcus Garvey Drive</span>"],
+			        "InspectorThreatened": ["[Inspector_Threatened]","<span class='param'>Keith Brooks</span>"],
+			        "DirectiveOfInspect": ["[Directive_of_Inspector]","<span class='param'>remove vehicle</span>"],
+			         "ParishOfOffender": ["[Parish_of_Offender]","<span class='param'>Kingston</span>"],
+			         "NOP": ["[Number_of_Passengers]","<span class='param'>15</span>"],
+			         "Seat": ["[Seating_capacity]","<span class='param'>12</span>"],
+			        "Driver" : ["[Drivers_Name]","<span class='param'>Winston Jones</span>"],
+			        "LType" : ["[Licence_Type]","<span class='param'>Route Taxi</span>"]
+			    }
+						];
+		$(document).ready(function(){
+		$('legend').removeClass();
+		$('span.ui-fieldset-toggler').css('float','right');
+		$('legend span').click( 
+		  function() {
+		    $('legend').removeClass();
+		 }); 
+		$('legend').hover( 
+		  function() {
+		    $('legend').removeClass();
+		 }); 
+		
+
+		
+		//Takes values from select list and add to textarea
+		$('#transBtn').click(function (){
+
+				var y = $('#offenceMaintenanceDetails\\:tabView\\:mySelect option:selected').val();
+				
+				var id = $('#offenceMaintenanceDetails\\:tabView\\:mySelect option:selected').text();
+				ids.push(id);
+				$('#offenceMaintenanceDetails\\:textAreaId').insertAtCaret(y);
+				var output = $( "#offenceMaintenanceDetails\\:textAreaId" ).val();
+				updatePreview(paramValues,output);	
+				});
+		
+		//Gets value of selected item in select  list if double clicked and added to text area
+		$("#offenceMaintenanceDetails\\:tabView\\:mySelect_input").dblclick(function () {
+				var y = $('#offenceMaintenanceDetails\\:tabView\\:mySelect option:selected').val();
+				var id = $('#offenceMaintenanceDetails\\:tabView\\:mySelect option:selected').text();
+				
+				 ids.push(id);
+				 $('#offenceMaintenanceDetails\\:textAreaId').insertAtCaret(y);
+				 var output = $( "#offenceMaintenanceDetails\\:textAreaId" ).val();
+				 updatePreview(paramValues,output);
+			}).trigger('change');
+	
+	
+		
+		previewOffence();
+		
+		
+		$('.getData').click(function(){
+				/*var x=$('#offenceMaintenanceDetails\\:textAreaId').val();*/
+				//alert('update button clicked');
+			var dx = $('#offenceMaintenanceDetails\\:textAreaId').val();
+			//alert(dx); 
+			
+		    		
+			
+			 	if((dx.indexOf("[Vehicle_Type]") > -1))
+					 	ids.push(3);
+				if((dx.indexOf("[Plate_Number]") > -1))
+					 	ids.push(4);
+				if((dx.indexOf("[Route]") > -1))
+					 	ids.push(5);
+				if((dx.indexOf("[Parish_of_Offence]") > -1))
+					 	ids.push(6);
+				if((dx.indexOf("[Route_Start]") > -1))
+					 	ids.push(7);
+				if((dx.indexOf("[Route_End]") > -1))
+					 	ids.push(8);
+				if((dx.indexOf("[Artery]") > -1))
+					 	ids.push(9);
+				if((dx.indexOf("[Inspector_Threatened]") > -1))
+					 	ids.push(2);
+				if((dx.indexOf("[Directive_of_Inspector]") > -1))
+					 	ids.push(1);
+				if((dx.indexOf("[Parish_of_Offender]") > -1))
+					 	ids.push(12);
+				if((dx.indexOf("[Number_of_Passengers]") > -1))
+					 	ids.push(13);
+				if((dx.indexOf("[Seating_capacity]") > -1))
+					 	ids.push(14);
+				if((dx.indexOf("[Drivers_Name]") > -1))
+					 	ids.push(10);
+				if((dx.indexOf("[Licence_Type]") > -1))
+					 	ids.push(11);
+				$('#offenceMaintenanceDetails\\:paramsListId').val(ids);//set array of paramIds selected;
+					 	//alert(ids);
+		});
+				
+		$.fn.extend({
+						insertAtCaret: function(myValue) {
+					
+						var val = $( "#offenceMaintenanceDetails\\:textAreaId" ).val();
+						var startPos = this[0].selectionStart;
+						var endPos = this[0].selectionEnd;
+						var scrollTop = this[0].scrollTop;
+						var tags = [];
+    					var arrayValue;
+						
+						if((this[0].selectionStart == '0') || (this[0].selectionStart == '0'))
+						{
+							if(val.length == '0')
+							{
+								this.val("["+myValue+"]");
+								//updatePreview(paramValues,val);
+							}
+							else
+								{
+									this.val(val.substring(0, startPos) + "["+myValue+"]" + val.substring(endPos,this.val().length));
+									//updatePreview(paramValues,val);
+								}
+						}
+						else 
+						{
+							this.val(val.substring(0, startPos) +" " + "["+myValue+"]" + val.substring(endPos,this.val().length));
+							//updatePreview(paramValues,val);
+						}
+						}
+				});
+			
+			
+		});
+		
+		function previewOffence()
+			{
+				 
+				$('#offenceMaintenanceDetails\\:textAreaId').bind("input focus", function(e){
+			  		//alert("called");
+					  var output = e.target.value;
+						updatePreview(paramValues,output);
+				});
+				$('#offenceMaintenanceDetails\\:textAreaId').trigger("focus");
+			}
+			
+			function updatePreview(params,data){
+			//alert();
+			var dataParams = new Array();  
+			var paramValues = params;
+			var output = data;
+			$.each(paramValues,function(i,el)
+			{
+			   //alert(el.VehicleType);
+				   var words = [];
+				    var v = el.VehicleType;
+				    var pn = el.PlateNumber;
+				    var rt = el.Route;
+				    var pcf = el.ParishCommitted;
+				    var rtS = el.RouteStart;
+				    var rtE = el.RouteEnd;
+				    var art = el.Artery;
+				    var ins = el.InspectorThreatened;
+				    var doI = el.DirectiveOfInspect;
+				    var poO = el.ParishOfOffender;
+				    var no = el.NOP;
+				    var seat = el.Seat;
+				    var dn = el.Driver;
+				    var lt = el.LType;
+				    var id ;
+				    
+				  
+				    for(var x = 0;x  < output.length;x++)
+				    {
+				    
+				     output = output.replace(v[0],v[1]);
+				    
+				     output = output.replace(pn[0],pn[1]);
+				     output = output.replace(rt[0],rt[1]);
+				     output = output.replace(pcf[0],pcf[1]);
+				     output = output.replace(rtS[0],rtS[1]);
+				     output = output.replace(rtE[0],rtE[1]);
+				     output = output.replace(art[0],art[1]);
+				     output = output.replace(ins[0],ins[1]);
+				     output = output.replace(doI[0],doI[1]);
+				     output = output.replace(poO[0],poO[1]);
+				     output = output.replace(no[0],no[1]);
+				     output = output.replace(seat[0],seat[1]); 
+				     output = output.replace(dn[0], dn[1]);
+				     output = output.replace(lt[0],lt[1]);
+				     }
+				     
+				  //#fbeb1f
+				  	$('#offenceMaintenanceDetails\\:paramsListId').val(ids);//set array of paramIds selected;
+				  	//var dfgfd = $('#offenceMaintenanceDetails\\:paramsListId').val();//set array of paramIds selected;
+				  	//alert(dfgfd);
+				         $("#previewId").html(output);
+					//alert(ids);
+			});
+			}
+		//]]>
+		</script>
+    
+    	
+		<h:form styleClass="form" id="offenceMaintenanceDetails">
+			 <div class="tabs"><a href="#">#{displaySaveBtn == 'none'?'Edit ':'Add '} Offence Details </a></div>
+			 <div class="main borders">
+			
+			<fieldset>
+			
+			 <p:messages autoupdate="true" id="msg2" closable="true"/>
+			
+			<div style="margin:10px 0 20px 20px;">
+				<div style="margin:10px 0 0px 0px;">	
+				<div style="margin:10px 0 0 0;">
+				<span style="padding-left:1px;width: 155px;display: inline-block;">
+					<h:outputText value="Offence Number:" />
+					<h:outputText value="*" styleClass="required" />
+				</span>
+					<c:choose>
+						<c:when test="#{hideActive != true}">
+							
+								<p:inputMask value="#{offence.offenceId}" id="offenceId" style="margin-left:0px;text-align: left;" mask="9?999" maxlength="4" placeHolder=" " size="40"/>
+						</c:when>
+						<c:otherwise>	
+							<p:inputText value="" id="offenceIdNew" style="text-align: left;background:#dddddd;" readonly="true" maxlength="40" size="40" />
+							<p:watermark for="offenceIdNew" value="#{offence.offenceId}" />
+							<h:inputHidden id="origoffenceIdNew" value="#{offence.offenceId}"></h:inputHidden>
+						</c:otherwise>
+					</c:choose>
+					
+					
+					
+					
+				</div>
+				</div>
+				<div style="margin:10px 0 40px 0px;">	
+				<div style="margin:10px 0 0 0;">
+					<h:outputText value="Offence Name (Short):" />
+					<h:outputText value="*" styleClass="required" />
+					<p:inputText value="#{offence.shortDescription}" id="offenceName" style="margin-left:8px;text-align: left;" 
+							maxlength="40" size="40" />
+				</div>
+				<div style="margin:10px 0 0 0;">
+					<h:outputText value="Description:" />
+					<h:outputText value="*" styleClass="required" />
+					<!-- <p:inputText value="#{offence.offenceDescription}" id="offenceDescript" style="margin-left:82px;text-align: left;" 
+							maxlength="40" size="40" /> -->
+					<p:inputTextarea id="offenceDescript"  style="margin-left:66px;text-align: left;width:280px; height:80px;" value="#{offence.offenceDescription}"/>
+				</div>
+				<div style="margin:10px 0 0 0;">
+					<h:outputText value="Road Check Type:" />
+					<h:outputText value="*" styleClass="required" />
+						<p:selectOneMenu value="#{offence.roadCheckTypeId}" id="roadCheckQuery" style="margin-left:29px;width:200px;">
+								<f:selectItem itemValue=""  itemLabel="[Select One]"/>
+    							<f:selectItems value="#{roadCheckList}" />
+							</p:selectOneMenu>
+				</div>
+				<div style="margin:10px 0 0 0;">
+				
+					<h:outputText value="Status:" />
+					<c:choose>
+					<c:when test="#{hideActive == true}">
+					<p:selectOneMenu value="#{offence.statusId}" id="statusSelId" style="margin-left:115px;width:200px;">
+							<f:selectItem itemValue="ACT" itemLabel="ACTIVE"></f:selectItem>
+							<f:selectItem itemValue="INA" itemLabel="INACTIVE"></f:selectItem>
+					</p:selectOneMenu>
+					</c:when>
+					<c:otherwise>
+							<p:inputText value="" id="statId" style="text-align: left; margin-left: 115px;width:120px;background:#dddddd;" readonly="true"/>
+							<p:watermark for="statId" value="Active" />
+					</c:otherwise>
+					</c:choose>
+						
+				</div>
+				
+				</div>
+				
+
+				<p:fieldset id="offenceFieldSet">
+				<h:outputText value="Provide details for Offence" style="font-size:16px;color:#666666;" />
+				<br/>
+				<h:outputText value="Specify Wording:" style="color:#666666;"/>
+				 <h:outputText value="*" styleClass="required" />	
+				 	<div style="height:auto;">
+				 		<div style="width:40%;float:left;">
+				 		 <h:panelGrid id="displayCities2" columns="2"> 
+				 		  
+				 		   <p:inputTextarea  cols="40" rows="13" data-role="none" contenteditable="false" autoResize="false" ajax="true" id="textAreaId" value="#{offence.excerpt}" style="min-width: 172px; height: 209px;resize:none;">
+				 		  		<!-- <p:inplace id="basic"> 
+				 		  			<p:inputText id="inplaceId" value="test"/>
+				 		  		</p:inplace>	 -->	
+				 		  </p:inputTextarea>
+				 		   
+				 		  </h:panelGrid>
+				 		</div>	
+				 		<div style="float:left;width:20%;margin:80px auto;text-align:center;">
+				 			
+				 				<span id="transBtn" style="cursor:pointer;"><i class="icon-angle-left icon-4x" style="color:#0951B5;"></i></span>
+				 			
+				 		</div>
+				 		<div style="width:40%;float:right;">	
+				 			<p:tabView id="tabView">  
+  						
+							    <p:tab id="tab1" title="Parameters">  
+							        <h:panelGrid columns="2" cellpadding="10">  
+							              <h:outputText id="tab2Text" value=""/> 
+							              <p:selectOneListbox id="mySelect" value="#{excerptOffenceParamsList}" var="params" style="height:120px;width:140%;" filter="true" converter="pickListConverter">  
+										            <f:selectItems value="#{excerptOffenceParamsList}" var="par" itemLabel="#{par.code}" itemValue="#{par.shortDescription}"/>
+										          	
+										             <p:column>
+										               #{params}
+										             </p:column>  
+										              <!-- <p:column>
+										             	  <h:outputText id="paramId" value="#{par.code}" style="display:none;" />
+										             </p:column>  -->
+										             
+										        </p:selectOneListbox>   
+							        </h:panelGrid>  
+							    </p:tab>  
+				 			</p:tabView>
+				 			<h:inputHidden id="paramsListId" value="#{flowScope.paramsList}"></h:inputHidden>
+				 		</div>
+				 		
+				 		<div style="width:100%;height:auto;float:left;">
+				 		
+				 		   <!-- <p:ouptText  cols="40" rows="13" data-role="none" contenteditable="false" autoResize="false" ajax="true" id="textAreaId" value="#{offence.excerpt}" style="min-width: 172px; height: 209px;">
+				 		  		
+				 		  </p:inputTextarea> -->
+				 		  
+				 		  <i><h:outputText style="font-size:14px;color:#666666;"  value="Preview using sample data"/></i>
+				 		  <div id="previewId"></div>
+				 		
+				 		</div>	
+				
+					</div>
+				</p:fieldset>
+		
+				<div id="buttons" style="width:100%;text-align:center;">
+					<p:commandButton styleClass="getData blue" value="Save" action="save" update="offenceMaintenanceDetails,:offenceMaintenanceDetails:msg2" processIds="*" ajax="false" style="display:#{displaySaveBtn}"/>			
+					<p:commandButton id="updateId" styleClass="getData blue" value="Save" action="update" processIds="*" update="offenceMaintenanceDetails,:offenceMaintenanceDetails:msg2" ajax="false" style="display:#{displayUpdateBtn}"/>
+					<p:commandButton styleClass="blue" value="Clear" processIds="*" actionListener="#{offenceMaintenanceServiceAction.add(flowRequestContext)}" update="offenceMaintenanceDetails" ajax="true" style="display:#{displaySaveBtn}"/>
+					<!-- <p:commandButton styleClass="blue" value="Clear" >  
+				        <p:ajax update="offenceMaintenanceDetails" resetValues="true" />  
+					</p:commandButton>   -->
+					<p:commandButton styleClass="blue" value="Back" action="cancel" processIds="*"  ajax="false"  update="offenceMaintenanceDetails" />
+					
+				</div>
+			</div>
+			</fieldset>
+			</div>
+		</h:form>
+		
+	</ui:define>
+
+</ui:composition>

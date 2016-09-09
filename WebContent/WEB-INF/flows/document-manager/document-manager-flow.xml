@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+
+	<secured attributes="ROLE_ROMS_DOC_MAN_SEARCH" />
+
+	<var name="mode" class="java.lang.String" />
+	<var name="modeCS" class="java.lang.String" />
+	<var name="documents" class="java.util.ArrayList" />
+	<var name="documentsSelected" class="java.util.ArrayList" />
+	<var name="document"
+		class="fsl.ta.toms.roms.bo.DocumentViewBO" />
+	<var name="documentCopy"
+		class="fsl.ta.toms.roms.bo.DocumentViewBO" />
+	<var name="statusList" class="java.util.ArrayList" />
+	<var name="criteria"
+		class="fsl.ta.toms.roms.search.criteria.impl.DocumentsCriteriaBO" />
+	<var name="docType" class="java.lang.String" />
+	<var name="overrideView" class="org.fsl.roms.view.OverrideDetailsSecurityView" />
+	<var name="verifyView" class="org.fsl.roms.view.VerifyDetailsSecurityView" />
+	<var name="jpList" class="java.util.ArrayList" />
+	<var name="docTypeList" class="java.util.ArrayList" />
+	<var name="printDocType" class="java.lang.String" />
+	<var name="typeOfDocumentUploaded" class="java.lang.String" />
+	<var name="staffBOForSearch" class="fsl.ta.toms.roms.bo.StaffUserMappingBO" />
+	<var name="staffBOForServe" class="fsl.ta.toms.roms.bo.StaffUserMappingBO" />
+
+	<!-- Scanned doc details -->
+	<var name="scannedDocToView"
+		class="fsl.ta.toms.roms.bo.ScannedDocBO" />
+	<var name="scannedDocToUpload"
+		class="fsl.ta.toms.roms.bo.ScannedDocBO" />
+	<var name="scannedDocToDelete"
+		class="fsl.ta.toms.roms.bo.ScannedDocBO" />
+	<var name="scannedDocumentsSelected" class="java.util.ArrayList" />
+
+	<var name="nameUtil" class="org.fsl.roms.util.NameUtil" />
+
+	<!-- TO HOLD THE LIST OF FILE UPLOADS -->
+	<var name="flashScope.fileUploadList" class="java.util.ArrayList" />
+	<!-- <var name="flashScope.currentUploadedFile" class="org.primefaces.model.DefaultUploadedFile" 
+		/> -->
+
+	<!-- COURT CASE -->
+	<var name="newCourtAppearance"
+		class="fsl.ta.toms.roms.bo.CourtAppearanceBO" />
+	<var name="updatedCourtAppearance"
+		class="fsl.ta.toms.roms.bo.CourtAppearanceBO" />
+	<var name="updatedCourtCase"
+		class="fsl.ta.toms.roms.bo.CourtCaseBO" />
+	<var name="inspector" class="fsl.ta.toms.roms.bo.TAStaffBO" />
+	<var name="courtParish" class="java.lang.String" />
+	<var name="editCourtDate" class="java.util.Date" />
+
+	<!-- Printing -->
+	<!-- <var name="flashScope.openReportWindow" class="java.lang.String" /> 
+		<var name="flashScope.printDocumentFromList" class="java.lang.String" /> 
+		<var name="flashScope.viewScannedDoc" class="java.lang.String" /> -->
+
+	<input name="documentFromRoadCheck" required="false"
+		type="fsl.ta.toms.roms.bo.DocumentViewBO" />
+	
+	<input name="summonsDocTypePresent" required="false" type="java.lang.Boolean" />
+		
+
+	<on-start>
+		<evaluate expression="documentManagerServiceAction.getStaffList"></evaluate>
+		<evaluate expression="documentManagerServiceAction.getParishes"></evaluate>
+		<evaluate expression="documentManagerServiceAction.getActiveCourts"></evaluate>
+		<evaluate expression="documentManagerServiceAction.getJusticesOfPeace"></evaluate>
+		<evaluate expression="documentManagerServiceAction.getDocManagerStatuses"></evaluate>
+		<evaluate expression="documentManagerServiceAction.getScannedDocumentTypes"></evaluate>
+		<set name="flowScope.viewScannedDoc" value="'false'"></set>
+		<set name="flowScope.openReportWindow" value="'false'"></set>
+		<set name="flowScope.printDocumentFromList" value="'false'"></set>
+		<set name="flowScope.uploadedFileName" value="''"></set>
+	</on-start>
+
+
+	<action-state id="begin">
+		<evaluate expression="documentFromRoadCheck != null" />
+		<transition on="yes" to="documentManagerView">
+			<set name="document" value="documentFromRoadCheck"></set>
+			<evaluate expression="documentManagerServiceAction.loadDocumentDetails"></evaluate>
+		</transition>
+		<transition on="no" to="documentManagerSearch">
+		</transition>
+	</action-state>
+
+	<view-state id="documentManagerSearch">
+
+		<transition on="search" to="search">
+			<set name="flowScope.mode" value="'search'"></set>
+			<set name="flowScope.docType" value="''"></set>
+			<render fragments="searchResultsForm" />
+		</transition>
+
+		<transition on="printSelectedDocuments" to="printSelectedDocuments">
+			<render fragments="searchResultsForm" />
+		</transition>
+
+		<transition on="view" to="documentManagerView">
+			<set name="flowScope.mode" value="'view'"></set>
+			<!-- <set name="flowScope.document" value="documents.selectedRow" /> -->
+			<evaluate expression="documentManagerServiceAction.loadDocumentDetails"></evaluate>
+		</transition>
+
+		<transition on="resetPrintWindows" to="documentManagerView">
+			<set name="flowScope.viewScannedDoc" value="'false'"></set>
+			<set name="flowScope.openReportWindow" value="'false'"></set>
+			<set name="flowScope.printDocumentFromList" value="'false'"></set>
+		</transition>
+
+		<transition on="reset" to="endState" />
+	</view-state>
+
+	<view-state id="documentManagerView">
+		<transition on="success" to="documentManagerView">
+			<set name="flowScope.mode" value="'view'" />
+		</transition>
+
+		<transition on="error" to="documentManagerView">
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="resetPrintWindows" to="documentManagerView">
+			<set name="flowScope.viewScannedDoc" value="'false'"></set>
+			<set name="flowScope.openReportWindow" value="'false'"></set>
+			<set name="flowScope.printDocumentFromList" value="'false'"></set>
+		</transition>
+
+		<!-- modes -->
+		<transition on="initServeMode" to="documentManagerView">
+			<set name="flowScope.viewScannedDoc" value="'false'"></set>
+			<set name="flowScope.openReportWindow" value="'false'"></set>
+			<set name="flowScope.printDocumentFromList" value="'false'"></set>
+			<set name="flowScope.staffBOForSearch" value="null"></set>
+			<set name="flowScope.staffBOForServe" value="null"></set>
+			<set name="flowScope.mode" value="'serve'" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="initEditMode" to="documentManagerView">
+			<set name="flowScope.viewScannedDoc" value="'false'"></set>
+			<set name="flowScope.openReportWindow" value="'false'"></set>
+			<set name="flowScope.printDocumentFromList" value="'false'"></set>
+			<set name="flowScope.mode" value="'edit'" />
+			<set name="flowScope.documentCopy" value="flowScope.document" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="initWithdrawMode" to="documentManagerView">
+			<set name="flowScope.viewScannedDoc" value="'false'"></set>
+			<set name="flowScope.openReportWindow" value="'false'"></set>
+			<set name="flowScope.printDocumentFromList" value="'false'"></set>
+			<set name="flowScope.mode" value="'withdraw'" />
+			<evaluate
+				expression="documentManagerServiceAction.getActiveReasonsByModuleType('DW')"></evaluate>
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="initJpVerifyMode" to="documentManagerView">
+			<set name="flowScope.viewScannedDoc" value="'false'"></set>
+			<set name="flowScope.openReportWindow" value="'false'"></set>
+			<set name="flowScope.printDocumentFromList" value="'false'"></set>
+			<set name="flowScope.mode" value="'jpverify'" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="initVerifyEditsMode" to="documentManagerView">
+			<set name="flowScope.viewScannedDoc" value="'false'"></set>
+			<set name="flowScope.openReportWindow" value="'false'"></set>
+			<set name="flowScope.printDocumentFromList" value="'false'"></set>
+			<set name="flowScope.verifyView.userName" value="''"></set>
+			<set name="flowScope.mode" value="'verify'" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="initVerifyDetailsMode" to="documentManagerView">
+			<set name="flowScope.viewScannedDoc" value="'false'"></set>
+			<set name="flowScope.openReportWindow" value="'false'"></set>
+			<set name="flowScope.printDocumentFromList" value="'false'"></set>
+			<set name="flowScope.mode" value="'verifyDetails'" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="initUploadMode" to="documentManagerView">
+			<set name="flowScope.viewScannedDoc" value="'false'"></set>
+			<set name="flowScope.openReportWindow" value="'false'"></set>
+			<set name="flowScope.printDocumentFromList" value="'false'"></set>
+			<evaluate expression="documentManagerServiceAction.getDocumentTypeList(docType)"
+				result="docTypeList" result-type="java.util.ArrayList"></evaluate>
+			<set name="flowScope.mode" value="'upload'" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="initPrintMode" to="documentManagerView">
+			<set name="flowScope.viewScannedDoc" value="'false'"></set>
+			<set name="flowScope.openReportWindow" value="'false'"></set>
+			<set name="flowScope.printDocumentFromList" value="'false'"></set>
+			<set name="flowScope.mode" value="'print'" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="initRePrintMode" to="documentManagerView">
+			<set name="flowScope.viewScannedDoc" value="'false'"></set>
+			<set name="flowScope.openReportWindow" value="'false'"></set>
+			<set name="flowScope.printDocumentFromList" value="'false'"></set>
+			<set name="flowScope.mode" value="'reprint'" />
+			<evaluate
+				expression="documentManagerServiceAction.getActiveReasonsByModuleType('DR')"></evaluate>
+			<render fragments="documentManagerView" />
+		</transition>
+		
+		<transition on="initRePrintSDMode" to="documentManagerView">
+			<set name="flowScope.viewScannedDoc" value="'false'"></set>
+			<set name="flowScope.openReportWindow" value="'false'"></set>
+			<set name="flowScope.printDocumentFromList" value="'false'"></set>
+			<set name="flowScope.scannedDocToView.reprintReasonCode" value="''"></set>
+			<set name="flowScope.mode" value="'reprintSD'" />
+			<evaluate
+				expression="documentManagerServiceAction.getActiveReasonsByModuleType('DR')"></evaluate>
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="initCancelMode" to="documentManagerView">
+			<set name="flowScope.viewScannedDoc" value="'false'"></set>
+			<set name="flowScope.openReportWindow" value="'false'"></set>
+			<set name="flowScope.printDocumentFromList" value="'false'"></set>
+			<set name="flowScope.mode" value="'cancel'" />
+			<evaluate
+				expression="documentManagerServiceAction.getActiveReasonsByModuleType('DC')"></evaluate>
+			<render fragments="documentManagerView" />
+		</transition>
+		<!--
+		<transition on="initEditDateMode" to="documentManagerView">
+			<set name="flowScope.viewScannedDoc" value="'false'"></set>
+			<set name="flowScope.openReportWindow" value="'false'"></set>
+			<set name="flowScope.printDocumentFromList" value="'false'"></set>
+			<set name="flowScope.mode" value="'editDate'" />
+			<set name="flowScope.documentCopy" value="flowScope.document" />
+			<render fragments="documentManagerView" />
+		</transition>
+		-->
+		<!-- <transition on="validateUserDetails" to="documentManagerView"> <set 
+			name="flowScope.mode" value="'cancel'" /> <render fragments="documentManagerView" 
+			/> </transition> -->
+
+		<!-- end modes -->
+
+		<transition on="searchTrn" to="documentManagerView">
+			<evaluate expression="documentManagerServiceAction.searchTrn" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="edit" to="documentManagerView">
+			<evaluate expression="documentManagerServiceAction.editDocument" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="serve" to="documentManagerView">
+			<evaluate expression="documentManagerServiceAction.serveDocument" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="withdraw" to="documentManagerView">
+			<evaluate expression="documentManagerServiceAction.withdrawDocument" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="verifyUserEdits" to="documentManagerView">
+			<set name="flowScope.verifyView.permission" value="'ROMS_DOC_MAN_VERIFY'"></set>
+			<evaluate expression="documentManagerServiceAction.verifyUserCredentials" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="verifyDocumentDetails" to="documentManagerView">
+			<set name="flowScope.verifyView.permission" value="'ROMS_DOC_MAN_VERIFY'"></set>
+			<evaluate expression="documentManagerServiceAction.verifyUserCredentials" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+
+		<transition on="denyUserEditVerification" to="documentManagerView">
+			<set name="flowScope.verifyView.permission" value="'ROMS_DOC_MAN_VERIFY'"></set>
+			<evaluate expression="documentManagerServiceAction.verifyDenyUserCredentials" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="denyDocumentDetailsVerification" to="documentManagerView">
+			<set name="flowScope.verifyView.permission" value="'ROMS_DOC_MAN_VERIFY'"></set>
+			<evaluate
+				expression="documentManagerServiceAction.denyDocumentDetailsVerification" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<!-- <transition on="verifyDocumentDetails" to="documentManagerView"> <set 
+			name="flowScope.verifyView.permission" value="'ROMS_DOC_MAN_JP_VERIFY'"></set> 
+			<evaluate expression="documentManagerServiceAction.verifyUserCredentials" 
+			/> <render fragments="documentManagerView" /> </transition> -->
+
+
+		<transition on="verifyJPDetails" to="documentManagerView">
+			<evaluate expression="documentManagerServiceAction.verifyJPDetails" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="verifyDetails" to="documentManagerView">
+			<evaluate expression="documentManagerServiceAction.verifyDocumentDetails" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="uploadDocument" to="documentManagerView">
+			<evaluate expression="documentManagerServiceAction.uploadDocument" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="print" to="documentManagerView">
+			<evaluate expression="documentManagerServiceAction.printDocument" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="printDischargeForm" to="documentManagerView">
+			<evaluate expression="documentManagerServiceAction.printDischargeForm" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="reprint" to="documentManagerView">
+			<evaluate expression="documentManagerServiceAction.rePrintDocument" />
+			<render fragments="documentManagerView" />
+		</transition>
+		
+		<transition on="reprintSD" to="documentManagerView">
+			<evaluate expression="documentManagerServiceAction.printScannedDocument" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="viewScannedDocument" to="documentManagerView">
+			<evaluate expression="documentManagerServiceAction.viewScannedDocument" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="deleteScannedDocument" to="documentManagerView">
+			<evaluate expression="documentManagerServiceAction.deleteScannedDocument" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="printSelectedScannedDocuments" to="documentManagerView">
+			<evaluate
+				expression="documentManagerServiceAction.printSelectedScannedDocuments" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="preview" to="documentManagerView">
+			<set name="flowScope.mode" value="'preview'" />
+		</transition>
+
+		<transition on="cancel" to="documentManagerView">
+			<set name="flowScope.viewScannedDoc" value="'false'"></set>
+			<set name="flowScope.openReportWindow" value="'false'"></set>
+			<evaluate expression="documentManagerServiceAction.cancelDocument" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="cancelAction" to="documentManagerView">
+			<set name="flowScope.mode" value="'view'" />
+			<set name="flowScope.viewScannedDoc" value="'false'"></set>
+			<set name="flowScope.openReportWindow" value="'false'"></set>
+			<evaluate expression="documentManagerServiceAction.cancelAction" />
+			<render fragments="documentManagerView" />
+		</transition>
+		<!--  
+		<transition on="addInitialCourtDate" to="documentManagerView">
+			<evaluate expression="documentManagerServiceAction.addInitialCourtDate" />
+			<render fragments="documentManagerView" />
+		</transition>
+		-->
+		<transition on="back" to="documentManagerSearch">
+			<evaluate expression="documentManagerServiceAction.backAction" />
+		</transition>
+
+		<!-- COURT RELATED Options -->
+		<transition on="viewCourtCaseDetails" to="courtCaseDetails">
+			<evaluate expression="documentManagerServiceAction.viewCourtDetails" />
+			<set name="flowScope.modeCC" value="'viewCC'"></set>
+			<render fragments="courtCaseDetails" />
+		</transition>
+
+		<transition on="endStateBackToRoadCheck" to="endStateBackToRoadCheck"></transition>
+
+
+		<!-- <transition on="update" to="updateconfiguration" /> -->
+	</view-state>
+
+
+	<view-state id="courtCaseDetails">
+
+		<transition on="success" to="courtCaseDetails">
+			<set name="flowScope.modeCC" value="'viewCC'" />
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="error" to="courtCaseDetails">
+			<render fragments="documentManagerView" />
+		</transition>
+
+		<transition on="initUpdateCourtCase" to="courtCaseDetails">
+			<set name="flowScope.modeCC" value="'updateCC'"></set>
+			<set name="flowScope.updatedCourtAppearance.verdictId" value="flowScope.summons.courtCase.verdictCode"></set>
+		</transition>
+
+		<transition on="initOverrideCourtAppearanceDate" to="courtCaseDetails">
+			<set name="flowScope.modeCC" value="'overrideCD'"></set>
+			<set name="flowScope.summons.overrideReason" value="''"></set>
+			<set name="flowScope.editCourtDate" value="null"></set>
+			<evaluate
+				expression="documentManagerServiceAction.getActiveReasonsByModuleType('CAO')"></evaluate>
+		</transition>
+		
+		<transition on="initOverrideCourtAppearanceCourt" to="courtCaseDetails">
+			<set name="flowScope.modeCC" value="'overrideC'"></set>
+			<set name="flowScope.summons.overrideReason" value="''"></set>
+			<set name="flowScope.summons.courtCase.newComments" value="''"></set>
+			<set name="flowScope.updatedCourtAppearance.courtId" value="''"></set>
+			<set name="flowScope.editCourtDate" value="null"></set>
+			<evaluate
+				expression="documentManagerServiceAction.getActiveReasonsByModuleType('CAO')"></evaluate>
+			<evaluate
+				expression="documentManagerServiceAction.getCourtsByParish(flowScope.courtParish)"></evaluate>	
+		</transition>
+
+		<transition on="initOverrideCourtCaseNo" to="courtCaseDetails">
+			<set name="flowScope.modeCC" value="'overrideCN'"></set>
+			<set name="flowScope.summons.overrideReason" value="''"></set>
+			<set name="flowScope.summons.courtCase.newComments" value="''"></set>
+			<evaluate
+				expression="documentManagerServiceAction.getActiveReasonsByModuleType('CCO')"></evaluate>
+		</transition>
+
+		<transition on="initOverrideCourtCaseDetails" to="courtCaseDetails">
+			<set name="flowScope.modeCC" value="'overrideCC'"></set>
+			<set name="flowScope.summons.overrideReason" value="''"></set>
+<!-- 		<evaluate expression="documentManagerServiceAction.clearSentenceDate()" />
+			<evaluate expression="documentManagerServiceAction.getPrisonDuration()"></evaluate> -->
+			<evaluate expression="documentManagerServiceAction.getCourtRulings"></evaluate>
+			<evaluate
+				expression="documentManagerServiceAction.getCourtRulingsListForCourtCaseScreen"></evaluate>
+			<evaluate expression="documentManagerServiceAction.getPleas"></evaluate>
+			<evaluate expression="documentManagerServiceAction.getVerdicts"></evaluate>
+			<evaluate
+				expression="documentManagerServiceAction.getActiveReasonsByModuleType('CAO')"></evaluate>
+			<set name="flowScope.updatedCourtAppearance.verdictId" value="flowScope.summons.courtCase.verdictCode"></set>
+			<set
+				name = "flowScope.finalRuling" value="documentManagerServiceAction.showFinalCourtRulingLabel(flowScope.updatedCourtAppearance.courtRulingId)"></set>
+			<evaluate expression="documentManagerServiceAction.isFirstCourtAppearance"></evaluate>
+		</transition>
+
+		<transition on="updateCourtCase" to="courtCaseDetails">
+			<evaluate expression="documentManagerServiceAction.updateCourtCase" />
+		</transition>
+
+		<transition on="cancelUpdateCourtCase" to="courtCaseDetails">
+			<set name="flowScope.updatedCourtAppearance.courtRulingId" value="null"></set>
+			<evaluate expression="documentManagerServiceAction.cancelUpdateCourtCase" />
+		</transition>
+		
+		<transition on="cancelOverrideCourtCaseDetails" to="courtCaseDetails">
+			<evaluate expression="documentManagerServiceAction.cancelUpdateCourtCase" />
+		</transition>
+		
+
+		<transition on="cancelUpdateCourt" to="courtCaseDetails">
+			<evaluate expression="documentManagerServiceAction.cancelUpdateCourt" />
+			<set name="flowScope.modeCC" value="'updateCA'"></set>
+		</transition>
+
+		<!-- <var name="scannedDocs" class="java.util.ArrayList" /> -->
+		<transition on="cancelCourtCaseDetails" to="documentManagerView">
+			<set name="flowScope.modeCC" value="''"></set>
+		</transition>
+
+		<transition on="updateCourtAppearanceDetails" to="courtCaseDetails">
+			<set name="flowScope.modeCC" value="'updateCA'"></set>
+			<evaluate expression="documentManagerServiceAction.updateCourtAppearanceDetails" />
+		</transition>
+
+		<transition on="overrideCourtCaseDetails" to="courtCaseDetails">
+			<evaluate expression="documentManagerServiceAction.overrideCourtCaseDetails" />
+			<set name="flowScope.modeCC" value="'updateCC'"></set>
+		</transition>
+
+		<transition on="overrideCourtAppearanceDetails" to="courtCaseDetails">
+			<evaluate
+				expression="documentManagerServiceAction.overrideCourtAppearanceDetails" />
+			<set name="flowScope.modeCC" value="'updateCC'"></set>
+		</transition>
+		
+		<transition on="overrideCourtAppearanceCourtDetails" to="courtCaseDetails">
+			<evaluate
+				expression="documentManagerServiceAction.overrideCourtAppearanceDetails" />
+			<set name="flowScope.modeCC" value="'updateCA'"></set>
+		</transition>
+		
+
+		<transition on="saveCourtAppearanceDetails" to="courtCaseDetails">
+			<set name="flowScope.modeCC" value="'saveCA'"></set>
+			<evaluate expression="documentManagerServiceAction.saveCourtAppearanceDetails" />
+		</transition>
+
+		<transition on="newCourtAppearanceDetails" to="courtCaseDetails">
+			<set name="flowScope.modeCC" value="'saveCA'"></set>
+			<set name="flowScope.newCourtAppearance.courtDate" value="null"></set>
+			<set name="flowScope.newCourtAppearance.comment" value="''"></set>
+			<set name="flowScope.newCourtAppearance.courtId" value="flowScope.updatedCourtAppearance.courtId"></set>
+			
+			<evaluate expression="documentManagerServiceAction.getCourtListByUserRegion"></evaluate>
+			<evaluate
+				expression="documentManagerServiceAction.getCourtsByParish(flowScope.courtParish)"></evaluate>
+			<!-- <evaluate expression="documentManagerServiceAction.validateCourtAppearanceSave" 
+				/> -->
+		</transition>
+
+		<transition on="viewCourtAppearance" to="courtCaseDetails">
+			
+			<evaluate expression="documentManagerServiceAction.getCourtRulings"></evaluate>
+			<evaluate
+				expression="documentManagerServiceAction.getCourtRulingsListForCourtCaseScreen"></evaluate>
+			<evaluate expression="documentManagerServiceAction.getPleas"></evaluate>
+			<evaluate expression="documentManagerServiceAction.getVerdicts"></evaluate>
+			<set name="flowScope.modeCC" value="'updateCA'"></set>
+			<set name="flowScope.showNewCourtAppearance" value="''"></set>
+			<set name="flowScope.summons.courtCase.newComments" value="''"></set>
+			<evaluate expression="documentManagerServiceAction.isFirstCourtAppearance"></evaluate>
+			
+		</transition>
+
+		<transition on="clearCourtAppearanceDetails" to="courtCaseDetails">
+			<evaluate expression="documentManagerServiceAction.clearCourtAppearanceDetails" />
+		</transition>
+
+		<transition on="viewDocumentDetails" to="documentManagerView">
+			<!-- <evaluate expression="documentManagerServiceAction.updateCourtCaseDetails" 
+				/> -->
+		</transition>
+
+		
+	</view-state>
+
+	<action-state id="search">
+		<evaluate expression="documentManagerServiceAction.search"></evaluate>
+		<transition on="success" to="documentManagerSearch"></transition>
+		<transition on="error" to="documentManagerSearch" />
+		<transition on="yes" to="documentManagerView">
+			<set name="flowScope.mode" value="'view'"></set>
+		</transition>
+	</action-state>
+
+	<action-state id="printSelectedDocuments">
+		<evaluate expression="documentManagerServiceAction.printSelectedDocuments"></evaluate>
+		<transition on="success" to="documentManagerSearch"></transition>
+		<transition on="error" to="documentManagerSearch" />
+	</action-state>
+
+	<end-state id="endState" />
+
+	<end-state id="endStateBackToRoadCheck">
+		<output name="documentFromRoadCheck" required="true"
+			value="documentFromRoadCheck" type="fsl.ta.toms.roms.bo.DocumentViewBO" />
+	</end-state>
+
+</flow>

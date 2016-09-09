@@ -1,0 +1,123 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui" xmlns:fsl="http://org.fsl.com"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/WEB-INF/newTemplate.xhtml" >
+
+	<ui:define name="title">Court Schedule Report</ui:define>
+	<ui:define name="pageHeader">Court Schedule Report</ui:define>
+	<ui:define name="content" >
+		<div class="main">
+			<p:messages id="errorMessages" closable="true"/>
+			<p:panel id="panelMain" header="Report" prependId="false">
+			
+			<h:form id="courtScheduleReport">
+				 
+				<table>
+					<tr>
+						<td>
+							<h:outputLabel value="Court Appearance Date:" />
+							<h:outputText value=" * " styleClass="required" />
+						</td>
+						<td>
+							<p:calendar value="#{criteria.trialStartDate}"
+								id="eventDateStart" readonlyInput="true" showOn="button"
+								maxlength="10" pattern="yyyy-MM-dd" navigator="true">
+								
+							</p:calendar> 
+						</td>
+						<td>-</td>
+						<td>
+							<p:calendar value="#{criteria.trialEndDate}"
+								id="eventDateEnd" readonlyInput="true" showOn="button"
+								maxlength="10" pattern="yyyy-MM-dd" navigator="true">
+								
+							</p:calendar>
+						</td>
+					</tr>
+					
+					<tr>
+						<td><h:outputLabel for="regionList" value="Region:" /></td>
+						<td colspan = "3">
+
+                   			
+                   			<p:selectManyMenu showCheckbox="true" id="regionList" var="reg" value="#{flowScope.taOfficeRegion}"
+                   				converter="regionConverter" filter="true" filterMatchMode="contains" style="height:200px;width:100%;border-bottom:solid #79b7e7 1px;" >
+                   				<f:selectItems value="#{regionList}" var="r" itemLabel="#{r.description}" itemValue="#{r}" />
+                   				<p:column>
+									#{reg.description}
+								</p:column>
+                   			</p:selectManyMenu>
+
+						</td>
+					</tr>
+					<tr>
+						<td><h:outputLabel value="Court:" /></td>
+						<td colspan = "3">
+							<p:selectOneMenu id="comboCourt" value="#{criteria.courtId}" widgetVar="widgetComboCourt"> 
+								<f:selectItem itemValue="" itemLabel="[ALL]" />
+								<f:selectItems var="court" itemValue="#{court.courtId}" itemLabel="#{court.description}" value="#{courtList}" />
+							</p:selectOneMenu>
+						</td>
+					</tr>
+					<tr>
+						<td><h:outputLabel value="TA Staff:" /></td>
+						<td colspan = "3">
+							<p:watermark id="taStaffWM" for="taStaff" value="Last, First Middle Name [ID]"/>
+							<p:autoComplete global="false" id="taStaff" scrollHeight="200"  size="43" value="#{flowScope.taFullName}" 
+							completeMethod="#{courtScheduleReportServiceAction.taStaffNameAutoComplete}" converter="TAStaffIDConverter"
+							var="p" itemValue="#{p}" forceSelection="true" itemLabel="#{p.fullName.concat(' [').concat(p.staffId).concat(']')}">
+							<p:ajax event="query" global="false"></p:ajax>   
+							</p:autoComplete>  
+						 	
+						</td>
+					</tr>
+					
+				</table> 
+				
+				 <p:accordionPanel id="panelAccordian1" >
+				  <p:tab title="Offender Details">
+						
+				<table>
+					<tr>
+						<td><h:outputLabel value="TRN:" /></td>
+						<td colspan = "3"><p:inputText value="#{criteria.offenderTRN}" id="trn" maxlength="9" onkeyup="restrictNumericFields(this);" onkeydown="restrictNumericFields(this);"/></td>
+					</tr>
+					<tr>
+						<td><h:outputLabel value="Name:" /></td>
+						<td><p:inputText value="#{criteria.offenderLastName}" id="offLN" alt="lastName" maxlength="40" size="58"/></td>
+						<td><p:inputText value="#{criteria.offenderFirstName}" id="offFN" alt="firstName" maxlength="40" size="58"/></td>
+						
+						<td></td>
+					</tr>
+				</table>
+		
+				<p:watermark for=":courtScheduleReport:panelAccordian1:offLN" value="LAST NAME" />
+  				<p:watermark for=":courtScheduleReport:panelAccordian1:offFN" value="FIRST NAME" />	
+  				</p:tab>
+		</p:accordionPanel>
+		<br/>
+					<div id="buttons"  style="text-align: center">
+		               <p:commandButton styleClass ="blue"  id="generateCourtScheduleReport" value="Generate" action="generateCourtScheduleReport" processIds="*" ajax="false" ></p:commandButton>
+		               <p:commandButton styleClass ="blue"  id="clearReport" value="Clear" action="clear" processIds="*" ajax="false" widgetVar="theWidget"></p:commandButton>
+		            </div>
+		            
+	            </h:form>
+	            
+	            <f:subview id="pdfView" rendered="#{flashScope.openReportWindow == 'true'}">
+			     	<script type="text/javascript">openNewWindowWithName('${request.contextPath}/view/pdf/?buffered=true');</script>
+		       	</f:subview>
+	            
+			</p:panel>
+			
+		</div>
+		
+
+	</ui:define>
+</ui:composition>

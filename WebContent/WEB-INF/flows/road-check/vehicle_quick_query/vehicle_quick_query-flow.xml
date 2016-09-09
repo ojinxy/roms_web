@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+       <secured attributes="ROLE_ROMS_ROAD_CHK_PERFORM" /> 
+        
+       
+	<var name="mvCheck" class="fsl.ta.toms.roms.bo.VehicleCheckResultBO" />
+	<var name="initiateView" class="org.fsl.roms.view.RoadCheckInitiateView" />
+	
+	<on-start>
+    	<evaluate expression="roadCheckServiceAction.findActiveOperationForUser()"></evaluate>
+    </on-start>
+    <view-state id="vehicleQuickQuery" redirect="false" >
+    	<transition on="queryMV">
+    		<evaluate expression="roadCheckServiceAction.quickQueryMV"></evaluate>
+    	</transition>
+		<transition on="clear"  to="endState"/>
+		
+		<transition on="performRoadCheck" to="subFlowPerformRoadCheck" />
+	</view-state>
+	
+	<subflow-state id="subFlowPerformRoadCheck" subflow="road-check">
+		<input name="initiateViewFromQuickQuery" required="true" value="flowScope.initiateView" type="org.fsl.roms.view.RoadCheckInitiateView"/>
+		<transition on="endState" to="vehicleQuickQuery"/>
+	</subflow-state>
+	
+	<end-state id="endState" />
+	
+</flow>

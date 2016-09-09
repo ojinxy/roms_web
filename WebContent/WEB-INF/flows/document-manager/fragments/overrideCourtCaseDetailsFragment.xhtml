@@ -1,0 +1,225 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces" xmlns:hx="http://www.ibm.com/jsf/html_extended" xmlns:sec="http://www.springframework.org/security/tags" xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com" xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
+	<ui:fragment id="pagel">
+		<p:dialog id="ccnoDialogid" header="Enter Case Details" resizable="false" 
+		widgetVar="ccnoDialog" width="60%" height="550px" 
+		modal="true" rendered="#{modeCC == 'overrideCC'}" 
+		visible="true" onShow="$('body').addClass('stop-scrolling')" onHide="$('body').removeClass('stop-scrolling')">
+			<div>
+				<p:messages id="messages" closable="true" />
+				<div>
+					<h2>
+						<span>Court Appearance Details</span>
+					</h2>
+					<br />
+					<p:panelGrid style="margin-bottom:0px">
+						<p:row>
+							<p:column>
+								<h:outputLabel for="comboCourtoo" value="Court:" styleClass="lbl-display-court" />
+								<h:outputText value=" * " styleClass="required align-ddl" />
+								<h:outputText id="comboCourtoo" value="#{updatedCourtAppearance.courtName}" style="text-transform: capitalize;" />
+							</p:column>
+							<p:column>
+								<h:outputLabel for="courtDateoo" value="Court Date:" styleClass="lbl-display-court" />
+								<h:outputText value=" * " styleClass="required align-ddl"  />
+								<h:outputText value="#{updatedCourtAppearance.courtDate}" pattern="yyyy-MM-dd hh:mm a" id="courtDateoo">
+									<fsl:dateTimeConverter showTime="true" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2">
+								<h:outputLabel for="reasonDate" value="Reason:" styleClass="lbl-display-court align-ddl" />
+								<h:outputText value=" * " styleClass="required align-ddl"  />
+								<p:selectOneMenu id="reasonDate" disabled="#{flowScope.modeCC == 'viewCC' }" value="#{flowScope.summons.overrideReason}">
+									<f:selectItem itemValue="" itemLabel="[Select One]" />
+									<f:selectItems value="#{reasonList}" var="s" itemLabel="#{s.description}" itemValue="#{s.code}">
+									</f:selectItems>
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						</p:panelGrid>
+						<p:panelGrid id="pgridUpdateCourtAppearance" style="margin-bottom:0px">
+							<p:row>
+								<p:column colspan="2">
+									<h:outputLabel for="comboPleao" value="Plea:" styleClass="lbl-display-court align-ddl" style="padding-right: 9px;" />
+									<h:outputText value=" " styleClass="required align-ddl" />
+									<p:selectOneMenu id="comboPleao" disabled="#{flowScope.modeCC == 'viewCC' }" value="#{updatedCourtAppearance.pleaId}">
+										<f:selectItem itemValue="" itemLabel="[Select One]" />
+										<f:selectItems value="#{pleaList}" var="s" itemLabel="#{s.description}" itemValue="#{s.code}">
+										</f:selectItems>
+										<p:ajax update="pgridUpdateCourtAppearance pgridSentenced pgridVerdict" listener="#{documentManagerServiceAction.validatePlea}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column colspan="2">
+									<h:outputLabel for="rulingo" value="Court Ruling:" styleClass="lbl-display-court align-ddl" />
+									<h:outputText value=" * " styleClass="required align-ddl" />
+									<p:selectOneMenu id="rulingo" 
+										value="#{updatedCourtAppearance.courtRulingId}" style="margin-right:10px"
+									>
+										<f:selectItem itemValue="" itemLabel="[Select One]" />
+										<f:selectItems value="#{courtRulingList}" var="s" itemLabel="#{s.description}" itemValue="#{s.code}" />
+										<p:ajax update="pgridUpdateCourtAppearance pgridSentenced pgridVerdict" listener="#{documentManagerServiceAction.validateCourtRuling}" />
+									</p:selectOneMenu>
+									<h:outputLabel value="*Case Will Be Closed." class="ui-messages-warn ui-message-warning align-ddl" rendered="#{finalRuling == 'Y'}" />
+								</p:column>
+							</p:row>
+					</p:panelGrid>
+					<p:panelGrid id="pgridVerdict"  style="margin:0px">
+							<c:if test="#{finalRuling == 'Y'}">	
+							<p:row>
+								<p:column colspan="2">
+									<h:outputLabel for="verdicto" value="Verdict:" styleClass="lbl-display-court align-ddl"/>
+									<h:outputText value=" * " styleClass="required align-ddl" />
+									<h:outputText value=" " styleClass="required align-ddl" />
+									<p:selectOneMenu id="verdicto" disabled="#{(!(empty updatedCourtAppearance.pleaId) &amp;&amp; updatedCourtAppearance.pleaId == '2' &amp;&amp; isFirstCourtAppearance == true) || flowScope.modeCC == 'viewCC'  }"
+										value="#{updatedCourtAppearance.verdictId}"
+									>
+										<f:selectItem itemValue="" itemLabel="[Select One]" />
+										<f:selectItems value="#{verdictList}" var="s" itemLabel="#{s.description}" itemValue="#{s.code}" />
+										<p:ajax update="pgridUpdateCourtAppearance pgridSentenced" listener="#{documentManagerServiceAction.validateVerdict}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>
+							
+					
+						</c:if>
+						
+					</p:panelGrid>
+						
+					<p:panelGrid>
+						<p:row>
+							<p:column colspan="2">
+								<h:outputLabel value="Inspector Attended:" styleClass="lbl-display-court" style="vertical-align: top;" />
+								<h:outputText value=" * " styleClass="required align-ddl"/>
+								<span style="display:inline-block;white-space:nowrap">
+							        <p:selectOneButton value="#{updatedCourtAppearance.inspectorAttended}" onchange="checkAttendedState(this)">	
+							            <f:selectItem itemLabel="YES" itemValue="YES" />  
+							            <f:selectItem itemLabel="NO" itemValue="NO" />    
+							        </p:selectOneButton>
+							        
+							    </span>
+							</p:column>
+						</p:row>
+						</p:panelGrid>
+						<p:panelGrid id="pgridSentenced">
+							<c:if test="#{finalRuling == 'Y' and updatedCourtAppearance.verdictId == 1}">
+								<p:row>
+									<p:column colspan="2">
+										<p:outputPanel id="panelFine">
+											<h:outputLabel value="Fine Amount:" styleClass="lbl-display-court" style="vertical-align: top; padding-right:10px" />
+											<span style="display:inline-block;white-space:nowrap">
+												<h:outputLabel value="$"></h:outputLabel>
+										       <p:inputText id="spinnerFine" type="currency" 
+										      	converterMessage="Fine Amount must be a numeric value."
+										      	value="#{flowScope.summons.courtCase.fineAmount}" maxlength="13">				
+									            </p:inputText>							        
+										    </span>
+									    </p:outputPanel>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="Sentence Period:"
+											styleClass="lbl-display-court"
+											style="vertical-align: top;padding-right:10px" />
+
+										<span>
+										<p:inputText
+												id="spinnerSentencePrdYear"
+												value="#{flowScope.summons.courtCase.sentencePeriodYear}"
+												converterMessage="Sentence Period Year(s) must be a numeric value."
+												maxlength="6" min="0">
+										</p:inputText>
+											<h:outputLabel value="year(s)" style="padding-right: 15px;"/>  
+										<p:inputText
+												id="spinnerSentencePrdMonth"
+												value="#{flowScope.summons.courtCase.sentencePeriodMonth}"
+												converterMessage="Sentence Period Month(s) must be a numeric value."
+												maxlength="6" min="0">
+										</p:inputText>
+											<h:outputLabel value="month(s)" style="padding-right: 15px;"/>
+										<p:inputText id="spinnerSentencePrdDay"
+												stepFactor="1" maxlength="6"
+												converterMessage="Sentence Period Day(s) must be a numeric value."
+												value="#{flowScope.summons.courtCase.sentencePeriodDay}">
+										</p:inputText>
+											<h:outputLabel value="day(s)" style="padding-right: 15px;" />  
+										</span>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="Sentence Outcome:"
+											styleClass="lbl-display-court"
+											style="vertical-align: top;padding-right:10px" />
+											<span>
+											<c:if test="#{flowScope.summons.courtCase.finePaidFlag == 'Y'}">
+												<p:selectBooleanCheckbox value="true" itemLabel="Pay Fine " >
+													<p:ajax listener="#{documentManagerServiceAction.validateSentenceServedFine}" />
+												</p:selectBooleanCheckbox>
+											</c:if>
+											<c:if test="#{flowScope.summons.courtCase.finePaidFlag != 'Y'}">
+												<p:selectBooleanCheckbox value="false" itemLabel="Pay Fine " >
+													<p:ajax listener="#{documentManagerServiceAction.validateSentenceServedFine}" />
+												</p:selectBooleanCheckbox>
+											</c:if>
+											
+											<c:if test="#{flowScope.summons.courtCase.timeServedFlag == 'Y'}">	
+			   									<p:selectBooleanCheckbox value="true" itemLabel="Serve Time ">
+			   										<p:ajax listener="#{documentManagerServiceAction.validateSentenceServedTime}" />
+			   									</p:selectBooleanCheckbox>	
+											</c:if>
+											<c:if test="#{flowScope.summons.courtCase.timeServedFlag != 'Y'}">	
+			   									<p:selectBooleanCheckbox value="false" itemLabel="Serve Time " >
+			   										<p:ajax listener="#{documentManagerServiceAction.validateSentenceServedTime}" />
+			   									</p:selectBooleanCheckbox>	
+											</c:if>
+											
+											
+											</span>
+									</p:column>
+								</p:row>
+							</c:if>				
+					</p:panelGrid>
+					<p:panelGrid>
+					<p:row>
+						<p:column colspan="1" >
+								<h:outputLabel for="comm2oc" value="Previous Comments:" styleClass="lbl-display-court" style="vertical-align: top;" />									
+								<h:outputText value="#{fn:replace(updatedCourtAppearance.comment,'\\(','&lt;br/&gt;&#9;')}" id="comm2oc" maxlength="250" escape="false"/>
+							</p:column>
+							<p:column colspan="1">
+								<h:outputLabel for="comm2o" value="New Comment:" styleClass="lbl-display-court" style="vertical-align: top;" />
+									<h:outputText value=" * " styleClass="required align-ddl"/>
+								<p:inputTextarea rows="6" cols="30" disabled="#{flowScope.modeCC == 'viewCC'}" value="#{flowScope.summons.courtCase.newComments}" id="comm2o" maxlength="250"/>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+	
+				<div align="center" style="margin: 0px auto">
+					<p:commandButton value="Update" processIds="*" styleClass="ui-confirmdialog-yes blue" icon="ui-icon-check" action="overrideCourtAppearanceDetails" ajax="false" id="ccOverrideBtn" oncomplete="$('body').removeClass('stop-scrolling');"/>
+					<p:commandButton value="Cancel" processIds="*" id="ccOverrideCancelBtn" action="cancelOverrideCourtCaseDetails" styleClass="ui-confirmdialog-no blue" icon="ui-icon-close" oncomplete="$('body').removeClass('stop-scrolling');"
+						 ajax="false"
+					/>
+				</div>
+				<br /> <br />
+			</div>
+		</p:dialog>
+		<script type="text/javascript">
+			function clickExitButt(){
+				$('button[id*=ccOverrideCancelBtn]').click();
+			}
+			
+			function clearSentenceDate(){
+				$('#calSentenceStartDate_input').val(null);
+				$('#calSentenceEndDate_input').val(null);
+			}
+		</script>
+	</ui:fragment>
+</ui:composition>

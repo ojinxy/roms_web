@@ -1,0 +1,239 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/newTemplate.xhtml">
+	
+	<ui:define name="title">Road Check</ui:define>
+	<ui:define name="pageHeader">Perform Road Check - Verify Identity
+		<style> 
+	td{
+		text-align: left;
+	}
+	
+	.test:hover, .test tr:hover {
+background: #d0e5f5 url("#{request.contextPath}/spring/javax.faces.resource/images/ui-bg_glass_75_d0e5f5_1x400.png?ln=primefaces-redmond") 50% 50% repeat-x;
+/*color: white !important;*/
+}
+	
+	</style>
+	<script type="text/javascript">
+			/* <![CDATA[ */
+
+			$(document).ready(
+					function() {
+						hoverDataGrid()});
+			
+			
+			function hoverDataGrid() {
+				$('td[class*=ui-datagrid-column]').addClass('test');
+			}
+			
+
+	
+	/* ]]> */
+		</script>
+	</ui:define>
+	<ui:define name="content">
+  <!--  	<ui:fragment id="messages">
+		<div id="messagesInsertionPoint" class="messages"><h:messages errorClass="error" id="msg"
+			infoClass="info" layout="list" /></div>
+	</ui:fragment>
+	 -->
+<script type="text/javascript">
+			/*<![CDATA[ */
+			            
+ 				function openDialog(showDialog){
+ 					//alert(document.getElementById('roadCheckInitiate:showDialogId').value);
+ 					//refreshScr();
+ 					alert(showDialog);
+ 					//alert(document.getElementById('roadCheckInitiate:showDialogId').value);
+ 					if(showDialog){
+						 
+						 PF('nameResultdlg').show();
+					 }
+ 					
+ 					 
+ 				 }
+			
+ 				function clickHiddenBtn(showDialog){
+ 					alert(document.getElementById('roadCheckInitiate:showDialogId').value);
+ 					refreshScr();
+ 					//alert(showDialog);
+ 					alert(document.getElementById('roadCheckInitiate:showDialogId').value);
+ 					if(showDialog){
+						 
+						 PF('nameResultdlg').show();
+					 }
+ 					
+ 					 
+ 				 }
+
+ 				 /* ]]> */
+</script>
+	<ui:fragment rendered="#{verifyIdView.currentRoadOperationId == null and roadCheckServiceAction.isHandHeldNoFlow()}">
+		<h:form styleClass="form" id="errorRoadCheckVerifyIdentity" >
+			<p:messages id="error" closable="false"/>
+		</h:form>
+	</ui:fragment>
+	<ui:fragment id="roadCheckVerifyId" rendered="#{verifyIdView.currentRoadOperationId != null || !roadCheckServiceAction.isHandHeldNoFlow()}" >	 
+		<h:form styleClass="form" id="roadCheckVerifyIdentity" >
+		
+		<p:panel id="panelroadCheckVerifyId" header="Verify Identity" >
+		 
+		<p:messages id="msg" closable="true"/>
+			<!--<div style="clear: both">
+				<span style="float:left;padding-right:20px">
+				<p:selectOneRadio id="searchRadio" 
+								value="#{verifyIdView.searchType}">
+								<f:selectItem itemLabel="TRN" itemValue="T" />
+								<f:selectItem itemLabel="Name" itemValue="N" />
+							</p:selectOneRadio>   <h:outputText styleClass="outputText" value="TRN "/> 
+							</span>
+							<h:inputText value="#{verifyIdView.trn}" id="trn" maxlength="9" disabled="#{verifyIdView.disableTrnField}"/>
+ 		</div>
+ 		-->
+ 		<p:outputPanel id="customPanel">  
+    <p:selectOneRadio id="customRadio" value="#{verifyIdView.searchType}" layout="custom" on="alert('top before');PrimeFaces.showWatermarks();alert('top after');">  
+        <f:selectItem itemLabel="Option 1" itemValue="T" />  
+        <f:selectItem itemLabel="Option 2" itemValue="N" />     
+         <p:ajax update="roadCheckVerifyIdentity:panelroadCheckVerifyId" event="change" listener="#{verifyIdView.changeDisableFields}" />
+    </p:selectOneRadio>  
+  
+    <h:panelGrid columns="3" widgetVar="mainPanelGrid">  
+        <p:radioButton id="opt1" for="customRadio" itemIndex="0"/>  
+        <h:outputLabel for="opt1" value="TRN:" />         
+      <h:panelGrid columns="2" border="0" widgetVar="trnPanelGrid"><p:inputText value="#{verifyIdView.trn}" id="trn" maxlength="9" disabled="#{verifyIdView.disableTrnField}" onkeyup="restrictNumericFields(this);" onkeydown="restrictNumericFields(this);"/>
+      	 <p:commandLink action="searchTrn" id="searchTrnLink" processIds="*" ajax="false" disabled="#{verifyIdView.disableTrnField}">
+     		  <img id="trnSearchIcon" src="${request.contextPath}/images/search-icon.gif"  alt="Input search criteria"></img>
+      	 </p:commandLink></h:panelGrid>
+  
+        <p:radioButton id="opt2" for="customRadio" itemIndex="1">
+        </p:radioButton>  
+        <h:outputLabel for="opt2" value="Name:" />  
+        
+         <h:panelGrid columns="4" border="0" widgetVar="namePanelGrid">
+        <p:inputText value="#{verifyIdView.lastName}" id="lName" size="27" disabled="#{verifyIdView.disableNameField}" maxlength="40">
+         <p:ajax global="false" update="roadCheckVerifyIdentity:initiateBtn" event="keyup" listener="#{verifyIdView.changeLastName}" />
+        </p:inputText>
+ 			<p:inputText value="#{verifyIdView.firstName}" id="fName" size="27" disabled="#{verifyIdView.disableNameField}" maxlength="40">
+ 			 <p:ajax global="false" update="roadCheckVerifyIdentity:initiateBtn" event="keyup" listener="#{verifyIdView.changeFirstName}" />
+ 			</p:inputText>
+ 			<p:inputText value="#{verifyIdView.middleName}" id="middleInitial" size="20" disabled="#{verifyIdView.disableNameField}" maxlength="25">
+ 			 <p:ajax global="false" update="roadCheckVerifyIdentity:initiateBtn" event="keyup" listener="#{verifyIdView.changeMiddleName}" />
+ 			</p:inputText> 
+  			<p:commandLink action="searchName" id="searchNameLink" processIds="*" ajax="false"  disabled="#{verifyIdView.disableNameField}" update="roadCheckVerifyIdentity:panelroadCheckVerifyId">
+  				
+  				<img id="nameearchIcon" src="${request.contextPath}/images/search-icon.gif"  alt="Input search criteria"></img>
+  			</p:commandLink>
+  
+  <p:watermark for="roadCheckVerifyIdentity:lName" value="LAST NAME" />
+  <p:watermark for="roadCheckVerifyIdentity:fName" value="FIRST NAME" />
+  <p:watermark for="roadCheckVerifyIdentity:middleInitial" value="MIDDLE NAME" />
+ 
+  		 </h:panelGrid>
+    
+    <h:panelGrid columns="1">
+    </h:panelGrid>
+     <h:panelGrid columns="1">
+    </h:panelGrid>
+     <h:panelGrid columns="2" style="margin-left:auto; margin-right:auto;">
+						<p:commandButton id="initiateBtn"  value="Initiate Road Check" action="initiate" processIds="*"  ajax="false" disabled="#{verifyIdView.disableInitiateBtn}" styleClass="blue"></p:commandButton>
+						<p:commandButton id="CancelBtn" value="Clear" processIds="*" action="clear" ajax="false" styleClass="blue blue-icon icon-refresh icon-af " ></p:commandButton>
+						
+	</h:panelGrid>
+
+	</h:panelGrid>  
+    </p:outputPanel>  
+    
+ 		<!-- 	<p:dialog id="dialog" header="#{verifyIdView.nameSearchTitle}" widgetVar="nameResultdlg" resizable="false" modal="true" width="50%" rendered="#{verifyIdView.showDialog}" visible="true">
+		 -->			
+					
+		<p:dataGrid var="bdg" id="badgeList" value="#{badges.badgeList}" columns="2" rendered="#{verifyIdView.showDialog}"
+        rows="10" paginator="true"   rowsPerPageTemplate="10,20,30" paginatorPosition="bottom"
+        currentPageReportTemplate="Results: {startRecord}-{endRecord} of {totalRecords} "
+       paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} ">  
+
+<p:ajax event="page" oncomplete="hoverDataGrid();"/> 
+<f:facet name="header" > 
+	<span  style="margin: auto 20%; ">	
+		  
+		</span> 
+		  </f:facet> 
+ 
+
+ 
+ <p:commandLink  action="selectBadge" processIds="*" ajax="false" >  
+ <div style="display:inline-block; width:100%">
+  		
+  		
+  	<p:panelGrid style="width:100%; margin-bottom:0;" >
+  		<p:row>
+  		
+  			<p:column style="width:96px;">
+  				<h:graphicImage id="photo2" width="90" height="106" border="0"
+						url="#{bdg.photoURL}" alt="No Image" style="border:3px solid #dddddd;" /> 
+  			</p:column>
+  			<p:column>
+  			
+  					<strong><h:outputText value="TRN: " /></strong><h:outputText value="#{bdg.trn}" /><br/>
+  					<strong><h:outputText value="Name: " /></strong> <h:outputText value="#{bdg.fullName}" style="word-wrap:break-word;"/><br/>
+  					<strong><h:outputText value="Badge No.: " /></strong>   <h:outputText value="#{bdg.trn}" /> <br/>
+  					<strong><h:outputText value="Badge Type: " /></strong>   <h:outputText value="#{bdg.badgeDesc}" /> 
+  				
+  			
+  			</p:column>
+  		</p:row>
+  	
+  	</p:panelGrid>	
+   
+ 		
+     
+ 
+          <!--   </div> -->
+           <f:setPropertyActionListener value="#{bdg}"   
+                            target="#{badges.selectedBadge}" />  
+                            
+</div>
+ </p:commandLink>   
+
+         
+          
+            
+              
+         
+
+
+
+   </p:dataGrid>  
+					
+	 <p:commandButton wigetVar="btnSel" id="pageBtn" value="Do select" style="display:none" processIds="*" update=":roadCheckVerifyIdentity:badgeList" 
+			 ajax="false" ></p:commandButton>
+         <script>
+         $("document").ready( function(){
+  			
+  			$('#roadCheckVerifyIdentity\\:badgeList').forceDataGridPagin();
+  		});
+         function paginate()
+		 	{
+		 		$("button[id*='pageBtn']").click();
+		 	}
+         </script>
+					
+			<!-- 	</p:dialog> -->
+ 				
+ 		</p:panel>
+ 		
+ 		
+ 		
+<p:remoteCommand name="refreshScr" oncomplete="location.reload();"/>
+
+		</h:form>
+		</ui:fragment>
+	</ui:define>
+</ui:composition>

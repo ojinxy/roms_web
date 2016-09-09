@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+        
+    <secured attributes="ROLE_ROMS_ROAD_CHK_SEARCH" />
+     
+      <var name="summonsDocTypePresent" class="java.lang.String" />
+	<var name="mode" class="java.lang.String" />
+	<var name="saved" class="java.lang.String" />
+	<var name="officeRegionList" class="java.util.ArrayList" />
+	<var name="statusList" class="java.util.ArrayList" />
+	<var name="criteria" class="fsl.ta.toms.roms.search.criteria.impl.RoadCompliancyCriteriaBO" />
+	<var name="dataTable" class="org.fsl.datatable.DataTableMemory" />
+	<var name="nameUtil" class="org.fsl.roms.util.NameUtil" />
+	<var name="documentFromRoadCheck" class="fsl.ta.toms.roms.bo.DocumentViewBO"/>
+	<var name="reasonList" class="java.util.ArrayList"></var>
+	<var name="staffBOForSearch" class="fsl.ta.toms.roms.bo.StaffUserMappingBO" />
+	
+	<input name="fromRoadCheck" required="false" type="java.lang.Boolean" />
+	<input name="complianceBO" required="false" type="fsl.ta.toms.roms.bo.ComplianceBO" />
+	
+	<on-start>
+		<evaluate expression="roadCheckServiceAction.getTAOfficeRegions"></evaluate>
+		<evaluate expression="roadCheckServiceAction.getStaffList"></evaluate>
+		<evaluate expression="roadCheckServiceAction.getComplianceStatusList"></evaluate>
+		<evaluate expression="nameUtil eq new org.fsl.roms.util.NameUtil()"></evaluate>
+		<evaluate expression="roadCheckServiceAction.isHandHeld(flowRequestContext)"></evaluate>
+		<set name="flowScope.hasSpecialPermissions" value="roadCheckServiceAction.hasSpecialPermissions()" type="java.lang.Boolean"/>
+		<evaluate expression="flowScope.criteria.setRegion(roadOperationsServiceAction.hasSpecialPermissions() ? null :roadOperationsServiceAction.getRomsLoggedInUser().getLocationCode())"></evaluate>
+		<evaluate expression="roadCheckServiceAction.findActiveOperationForUser()"></evaluate>
+	</on-start>
+
+	<action-state id="begin">
+	    <evaluate expression="complianceBO != null"/>
+	    <transition on="yes" to="viewDetailsAction"/>
+	    <transition on="no" to="roadCheckSearch"/>
+	</action-state>
+	
+	<view-state id="roadCheckSearch" redirect="false">
+		<on-entry>
+			<evaluate expression="roadCheckServiceAction.setCurrentRoadOp(flowRequestContext)"></evaluate>
+		</on-entry>
+		<!-- Not Moving From State just loading Data Table -->
+		<transition on="search" to="roadCheckSearch">
+			<evaluate expression="roadCheckServiceAction.getRoadCheckSearchResults(flowRequestContext)"></evaluate>
+		</transition>
+		
+		<transition on="next" to="roadCheckSearch">
+			<evaluate expression="roadCheckServiceAction.next('dataTable')"></evaluate>
+		</transition>
+
+		<transition on="prev" to="roadCheckSearch">
+			<evaluate expression="roadCheckServiceAction.prev('dataTable')"></evaluate>
+		</transition>
+
+		<transition on="first" to="roadCheckSearch">
+			<evaluate expression="roadCheckServiceAction.first('dataTable')"></evaluate>
+		</transition>
+
+		<transition on="last" to="roadCheckSearch">
+			<evaluate expression="roadCheckServiceAction.last('dataTable')"></evaluate>
+		</transition>
+
+
+		<transition on="reset" to="endState" />
+
+		<transition on="clear" to="endState" />
+		
+		<transition on="sortOrderASC" to="roadCheckSearch" >
+			<evaluate expression="roadCheckServiceAction.sortOrderASC"></evaluate>
+		</transition>
+		
+		<transition on="sortOrderDESC" to="roadCheckSearch" >
+			<evaluate expression="roadCheckServiceAction.sortOrderDESC"></evaluate>
+		</transition>
+		
+		<transition on="viewDetails" to="viewDetailsAction">
+		</transition>
+
+		<transition on="viewDetailsIncomplete" to="subFlowDetailsIncomplete">
+		</transition>
+		
+	</view-state>
+	
+	<subflow-state id="subFlowDetailsIncomplete" subflow="road-check" >
+		<input name="complianceBO" required="true" value="roadCheckServiceAction.getCurrentComplianceBO(flowRequestContext)" type="fsl.ta.toms.roms.bo.ComplianceBO"/>
+		
+		<transition on="endState" to="roadCheckSearch">
+			<evaluate expression="roadCheckServiceAction.getRoadCheckSearchResults(flowRequestContext)"></evaluate>
+		</transition>
+	</subflow-state>	
+	
+	<subflow-state id="subFlowViewDocDetails" subflow="document-manager" >
+		<input name="documentFromRoadCheck" required="true" value="roadCheckServiceAction.getDocumentViewFromDocMan(flowRequestContext)" type="fsl.ta.toms.roms.bo.DocumentViewBO"/>
+		<output name="documentFromRoadCheck" required="true" value="documentFromRoadCheck" type="fsl.ta.toms.roms.bo.DocumentViewBO"/>
+		<transition on="endStateBackToRoadCheck" to="viewDetailsState">
+			<evaluate expression="roadCheckServiceAction.updateDocumentInTable(flowRequestContext,documentFromRoadCheck)"></evaluate>
+		</transition>
+	</subflow-state>
+	
+	<action-state id="viewDetailsAction" >
+		<evaluate expression="roadCheckServiceAction.getDetails"/>
+		<transition on="success" to="viewDetailsState"></transition>
+		<transition on="error" to="roadCheckSearch"></transition>
+	</action-state>
+	
+	<view-state id="viewDetailsState"  view="../review_road_check/roadCheckReview.xhtml" redirect="false">
+		<transition on="backToSearch" to="roadCheckSearch"/>
+		<transition on="printSelectedDocs" to="verifyJP">
+			<evaluate expression="roadCheckServiceAction.checkSelectedDocuments(flowRequestContext)"/>
+		</transition>
+		<transition on="printAllDocs" to="verifyJP">
+			<evaluate expression="roadCheckServiceAction.printAllDocs(flowRequestContext)"/>
+		</transition>
+		<transition on="viewDocDetails" to="subFlowViewDocDetails"/>
+		<transition on="endReviewFromRoadCheck" to="endState"></transition>
+		<transition on="cancelRoadCheck" to="cancelRoadCheckViewState"></transition>
+		<transition on="verifyRoadCheck" to="verifyRoadCheckViewState"></transition>
+		<transition on="serveRoadCheck" to="serveRoadCheckViewState"></transition>
+	</view-state>
+	
+	<view-state id="verifyJP" redirect="false" view="../review_road_check/jp_print_entry_view.xhtml">
+		<transition on="verifyJP_Trans">
+			<evaluate expression="roadCheckServiceAction.verifyJP(flowRequestContext)"></evaluate>
+		</transition>
+		<transition on="cancelVerifyJP" to="viewDetailsState">
+		</transition>
+		<transition on="finishedPrinting" to="viewDetailsState">
+				<evaluate expression="roadCheckServiceAction.getDetails"></evaluate>
+		</transition>
+	</view-state>
+	
+	<view-state id="cancelRoadCheckViewState" view="../review_road_check/roadCheckCancel.xhtml" redirect="false">
+		<on-entry>
+			<set name="reasonList" value="roadCheckServiceAction.getReasonsByModuleType('DC')" type="java.util.ArrayList"></set>
+		</on-entry>
+		<transition on="cancel" to="cancelDocs"/>
+		<transition on="cancelAction" to="viewDetailsState"></transition>
+	</view-state>
+	
+	<action-state id="cancelDocs">
+		<evaluate expression="roadCheckServiceAction.cancelRoadCheckAndDocs(flowRequestContext)"></evaluate>
+		<transition on="success" to="viewDetailsState"></transition>
+		<transition on="error" to="cancelRoadCheckViewState"></transition>
+	</action-state>
+	
+	<view-state id="verifyRoadCheckViewState" view="../review_road_check/roadCheckVerify.xhtml" redirect="false">
+		<transition on="cancelAction" to="viewDetailsState"></transition>
+		<transition on="verifyUserEdits" to="verifyDocs">
+			<set name="flowScope.roadCheckReviewSummaryBean.verifyView.permission" value="'ROMS_DOC_MAN_JP_VERIFY'"></set>
+		</transition>
+		<transition on="denyUserEditVerification" to="verifyDenyDocs">
+			<set name="flowScope.roadCheckReviewSummaryBean.verifyView.permission" value="'ROMS_DOC_MAN_JP_VERIFY'"></set>
+		</transition>
+	</view-state>
+	
+	<action-state id="verifyDocs">
+		<evaluate expression="roadCheckServiceAction.verifyAllDocuments(flowRequestContext)"></evaluate>
+		<transition on="success" to="viewDetailsState"></transition>
+		<transition on="error" to="verifyRoadCheckViewState"></transition>
+	</action-state>
+	
+	<action-state id="verifyDenyDocs">
+		<evaluate expression="roadCheckServiceAction.verifyDenyAllDocuments(flowRequestContext)"></evaluate>
+		<transition on="success" to="viewDetailsState"></transition>
+		<transition on="error" to="verifyRoadCheckViewState"></transition>
+	</action-state>
+	
+	<view-state id="serveRoadCheckViewState" view="../review_road_check/roadCheckServe.xhtml" redirect="false">
+		<on-entry>
+			<evaluate expression="roadCheckServiceAction.getTAStaffListByRegion(roadCheckServiceAction.getRomsLoggedInUser().getLocationCode())"></evaluate>
+			<evaluate expression="roadCheckServiceAction.getParishes(flowRequestContext)"></evaluate>
+			<set name="summonsDocTypePresent" value="roadCheckServiceAction.checkIfSummonsPresent(flowRequestContext)"  type="java.lang.String"/>
+		</on-entry>
+		<transition on="cancelAction" to="viewDetailsState"></transition>
+		<transition on="serve" to="serveAction">
+			<!-- <evaluate expression="roadCheckServiceAction.serveAllDocuments(flowRequestContext)"></evaluate> -->
+		</transition>
+	</view-state>
+
+	
+	<action-state id="serveAction">
+		<evaluate expression="roadCheckServiceAction.serveAllDocuments(flowRequestContext)"></evaluate>
+		<transition on="success" to="viewDetailsState"></transition>
+		<transition on="error" to="serveRoadCheckViewState"></transition>
+	</action-state>
+
+
+	<end-state id="endState" />
+
+
+
+</flow>

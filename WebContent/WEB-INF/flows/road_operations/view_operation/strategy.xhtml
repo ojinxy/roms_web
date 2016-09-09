@@ -1,0 +1,251 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/newTemplate.xhtml">
+
+	<ui:define name="title">Schedule Operation</ui:define>
+	<ui:define name="pageHeader">Schedule Operation
+		<link	href="${request.contextPath}/theme/roadOp.css"	rel="stylesheet" />
+	</ui:define>
+	
+	<ui:define name="content">
+	
+		<script	src="${request.contextPath}/script/roadOperations.js"></script>
+		
+		<p:messages id="errorMessages" closable="true"/>
+      	<p:panel id="strategyDetailsPanel" header="Schedule Operation" >
+		<h:form id="strategyDetails">
+		
+		
+		<div style="padding-bottom:30px">
+	
+		<ol class="progtrckr" data-progtrckr-steps="5">
+		 
+    		<c:if test="#{completeOpDetails}">
+    		<li class="progtrckr-done" num="1">
+	    		<p:commandLink action="operation_details" id="opId" processIds="*" ajax="false" rendered="#{completeOpDetails}">
+	    		Operation Details
+				</p:commandLink>
+			</li>
+			</c:if>
+			<c:if test="#{!completeOpDetails}">
+				<li class="progtrckr-todo" num="1">Operation Details</li>
+			</c:if> 
+	    	<li class="progtrckr-current" num="2">Strategy</li>
+    	
+   			<c:if test="#{completeOpResource}"> 
+		 	<li class="progtrckr-done" num="3">
+		 		<p:commandLink action="resources" id="resourceId" processIds="*" ajax="false" rendered="#{completeOpResource}">
+		 		Resources
+				</p:commandLink>
+			</li>
+			</c:if>
+			<c:if test="#{!completeOpResource}"> 
+				<li class="progtrckr-todo" num="3">Resources</li>
+			</c:if>
+	
+			<c:if test="#{completeOpCourtDetails}"> 
+		 	<li class="progtrckr-done" num="4">
+		 		<p:commandLink action="court_details" id="courtId" processIds="*" ajax="false" rendered="#{completeOpCourtDetails}">
+		 		Court Details
+				</p:commandLink>
+			</li>
+			</c:if>
+			<c:if test="#{!completeOpCourtDetails}"> 
+					<li class="progtrckr-todo" num="4">Court Details</li>
+			</c:if>	
+	
+			<!-- <c:if test="#{completeOpReview}"> 
+		 	<li class="progtrckr-done" num="5">
+		 		<p:commandLink action="review" id="reviewId" processIds="*" ajax="false" rendered="#{completeOpReview}">
+		 		Review
+		 		</p:commandLink>	
+		 	</li>
+		 	</c:if>
+	
+			<c:if test="#{!completeOpReview}"> 
+					<li class="progtrckr-todo" num="5">Review</li>
+			</c:if>-->
+			
+			<c:if test="#{completeOpReview || completeOpCourtDetails}"> 
+			 	<li class="progtrckr-done" num="5">
+			 	<p:commandLink action="review" id="reviewId" processIds="*" ajax="false">
+			 	Review
+			 	</p:commandLink>
+			 	</li>
+			</c:if>
+			
+			<c:if test="#{!completeOpReview &amp;&amp; !completeOpCourtDetails}"> 
+					<li class="progtrckr-todo" num="5">Review</li>
+			</c:if>
+			</ol>
+		</div>
+		
+			<div style="padding-bottom:30px;margin-left:30px">
+		
+				<!-- div style="margin-left:30px">
+					<strong><h:outputText value="Operation Name: " /></strong>
+					<span style="color:#1365A0; font-size:16px;"><h:outputText id="operationName" name="operationName" value="#{operation.operationName}" /></span>
+					<br></br>
+					<br></br>
+				</div-->
+				<input type="text" name="opCategory" id="opCategory" value="#{operation.categoryId}" style="display:none"></input>
+				<input type="text" name="userRegion" id="userRegion" value="#{roadOperationsServiceAction.getUserRegion()}" style="display:none"></input>
+				<input type="text" name="opName" id="opName" value="#{roadOperationsServiceAction.getOpName()}" style="display:none"></input>
+				<h:inputText id="prevOpCategory" style="display:none" value="test"></h:inputText>
+				<p:inputText id="operationName" name="operationName" value="#{operation.operationName}" maxlength="64" size="75" style="display:none" ></p:inputText>
+				
+				<div style="padding-bottom:10px; padding-top:10px;">
+					<span  class="progress-label">Step 2 : Operation Strategies - </span>
+					<span class="progress-label-key"><h:outputText value="Operation Name: " /><h:outputText id="operationName" name="operationName" value="#{operation.operationName} [#{operation.categoryDescription}]" /></span>
+				</div>
+				<h2><span>Indicate Strategies that will be applied during the operation</span></h2>
+				
+				<div style="float:left; margin-top:21px;margin-left:15px;">
+				    <p:pickList id="strategyPickList" value="#{operation.listOfStrategies}" var="strategy" style="text-align:left;vertical-align:middle;"  
+				                itemLabel="#{strategy.strategyDescription}" itemValue="#{strategy}" showCheckbox="true" itemDisabled= "#{roadOperationsServiceAction.operationScheduleEditable('singlecomp')}"
+				                showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" converter="pickListConverter"
+				                onTransfer="handleStrategyTransfer(e)">
+				                
+				                <f:facet name="sourceCaption">Available</f:facet> 
+								<f:facet name="targetCaption">Assigned </f:facet>  
+				               
+				     </p:pickList>  
+				  
+				</div>
+				
+				 <p:outputPanel id="minReqDet">	
+					<div class="bubble" style="padding-top:20px;float:left;margin-left:70px;margin-top:40px;text-align:center">
+					
+						<strong>Minimum Resources Required:</strong>
+						<ul>
+							<li style="text-align:left"><h:outputText style="text-align:left;" value="[#{flowScope.minimumStaffReq}] TA Staff" /></li>
+							<li style="text-align:left"><h:outputText style="text-align:left;" value="[#{flowScope.minimumITAReq}] ITA Examiner(s)" /></li>
+							<li style="text-align:left"><h:outputText style="text-align:left;" value="[#{flowScope.minimumPoliceReq}] Police Officer(s)" /></li>
+							<li style="text-align:left"><h:outputText style="text-align:left;" value="[#{flowScope.minimumJPReq}] Justice(s) of the Peace" /></li>
+							<li style="text-align:left"><h:outputText style="text-align:left;" value="[#{flowScope.minimumVehReq}] Vehicle(s)" /></li>
+						</ul>
+					</div>
+				</p:outputPanel>
+				<br></br>
+				<br></br>
+				<br></br>
+			</div>
+			
+			
+			<h:inputText id="listOfSelectedStrategyID" style="display:none" value="#{operation.listOfSelectedStrategyID}"></h:inputText>
+			<h:inputText id="autoGeneratedName" style="display:none" value="#{operation.autoGeneratedName}"></h:inputText>
+			<h:inputText id="opNameChanged" style="display:none" value="#{flowScope.opNameChanged}"></h:inputText>
+			
+			
+			 <p:commandButton style="display:none"  id="buttHandleStratTransfer" action="handleStategyTransfer" ajax="true"
+		   		update="listOfSelectedStrategyID,strategyDetails:minReqDet, strategyDetails:strategyPickList" processIds="*"> 
+		     </p:commandButton>
+		     
+		     <!-- Invisible Button used for Navigation -->
+		     <p:commandButton style="display:none" action="operation_details" id="opIdLink" processIds="*" ajax="false"></p:commandButton>
+			 <p:commandButton style="display:none" action="strategy" id="strategyIdLink" processIds="*" ajax="false"></p:commandButton>
+			 <p:commandButton style="display:none" action="resources" id="resourceIdLink" processIds="*" ajax="false" ></p:commandButton>
+	    	 <p:commandButton style="display:none" action="court_details" id="courtIdLink" processIds="*" ajax="false" ></p:commandButton>
+			 <p:commandButton style="display:none" action="review" id="reviewIdLink" processIds="*" ajax="false" ></p:commandButton>
+			<!-- end -->
+		 		
+			<div id="buttons" style="clear:both; padding-top:20px;text-align: center">	
+					 <p:commandButton styleClass ="blue"  id="backFromOpDetails" value="Back" action="back" processIds="*" ajax="false"></p:commandButton>
+					<p:commandButton styleClass ="blue"  id="continueFromStrategy" value="Continue" action="continueFromStrategy" processIds="*" ajax="false" widgetVar="theWidget" onstart="theWidget.disable();" oncomplete="theWidget.enable();"></p:commandButton>
+				</div>
+			
+			<div>
+			
+<!-- 			<c:forEach var="item" value="#{availableParishes}"> -->
+<!-- 				<h:outputText value="#{item}" /> -->
+			<!-- 				<h:selectBooleanCheckbox value="#{formBean.checkMap[item]}"> -->
+<!-- 				<h:selectBooleanCheckbox value="true"> -->
+<!-- 					<sf:ajaxEvent event="click" action="test" processIds="*" /> -->
+<!-- 				</h:selectBooleanCheckbox> -->
+<!-- 			</c:forEach> -->
+			
+			
+			</div>
+			
+			
+		</h:form>
+		</p:panel>
+		
+		<script type="text/javascript">
+          $(document).ready( function() { 
+        	
+        	  handleStrategyTransferAux();
+        	  
+        	  var currentOpName = $('input[id*="opName"]').val();
+        	  var opNameChanged = $('input[id*="opNameChanged"]').val();
+        	  var autoGeneratedName = $('input[id*="autoGeneratedName"]').val();
+        	  /*  alert("currentOpName'"+ currentOpName+"'");
+        	  alert(autoGeneratedName); */
+        	  
+        	   //var opCategory = $('input[id*="OpCategory"]').val(); 
+        	 //  $('input[id*="prevOpCategory"]').val(opCategory);
+        	  // alert(opCategory);
+        	   
+//         	  if ((currentOpName.length == 0)  || /(^[A-Z]{3}-[A-Z]{1}-[0-9]{4})$/.test(currentOpName)) 
+        	  if (currentOpName.length == 0){
+        			  if(( autoGeneratedName =='Y' ))
+	        	  {
+        			 
+        				  var cat= $('input[id*="opCategory"]').val().charAt(0);
+	        			  
+		        	  	  var reg= $('input[id*="userRegion"]').val();
+			        
+			        	  var options = {regionCode:reg,
+			        				category:cat};
+			        	  $('span[id*="operationName"]').Default_RO_Name(options);
+			        	  
+			        	  var newOpName = $('span[id*="operationName"]').val();
+			        	 
+			        	  $('input[id*="operationName"]').val(newOpName);
+			        	  $('input[id*="autoGeneratedName"]').val('Y');
+			        	  //alert(newOpName);
+        			  
+	        	  }/* else{
+	        		  alert("NOT GENERATED currentOpName'"+ currentOpName+"'");
+	        		  
+	        	  } */
+        	  }
+
+
+			        	  $(".progtrckr li:has(a)").click(function() {
+			                  
+			               //TODO use if condition along with invisible buttons
+			                //alert($(this).attr('num'));//.click();
+			               if($(this).attr('num')== 1){
+			            	   $('button[id*=opIdLink]').click(); //rendered="#{completeOpDetails}"
+			               }if($(this).attr('num')== 2){
+			            	   $('button[id*=strategyIdLink]').click(); //rendered="#{completeOpStrategy}"
+			               } 
+			               else if($(this).attr('num')== 3){
+			                
+			            	   $('button[id*=resourceIdLink]').click(); //rendered="#{completeOpResource}"
+			               }else if($(this).attr('num')== 4){
+			            	   $('button[id*=courtIdLink]').click(); //rendered="#{completeOpCourtDetails}"
+			                	
+			               }else if($(this).attr('num')== 5){
+			            	   $('button[id*=reviewIdLink]').click(); //rendered="#{completeOpReview}"
+			               }
+			               
+			               });	
+          	
+        	
+        	  
+        	  
+          });
+         	
+       </script>	 
+</ui:define>	
+</ui:composition>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+
+<html class="no-js"
+ 	lang="en" 
+ 	xmlns:p="http://primefaces.org/ui"
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"	
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:fsl="http://org.fsl.com"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	>
+	
+	<h:head>	
+		<f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        </f:facet>
+		<title>ROMS-<ui:insert name="title">Road Operation Management System</ui:insert></title>
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<!-- meta charset="utf-8" /-->
+		
+		
+		<!-- Demo page js and css files -->
+		<!--script src="http://code.jquery.com/jquery-1.10.2.min.js"></script-->
+ <!-- script type="text/javascript" src="${request.contextPath}/script/JQueryUI/js/jquery-1.9.1.min.js"></script--> 
+ <script type="text/javascript" src="${request.contextPath}/script/util.js" />	
+	
+<script type="text/javascript" src="${request.contextPath}/script/JQueryUI/jquery-migrate-1.2.1.js" />
+
+<script type="text/javascript" src="${request.contextPath}/script/force-place.js" />
+
+		<link rel="stylesheet" href="${request.contextPath}/css/reset.css"/>
+		<link rel="stylesheet" href="${request.contextPath}/css/960_24_col.css"/>
+		<link rel="stylesheet" href="${request.contextPath}/css/text.css"/>
+		<link rel="stylesheet" href="${request.contextPath}/css/style.css" />
+		
+		<link rel="stylesheet" href="${request.contextPath}/css/fonts/awesomeIconFonts/font-awesome.css" type="text/css"/> 
+		<link rel="stylesheet" href="${request.contextPath}/css/fonts/awesomeIconFonts/font-awesome-helper.css" type="text/css"/> 
+
+		<!-- Add JQuery cookie plugin (optional) -->
+		<script src="${request.contextPath}/script/src/jquery.cookie.js"></script>
+		<!-- Add navgoco main js and css files  -->
+		<script type="text/javascript" src="${request.contextPath}/script/src/jquery.navgoco.js"></script>
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/script/src/jquery.navgoco.css" media="screen" />
+
+
+<script type="text/javascript" 	src="${request.contextPath}/script/jquery.balloon.js" />
+<script type="text/javascript" src="${request.contextPath}/script/force-place.js" />
+<script type="text/javascript" src="${request.contextPath}/script/ajaxLoaderscript.js" />
+
+<!-- CSS Used for Road Operation Screens -->
+<link href="${request.contextPath}/theme/roadOp.css" rel="stylesheet" />
+	
+
+
+
+
+<script type="text/javascript"> 
+	window.history.forward(1);
+</script> 
+
+<ui:insert name="script" />
+</h:head>
+<body>
+<f:loadBundle basename="application" var="app"/>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+<!--input type="button" class="dhe-input-button" value="Toggle sidebar" id="button-toggle2"-->
+		<p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/> 
+		<p:dialog modal="true" widgetVar="statusDialog" header="Status" resizable="false"  draggable="false" closable="false">  
+			<div style="text-align:center;">
+				Please wait while your request is being processed <br/>
+				<p:graphicImage value="/images/ajax-loader_blue.gif" />  
+			</div>
+		</p:dialog>
+		<div id="header"  class="container_24" >
+			<div id="topMenu" class="grid_24" >
+				<!-- <ul class="header-taskbar" style="float:right; text-align:right;">
+					<li><a href="${request.contextPath}/spring/home">Home</a></li>
+					<li id="user">
+						<a  href="#">
+							<span class="username"><i class="icon-user icon-lg"></i>${currentUser.name}</span>
+							<i class="icon-angle-down"></i>
+						</a>
+							<ul class="hideMenu" id="userMenu" style="">
+								<li><a href="${request.contextPath}/spring/logout">Log Out</a></li>
+							</ul>
+						a href="#">UserName <img src="img/icons/logout-icon.png" alt="Log Out"/></a></li
+					</li>
+				</ul> -->	
+			</div>
+			<div  class="grid_24" style="background-color:#ffffff; -webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px; -moz-border-radius-topleft: 5px; -moz-border-radius-topright: 5px; border-top-left-radius: 5px; border-top-right-radius: 5px;">
+				<div class="grid_1 alpha" style="background-color:#0e6fc4; -webkit-border-top-left-radius: 5px;-moz-border-radius-topleft: 5px;
+												 border-top-left-radius: 5px; padding:25px 15px;">
+					<span id="test"><!--a href="#menu">
+					i class="icon-bars icon-lg"></i-->
+					<!--img src="img/icons/menu-icon.png" alt="menu"/></a-->
+					<input type="image" src="${request.contextPath}/img/icons/menu-bars.png" id="button-toggle" style="width:24px; color:#fff;"  />
+					</span>
+					
+					
+				</div>
+				<span class="grid_16" style="padding-top:13px;"><a href="#"><img src="${request.contextPath}/img/logo.png" alt="Road Operation Management"/></a></span>
+				<span class="grid_6" style="margin-top:4%; float:right; text-align:right"><span id="date-span" ></span></span>				
+			</div>
+
+			
+		</div>
+			
+		<div id="main-content" class="container_24"  style="clear:both; transition:width 2s;
+					-webkit-transition:width 2s">
+			<div id="main" class="use-regsidebar sidebar-at-left grid_24 grad1" style="/*background:#fff;*/ transition: width 2s;
+-webkit-transition: width 2s; /* Safari */" >
+				<!--input type="checkbox" id="toggleexpand" />
+				<label for="toggleexpand"><span>></span>
+				</label-->
+				<div id="content" style="background-color:#fff; min-height:850px;" >
+				
+					<div id="page-header" style="background-color:none; height:height: 47px;" class="grad2">
+						<span id="wrapper-welcome" class="grid_12" style="font-size:16px;">
+							<ui:insert name="welcome" />
+						</span>
+						<span id="region-wrapper" class ="grid_12" style="text-align:right; float:right;">
+							<i class="icon-map-marker icon-large"></i>${baseServiceAction.romsLoggedInUser.location}
+						</span>
+					</div>
+					
+					<div id="page-content" style="clear:both; background-color:#fff; min-height:700px;">
+					<article>
+						<header>
+							<h3 class="page-title"><ui:insert name="pageHeader">Page Header</ui:insert></h3>
+							<hr/>
+							
+
+						</header>
+						<section>
+						
+							<p:outputPanel id="mainContent">  
+								<ui:insert name="content" />
+							</p:outputPanel>
+						
+						
+						</section>
+						
+					</article>
+				</div>
+
+				</div>
+
+			</div>
+			
+			
+			</div>
+			
+			<div id="version-footer" class="container_24">
+					<footer class="grid_24">
+						<span>
+							<img src="${request.contextPath}/img/ta-logo.png" alt="transport authority"/>
+						</span>
+						<br/>Copyright &#169; <span id="copyYear"></span> eGov Jamaica Ltd.   Version ${app.version}
+					</footer>
+			</div>
+		
+
+    </body>
+</html>

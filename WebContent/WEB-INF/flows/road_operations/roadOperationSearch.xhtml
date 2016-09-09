@@ -1,0 +1,417 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/newTemplate.xhtml"
+	xmlns:fsl="http://org.fsl.com">
+	
+	
+	<ui:define name="title">Road Operation Search</ui:define>
+	<ui:define name="pageHeader">
+		<!-- CSS Used for Road Operation Screens -->
+		<link	href="${request.contextPath}/theme/roadOp.css"	rel="stylesheet" />	
+	
+		<style type="text/css">
+			.resultsFirstColumn
+			{
+				width: 30%;
+			}
+			
+			label
+			{
+				margin-right:5px !important;
+			}
+			
+			.pageHead 
+			{
+				background-color: blanchedalmond;
+				padding: 0.6em;
+				width: 99%;
+				min-height: 20px;
+			}
+			
+	
+		</style>	
+	</ui:define>
+	<ui:define name="content">
+
+	
+		<h:form styleClass="form" id="roadOperationSearch">
+		<p:panel id="panelRoadOpSearch" header="Road Operation Search">
+		<div class="tabs"><a href="#">Road Operation Search</a></div>
+		<div class="main borders">
+			<p:messages id="errorMessageMain" closable="true" autoUpdate="true"/>  
+			<div class="main">
+				<div >
+					<!-- <h4 class="pageHead">
+						<span>At least one search criteria MUST be entered</span>
+						<h:outputText value="Has Special Permsiions: #{flowScope.hasSpecialPermissions}"></h:outputText>
+					</h4> -->
+					<span>
+						<h:outputText styleClass="outputText" value="Operation Name: "></h:outputText>						
+						<p:autoComplete id="txtOpName" scrollHeight="200" size="50" cache="true" cacheTimeout="30000" value="#{criteria.operationName}" completeMethod="#{roadOperationsServiceAction.roadOperationNameAutoComplete}">
+							<p:ajax event="query" global="false"></p:ajax>   
+						</p:autoComplete>
+              
+					</span>
+					<br/>
+					<br/>
+				</div>
+				<div>
+					<div style="clear: both;padding-bottom:15px;padding-top:10px">
+						<span style="float:left;padding-right:13px">
+							<h:outputText value="Operation Start Date:"></h:outputText>
+							<br/>
+							<p:calendar value="#{criteria.operationStartDate}" id="txtScheduledStartDate" binding="#{startDate}" pattern="yyyy-MM-dd" 
+								readonlyInput="true" showOn="button" navigator="true">
+								<fsl:dateTimeConverter showTime="false" />
+							</p:calendar>
+							<p:watermark for="txtScheduledStartDate" value="yyyy-mm-dd"></p:watermark>
+						</span>
+						<span style="float:left;padding-right:13px">
+							<h:outputText value="Operation End Date:"></h:outputText>
+							<br/>
+							<p:calendar value="#{criteria.operationEndDate}" icon="/resources/images/startRoadOp.png" converter="DateTimeConverter" id="txtScheduledEndDate" pattern="yyyy-MM-dd"
+								readonlyInput="true" showOn="button" navigator="true">
+								<fsl:dateTimeConverter showTime="false" />
+							</p:calendar>
+							<p:watermark for="txtScheduledEndDate" value="yyyy-mm-dd"></p:watermark>
+						</span>
+						<span style="float:left;padding-top:26px">
+							<p:selectBooleanCheckbox style="vertical-align:middle !important;margin-right:7px;" value="#{criteria.scheduledDTime}" id="checkActualDate" itemLabel="Actual"></p:selectBooleanCheckbox>
+						</span>
+					</div>
+				</div>
+				<div style="clear: both;padding-bottom:15px;padding-top:10px">
+						<span style="float:left;padding-right:30px">
+							<h:outputText value="Category:"></h:outputText>
+							<br/>
+							<p:selectOneMenu style="width:150px"
+								id="comboCategory" value="#{criteria.categoryId}" disabled="#{! flowScope.hasSpecialPermissions}">
+								<f:selectItem itemValue="" itemLabel="[Select One]" />
+								<f:selectItems value="#{categoryList}" />
+							</p:selectOneMenu>
+						</span>
+						<span style="float:left;padding-right:30px">
+							<h:outputText value="Status:"></h:outputText>
+							<br/>
+								<p:selectOneMenu style="width:150px"
+								id="comboStatus" value="#{criteria.statusId}">
+								<f:selectItem itemValue="" itemLabel="[Select One]" />
+								<f:selectItems value="#{statusList}" />
+							</p:selectOneMenu>
+						</span>
+						<span>
+							<h:outputText value="Region Origin:"></h:outputText>
+							<br/>
+							<p:selectOneMenu style="width:150px"
+								id="comboOfficeRegion" value="#{criteria.officeLocCode}" disabled="#{! flowScope.hasSpecialPermissions}">
+								<f:selectItem itemValue="" itemLabel="[Not Specified]" />
+								<f:selectItems value="#{officeRegionList}" />
+							</p:selectOneMenu>
+						</span>
+				</div>
+				<div>
+					<p:accordionPanel id="panelAdvancedSearch" activeIndex="-1">
+						<p:tab title="Advanced Search Criteria">
+						<div style="padding-top:10px">
+							<h:outputText styleClass="outputText" value="Strategy :" style="width:13%;display:inline-block;"></h:outputText>
+							<p:selectOneMenu 
+								id="comboStrategy" value="#{criteria.strategyId}" style="vertical-align: middle;width:200px">
+								<f:selectItem itemValue="-1" itemLabel="[Select One]" />
+								<f:selectItems value="#{strategyList}" />
+							</p:selectOneMenu>
+						</div>
+						<div style="padding-top:20px;">
+							<span>
+								<h:outputText styleClass="outputText" value="Team Lead :" style="width:13%;display:inline-block;"></h:outputText>
+								<p:watermark id="teamLeadWM" for="txtTeamLead" value="Last, First Middle Name [ID]"/> 
+								<p:autoComplete global="false" id="txtTeamLead" scrollHeight="200"  size="28" value="#{flowScope.teamLeadAdvSearch}" 
+									completeMethod="#{roadOperationsServiceAction.taStaffNameAutoComplete}" converter="TAStaffIDConverter"
+									var="p" itemValue="#{p}" forceSelection="true" itemLabel="#{p.fullName.concat(' [').concat(p.staffId).concat(']')}">
+									<p:ajax event="query" global="false"></p:ajax>   
+								</p:autoComplete>  
+							</span>
+						</div>
+						<div style="padding-top:20px;white-space: nowrap;">
+							<span style="padding-right:20px;text-align: left">
+								<h:outputText value="Parish :"  styleClass="outputText" style="width:13%;display:inline-block;"></h:outputText>
+								<p:selectOneMenu 
+									id="comboParish" value="#{criteria.parishCode}" style="vertical-align: middle;width:200px">
+									<f:selectItem  itemValue="" itemLabel="[Select One]" />
+									<f:selectItems value="#{parishList}" />
+									<p:ajax update="comboLocation" listener="#{roadOperationsServiceAction.filterLocations}"/> 
+								</p:selectOneMenu>
+							</span>
+							<span>
+								<h:outputText value="Location :" styleClass="outputText"></h:outputText>
+									<p:selectOneMenu  
+									id="comboLocation" value="#{criteria.locationId}" style="vertical-align: middle;width:200px">
+									<f:selectItem itemValue="-1" itemLabel="[Select One]" />
+									<f:selectItems value="#{locationList}" />
+								</p:selectOneMenu>
+							</span>
+						</div>
+						<div style="padding-top:20px;">
+							<span style="padding-right:20px;margin-right:26px;">
+<!-- 								<h:outputText value="Back Dated Operation :" styleClass="outputText"></h:outputText> -->
+								<p:selectBooleanCheckbox itemLabel="Back Dated Operation " value="#{criteria.backDated}" id="checkBackDated" widgetVar="checkBackDated"  style="vertical-align:middle;">
+<!-- 									  <p:ajax update="checkAuthorized,lblAuthorized"/> -->
+										<p:ajax update="checkAuthorized"/>
+								</p:selectBooleanCheckbox>
+							</span>
+			
+							<span >
+<!-- 								<h:outputText value="Authorized :" id="lblAuthorized" styleClass="outputText" style="color:#{not criteria.backDated ? 'gray' : 'inherit'}"></h:outputText> -->
+								<p:selectBooleanCheckbox itemLabel="Authorized " value="#{criteria.unAuthorized}" id="checkAuthorized" disabled="#{not criteria.backDated}" widgetVar="checkAuthorized"
+									style="vertical-align:middle;color:#{not criteria.backDated ? 'gray' : 'inherit'}"/>
+							</span>
+							
+						</div>
+						</p:tab>
+					</p:accordionPanel>
+				</div>
+				<div style="text-align: center;padding-top:10px;/*border-top: .1em solid #ddd;*/ margin-top:15px;" >
+					<span>
+						<p:commandButton id="butSearch" value="Search" style="padding-rght:1em;" action="search" processIds="*" ajax="true"   iconPos="right"
+							widgetVar="butSearch" onstart="butSearch.disable();" update="panelResults,errorMessageMain" oncomplete="butSearch.enable();" styleClass="blue blue-icon icon-search icon-af ">
+						</p:commandButton>
+						<p:commandButton id="butReset"   value="Clear" processIds="*" action="reset" ajax="false" 
+							 widgetVar="butReset" onstart="butReset.disable();" oncomplete="butReset.enable();"  styleClass="blue blue-icon icon-refresh icon-af ">
+						</p:commandButton>						
+				
+					</span>
+				</div>
+				
+			</div>
+			</div>
+			<p:outputPanel id="panelResults">
+			<div style="width: 95%;margin-left: auto; margin-right: auto;
+			display: #{dataTable.amountOfRecords gt 0 ?'':'none'}" >
+				<div style="border: 1px solid gainsboro;padding: 0.9em; border-bottom: 2px solid gainsboro;overflow: auto;">
+					<span style="white-space: nowrap;overflow: auto;">
+						Results:
+						<h:outputText styleClass="outputText" value="#{dataTable.pagingDetails}" id="lblResultsPaging"></h:outputText>
+						<label style="padding-left:30px">Sort By:</label>
+						<p:selectOneMenu 
+								id="comboSortBy" value="#{dataTable.sortBy}"
+								valueChangeListener="#{roadOperationsServiceAction.sortBy}" style="vertical-align:middle">
+								<f:selectItem itemValue="Category" itemLabel="Category" />
+								<f:selectItem itemValue="Date Created" itemLabel="Date Created" />
+								<f:selectItem itemValue="Operation Name" itemLabel="Operation Name" />
+								<f:selectItem itemValue="Operation Start Date" itemLabel="Operation Start Date" />
+								<f:selectItem itemValue="Status" itemLabel="Status" />
+								<p:ajax update="panelResults"/>
+						</p:selectOneMenu>
+						<span>
+							<p:commandLink id="linkSortASC" action="sortOrderASC" ajax="true" update="panelResults" disabled="#{dataTable.sortOrder eq 'asc'?true:false}">
+								<h:outputText value="ASC" />
+							</p:commandLink>
+							|
+							<p:commandLink id="linkSortDESC" action="sortOrderDESC" ajax="true" update="panelResults" disabled="#{dataTable.sortOrder eq 'desc'?true:false}">
+								<h:outputText value="DESC" />
+							</p:commandLink>
+						</span>
+						<span>
+							<label style="padding-left:30px; ">Items:</label>
+							<p:selectOneMenu valueChangeListener="#{roadOperationsServiceAction.changePageSize}"
+									id="comboItems" value="#{dataTable.rowsPerPage}" style="vertical-align:middle">
+									<f:selectItem itemValue="10" itemLabel="10" />
+									<f:selectItem itemValue="50" itemLabel="50" />
+									<f:selectItem itemValue="100" itemLabel="100" />
+									<p:ajax update="panelResults"/>
+							</p:selectOneMenu>
+						</span>
+					</span>
+					</div>
+					
+					<div style="overflow: auto;border: 1px solid gainsboro;width: 100% !important;/*background-color: #f4f0ec*/">
+					
+					
+					      <h:dataTable
+							border="1" styleClass="tblroadOpClass" style="width: 100%; margin-bottom:0;"
+							footerClass="footerClass" rowClasses="even,odd" columnClasses="resultsFirstColumn" cellpadding="5"
+							cellspacing="8"  id="searchResults" rendered="true" rows="100"
+							value="#{dataTable.pageElements}" var="roadOperationDetailsSumary">
+								<h:column id="roadOpInfo" >
+									<h:outputText value="#{roadOperationDetailsSumary.roadOp.operationName} (#{roadOperationDetailsSumary.roadOp.categoryDescription})" style="font-weight:bolder;"/>
+									<p:tree style="width:90%; background:none;" value="#{roadOperationDetailsSumary.roadOpTeamTree.root}" var="node" id="teamTree" animate="true">  
+									        <p:treeNode id="treeNode">  
+									        	 <span style="cursor: pointer;" onclick="this.parentNode.parentNode.firstChild.click();">
+                       								  <h:outputText value="#{node}" id="lblNode"/>  
+                    							</span>									           
+									        </p:treeNode>  
+									</p:tree>								
+									<f:subview rendered="#{not roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('scheduling')}">
+										<p:tree style="width:90%; background:none;" value="#{roadOperationDetailsSumary.roadOpStatsTree.root}" var="node" id="tree" animate="true">  
+									        <p:treeNode id="treeNode">  
+									        	 <span style="cursor: pointer;" onclick="this.parentNode.parentNode.firstChild.click();">
+                       								 <h:outputText value="#{node}" id="lblNode"/>
+                    							</span>									             
+									        </p:treeNode>  
+										</p:tree>
+									</f:subview>
+								</h:column>
+								<h:column id="roadOpInfo" >
+									<div style="float:right;">
+									
+									<ul id="breadcrumbs-three" ><li class="#{roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('scheduling') ? 'scheduling': roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('closed')? 'closed' :
+															roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('completed') ? 'completed' : roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('started')? 'started' :
+															roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('no action') ? 'noaction' : roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('terminated') ? 'terminated' :
+															roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('cancelled') ? 'cancelled' : 'unkown'}">
+									<a href="#">
+									<span>
+									<f:subview rendered="#{roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('terminated') or roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('cancelled')}">
+										<h:graphicImage url="#{roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('terminated')?'/resources/images/terminated.png':'/resources/images/cancelled.png'}"/>
+									</f:subview>
+									
+									<h:outputText value="#{roadOperationDetailsSumary.roadOp.statusDescription}" styleClass="#{roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('scheduling') ? 'scheduling': roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('closed')? 'closed' :
+															roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('completed') ? 'completed' : roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('started')? 'started' :
+															roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('no action') ? 'noaction' : roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('terminated') ? 'terminated' :
+															roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('cancelled') ? 'cancelled' : 'unkown'} breadcrumbs"/>
+									
+									</span>	
+									</a>	
+									</li></ul></div>		
+									<f:subview rendered="#{roadOperationDetailsSumary.roadOp.backDated.trim().equalsIgnoreCase('Y')}">
+										<span style="display:#{roadOperationDetailsSumary.roadOp.authorizedDtime eq null ? 'none' : 'inline'}; width:30%;overflow:auto;white-space:nowrap">
+											Backdated:
+											 <h:outputText value="#{roadOperationDetailsSumary.roadOp.authorizedDtime }"  style="padding-right:30px;">
+															<fsl:dateTimeConverter showTime="false" />
+											</h:outputText>
+										</span>
+										<span style="display:#{roadOperationDetailsSumary.roadOp.authorized eq null ? 'none' : 'inline'}">
+											Authorized: 
+											<h:graphicImage url="#{roadOperationDetailsSumary.roadOp.authorized.equals('Y')?'/resources/images/yesIcon.png':'/resources/images/close.png'}" style="vertical-align:bottom;"/>
+										</span>
+									</f:subview>
+									<br/>
+									<span>				
+									
+										<span style="font-size:1em;white-space: nowrap;overflow: auto;">
+											<h:outputText value="Date Created: "/>
+											<h:outputText value="#{roadOperationsServiceAction.formatDateTime(roadOperationDetailsSumary.roadOp.dateCreated)}">
+											</h:outputText>
+										</span>
+										<br/>			
+										<span style="font-size:1em;white-space: nowrap;overflow: auto;">
+											<h:outputText value="Scheduled Date: "/>
+											<h:outputText value="#{roadOperationsServiceAction.formatDateTime(roadOperationDetailsSumary.roadOp.scheduledStartDtime)}">
+											</h:outputText>
+											<h:outputText value=" to "/>
+											<h:outputText value="#{roadOperationsServiceAction.formatDateTime(roadOperationDetailsSumary.roadOp.scheduledEndDtime)}" >
+											</h:outputText>
+										</span>
+										
+										
+										<f:subview rendered="#{not roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('scheduling') and 
+																not roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('canceled') and 
+																not roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('no action')}">
+										<br/>
+										<span style="font-size:1em;white-space: nowrap;overflow: auto;">
+											<h:outputText value="Actual Date: "/>
+											<h:outputText value="#{roadOperationsServiceAction.formatDateTime(roadOperationDetailsSumary.roadOp.actualStartDtime)}" >
+											</h:outputText>
+											<h:outputText value=" to " rendered="#{roadOperationDetailsSumary.roadOp.actualEndDtime != null}"/>
+											<h:outputText value="#{roadOperationsServiceAction.formatDateTime(roadOperationDetailsSumary.roadOp.actualEndDtime)}" rendered="#{roadOperationDetailsSumary.roadOp.actualEndDtime != null}">
+											</h:outputText>
+										</span>
+										</f:subview>
+										<span style="text-align: right;display: block; width: 90%">
+											
+												<f:subview rendered="#{operation.validUserToScheduleOp and roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('scheduling') and roadOperationDetailsSumary.roadOp.authorized.equals('N') and ! roadOperationsServiceAction.isHandHeldNoFlow()}"	>
+													<p:commandLink id="butAuth" processIds="*" action="authOne" ajax="false" style="padding-right:20px">
+															<h:graphicImage value="/resources/images/authorize_ico.png" styleClass="roadOpStart" style="border-bottom: transparent 4px solid;"/>
+													</p:commandLink>
+													<p:tooltip for="butAuth" value="Authorize Road Operation."></p:tooltip>
+												</f:subview>
+											
+											
+											<sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_OP_START">
+												<f:subview rendered="#{operation.validUserToScheduleOp and (roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('scheduling') or roadOperationDetailsSumary.roadOp.statusDescription.trim().equalsIgnoreCase('no action'))and not roadOperationDetailsSumary.roadOp.authorized.equals('N')}"	>
+	
+													<p:commandLink id="butStart" processIds="*" action="roadOperationStart" ajax="false"  style="padding-right:20px;" >
+														<h:graphicImage value="/resources/images/start-icon.png" styleClass="roadOpStart" style="border-bottom: transparent 4px solid;"/>
+													</p:commandLink>
+													<p:tooltip for="butStart" value="Start Road Operation."></p:tooltip>
+												</f:subview>
+												
+												<f:subview rendered="#{operation.validUserToScheduleOp and roadOperationDetailsSumary.roadOp.statusId.trim().equalsIgnoreCase('RO_STA') }"	>
+	
+													<p:commandLink id="butComplete" processIds="*" action="roadOperationComplete" ajax="false"  style="padding-right:20px;" >
+														<h:graphicImage value="/resources/images/complete-icon.png" styleClass="roadOpStart" style="border-bottom: transparent 4px solid;"/>
+													</p:commandLink>
+													<p:tooltip for="butComplete" value="Complete Road Operation."></p:tooltip>
+												</f:subview>
+												
+											</sec:authorize>
+											
+											
+											<p:commandLink id="butView" processIds="*" action="viewOne" ajax="false" rendered="#{! roadOperationsServiceAction.isHandHeldNoFlow() }" >
+													<h:graphicImage value="/resources/images/viewRoadOp.png" styleClass="roadOpView" style="border-bottom: transparent 4px solid;"/>
+											</p:commandLink>
+											<p:tooltip for="butView" value="View Road Operation Details."></p:tooltip>
+											
+										</span>
+									</span>
+								</h:column>
+							</h:dataTable>  	
+														
+					</div>
+					<div class="" style="text-align:right;">
+						<span style="padding-right:20px">
+							<p:commandLink id="butPrevious" update="panelResults" disabled="#{dataTable.getCurrentFirstRow() eq 0}" action="prev" processIds="*">&lt;&lt;Prev</p:commandLink>
+							|
+							<p:commandLink id="butNext" update="panelResults" action="next" disabled="#{dataTable.getAmountOfRecords() eq dataTable.getCurrentLastRow() + 1}" processIds="*">Next&gt;&gt;</p:commandLink>
+						</span>
+						<span>
+							<p:commandLink id="butFirst" update="panelResults" action="first" processIds="*" disabled="#{dataTable.getCurrentFirstRow() eq 0 }">First</p:commandLink>
+							|
+							<p:commandLink id="butLast" update="panelResults" action="last" processIds="*" disabled="#{dataTable.getAmountOfRecords() eq dataTable.getCurrentLastRow() + 1}">Last</p:commandLink>
+						</span>
+					</div>
+			</div>
+			</p:outputPanel>
+			<script type="text/javascript">
+			//<![CDATA[
+			$(document).ready( function() {
+				   
+				    
+				$('.fc-header-title').prepend('<img src="/resources/images/Objects-Tear-of-calendar-icon.png" style="float:left;padding-right:10px"/>')
+				    
+				    $(".tblroadOpClass").delegate('tr','mouseover mouseleave', function(e) {
+				        if (e.type == 'mouseover') {
+				          $(this).addClass("tblRoadOpHover");
+				          
+				        }
+				        else {
+				          $(this).removeClass("tblRoadOpHover");
+				          
+				        }
+				    });
+				    
+				    
+				    $('div[id*=searchRes]').css({'background':'none'});
+				  });		
+				  
+				  			
+				
+		
+			//]]>
+  			</script>
+  			 
+  			</p:panel>
+
+  			
+	  </h:form>
+
+
+
+	</ui:define>
+</ui:composition>

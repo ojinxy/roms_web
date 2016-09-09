@@ -1,0 +1,130 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces" xmlns:hx="http://www.ibm.com/jsf/html_extended" xmlns:sec="http://www.springframework.org/security/tags" xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com" xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
+	<ui:fragment id="page">
+	  		<div style="width:95%; display:#{initiateView.disableMotorVehicleFields ? 'none' : 'block'}">
+				<span  class="info-alert">
+					No Motor Vehicle Results were returned. Below are the details captured
+				</span>
+			</div>
+						
+						
+						<p:panelGrid >
+						
+							<p:row>
+								<p:column><h:outputLabel value="Vehicle Details" style="font-weight:bold;"/></p:column>
+								<p:column><h:outputLabel value="MAKE" style="font-weight:bold;"/></p:column>
+								<p:column><h:outputLabel value="MODEL" style="font-weight:bold;"/></p:column>
+								<p:column><h:outputLabel value="YEAR" style="font-weight:bold;"/></p:column>
+								<p:column> <h:outputText value="COLOUR: " style="font-weight:bold;"/></p:column>
+							</p:row>
+							<p:row>
+								<p:column></p:column>
+								<p:column><h:outputLabel value="#{initiateView.makeDescription}" /></p:column>
+								<p:column><h:outputLabel value="#{initiateView.model}"/></p:column>
+								<p:column><h:outputLabel value="#{initiateView.year}" /></p:column>
+								<p:column> <h:outputLabel value="#{initiateView.colour}"/></p:column>
+							</p:row>
+							
+							
+							<p:row>
+								<p:column></p:column>
+								<p:column><h:outputLabel value="ENGINE NO." style="font-weight:bold;"/></p:column>
+								<p:column><h:outputLabel value="CHASSIS NO." style="font-weight:bold;"/></p:column>
+								<p:column><h:outputLabel value="PLATE REGN NO." style="font-weight:bold;"/></p:column>
+							</p:row>
+							<p:row>
+								<p:column></p:column>
+								<p:column><h:outputLabel value="#{initiateView.engineNo}" /></p:column>
+								<p:column><h:outputLabel value="#{initiateView.chassisNo}"/></p:column>
+								<p:column><h:outputLabel value="#{initiateView.plateRegNo}" /></p:column>
+							</p:row>
+							
+								    						
+							<p:row rendered="#{initiateView.disableMotorVehicleFields}">
+								<p:column><h:outputLabel value="Fitness Details" style="font-weight:bold;"/></p:column>
+								<p:column rendered="#{not(mvResult.fitnessInfo.examDepot eq null or mvResult.fitnessInfo.examDepot eq '')}"><h:outputLabel value="FITNESS NUMBER" style="font-weight:bold;"/></p:column>
+								<p:column rendered="#{not(mvResult.fitnessInfo.examDepot eq null or mvResult.fitnessInfo.examDepot eq '')}"><h:outputLabel value="EXAM DEPOT" style="font-weight:bold;"/></p:column>
+								<p:column rendered="#{not(mvResult.fitnessInfo.examDepot eq null or mvResult.fitnessInfo.examDepot eq '')}"><h:outputLabel value="ISSUE DATE" style="font-weight:bold;"/></p:column>
+								<p:column rendered="#{not(mvResult.fitnessInfo.examDepot eq null or mvResult.fitnessInfo.examDepot eq '')}"><h:outputLabel value="EXPIRY DATE" style="font-weight:bold;"/></p:column>
+							</p:row>
+							<p:row rendered="#{initiateView.disableMotorVehicleFields}">
+								<p:column>
+									<h:outputText value="NO FITNESS INFORMATION" rendered="#{mvResult.fitnessInfo.examDepot eq null or mvResult.fitnessInfo.examDepot eq ''}" styleClass="expiredDate"></h:outputText>
+								</p:column>
+								<p:column rendered="#{not(mvResult.fitnessInfo.examDepot eq null or mvResult.fitnessInfo.examDepot eq '')}"><h:outputLabel value="#{mvResult.fitnessInfo.fitnessNo}" /></p:column>
+								<p:column rendered="#{not(mvResult.fitnessInfo.examDepot eq null or mvResult.fitnessInfo.examDepot eq '')}"><h:outputLabel value="#{mvResult.fitnessInfo.examDepot}" /></p:column>
+								<p:column rendered="#{not(mvResult.fitnessInfo.examDepot eq null or mvResult.fitnessInfo.examDepot eq '')}"><h:outputLabel value="#{roadCheckServiceAction.formatDate(mvResult.fitnessInfo.issueDate)}" /></p:column>
+								<p:column rendered="#{not(mvResult.fitnessInfo.examDepot eq null or mvResult.fitnessInfo.examDepot eq '')}">
+									<h:outputLabel value="#{roadCheckServiceAction.formatDate(mvResult.fitnessInfo.expiryDate)}"  styleClass="#{initiateView.fTCkFl ? 'expiredDate' : ''}" />
+								</p:column>
+							
+							</p:row>
+						
+							<p:row rendered="#{initiateView.disableMotorVehicleFields}">
+								<p:column><h:outputLabel value="Registration Details" style="font-weight:bold;"/></p:column>
+								<p:column rendered="#{not(mvResult.laNo eq null or mvResult.laNo eq '')}"><h:outputLabel value="MVRC NO." style="font-weight:bold;"/></p:column>
+								<p:column rendered="#{not(mvResult.laNo eq null or mvResult.laNo eq '')}"><h:outputLabel value="MVRC ISSUE DATE" style="font-weight:bold;"/></p:column>
+								<p:column rendered="#{not(mvResult.laNo eq null or mvResult.laNo eq '')}"><h:outputLabel value="MVRC EXPIRY DATE" style="font-weight:bold;"/></p:column>
+							</p:row>
+							
+							<p:row rendered="#{initiateView.disableMotorVehicleFields}">
+								<p:column>
+									<h:outputText value="NO REGISTRATION INFORMATION" rendered="#{mvResult.laNo eq null or mvResult.laNo eq ''}" styleClass="expiredDate"></h:outputText>
+								</p:column>
+								<p:column rendered="#{not(mvResult.laNo eq null or mvResult.laNo eq '')}"><h:outputLabel value="#{mvResult.laNo}" /></p:column>
+								<p:column rendered="#{not(mvResult.laNo eq null or mvResult.laNo eq '')}"><h:outputLabel value="#{roadCheckServiceAction.formatDate(mvResult.mvrcIssueDate)}" /></p:column>
+								<p:column rendered="#{not(mvResult.laNo eq null or mvResult.laNo eq '')}">
+									<h:outputLabel value="#{roadCheckServiceAction.formatDate(mvResult.mvrcExpiryDate)}"  styleClass="#{initiateView.mVCkFl ? 'expiredDate' : ''}" />
+								</p:column>
+							</p:row>
+							
+							<p:row rendered="#{initiateView.disableMotorVehicleFields}">
+								<p:column><h:outputLabel value="Insurance Details" style="font-weight:bold;"/></p:column>
+								<p:column rendered="#{not(mvResult.insuranceInfo eq null or mvResult.insuranceInfo eq '')}"><h:outputLabel value="INSURANCE COMPANY" style="font-weight:bold;"/></p:column>
+								<p:column rendered="#{not(mvResult.insuranceInfo eq null or mvResult.insuranceInfo eq '')}"><h:outputLabel value="ISSUE DATE" style="font-weight:bold;"/></p:column>
+								<p:column rendered="#{not(mvResult.insuranceInfo eq null or mvResult.insuranceInfo eq '')}"><h:outputLabel value="EXPIRY DATE" style="font-weight:bold;"/></p:column>
+							</p:row>
+							<p:row rendered="#{initiateView.disableMotorVehicleFields}">
+								<p:column>
+									<h:outputText value="NO INSURANCE INFORMATION" rendered="#{mvResult.insuranceInfo eq null or mvResult.insuranceInfo eq ''}" styleClass="expiredDate"></h:outputText>
+								</p:column>
+								<p:column rendered="#{not(mvResult.insuranceInfo eq null or mvResult.insuranceInfo eq '')}"><h:outputLabel value="#{mvResult.insuranceInfo.companyName}" /></p:column>
+								<p:column rendered="#{not(mvResult.insuranceInfo eq null or mvResult.insuranceInfo eq '')}"><h:outputLabel value="#{roadCheckServiceAction.formatDate(mvResult.insuranceInfo.issueDate)}" /></p:column>
+								<p:column rendered="#{not(mvResult.insuranceInfo eq null or mvResult.insuranceInfo eq '')}">
+									<h:outputLabel value="#{roadCheckServiceAction.formatDate(mvResult.insuranceInfo.expiryDate)}" styleClass="#{initiateView.inCkFl ? 'expiredDate' : ''}" />
+								</p:column>
+							</p:row>
+							
+							<p:row rendered="#{initiateView.disableMotorVehicleFields}">
+								<p:column><h:outputLabel value="Owner Details" style="font-weight:bold;"/></p:column>
+								<p:column colspan="3">
+									<p:dataList columns="2" paginator="false" value="#{mvResult.vehicleOwners}" var="mvOwner" type="ordered" id="dataListMVOwners" rendered="#{mvResult.vehicleOwners.size()>0}">  
+										 #{mvOwner.lastName}, #{mvOwner.firstName} 
+										
+										 	<p:outputLabel value="- #{roadCheckServiceAction.doTRNBumpUp(mvOwner.trnNbr)}" rendered="#{mvOwner.trnNbr ne null}"></p:outputLabel>
+										 
+										 <br></br>
+										 <h:outputText value="#{roadCheckServiceAction.getAddressLine1(mvOwner.address.streetName,mvOwner.address.mark,
+							  				mvOwner.address.streetNumber)}"/>
+							  			<h:outputText value="," rendered="{roadCheckServiceAction.getAddressLine1(mvOwner.address.streetName,'',
+							  				mvOwner.address.streetNumber) ne '' and roadCheckServiceAction.getAddressLine2(mvOwner.address.poBoxNumber,mvOwner.address.poLocation,
+							  				mvOwner.address.parish) ne ''}"></h:outputText> 
+							  			<h:outputText value=" #{roadCheckServiceAction.getAddressLine2(mvOwner.address.poBoxNumber,mvOwner.address.poLocation,
+							  				mvOwner.address.parish)}"/> 
+									</p:dataList>	
+								</p:column>
+							</p:row>
+<!-- 							<p:row rendered="#{initiateView.disableMotorVehicleFields}"> -->
+<!-- 								<p:column></p:column> -->
+<!-- 								<p:column colspan="3"> -->
+<!-- 									<h:outputLabel value="#{mvResult.vehicleOwners[0].lastName}, #{mvResult.vehicleOwners[0].firstName} #{mvResult.vehicleOwners[0].midName}" /> -->
+<!-- 								</p:column> -->
+								
+<!-- 							</p:row> -->
+							
+						</p:panelGrid>
+	</ui:fragment>
+</ui:composition>

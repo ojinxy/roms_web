@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://webservices.roms.toms.ta.fsl/" version="1.0" xmlns:tns="http://webservices.roms.toms.ta.fsl/">
+
+  <xs:element name="InvalidFieldException" type="tns:InvalidFieldException"/>
+
+  <xs:element name="NoRecordFoundException" type="tns:NoRecordFoundException"/>
+
+  <xs:element name="RequiredFieldMissingException" type="tns:RequiredFieldMissingException"/>
+
+  <xs:element name="getReferenceCode" type="tns:getReferenceCode"/>
+
+  <xs:element name="getReferenceCodeResponse" type="tns:getReferenceCodeResponse"/>
+
+  <xs:complexType name="getReferenceCode">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="criteriaBO" type="tns:refCodeCriteriaBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="refCodeCriteriaBO">
+    <xs:sequence>
+      <xs:element name="filter">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="entry">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" name="key" type="xs:string"/>
+                  <xs:element minOccurs="0" name="value" type="xs:string"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="status" type="xs:string"/>
+      <xs:element minOccurs="0" name="tableName" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getReferenceCodeResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:refCodeBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="refCodeBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="altId" type="xs:string"/>
+      <xs:element minOccurs="0" name="code" type="xs:string"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="shortDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="RequiredFieldMissingException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="NoRecordFoundException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="InvalidFieldException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

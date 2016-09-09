@@ -1,0 +1,309 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com">
+
+	<ui:fragment id="page">	
+	
+					<p:panel  id="bdgPanel" header="Badge Query Results" style="vertical-align: top; text-align:left;" rendered="true">  
+					<p:panel rendered="#{initiateView.noBadgeFound}">
+						<h:outputText value="No Badge Record found for Badge No. " style="font-weight:bold;"/><h:outputText value="#{initiateView.badgeNo}" style="font-weight:bold;"/>
+					</p:panel>
+	    				<p:panel  id="mvTopPan" style="vertical-align: top;" rendered="#{!initiateView.noBadgeFound}">  
+	    				
+	    					<p:panelGrid>
+	    					<p:row style="border-bottom:1px solid black">
+	    							<p:column colspan="3"><hr/></p:column>
+	    						</p:row>
+	    						<p:row>
+	    							<p:column colspan="2"><h:outputText value="NAME " style="font-weight:bold;"/></p:column>
+	    							<p:column rowspan="10">
+	    				  						<h:graphicImage id="photo2" width="120" height="143"  border="0"
+													url="#{recordOffenceOutcomeView.badgePhotoURL}" alt="No Image" style="display: inline-block; border:3px solid #dddddd;" />
+	    				  			
+	    				  					</p:column>
+	    						</p:row>
+	    						<p:row>
+	    							<p:column colspan="2"><h:outputText value="#{badgeResult.lastName}" /></p:column>
+	    						</p:row>
+	    						<p:row>
+	    							<p:column colspan="2"><h:outputText value="#{badgeResult.firstName}" /> <h:outputText value="  " />&nbsp;<h:outputText value="#{badgeResult.middleName}" /></p:column>
+	    						</p:row>
+	    						<p:row>
+	    							<p:column colspan="2"></p:column>
+	    						</p:row>
+	    						<p:row>
+	    							<p:column><h:outputText value="BADGE NO" style="font-weight:bold;"/></p:column>
+	    							<p:column><h:outputText value="BADGE TYPE" style="font-weight:bold;"/></p:column>
+	    						</p:row>
+	    						<p:row>
+	    							<p:column><h:outputText value="#{badgeResult.badgeNumber}"/></p:column>
+	    							<p:column><h:outputText value="#{badgeResult.badgeTypeDescription}"/></p:column>
+	    						</p:row>
+	    						<p:row>
+	    							<p:column colspan="2"></p:column>
+	    						</p:row>
+	    						<p:row>
+	    							<p:column><h:outputText value="ISSUE DATE" style="font-weight:bold;"/></p:column>
+	    							<p:column><h:outputText value="EXPIRY DATE" style="font-weight:bold;"/></p:column>
+	    						</p:row>
+	    						<p:row>
+	    							<p:column><h:outputText value="#{roadCheckServiceAction.formatDate(badgeResult.issueDate)}"/></p:column>
+	    							<p:column>
+	    								<h:outputText value="#{roadCheckServiceAction.formatDate(badgeResult.expiryDate)}"  styleClass="#{initiateView.bGCkFl ? 'expiredDate' : ''}" />
+	    							</p:column>
+	    						</p:row>
+	    						<p:row>
+	    							<p:column colspan="3"><hr/></p:column>
+	    						</p:row>
+	    					</p:panelGrid>
+	    					<br/>
+	    					</p:panel>
+	    					<p:panel>
+	    					 <div align="left">
+	    				<h:outputText value="Indicate Action to be taken " style="font-weight:bold;"/> <br/>
+	    			     <p:selectOneRadio id="customRadioBDG" value="#{recordOffenceOutcomeView.bdgActionToBeTaken}" style="margin-bottom: 0px;">  
+	      					  <f:selectItem itemLabel="All is in Order" itemValue="A" itemDisabled="#{initiateView.bGCkFl}" />  
+	      					  <f:selectItem itemLabel="Record Offences and Outcomes" itemValue="R" />     
+	      					  
+	      					  <p:ajax  oncomplete="addBdgRowOnComplete(); updateBdgTable();" listener="#{roadCheckServiceAction.indicateActionBdg}"  update=":recordOffenceOutcome:tabV:panelDataTableBadge :recordOffenceOutcome:panelButtons"></p:ajax> 
+	  					  </p:selectOneRadio>  
+	  					  
+	  					 </div>
+  
+	    				</p:panel>
+	    				
+	    				<br/>
+	    				 <p:panel id="panelDataTableBdgErr">
+						<h:outputText value="#{recordOffenceOutcomeView.bdgTableError}" id="bdgTableErr" style="display:none"/> 
+						<h:outputText value="#{bdgOffenceList.size()}" id="bdgOffListSize" style="display:none"/> 
+						 <h:outputText value="#{recordOffenceOutcomeView.bdgOpenRecordCount}" style="display:none"/>
+						</p:panel>
+						<p:panel id="panelMsgBdg">
+						<p:messages id="msgMV" closable="true"/>
+						</p:panel>
+	    			 <p:panel id="panelDataTableBadge">
+	  					   <p:panel rendered="#{recordOffenceOutcomeView.bdgActionToBeTaken=='R' &amp;&amp; bdgOffenceList.size() == 0}">
+	    			 		<h:outputText value="No Offence related to Badge Check" style="font-weight:bold;"/>
+	    			 	</p:panel>
+	  					  <p:dataTable var="offOutcome" value="#{bdgOffenceOutcomes}" editable="true" rendered="#{recordOffenceOutcomeView.bdgActionToBeTaken=='R' &amp;&amp; bdgOffenceList.size() > 0}"
+	  					   rows="50" id="bdgOffenceOutcomeList" >  
+  
+						       <f:facet name="header" >  
+						           <div align="left">
+						             <h:outputText value=" Offences/Outcomes Observed " style="padding-right:30px"/>  
+						           <p:commandButton icon="ui-icon-plusthick" id="addBdgBtn"  value="Add" action="bdgAddOffenceOutcome" processIds="*"  ajax="true" style="padding-right:20px"  oncomplete="addBdgRowOnComplete();" update=":recordOffenceOutcome:tabV:panelDataTableBadge" disabled="#{recordOffenceOutcomeView.bdgOpenRecordCount > 0 || bdgOffenceList.size() == bdgOffenceOutcomes.size()}"/>
+						           <p:commandButton icon="ui-icon-trash"  id="deleteBdgBtn"  value="Delete" action="bdgDeleteOffenceOutcome" processIds="*"  ajax="true" update=":recordOffenceOutcome:tabV:panelDataTableBadge :recordOffenceOutcome:panelButtons" disabled="#{!recordOffenceOutcomeView.bdgOffenceOutcomeSelected || recordOffenceOutcomeView.bdgOpenRecordCount > 0 || bdgOffenceOutcomes.size() == 0}"/>
+						           </div>
+						           
+						       </f:facet>  
+						 
+						 		<p:ajax event="rowEditInit"  listener="#{roadCheckServiceAction.initRowEditBdg}" oncomplete="updateBdgTable();disablePenBdg();disableCheckBoxBdg();"/> 
+						 		  <p:ajax event="rowEdit" listener="#{roadCheckServiceAction.editBdgSelectedOffenceOutcome}"  update=":recordOffenceOutcome:tabV:panelMsgBdg :recordOffenceOutcome:tabV:bdgTableErr" oncomplete="updateBdgTableEdit();editAndCancelHideBdg();"/>  
+						       <p:ajax event="rowEditCancel" listener="#{roadCheckServiceAction.cancelBdgEditSelectedOffenceOutcome}" update=":recordOffenceOutcome:tabV:panelMsgBdg :recordOffenceOutcome:tabV:bdgTableErr" oncomplete="updateBdgTable();selectBdgAll();cancelHideBdg();"/>  
+						       
+						 		  <p:column  style="width:6%" id="checkBoxes">  
+						         <f:facet  name="header">
+									 <p:selectBooleanCheckbox id="bdgSelectAllBox" value="#{recordOffenceOutcomeView.bdgSelectAllOffenceOutcome}" onchange="selectBdgAll();" disabled="#{recordOffenceOutcomeView.bdgOpenRecordCount > 0}">
+									 		
+									 </p:selectBooleanCheckbox> 
+									</f:facet>
+						                <p:selectBooleanCheckbox value="#{offOutcome.rowSelected}" styleClass="ui-corner-checkbox"> 
+						                	<p:ajax oncomplete="selectBdgRow();" />
+						                </p:selectBooleanCheckbox> 
+						            
+						       </p:column>  
+						     
+						       <p:column headerText="Offence(s)" style="width:41%; text-align:left">  
+						         
+						                  <p:cellEditor>  
+						               <f:facet name="output">  
+						                     <h:outputText value="#{offOutcome.offenceShortDescription}" /> 
+						               </f:facet>  
+						               <f:facet name="input">  
+						                  <p:selectOneMenu style="width:100%"
+								id="comboOffenceInput" value="#{offOutcome.offenceId}">
+								<f:selectItem itemValue="" itemLabel="[Select One]" />
+								<f:selectItems var="offence" itemValue="#{offence.offenceId}" itemLabel="#{offence.shortDescription}" value="#{bdgOffenceList}" />
+									</p:selectOneMenu>  
+						               </f:facet>  
+						           </p:cellEditor>
+						            
+						       </p:column>  
+						        <p:column headerText="Issue Summons" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">  
+						                   <f:subview rendered="#{offOutcome.issueSummons}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.issueSummons}" />  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column> 
+						        <p:column headerText="Issue Warning Notice" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">    
+						                   <f:subview rendered="#{offOutcome.issuewWarningNotice}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.issuewWarningNotice}" />  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column>  
+						       <p:column headerText="Warning No Prosecution" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">  
+						                   <f:subview rendered="#{offOutcome.issueWarningNP}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.issueWarningNP}" />  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column> 
+						       <p:column headerText="Warning For Prosecution" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">   
+						                    <f:subview rendered="#{offOutcome.warnForProsecution}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.warnForProsecution}" />  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column>
+<!-- 						        <p:column headerText="Remove Plate" style="width:10%">   -->
+<!-- 						           <p:cellEditor>   -->
+<!-- 						               <f:facet name="output">    -->
+<!-- 						                     <f:subview rendered="#{offOutcome.removePlate}"> -->
+<!-- 												<i class="icon icon-check icon-1x"></i> -->
+<!-- 											</f:subview> -->
+<!-- 						               </f:facet>   -->
+						             
+<!-- 						               <f:facet name="input">   -->
+<!-- 						                   <p:selectBooleanCheckbox value="#{offOutcome.removePlate}" disabled="#{initiateView.activityType == 'U'}"/>   -->
+<!-- 						               </f:facet>   -->
+<!-- 						           </p:cellEditor>   -->
+<!-- 						       </p:column>  -->
+						       
+						         <p:column>  
+           							 <p:rowEditor id="bdgRowEditor"/> 
+           							  <p:tooltip for="bdgRowEditor" value="Click to Add/Edit" showEffect="fade" hideEffect="fade" />  
+        							</p:column>  
+						   </p:dataTable>
+						   
+						   <p:commandButton wigetVar="allBtnSelBdg" id="allSelectBtnBadge" value="Do select" style="display:none" processIds="*" action="bdgSelectAllOffenceOutcome" 
+			 ajax="true" update=":recordOffenceOutcome:tabV:panelDataTableBadge" ></p:commandButton>
+			 
+			  <p:commandButton wigetVar="selectBdg" id="selectBtnBdgRow" value="Do select" style="display:none" processIds="*" action="bdgSelectRowOffenceOutcome" 
+			 ajax="true" update=":recordOffenceOutcome:tabV:panelDataTableBadge" ></p:commandButton>
+			 
+			  <p:commandButton wigetVar="updateBdgTableVar" id="updateBdgTable" value="Do select2" style="display:none" processIds="*" 
+			 ajax="true" update=":recordOffenceOutcome:tabV:bdgOffenceOutcomeList:addBdgBtn :recordOffenceOutcome:tabV:bdgOffenceOutcomeList:deleteBdgBtn :recordOffenceOutcome:tabV:bdgOffenceOutcomeList:bdgSelectAllBox :recordOffenceOutcome:panelButtons :recordOffenceOutcome:progressPanel" ></p:commandButton>
+			
+			 <h:inputText id="hiddenbGCkFl" style="display:none" value="#{initiateView.bGCkFl}" ></h:inputText>
+ 			
+ 				
+			 <script>
+			 
+		       
+				//<![CDATA[
+				 function selectBdgRow(){
+			    $("button[id*='selectBtnBdgRow']").click();	
+			    }
+			 	function selectBdgAll(){
+			 	$("button[id*='allSelectBtnBadge']").click()			 	
+			 	}
+			 	function addBdgRowOnComplete() {
+			 		
+			 		var x = $('[name="recordOffenceOutcome:tabV:customRadioBDG"]:checked').val();
+			 		
+			 		//var y = $('input[type="radio" @id="recordOffenceOutcome:tabV:customRadioBDG"]:checked').val();
+			 				 		
+			 		var y = $('#recordOffenceOutcome\\:tabV\\:bdgOffListSize').text();
+			 		if((x=='R') && (y > 0)){
+			 			jQuery('#recordOffenceOutcome\\:tabV\\:bdgOffenceOutcomeList\\:0\\:bdgRowEditor .ui-icon-pencil')[0].id = 'supercoolnewrowBdg';
+			 		  	jQuery('#supercoolnewrowBdg').trigger('click');
+			 		}
+			 	
+			 		}
+			 	
+			 	function updateBdgTableEdit(){
+			 		var x = $('#recordOffenceOutcome\\:tabV\\:bdgTableErr').text();
+			 		
+			 		if(x=='false'){
+				 		$("button[id*='updateBdgTable']").click();	
+			 		}
+				 }
+			 	
+			 	function updateBdgTable(){
+			 		
+				 		$("button[id*='updateBdgTable']").click();	
+				 }
+			 	
+			 	function disableCheckBoxBdg(){
+			 		$('#recordOffenceOutcome\\:tabV\\:bdgOffenceOutcomeList .ui-corner-checkbox').each(function(){
+			        	 $(this).css('display','none');
+			        	 });
+	        	 }
+			 	function disablePenBdg(){
+		        	 $('#recordOffenceOutcome\\:tabV\\:bdgOffenceOutcomeList .ui-icon-pencil').each(function(){
+		        	 $(this).css('display','none');
+		        	 });
+	        	 }
+			 	function cancelHideBdg(){
+		        	 $('#recordOffenceOutcome\\:tabV\\:bdgOffenceOutcomeList .ui-icon-pencil').each(function(){
+		        	 //$(').addClass('rat');
+		        	 // $(this).css({backgroundColor: '#0099ff'});
+		        	 $(this).css('display','');
+		        	 });
+		        	 
+		        	 $('#recordOffenceOutcome\\:tabV\\:bdgOffenceOutcomeList .ui-corner-checkbox').each(function(){
+			        	 $(this).css('display','');
+			        	 });
+	        	 }
+	        	 
+	        	 function editAndCancelHideBdg(){
+				 		var x = $('#recordOffenceOutcome\\:tabV\\:bdgTableErr').text();
+				 		//alert(x);
+				 		if(x=='false'){
+				 			cancelHideBdg();
+				 		}
+					 }
+	        	//]]>
+			 </script>
+			
+			 </p:panel>
+			  <script>
+			//<![CDATA[	 
+			 $(document).ready( function() { 
+		       
+		           var chkBGFl = $('input[id*="hiddenbGCkFl"]').val();
+		          		           
+		    	   if(chkBGFl && $('div[id*=panelDataTableBadge]').find('table').find('tbody').find('tr[class*=empty]').size() != 0)
+		    		{   
+		    		   
+		    	   		$("button[id*='addBdgBtn']").click();
+		    		   
+		    		}
+		          });
+			 
+			//]]>
+			 </script>
+	    		</p:panel>
+	    	
+	  	
+</ui:fragment>
+</ui:composition>

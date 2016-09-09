@@ -1,0 +1,1042 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://webservices.roms.toms.ta.fsl/" version="1.0" xmlns:tns="http://webservices.roms.toms.ta.fsl/">
+
+  <xs:element name="ErrorSavingException" type="tns:ErrorSavingException"/>
+
+  <xs:element name="Exception" type="tns:Exception"/>
+
+  <xs:element name="InvalidFieldException" type="tns:InvalidFieldException"/>
+
+  <xs:element name="NoRecordFoundException" type="tns:NoRecordFoundException"/>
+
+  <xs:element name="RequiredFieldMissingException" type="tns:RequiredFieldMissingException"/>
+
+  <xs:element name="authorizeRoadOperation" type="tns:authorizeRoadOperation"/>
+
+  <xs:element name="authorizeRoadOperationResponse" type="tns:authorizeRoadOperationResponse"/>
+
+  <xs:element name="cancelRoadOperation" type="tns:cancelRoadOperation"/>
+
+  <xs:element name="cancelRoadOperationResponse" type="tns:cancelRoadOperationResponse"/>
+
+  <xs:element name="closeRoadOperation" type="tns:closeRoadOperation"/>
+
+  <xs:element name="closeRoadOperationResponse" type="tns:closeRoadOperationResponse"/>
+
+  <xs:element name="findActiveOperationForUser" type="tns:findActiveOperationForUser"/>
+
+  <xs:element name="findActiveOperationForUserResponse" type="tns:findActiveOperationForUserResponse"/>
+
+  <xs:element name="findArteryList" type="tns:findArteryList"/>
+
+  <xs:element name="findArteryListResponse" type="tns:findArteryListResponse"/>
+
+  <xs:element name="findAssignedStaffForRoadOperation" type="tns:findAssignedStaffForRoadOperation"/>
+
+  <xs:element name="findAssignedStaffForRoadOperationResponse" type="tns:findAssignedStaffForRoadOperationResponse"/>
+
+  <xs:element name="findITAExaminerByPersonID" type="tns:findITAExaminerByPersonID"/>
+
+  <xs:element name="findITAExaminerByPersonIDResponse" type="tns:findITAExaminerByPersonIDResponse"/>
+
+  <xs:element name="findJPByPersonID" type="tns:findJPByPersonID"/>
+
+  <xs:element name="findJPByPersonIDResponse" type="tns:findJPByPersonIDResponse"/>
+
+  <xs:element name="findOfficeLocCodeList" type="tns:findOfficeLocCodeList"/>
+
+  <xs:element name="findOfficeLocCodeListResponse" type="tns:findOfficeLocCodeListResponse"/>
+
+  <xs:element name="findPoliceOfficerByPersonID" type="tns:findPoliceOfficerByPersonID"/>
+
+  <xs:element name="findPoliceOfficerByPersonIDResponse" type="tns:findPoliceOfficerByPersonIDResponse"/>
+
+  <xs:element name="findRoadOperationOtherDetails" type="tns:findRoadOperationOtherDetails"/>
+
+  <xs:element name="findRoadOperationOtherDetailsResponse" type="tns:findRoadOperationOtherDetailsResponse"/>
+
+  <xs:element name="findSavedRoadOperationAssignedResource" type="tns:findSavedRoadOperationAssignedResource"/>
+
+  <xs:element name="findSavedRoadOperationAssignedResourceResponse" type="tns:findSavedRoadOperationAssignedResourceResponse"/>
+
+  <xs:element name="findTAStaffByPersonID" type="tns:findTAStaffByPersonID"/>
+
+  <xs:element name="findTAStaffByPersonIDResponse" type="tns:findTAStaffByPersonIDResponse"/>
+
+  <xs:element name="getAllROMSStaff" type="tns:getAllROMSStaff"/>
+
+  <xs:element name="getAllROMSStaffResponse" type="tns:getAllROMSStaffResponse"/>
+
+  <xs:element name="getAvailableITAResource" type="tns:getAvailableITAResource"/>
+
+  <xs:element name="getAvailableITAResourceResponse" type="tns:getAvailableITAResourceResponse"/>
+
+  <xs:element name="getAvailableJPResource" type="tns:getAvailableJPResource"/>
+
+  <xs:element name="getAvailableJPResourceResponse" type="tns:getAvailableJPResourceResponse"/>
+
+  <xs:element name="getAvailablePoliceResource" type="tns:getAvailablePoliceResource"/>
+
+  <xs:element name="getAvailablePoliceResourceResponse" type="tns:getAvailablePoliceResourceResponse"/>
+
+  <xs:element name="getAvailableResource" type="tns:getAvailableResource"/>
+
+  <xs:element name="getAvailableResourceResponse" type="tns:getAvailableResourceResponse"/>
+
+  <xs:element name="getAvailableTAStaffResource" type="tns:getAvailableTAStaffResource"/>
+
+  <xs:element name="getAvailableTAStaffResourceResponse" type="tns:getAvailableTAStaffResourceResponse"/>
+
+  <xs:element name="getAvailableTAVehResource" type="tns:getAvailableTAVehResource"/>
+
+  <xs:element name="getAvailableTAVehResourceResponse" type="tns:getAvailableTAVehResourceResponse"/>
+
+  <xs:element name="getOperationStrategyRule" type="tns:getOperationStrategyRule"/>
+
+  <xs:element name="getOperationStrategyRuleResponse" type="tns:getOperationStrategyRuleResponse"/>
+
+  <xs:element name="getStaffByUsername" type="tns:getStaffByUsername"/>
+
+  <xs:element name="getStaffByUsernameResponse" type="tns:getStaffByUsernameResponse"/>
+
+  <xs:element name="isOperationStrategyValid" type="tns:isOperationStrategyValid"/>
+
+  <xs:element name="isOperationStrategyValidResponse" type="tns:isOperationStrategyValidResponse"/>
+
+  <xs:element name="isPersonAvailable" type="tns:isPersonAvailable"/>
+
+  <xs:element name="isPersonAvailableResponse" type="tns:isPersonAvailableResponse"/>
+
+  <xs:element name="isTAVehicleAvailable" type="tns:isTAVehicleAvailable"/>
+
+  <xs:element name="isTAVehicleAvailableResponse" type="tns:isTAVehicleAvailableResponse"/>
+
+  <xs:element name="isVehicleRequired" type="tns:isVehicleRequired"/>
+
+  <xs:element name="isVehicleRequiredResponse" type="tns:isVehicleRequiredResponse"/>
+
+  <xs:element name="lookupAllOperationArtery" type="tns:lookupAllOperationArtery"/>
+
+  <xs:element name="lookupAllOperationArteryResponse" type="tns:lookupAllOperationArteryResponse"/>
+
+  <xs:element name="lookupAllRoadOperationForRoadCheck" type="tns:lookupAllRoadOperationForRoadCheck"/>
+
+  <xs:element name="lookupAllRoadOperationForRoadCheckResponse" type="tns:lookupAllRoadOperationForRoadCheckResponse"/>
+
+  <xs:element name="lookupOperationArtery" type="tns:lookupOperationArtery"/>
+
+  <xs:element name="lookupOperationArteryResponse" type="tns:lookupOperationArteryResponse"/>
+
+  <xs:element name="lookupRoadOperation" type="tns:lookupRoadOperation"/>
+
+  <xs:element name="lookupRoadOperationForRoadCheck" type="tns:lookupRoadOperationForRoadCheck"/>
+
+  <xs:element name="lookupRoadOperationForRoadCheckResponse" type="tns:lookupRoadOperationForRoadCheckResponse"/>
+
+  <xs:element name="lookupRoadOperationResponse" type="tns:lookupRoadOperationResponse"/>
+
+  <xs:element name="lookupRoadOperationWithDateRange" type="tns:lookupRoadOperationWithDateRange"/>
+
+  <xs:element name="lookupRoadOperationWithDateRangeResponse" type="tns:lookupRoadOperationWithDateRangeResponse"/>
+
+  <xs:element name="saveRoadOperation" type="tns:saveRoadOperation"/>
+
+  <xs:element name="saveRoadOperationResponse" type="tns:saveRoadOperationResponse"/>
+
+  <xs:element name="terminateRoadOperation" type="tns:terminateRoadOperation"/>
+
+  <xs:element name="terminateRoadOperationResponse" type="tns:terminateRoadOperationResponse"/>
+
+  <xs:element name="updateRoadOperation" type="tns:updateRoadOperation"/>
+
+  <xs:element name="updateRoadOperationResponse" type="tns:updateRoadOperationResponse"/>
+
+  <xs:element name="validateCourtDate" type="tns:validateCourtDate"/>
+
+  <xs:element name="validateCourtDateResponse" type="tns:validateCourtDateResponse"/>
+
+  <xs:element name="validateCourtDateRest" type="tns:validateCourtDateRest"/>
+
+  <xs:element name="validateCourtDateRestResponse" type="tns:validateCourtDateRestResponse"/>
+
+  <xs:complexType name="findRoadOperationOtherDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findRoadOperationOtherDetailsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:roadOperationOtherDetailsBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadOperationOtherDetailsBO">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="assignedTeamDetailsBOList" nillable="true" type="tns:assignedTeamDetailsBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="operationRegionList" nillable="true" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="operationStrategyList" nillable="true" type="tns:strategyBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="assignedTeamDetailsBO">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="itaExaminerList" nillable="true" type="tns:itaExaminerBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="jpList" nillable="true" type="tns:jpbo"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="operationArteryList" nillable="true" type="tns:arteryBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="operationLocationList" nillable="true" type="tns:locationBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="operationParishList" nillable="true" type="tns:parishBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="policeOfficerList" nillable="true" type="tns:policeOfficerBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="taStaffList" nillable="true" type="tns:taStaffBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="taVehicleList" nillable="true" type="tns:taVehicleBO"/>
+      <xs:element minOccurs="0" name="teamBO" type="tns:teamBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="itaExaminerBO">
+    <xs:complexContent>
+      <xs:extension base="tns:attendanceDetailsBO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="auditEntryBO" type="tns:auditEntryBO"/>
+          <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+          <xs:element minOccurs="0" name="examinerId" type="xs:string"/>
+          <xs:element minOccurs="0" name="idNumber" type="xs:int"/>
+          <xs:element minOccurs="0" name="officeLocationCode" type="xs:string"/>
+          <xs:element minOccurs="0" name="personBO" type="tns:personBO"/>
+          <xs:element name="scheduled" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+          <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="attendanceDetailsBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="attended" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="auditEntryBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="createDTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="createUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="updateDTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="updateUsername" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="personBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="addressLine1" type="xs:string"/>
+      <xs:element minOccurs="0" name="addressLine2" type="xs:string"/>
+      <xs:element minOccurs="0" name="addressLine2NL" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUserName" type="xs:string"/>
+      <xs:element minOccurs="0" name="dlNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="fullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="markText" type="xs:string"/>
+      <xs:element minOccurs="0" name="middleName" type="xs:string"/>
+      <xs:element minOccurs="0" name="occupation" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="personId" type="xs:int"/>
+      <xs:element minOccurs="0" name="poBoxNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="poLocationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetName" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneCell" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneHome" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneWork" type="xs:string"/>
+      <xs:element minOccurs="0" name="trnNbr" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="jpbo">
+    <xs:complexContent>
+      <xs:extension base="tns:attendanceDetailsBO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="auditEntryBO" type="tns:auditEntryBO"/>
+          <xs:element minOccurs="0" name="confirmedPin" type="xs:string"/>
+          <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+          <xs:element minOccurs="0" name="idNumber" type="xs:int"/>
+          <xs:element minOccurs="0" name="newPin" type="xs:string"/>
+          <xs:element minOccurs="0" name="oldPin" type="xs:string"/>
+          <xs:element minOccurs="0" name="parishCode" type="xs:string"/>
+          <xs:element minOccurs="0" name="parishDescription" type="xs:string"/>
+          <xs:element minOccurs="0" name="personBO" type="tns:personBO"/>
+          <xs:element minOccurs="0" name="pinHash" type="xs:string"/>
+          <xs:element minOccurs="0" name="regNumber" type="xs:string"/>
+          <xs:element name="scheduled" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+          <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="arteryBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arteryDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="arteryId" type="xs:int"/>
+      <xs:element minOccurs="0" name="auditEntryBO" type="tns:auditEntryBO"/>
+      <xs:element minOccurs="0" name="createdtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="createusername" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="distance" type="xs:float"/>
+      <xs:element minOccurs="0" name="endlatitude" type="xs:float"/>
+      <xs:element minOccurs="0" name="endlongitude" type="xs:float"/>
+      <xs:element minOccurs="0" name="locationDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="locationId" type="xs:int"/>
+      <xs:element minOccurs="0" name="parishCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="points" type="xs:string"/>
+      <xs:element name="selected" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="shortDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="startlatitude" type="xs:float"/>
+      <xs:element minOccurs="0" name="startlongitude" type="xs:float"/>
+      <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="locationBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntryBO" type="tns:auditEntryBO"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="locationDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="locationId" type="xs:int"/>
+      <xs:element minOccurs="0" name="parishCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishDescription" type="xs:string"/>
+      <xs:element name="selected" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="shortDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="parishBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntryBO" type="tns:auditEntryBO"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="officeLocationCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="officeLocationDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishCode" type="xs:string"/>
+      <xs:element name="selected" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="policeOfficerBO">
+    <xs:complexContent>
+      <xs:extension base="tns:attendanceDetailsBO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="currentUserName" type="xs:string"/>
+          <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+          <xs:element minOccurs="0" name="fullName" type="xs:string"/>
+          <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+          <xs:element minOccurs="0" name="middleName" type="xs:string"/>
+          <xs:element minOccurs="0" name="personID" type="xs:int"/>
+          <xs:element minOccurs="0" name="polOfficerCompNo" type="xs:int"/>
+          <xs:element minOccurs="0" name="rank" type="xs:string"/>
+          <xs:element name="scheduled" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="stationDescription" type="xs:string"/>
+          <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="taStaffBO">
+    <xs:complexContent>
+      <xs:extension base="tns:attendanceDetailsBO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+          <xs:element minOccurs="0" name="fullName" type="xs:string"/>
+          <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+          <xs:element minOccurs="0" name="loginUsername" type="xs:string"/>
+          <xs:element minOccurs="0" name="middleName" type="xs:string"/>
+          <xs:element minOccurs="0" name="officeLocationCode" type="xs:string"/>
+          <xs:element minOccurs="0" name="personId" type="xs:int"/>
+          <xs:element name="scheduled" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="staffId" type="xs:string"/>
+          <xs:element minOccurs="0" name="staffTypeCode" type="xs:string"/>
+          <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="taVehicleBO">
+    <xs:complexContent>
+      <xs:extension base="tns:attendanceDetailsBO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="auditEntryBO" type="tns:auditEntryBO"/>
+          <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+          <xs:element minOccurs="0" name="officeLocationCode" type="xs:string"/>
+          <xs:element name="scheduled" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+          <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+          <xs:element minOccurs="0" name="taVehicleId" type="xs:int"/>
+          <xs:element minOccurs="0" name="vehicle" type="tns:vehicleBO"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="vehicleBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="chassisNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="colour" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUserName" type="xs:string"/>
+      <xs:element minOccurs="0" name="engineNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="makeDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="model" type="xs:string"/>
+      <xs:element minOccurs="0" name="ownerName" type="xs:string"/>
+      <xs:element minOccurs="0" name="plateRegNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="typeDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="vehicleId" type="xs:int"/>
+      <xs:element minOccurs="0" name="year" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="teamBO">
+    <xs:sequence>
+      <xs:element name="delete" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="noMotorCycleAssigned" type="xs:int"/>
+      <xs:element minOccurs="0" name="noMotorCycleUsed" type="xs:int"/>
+      <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+      <xs:element minOccurs="0" name="teamId" type="xs:int"/>
+      <xs:element minOccurs="0" name="teamLead" type="tns:taStaffBO"/>
+      <xs:element minOccurs="0" name="teamName" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="strategyBO">
+    <xs:sequence>
+      <xs:element name="arteryRequired" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="auditEntryBO" type="tns:auditEntryBO"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+      <xs:element minOccurs="0" name="strategyDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="strategyId" type="xs:int"/>
+      <xs:element name="vehicleRequired" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="InvalidFieldException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="RequiredFieldMissingException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="NoRecordFoundException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getOperationStrategyRule">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="strategyIdList" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getOperationStrategyRuleResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:strategyRuleBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="strategyRuleBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="maximum" type="xs:int"/>
+      <xs:element minOccurs="0" name="minimum" type="xs:int"/>
+      <xs:element minOccurs="0" name="personTypeDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="personTypeId" type="xs:string"/>
+      <xs:element minOccurs="0" name="strategyId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findTAStaffByPersonID">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="personId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findTAStaffByPersonIDResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:taStaffBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="isVehicleRequired">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="strategyIdList" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="isVehicleRequiredResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="validateCourtDate">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="scheduledStartDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="courtDate" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="validateCourtDateResponse">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="getAvailableTAVehResource">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="availableResourceCriteriaBO" type="tns:availableResourceCriteriaBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="availableResourceCriteriaBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="categoryId" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="officeLocCodeList" nillable="true" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="parishCodeList" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="policeOfficerCompNum" type="xs:int"/>
+      <xs:element minOccurs="0" name="policeOfficerFirstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="policeOfficerLastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="policeStation" type="xs:string"/>
+      <xs:element minOccurs="0" name="resourceId" type="xs:int"/>
+      <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+      <xs:element minOccurs="0" name="scheduledEndDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="scheduledEndTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="scheduledStartDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="scheduledStartTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="usePoliceMaxFilter" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getAvailableTAVehResourceResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:taVehicleBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupAllOperationArtery">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupAllOperationArteryResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:arteryBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="isPersonAvailable">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="availableResourceCriteriaBO" type="tns:availableResourceCriteriaBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="isPersonAvailableResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="saveRoadOperation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="roadOperationBO" type="tns:roadOperationBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="assignedTeamDetailsBOList" type="tns:assignedTeamDetailsBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadOperationBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="actualEndDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="actualEndDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="actualEndTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="actualStartDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="actualStartDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="actualStartTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="authorized" type="xs:string"/>
+      <xs:element minOccurs="0" name="authorizedDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="authorizedUserName" type="xs:string"/>
+      <xs:element minOccurs="0" name="backDated" type="xs:string"/>
+      <xs:element minOccurs="0" name="categoryDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="categoryId" type="xs:string"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element minOccurs="0" name="courtBO" type="tns:courtBO"/>
+      <xs:element minOccurs="0" name="courtDTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="courtDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="courtTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="dateCreated" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="firstOffenceDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="lastOffenceDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="officeLocCode" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="officeLocCodeList" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="operationName" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="operationStrategyList" nillable="true" type="tns:strategyBO"/>
+      <xs:element minOccurs="0" name="reasonId" type="xs:int"/>
+      <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+      <xs:element minOccurs="0" name="scheduledEndDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="scheduledEndDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="scheduledEndTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="scheduledStartDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="scheduledStartDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="scheduledStartTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="scheduler" type="tns:taStaffBO"/>
+      <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="courtBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntryBO" type="tns:auditEntryBO"/>
+      <xs:element minOccurs="0" name="courtId" type="xs:int"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="markText" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishName" type="xs:string"/>
+      <xs:element minOccurs="0" name="poBoxNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="poLocationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="shortDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetName" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetNo" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="saveRoadOperationResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:roadOperationBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ErrorSavingException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupRoadOperationForRoadCheck">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="operationStr" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupRoadOperationForRoadCheckResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:roadOperationBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="isOperationStrategyValid">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="strategyList" type="tns:strategyBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="assignedTeamDetailsBOList" type="tns:assignedTeamDetailsBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="isOperationStrategyValidResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getAvailableTAStaffResource">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="availableResourceCriteriaBO" type="tns:availableResourceCriteriaBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getAvailableTAStaffResourceResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:taStaffBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getAvailableITAResource">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="availableResourceCriteriaBO" type="tns:availableResourceCriteriaBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getAvailableITAResourceResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:itaExaminerBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getAllROMSStaff">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="getAllROMSStaffResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:taStaffBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="isTAVehicleAvailable">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="availableResourceCriteriaBO" type="tns:availableResourceCriteriaBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="isTAVehicleAvailableResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findITAExaminerByPersonID">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="personId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findITAExaminerByPersonIDResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:itaExaminerBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findOfficeLocCodeList">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findOfficeLocCodeListResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findAssignedStaffForRoadOperation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findAssignedStaffForRoadOperationResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:taStaffBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupRoadOperationWithDateRange">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="roadOperationCriteriaBO" type="tns:roadOperationCriteriaBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadOperationCriteriaBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arteryId" type="xs:int"/>
+      <xs:element name="backDated" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="categoryId" type="xs:string"/>
+      <xs:element minOccurs="0" name="locationId" type="xs:int"/>
+      <xs:element minOccurs="0" name="officeLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="operationEndDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="operationEndTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="operationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="operationStartDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="operationStartTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+      <xs:element name="scheduledDTime" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="schedulerStaffId" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+      <xs:element minOccurs="0" name="strategyId" type="xs:int"/>
+      <xs:element minOccurs="0" name="teamLeadStaffId" type="xs:string"/>
+      <xs:element name="unAuthorized" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupRoadOperationWithDateRangeResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:roadOperationBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="authorizeRoadOperation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="roadOperationBO" type="tns:roadOperationBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="authorizeRoadOperationResponse">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="lookupAllRoadOperationForRoadCheck">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="lookupAllRoadOperationForRoadCheckResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:roadOperationBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getAvailablePoliceResource">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="availableResourceCriteriaBO" type="tns:availableResourceCriteriaBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getAvailablePoliceResourceResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:policeOfficerBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findArteryList">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="findArteryListResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:arteryBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getAvailableResource">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="availableResourceCriteriaBO" type="tns:availableResourceCriteriaBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getAvailableResourceResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:availableResourceBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="availableResourceBO">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="itaExaminerList" nillable="true" type="tns:itaExaminerBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="jpList" nillable="true" type="tns:jpbo"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="policeOfficerList" nillable="true" type="tns:policeOfficerBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="taStaffList" nillable="true" type="tns:taStaffBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="taVehicleList" nillable="true" type="tns:taVehicleBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findPoliceOfficerByPersonID">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="personId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findPoliceOfficerByPersonIDResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:policeOfficerBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findJPByPersonID">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="personId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findJPByPersonIDResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:jpbo"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="terminateRoadOperation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="roadOpBo" type="tns:roadOperationBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="terminateRoadOperationResponse">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="Exception">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getAvailableJPResource">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="availableResourceCriteriaBO" type="tns:availableResourceCriteriaBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getAvailableJPResourceResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:jpbo"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findActiveOperationForUser">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="userName" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findActiveOperationForUserResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:roadOperationBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupRoadOperation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="roadOperationCriteriaBO" type="tns:roadOperationCriteriaBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupRoadOperationResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:roadOperationBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="cancelRoadOperation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="roadOpBo" type="tns:roadOperationBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="cancelRoadOperationResponse">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="closeRoadOperation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="roadOpBo" type="tns:roadOperationBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="closeRoadOperationResponse">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="findSavedRoadOperationAssignedResource">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findSavedRoadOperationAssignedResourceResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:assignedResourceBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="assignedResourceBO">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="itaExaminerList" nillable="true" type="tns:assignedPersonBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="jpList" nillable="true" type="tns:assignedPersonBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="policeOfficerList" nillable="true" type="tns:assignedPersonBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="taStaffList" nillable="true" type="tns:assignedPersonBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="taVehicleList" nillable="true" type="tns:assignedVehicleBO"/>
+      <xs:element minOccurs="0" name="teamId" type="xs:int"/>
+      <xs:element minOccurs="0" name="teamLeadStaffId" type="xs:string"/>
+      <xs:element minOccurs="0" name="teamName" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="assignedPersonBO">
+    <xs:sequence>
+      <xs:element name="attended" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="fullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="middleName" type="xs:string"/>
+      <xs:element minOccurs="0" name="otherInfo" type="xs:string"/>
+      <xs:element minOccurs="0" name="personId" type="xs:int"/>
+      <xs:element minOccurs="0" name="personTypeId" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+      <xs:element minOccurs="0" name="teamId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="assignedVehicleBO">
+    <xs:sequence>
+      <xs:element name="attended" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+      <xs:element minOccurs="0" name="taVehicle" type="tns:taVehicleBO"/>
+      <xs:element minOccurs="0" name="teamId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupOperationArtery">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+      <xs:element minOccurs="0" name="arteryStr" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupOperationArteryResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:arteryBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getStaffByUsername">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="username" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getStaffByUsernameResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:taStaffBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="validateCourtDateRest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="scheduledStartDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="courtDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="dateUsed" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="validateCourtDateRestResponse">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="updateRoadOperation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="roadOperationBO" type="tns:roadOperationBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="assignedTeamDetailsBOList" type="tns:assignedTeamDetailsBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="updateRoadOperationResponse">
+    <xs:sequence/>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,791 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com">
+
+	<ui:define name="title">Team Details</ui:define>
+	<ui:define name="pageHeader">Team Details</ui:define>
+	<ui:fragment id="page">	
+	<style>
+			.ui-picklist .ui-picklist-list{
+		width: 310px;
+		}
+		
+		.ui-picklist .ui-picklist-filter{
+			width: 95%;
+		}
+	</style>
+<!-- 	<h:form styleClass="form" id="addTeam" > -->
+<!-- CSS Used for Road Operation Screens -->
+<link href="${request.contextPath}/theme/roadOp.css" rel="stylesheet" />
+
+
+<script src="${request.contextPath}/script/js/StyledMarker.js"></script>
+<script src="${request.contextPath}/script/js/TAMap 1.0.0.js"></script>
+<script	src="${request.contextPath}/script/roadOperations.js"></script>
+
+<script>
+//<![CDATA[
+		
+		
+		var tamap;//Global 
+		var par = "";//Global
+		var counter = 0;
+		$("document").ready( function(){
+			if(typeof google == 'undefined'){
+				$("#map-canvas").hide();
+				$("#divGoogleNotConnect").show();				
+				return;
+			}else{
+				$("#map-canvas").show();
+				$("#divGoogleNotConnect").hide();	
+			}
+			qq("true");//map method
+			loadOptArteries();
+			
+			//disable selction of parish/location that have NO associated location/artery respectively
+			$("div[id*=availLocations] tr.ui-widget-content.ui-datatable-odd").not(".ui-datatable-selectable").find(".locDesc").append("<strong>*</strong>");
+			$("div[id*=availLocations] tr.ui-widget-content.ui-datatable-odd").not(".ui-datatable-selectable").addClass("disabled");
+	        $("div[id*=availLocations] tr.ui-widget-content.ui-datatable-even").not(".ui-datatable-selectable").find(".locDesc").append("<strong>*</strong>");
+	        $("div[id*=availLocations] tr.ui-widget-content.ui-datatable-even").not(".ui-datatable-selectable").addClass("disabled");
+	        
+	        $("div[id*=availParishes] tr.ui-widget-content.ui-datatable-odd").not(".ui-datatable-selectable").find(".parDesc").append("<strong>*</strong>");
+	        $("div[id*=availParishes] tr.ui-widget-content.ui-datatable-odd").not(".ui-datatable-selectable").addClass("disabled");
+	        $("div[id*=availParishes] tr.ui-widget-content.ui-datatable-even").not(".ui-datatable-selectable").find(".parDesc").append("<strong>*</strong>");
+	        $("div[id*=availParishes] tr.ui-widget-content.ui-datatable-even").not(".ui-datatable-selectable").addClass("disabled");
+	        //
+			$("div[id*=availParishes] td").click(function() {
+		        var selected = $(this).text();
+		        
+		        $("div[id*=availParishes] td").removeClass('rowHg');
+		        $("div[id*=availParishes] tr.ui-widget-content.ui-datatable-odd.ui-datatable-selectable").removeClass('rowHg');
+		        $("div[id*=availParishes] tr.ui-widget-content.ui-datatable-even.ui-datatable-selectable").removeClass('rowHg');
+		        $(this).addClass('rowHg');
+		        $(this).parent().addClass('rowHg');		        
+
+			        
+		});
+			
+			
+		});
+		
+		function clickLoc(){
+		
+			//alert('clickLoc() called'+ document.getElementsByTagName("el"));
+			
+			//ROMS1.0U-002(kpowell) :disable selction of parish/location that have NO associated location/artery respectively
+			
+			if($("div[id*=availLocations] tr.ui-widget-content.ui-datatable-odd").not(".ui-datatable-selectable").hasClass("disabled")== false){
+				$("div[id*=availLocations] tr.ui-widget-content.ui-datatable-odd").not(".ui-datatable-selectable").find(".locDesc").append("<strong>*</strong>");
+				$("div[id*=availLocations] tr.ui-widget-content.ui-datatable-odd").not(".ui-datatable-selectable").addClass("disabled");
+			}
+			
+			if($("div[id*=availLocations] tr.ui-widget-content.ui-datatable-even").not(".ui-datatable-selectable").hasClass("disabled") == false){
+		   	 	$("div[id*=availLocations] tr.ui-widget-content.ui-datatable-even").not(".ui-datatable-selectable").find(".locDesc").append("<strong>*</strong>");
+		   		$("div[id*=availLocations] tr.ui-widget-content.ui-datatable-even").not(".ui-datatable-selectable").addClass("disabled");
+			}
+		    
+			if($("div[id*=availParishes] tr.ui-widget-content.ui-datatable-odd").not(".ui-datatable-selectable").hasClass("disabled")== false){
+		    	$("div[id*=availParishes] tr.ui-widget-content.ui-datatable-odd").not(".ui-datatable-selectable").find(".parDesc").append("<strong>*</strong>");
+		    	$("div[id*=availParishes] tr.ui-widget-content.ui-datatable-odd").not(".ui-datatable-selectable").addClass("disabled");
+			}
+			
+			if($("div[id*=availParishes] tr.ui-widget-content.ui-datatable-even").not(".ui-datatable-selectable").hasClass("disabled")== false){
+	        	$("div[id*=availParishes] tr.ui-widget-content.ui-datatable-even").not(".ui-datatable-selectable").find(".parDesc").append("<strong>*</strong>");
+	        	$("div[id*=availParishes] tr.ui-widget-content.ui-datatable-even").not(".ui-datatable-selectable").addClass("disabled");
+			}
+		    //
+		    
+			$("div[id*=availParishes] td").click(function() {
+		        var selected = $(this).text();
+	        
+		        $("div[id*=availParishes] td").removeClass('rowHg');
+		        $("div[id*=availParishes] tr.ui-widget-content.ui-datatable-odd.ui-datatable-selectable").removeClass('rowHg');
+		        $("div[id*=availParishes] tr.ui-widget-content.ui-datatable-even.ui-datatable-selectable").removeClass('rowHg');
+		        $("div[id*=availParishes] td.ui-selection-column").removeClass('rowHg');
+		        
+		        $("div[id*=availParishes] tr.ui-widget-content.ui-datatable-even.ui-datatable-selectable").removeClass('rowHg');
+		        
+		        //ui-widget-content ui-datatable-even ui-datatable-selectable rowHg
+		        
+		        $(this).addClass('rowHg');
+		        $(this).parent().addClass('rowHg');
+			});
+			
+				$("div[id*=availLocations] tr").click(function() {
+						
+						//alert('div[id*=availLocations]');
+				        var selected = $(this).text();
+				       // alert(selected);
+				     
+				        $("div[id*=availLocations] td").removeClass('rowHg');
+				        $("div[id*=availLocations] tr.ui-widget-content.ui-datatable-odd.ui-datatable-selectable").removeClass('rowHg');
+				        $("div[id*=availLocations] tr.ui-widget-content.ui-datatable-even.ui-datatable-selectable").removeClass('rowHg');				        
+				    					     
+				        $(this).addClass('rowHg');
+				        $(this).parent().addClass('rowHg');
+				});
+				
+				
+				$("div[id*=availArteries] td").click(function() {
+		        var selected = $(this).text();
+			       
+		        $("div[id*=availArteries] td").removeClass('rowHg');
+		        $("div[id*=availArteries] tr.ui-widget-content.ui-datatable-odd.ui-datatable-selectable").removeClass('rowHg');
+		        $("div[id*=availArteries] tr.ui-widget-content.ui-datatable-even.ui-datatable-selectable").removeClass('rowHg');
+		        $(this).addClass('rowHg');
+		        $(this).parent().addClass('rowHg');
+		});
+		}
+		function qq(x)
+			{//alert("qq");
+		try{	
+			
+			tamap = new TAMap();//New instance of google map
+		
+			var arr = new Array();
+			var arteries = new Array();
+			var startLat = new Array();
+			var startLon = new Array();
+			var endLat = new Array();
+			var endLon = new Array();
+			var points = new Array();
+			var distance = new Array();
+			var editPathOptions;
+			var pathOptions = new Array();
+			var param = "";
+			var c = 0;
+			var p = -1;
+			
+			//Gets text from list of parishes in select Menu Add each parish selected to array
+			$('#resourceDetails\\:tabViewMain\\:availParishes_data .ui-datatable-selectable[aria-selected=true] .parDesc').each(function()
+			{
+				arr.push($(this).text())
+				p++;//count parishes selected
+			});
+			//Each start Latitude from Hidden text field
+			 $("#resourceDetails\\:tabViewMain\\:availArteries_data .ui-datatable-selectable[aria-selected=true] .dlgStartLat").each(function()
+			{
+				startLat.push($(this).val())
+			}); 
+			//Each start Longitude from Hidden text field
+			$("#resourceDetails\\:tabViewMain\\:availArteries_data .ui-datatable-selectable[aria-selected=true] .dlgStartLong").each(function()
+			{
+				startLon.push($(this).val())
+			}); 
+			//Each End Latitude from Hidden text field
+			$("#resourceDetails\\:tabViewMain\\:availArteries_data .ui-datatable-selectable[aria-selected=true] .dlgEndLat").each(function()
+			{
+				endLat.push($(this).val())
+			}); 
+			//Each end longitude from Hidden text field
+			$("#resourceDetails\\:tabViewMain\\:availArteries_data .ui-datatable-selectable[aria-selected=true] .dlgEndLong").each(function()
+			{
+				endLon.push($(this).val())
+			});
+			//Each points from Hidden text field
+			$("#resourceDetails\\:tabViewMain\\:availArteries_data .ui-datatable-selectable[aria-selected=true] .dlgPoints").each(function()
+			{
+				points.push($(this).val())
+			});
+			//Each distance from Hidden text field
+			$("#resourceDetails\\:tabViewMain\\:availArteries_data .ui-datatable-selectable[aria-selected=true] .dlgDistanceBx").each(function()
+			{
+				distance.push($(this).val())
+			});
+			
+			//Each artery from select menu
+			$('#resourceDetails\\:tabViewMain\\:availArteries_data .ui-datatable-selectable[aria-selected=true] .artDesc').each(function()
+			{
+				//alert($(this).text());
+				//Add name of arteries to array
+				arteries.push($(this).text());
+				var currentArtery = $(this).text();
+				//add map params to JSON format
+				editPathOptions = jQuery.parseJSON('{"ID":'+c+',"name":", ","address":", , ","color":"red","start_location":{"lat":'+startLat[c]+',"lng":'+startLon[c]+'},"end_location":{"lat":'+endLat[c]+',"lng":'+endLon[c]+'},"points":"","distance":'+distance[c]*1000+' }');
+				//Added points separate because of special characters it fails to parse in json method  
+				editPathOptions.points = points[c];
+				//if(editPathOptions != ""){
+				//Add params to array
+				pathOptions.push(editPathOptions);
+				//}
+				counter++;
+				c++;//Count Arteries added
+				
+			});
+			
+			
+			//alert(JSON.stringify(editPathOptions));
+			$("#textView").append(JSON.stringify(editPathOptions));
+			//$("#textView").remove();
+			//$("#textView").append("");
+			//tamap.modifyPaths(pathOptions);
+			//tamap = new TAMap();
+			//pathOptions.push( jQuery.parseJSON('{"ID":1,"name":", ","address":", , ","color":"red","start_location":{"lat":17.966316,"lng":-76.790985},"end_location":{"lat":17.979277,"lng":-76.789474},"points":"ie_nBzdswM?@","distance":1480}'));
+			//alert(pathOptions.length);
+			param = x;
+			
+			if(param == 'true'){//Checks to see if row was selected vs checked
+				//get the value for the selected parish row
+				$('#resourceDetails\\:tabViewMain\\:availParishes_data .ui-datatable-selectable[aria-selected=true] .parDesc').click(function(){
+					par = $(this).text();
+				});
+			}
+			else{
+				//alert(arr[arr.length-1]);
+				par = arr[arr.length - 1];
+			}
+			//alert(par);
+			if(pathOptions.length > 0){
+				tamap.showPaths(pathOptions);//Shows all paths currently added
+				
+			}else{
+				pathOptions.push( jQuery.parseJSON('{"ID":1,"name":", ","address":", , ","color":"red","start_location":{"lat":17.966316,"lng":-76.790985},"end_location":{"lat":17.979277,"lng":-76.789474},"points":"ie_nBzdswM?@","distance":1480}'));
+				tamap.showPaths(pathOptions);
+				tamap.showLocation(par);
+			}
+				var DD = $('.ui-widget-content ui-datatable-even ui-state-highlight[aria-selected=true] .artDesc').text();
+				//alert("end" + DD);
+		}catch(e){
+			alert(e);
+		}
+			//if(pathOptions.length != 0)
+			//{
+				//tamap.showPaths(pathOptions);//shows the paths on the map and zoom to area
+				//}
+			//else{
+				//tamap.showLocation(par);//zooms to parish
+			//}
+				
+	}
+	
+	//Function load google map paths based on when update is being done on operation
+		function loadOptArteries(){
+		//alert("hit new method!");
+		try{
+			var pathOptions = new Array();
+			//tamap = new TAMap();
+			var editPathOptions = "";
+		
+			var artDescCopy = stripSquareBrace($(".ui-widget-content [aria-selected=true]").find('.artDescCopy').text()); 
+			var dlgDistanceBxCopy = stripSquareBrace($(".ui-widget-content [aria-selected=true]").find('.dlgDistanceBxCopy').text()); 
+			//alert($(".ui-widget-content [aria-selected=true]").find('.artDescCopy').text());
+			//var artDes = stripSquareBrace($('#reviewOperations\\:accordion\\:artDesc').val());
+			//var dlgDistanceBx = stripSquareBrace($('#reviewOperations\\:accordion\\:dlgDistanceBx').val());
+			var dlgStartLatCopy = stripSquareBrace($(".ui-widget-content [aria-selected=true]").find('.dlgStartLatCopy').text());
+			var dlgStartLongCopy = stripSquareBrace($(".ui-widget-content [aria-selected=true]").find('.dlgStartLongCopy').text());
+			var dlgEndLatCopy = stripSquareBrace($(".ui-widget-content [aria-selected=true]").find('.dlgEndLatCopy').text());
+			var dlgEndLongCopy = stripSquareBrace($(".ui-widget-content [aria-selected=true]").find('.dlgEndLongCopy').text());
+			var dlgPointsCopy = stripSquareBrace($(".ui-widget-content [aria-selected=true]").find('.dlgPointsCopy').text());
+			var size = artDescCopy.length;
+			size -= 1;
+			//alert(artDescCopy + " distance " + dlgDistanceBxCopy + " lat " + dlgStartLatCopy + " Points " + dlgPointsCopy);
+			//alert(size);
+			if(size >= 1 && size != null){
+				for(var i = 0;i < size;i++)
+				{
+					editPathOptions = jQuery.parseJSON('{"ID":'+i+',"name":", ","address":"name, , ","color":"red","start_location":{"lat":'+dlgStartLatCopy[i]+',"lng":'+dlgStartLongCopy[i]+'},"end_location":{"lat":'+dlgEndLatCopy[i]+',"lng":'+dlgEndLongCopy[i]+'},"points":"","distance":'+dlgDistanceBxCopy[i]+' }');
+					editPathOptions.points = dlgPointsCopy[i];
+					pathOptions.push(editPathOptions);
+				}
+				tamap.showPaths(pathOptions);
+				//alert(JSON.stringify(editPathOptions));
+			}}catch(e){alert(e);}
+		}		
+		
+		function stripSquareBrace(v){
+		
+			var size = v.length;
+			var temp2 = new Array();
+			var temp1 = v.slice(0,size);
+			temp2 = temp1.toString().split(",");
+			return temp2;
+			
+			}
+	//]]>	
+	</script>
+
+
+		<p:panel id="teampanelID">
+		<p:messages id="addTeamMessages" closable="true" autoupdate="true"/>
+			
+			<div style="margin-left: 15px;">
+			
+			<table>
+				<tr>	
+					<td><h:outputText style="float:left" styleClass="outputText" value="Team Name: " /></td>
+					<td><p:inputText value="#{operation.currentTeam.teamName}" id="teamName" maxlength="100" size="40" style="text-align: left;display:inherit;"  /></td>
+				</tr>
+			</table>
+			</div>
+			<div style="width:100%;">	
+				<p:tabView id="tabViewMain" orientation="top" styleClass="mainTabs" >   
+                    <!-- <p:ajax event="tabChange" listener="#{roadOperationsServiceAction.onTabChange}" update=":resourceDetails:tabViewMain:tabViewResources:JPMsg, :resourceDetails:tabViewMain:tabViewResources:jpOutputPanel"/>        -->
+                            
+            			<p:tab id="location-tab" title="Assign Location(s) and Arteries" style="height:520px; "> 
+				
+							
+								<p:messages id="warnAbtJPMessagesPanel" closable="false" severity="warn"/>
+							
+							<h:inputText id="warnAbtJPMessages" style="display:none" value="#{flowScope.warnAbtJPMessages}"></h:inputText>
+				
+							
+							<h2><span>Indicate Location(s) assigned</span></h2>
+							
+								<div id="locDet" > 
+							
+										<table id="loctable">
+									<!-- <c:if test="#{operation.statusId == 'NONE' and flowScope.saveOrUpdate == 'save'}"> -->
+											<tr>
+											
+												<td>
+												<!--  -->
+													
+										 			<p:dataTable style="float:left ; width:200px;" scrollHeight="250" scrollable="true" id="availParishes" 
+										 				value="#{operation.allParishes}" 										 				
+							                              var="par" selection="#{operation.currentTeam.selectedTeamParishList}" rowKey="#{par.parishCode}" rowSelectMode="add"  disabledSelection="#{!roadOperationsServiceAction.hasLocations(par.parishCode)}">
+							                        			<p:column selectionMode="multiple" style="width:15%" />
+							                        		    <p:ajax event="rowSelect"  listener="#{roadOperationsServiceAction.addToSelectedParishes}" update=":resourceDetails:tabViewMain:availLocations,:resourceDetails:tabViewMain:availArteries, :resourceDetails:tabViewMain:tabViewResources:emptyMsg3,:resourceDetails:tabViewMain:tabViewResources:JPMsg, :resourceDetails:tabViewMain:tabViewResources:jpOutputPanel" oncomplete="qq('true');clickLoc();"/>
+							                                    <p:ajax event="rowUnselect"  listener="#{roadOperationsServiceAction.removeFromSelectedParishes}" update=":resourceDetails:tabViewMain:availLocations,:resourceDetails:tabViewMain:availArteries, :resourceDetails:tabViewMain:tabViewResources:emptyMsg3,:resourceDetails:tabViewMain:tabViewResources:JPMsg, :resourceDetails:tabViewMain:tabViewResources:jpOutputPanel" oncomplete="qq('true');clickLoc();"/>
+							 								    <p:ajax event="rowSelectCheckbox"  listener="#{roadOperationsServiceAction.addToSelectedParishes}" update=":resourceDetails:tabViewMain:availLocations,:resourceDetails:tabViewMain:availArteries, :resourceDetails:tabViewMain:tabViewResources:emptyMsg3,:resourceDetails:tabViewMain:tabViewResources:JPMsg, :resourceDetails:tabViewMain:tabViewResources:jpOutputPanel" oncomplete="qq();clickLoc();"/>
+							                                    <p:ajax event="rowUnselectCheckbox"  listener="#{roadOperationsServiceAction.removeFromSelectedParishes}" update=":resourceDetails:tabViewMain:availLocations,:resourceDetails:tabViewMain:availArteries, :resourceDetails:tabViewMain:tabViewResources:emptyMsg3,:resourceDetails:tabViewMain:tabViewResources:JPMsg, :resourceDetails:tabViewMain:tabViewResources:jpOutputPanel" oncomplete="qq();clickLoc();"/>
+							 								  	<p:ajax event="toggleSelect"  oncomplete="clickLoc();" listener="#{roadOperationsServiceAction.addToSelectedParishesToggle}" update=":resourceDetails:tabViewMain:tabViewResources:jpOutputPanel"/>
+							                                    <p:column headerText="Parishes" >  
+							                                       <h:outputText styleClass="parDesc" value="#{par.description}" />  
+							                                  </p:column> 
+							                    	</p:dataTable>
+												</td>
+												<td>
+												<!--  -->
+													<p:dataTable style="float:left;width:200px;" scrollHeight="250" scrollable="true"   id="availLocations" value="#{operation.allLocationsMap.get(operation.currentTeam.parishCodeIndex)}" 
+							                              var="loc" selection="#{operation.selectedLocationList}" rowKey="#{loc.locationId}" rowSelectMode="add" disabledSelection="#{!roadOperationsServiceAction.hasArteries(loc.locationId)}"
+							                              >
+							                        			<p:ajax event="rowSelect"  listener="#{roadOperationsServiceAction.addToSelectedLocations}" update=":resourceDetails:tabViewMain:availArteries, :resourceDetails:addTeamMessages" oncomplete="qq();clickLoc();"/>
+							                                     <p:ajax event="rowUnselect"  listener="#{roadOperationsServiceAction.removeFromSelectedLocations}" update=":resourceDetails:tabViewMain:availArteries"  oncomplete="qq(); clickLoc();"/>
+							                                     <p:ajax event="rowSelectCheckbox"  listener="#{roadOperationsServiceAction.addToSelectedLocations}" update=":resourceDetails:tabViewMain:availArteries, :resourceDetails:addTeamMessages" oncomplete="qq();"/>
+							                                     <p:ajax event="rowUnselectCheckbox"  listener="#{roadOperationsServiceAction.removeFromSelectedLocations}" update=":resourceDetails:tabViewMain:availArteries" oncomplete="qq();"/>
+							                                  	 <p:ajax event="toggleSelect" oncomplete="qq(); clickLoc();" listener="#{roadOperationsServiceAction.addToSelectedLocationsToggle}"/>
+							                                  	 <p:column selectionMode="multiple" style="width:15%" />  
+							                                     <p:column headerText="Locations">  
+							                                     <h:outputText styleClass="locDesc" value="#{loc.shortDesc}" />  
+							                                  	  </p:column> 
+						                    		</p:dataTable>
+												</td>
+												<td>
+												<!-- -->
+													<p:dataTable style="float:left;width:200px" scrollHeight="250" scrollable="true"  width="300" id="availArteries" value="#{operation.allArteriesMap.get(operation.currentTeam.locationCodeIndex)}"  
+							                              var="art" selection="#{operation.selectedArteryList}" rowKey="#{art.arteryId}" rowSelectMode="add" 
+							                              >
+							                        
+							                                    <p:ajax event="rowSelect"  listener="#{roadOperationsServiceAction.addToSelectedArteries}" oncomplete="qq();clickLoc();"  />
+							                                    <p:ajax event="rowUnselect"  listener="#{roadOperationsServiceAction.removeFromSelectedArteries}" oncomplete="qq();clickLoc();"  />
+							                                    <p:ajax event="rowSelectCheckbox"  listener="#{roadOperationsServiceAction.addToSelectedArteries}" oncomplete="qq();"  />
+							                                    <p:ajax event="rowUnselectCheckbox"  listener="#{roadOperationsServiceAction.removeFromSelectedArteries}" oncomplete="qq();" />
+							      								<p:ajax event="toggleSelect" oncomplete="qq();" listener="#{roadOperationsServiceAction.addToSelectedArteriesToggle}"/>
+							                                    <p:column selectionMode="multiple" style="width:15%" />  
+							                                    <p:column headerText="Arteries" >  
+							                                     <h:outputText styleClass="artDesc" value="#{art.shortDescription}" /> 
+							                                      
+							                                       <h:inputText value="#{art.distance}" styleClass="dlgDistanceBx" style="display:none;"/> 
+							                                       <h:inputText value="#{art.startlatitude}" styleClass="dlgStartLat" style="display:none;" />
+																	<h:inputText value="#{art.startlongitude}" styleClass="dlgStartLong"  style="display:none;"/>
+																	<h:inputText value="#{art.endlatitude}" styleClass="dlgEndLat" style="display:none;"/>
+																	<h:inputText value="#{art.endlongitude}" styleClass="dlgEndLong" style="display:none;"/>
+																	<h:inputText value="#{art.points}" styleClass="dlgPoints" style="display:none;"/>
+																	
+																	<!--For Editing -->
+																	 <h:outputText styleClass="artDescCopy" value="#{art.shortDescription}," style="display:none;"/>
+																	<h:outputText value="#{art.distance}," styleClass="dlgDistanceBxCopy" style="display:none;"/> 
+							                                       <h:outputText value="#{art.startlatitude}," styleClass="dlgStartLatCopy" style="display:none;" />
+																	<h:outputText value="#{art.startlongitude}," styleClass="dlgStartLongCopy"  style="display:none;"/>
+																	<h:outputText value="#{art.endlatitude}," styleClass="dlgEndLatCopy" style="display:none;"/>
+																	<h:outputText value="#{art.endlongitude}," styleClass="dlgEndLongCopy" style="display:none;"/>
+																	<h:outputText value="#{art.points}," styleClass="dlgPointsCopy" style="display:none;"/>
+							                                  	</p:column> 
+							                    	</p:dataTable>
+												</td>
+												</tr>
+												<!-- </c:if>
+												
+												<c:if test="#{operation.statusId == 'RO_SCH'}">
+												<tr>
+												<td>
+													<p:tree
+														value="#{roadOperationsServiceAction.locationTreeView}"
+														var="node" id="tree">
+														<p:treeNode id="treeNode">
+															<h:outputText style="text-align:left" value="#{node}"
+																id="lblNode" />
+														</p:treeNode>
+													</p:tree>
+												</td>
+												<td>
+														<h:inputText id="artDesc" value="#{listArteryDesc}" style="display:none;" /> 
+										                <h:inputText value="#{listDistance}" id="dlgDistanceBx" style="display:none;"/> 
+						                                <h:inputText value="#{listStrtLat}" id="dlgStartLat" style="display:none;" />
+														<h:inputText value="#{listStrtLon}" id="dlgStartLong"  style="display:none;"/>
+														<h:inputText value="#{listEndLat}" id="dlgEndLat" style="display:none;"/>
+														<h:inputText value="#{listEndLon}" id="dlgEndLong" style="display:none;"/>
+														<h:inputText value="#{listPoints}" id="dlgPoints" style="display:none;"/>
+												</td>
+											</tr>
+											</c:if> -->
+											<!-- TODO Map needs to use the hierachylist as reference to be populated -->
+									      </table> 	
+									      <span style="font-weight: normal !important;color: #808080;font-style: italic;">
+									      * - Parish/Location does not have an associated location/artery</span>	
+									</div>
+									<div id="mapDiv" >
+										<div id="map-canvas"  style="height:300px; border:black 1px solid;
+																width: 300px;">
+										</div>
+										<div id="divGoogleNotConnect" style="display:none;">
+											<h:outputText style="color:red !important;" value="* Unable to retrieve Google Maps information" />
+										</div>
+									</div>
+					        	
+				        		
+								</p:tab>
+
+                          <p:tab  id="resource-tab" title="Assign Resources" >
+                               	
+                               	<h2><span>Indicate Resource(s) assigned</span></h2>
+                               	<p:tabView id="tabViewResources" orientation="left" styleClass="leftTabs" >   
+                               	
+										
+                               			
+                               			<p:tab id="tastaff-tab" title="TA Staff" > <!-- DO NOT CHANGE TAB ID -->
+                               				
+                               				<p:outputPanel id="emptyMsg1" rendered="#{(operation.listOfStaff.getSource()==null &amp;&amp; operation.listOfStaff.getTarget()==null)||
+                               				(operation.listOfStaff.getSource().size()==0 &amp;&amp; operation.listOfStaff.getTarget().size()==0)}">
+													<span class="info-alert">
+														Based on the Currently Selected Operation Details, No TA Staff Members Are Available 
+													</span>
+													
+											</p:outputPanel>
+											
+											<span class="info-alert" style="width:98%">
+													#{roadOperationsServiceAction.getMinMaxMessage('TA').getMessage()}
+											</span>
+											
+											<div style="display:#{operation.listOfStaff.getSource().size()>0 or operation.listOfStaff.getTarget().size()>0 ?'block':'none'}">
+											
+											<div class="roms-picklist-holder">
+											    <p:pickList id="taStaffpickList" value="#{operation.listOfStaff}" var="taStaff"  itemDisabled="#{taStaff.scheduled and operation.onScheduledDate}"
+											                itemLabel="#{taStaff.fullName} - #{taStaff.staffId}		
+        														Role: #{taStaff.staffTypeCode =='I' ? 'Inspector' : 'Administration'}" itemValue="#{taStaff}" showCheckbox="true" styleClass="p1"
+											                showSourceFilter="true" showTargetFilter="true" filterMatchMode="startsWith" style="text-align:left" 
+											                converter="pickListConverter" onTransfer="handleStaffTransfer(e)" rendered="#{operation.listOfStaff != null}">
+											                
+											                <f:facet name="sourceCaption">Available</f:facet>  
+        													<f:facet name="targetCaption">Assigned</f:facet> 
+        													
+        													<p:ajax event="transfer" listener="#{roadOperationsServiceAction.onStaffTransferSort}" update="taStaffpickList" />
+        													<p:column style=""> 
+        														<div>
+        														
+																<span>
+	        														#{taStaff.fullName} - #{taStaff.staffId}<br/>      														
+        															<span style="color: #808080;font-style: italic;">Role: #{taStaff.staffTypeCode =='I' ? 'Inspector' : 'Administration'}</span>
+        														</span>
+        														</div> 
+													              
+													        </p:column>  
+													  
+															
+											   </p:pickList>
+											   </div>
+											  <p:commandButton style="display:none"  id="buttHandleTransfer" action="handleStaffTransfer" ajax="true"
+											   		update="teamLeadList" processIds="*"> 
+											   	<!-- <p:commandButton style="display:none"  id="buttHandleTransfer" value="Hidden" action="handleTransfer" 
+											   		 processIds="*"> -->
+											   	</p:commandButton>
+											   	
+											   	<h:inputText id="listOfSelectedStaffID" style="display:none" value="#{operation.currentTeam.listOfSelectedStaffID}"></h:inputText> 
+											   
+											</div>
+																		                
+							                <div style="display:#{operation.listOfStaff.getSource().size()>0 or operation.listOfStaff.getTarget().size()>0 ?'block':'none'}">
+							                
+												<table style="margin-bottom:0;">
+													<tr>	
+														<td><h:outputText styleClass="outputText" value="Team Lead: " /></td>
+							                			<td><p:selectOneMenu id="teamLeadList" value="#{operation.currentTeam.teamLeadId}" effect="fade" style="width:400px">  
+												            <f:selectItem itemLabel="[Select One]" itemValue="" />  
+												            <f:selectItems value="#{possibleTeamLeads}"	var="teamLeadStaff" itemLabel="#{teamLeadStaff.fullName}- #{teamLeadStaff.staffId} " itemValue="#{teamLeadStaff.staffId}"/>
+												            
+												            <p:ajax event="change" listener="#{roadOperationsServiceAction.setTeamLead}"  
+												            update=":resourceDetails:tabViewMain:tabViewResources:itaTeaamLdVal :resourceDetails:tabViewMain:tabViewResources:teamLeadPO :resourceDetails:tabViewMain:tabViewResources:jpTabTeamLead"/>
+												            <!-- oncomplete="teamLeadChanged();"-->
+												        	</p:selectOneMenu>  
+												        </td>
+												        </tr>
+												</table>
+							                </div>
+							                
+ 										</p:tab>
+                               	
+                               	
+                               			<p:tab id="ita-tab" title="ITA Examiners"> <!-- DO NOT CHANGE TAB ID -->
+											
+											<p:outputPanel id="emptyMsg2" rendered="#{(operation.listOfITA.getSource()==null &amp;&amp; operation.listOfITA.getTarget()==null)||
+											(operation.listOfITA.getSource().size()==0 &amp;&amp; operation.listOfITA.getTarget().size()==0)}">
+												<span  class="info-alert">
+													Based on the Currently Selected Operation Details, No ITA Examiners Are Available 
+												</span>
+											</p:outputPanel>	
+											<span class="info-alert" style="width:98%">
+													#{roadOperationsServiceAction.getMinMaxMessage('IE').getMessage()}
+											</span>
+											<div style="display:#{operation.listOfITA.getSource().size()>0 or operation.listOfITA.getTarget().size()>0?'block':'none'}">
+											     <div class="roms-picklist-holder">
+											     <p:pickList id="itapickList" value="#{operation.listOfITA}" var="ita"  itemDisabled="#{ita.scheduled and operation.onScheduledDate}"
+											                itemLabel="#{ita.personBO.lastName}, #{ita.personBO.firstName} - #{ita.examinerId}" itemValue="#{ita}" 
+											                showCheckbox="true" showSourceFilter="true" showTargetFilter="true" filterMatchMode="startsWith"
+															converter="pickListConverter" rendered="#{operation.listOfITA != null}" onTransfer="handleITATransfer(e)"
+															style="text-align:left">
+											                
+											                 <f:facet name="sourceCaption">Available</f:facet>  
+        													<f:facet name="targetCaption">Assigned</f:facet>
+        													<p:ajax event="transfer" listener="#{roadOperationsServiceAction.onITATransferSort}" update="itapickList" />
+        													
+        													</p:pickList>    
+											  	</div>
+											  	
+											</div>
+							                          
+							                <div> 
+												<h:outputText id="itaTeaamLd" style="float:left" value="Team Lead: " />	
+												<h:outputText id="itaTeaamLdVal" style="float:left" value="#{operation.currentTeam.teamLead.fullName}" />		
+											</div>
+
+										</p:tab>
+                               	
+                               	
+                               	
+                               				<p:tab id="police-tab" title="Police">  <!-- DO NOT CHANGE TAB ID -->
+
+											<p:outputPanel id="emptyMsg3" rendered="#{(operation.listOfPolice.getSource()==null &amp;&amp; operation.listOfPolice.getTarget()==null &amp;&amp; operation.getPoliceFilters().size() > 0)||
+											(operation.listOfPolice.getSource().size()==0 &amp;&amp; operation.listOfPolice.getTarget().size()==0 &amp;&amp; operation.getPoliceFilters().size() > 0) }">
+												<span  class="info-alert">
+													Based on the Currently Selected Operation Details, No Police Officers Are Available 
+												</span>
+											</p:outputPanel>
+											<span class="info-alert" style="width:98%">
+													#{roadOperationsServiceAction.getMinMaxMessage('PO').getMessage()}
+											</span>
+											<div>
+												<p:messages for="policeFilter" autoUpdate="true" id="msgPoliceFilter"></p:messages>
+											</div>	
+											<div style="padding-bottom:10px;padding-top:10px;">
+												<span style="display:inline-block;width:170px">Police Officer Comp. Number: </span>
+												<span><p:inputMask id="txtPoliceCompNum" size="30" maxlength="10" value="#{operation.policeOfficerCompNum}" mask="9?999999999"/></span>
+												
+												<p:watermark for="txtPoliceCompNum" value="Comp. Number" />
+											</div>
+											<div style="padding-bottom:10px">
+												<span style="display:inline-block;width:170px">Police Officer Name: </span>
+												<span><p:inputText size="30" value="#{operation.policeOfficerFirstName}" id="txtOfficerFirstName"></p:inputText></span>
+												<span><p:inputText size="30" value="#{operation.policeOfficerLastName}" id="txtOfficerLastName"></p:inputText></span>
+												<p:watermark for="txtOfficerFirstName" value="FIRST NAME" />
+				  								<p:watermark for="txtOfficerLastName" value="LAST NAME" />
+											</div>
+											<div>
+												<span style="display:inline-block;width:170px;vertical-align:super">Police Station:</span>
+												<span>
+													<p:selectOneMenu id="comboPoliceStation" value="#{operation.policeStation}" effect="fade" style="width:300px">
+														<f:selectItem itemLabel="[Select One]" itemValue="" />  
+												        <f:selectItems value="#{policeStations}"	/>
+													</p:selectOneMenu>
+												</span>
+												<span>
+													<p:commandButton id="butFilterPoliceOfficer" value="Search" action="filterPoliceOfficer" update="panelPolicePickList,emptyMsg3" style="vertical-align:top" styleClass="blue"></p:commandButton>
+													<p:commandButton id="butClearFilterPoliceOfficer" value="Clear" action="clearPoliceFilter" update="panelPolicePickList,emptyMsg3,txtPoliceCompNum,txtOfficerFirstName,txtOfficerLastName,comboPoliceStation" style="vertical-align:top" styleClass="blue"></p:commandButton>
+												</span>
+											</div>
+											<p:outputPanel  id="panelPolicePickList">
+											<div style="display:#{operation.listOfPolice.getSource().size()>0 or operation.listOfPolice.getTarget().size()>0?'block':'none'}">
+							
+												
+												<div class="roms-picklist-holder">
+											    <p:pickList id="policepickList" value="#{operation.listOfPolice}" var="police"  itemDisabled="#{police.scheduled and operation.onScheduledDate}" 
+											                itemLabel="#{police.fullName} - #{police.polOfficerCompNo} - #{police.stationDescription}" itemValue="#{police}" showCheckbox="true"
+											                showSourceFilter="true" showTargetFilter="true" filterMatchMode="startsWith" style="text-align:left"
+											                converter="policePickListConverter" rendered="#{operation.listOfPolice != null}"  onTransfer="handlePoliceTransfer(e)">
+											                
+											                
+											                <f:facet name="sourceCaption">Available</f:facet>  
+        													<f:facet name="targetCaption">Assigned</f:facet>
+        													
+        													<p:column style=""> 
+        														<div>
+        														
+																<span>
+	        														#{police.fullName} - #{police.rank} <span> [</span> #{police.polOfficerCompNo} <span>] </span> <br/><span style="color: #808080;font-style: italic;">#{police.stationDescription}</span>
+        														</span>
+        														</div> 
+													              
+													        </p:column>  
+        										</p:pickList>
+        										</div>    
+											  	
+											</div>
+											</p:outputPanel>
+											<div>
+												<h:outputText id="teamLeadPO" style="float:left" value="Team Lead: #{operation.currentTeam.teamLead.fullName}" />
+												
+											</div>
+							        	</p:tab>
+                               	
+                               	
+                               	
+                               	
+                              		  <p:tab id="jp-tab" title="JP">  <!-- DO NOT CHANGE TAB ID -->
+                              		  
+                              		  <p:outputPanel id="JPMsg" autoUpdate="true">
+                              		  <!--h:outputLabel vlaue="roadOperationsServiceAction.isDisplayJPMsg()"></h:outputLabel-->
+										<c:if test="#{roadOperationsServiceAction.isDisplayJPMsg() }">
+											<!-- <h:outputLabel value="empty operation.listOfJP.getSource() and empty operation.listOfJP.getTarget()"/>	-->
+											<span  class="info-alert">
+													Based on the Currently Selected Operation Details, No J.P.s Are Available. Please Ensure At Least One Parish is Selected in order to Select J.P.s
+											</span>											
+										</c:if>
+										
+										<c:if test="#{ !roadOperationsServiceAction.isDisplayJPMsg()  }">
+											<!-- <h:outputLabel value="JP in listing"/>	-->											
+										</c:if>
+									</p:outputPanel>
+								<span class="info-alert" style="width: 98%">
+									#{roadOperationsServiceAction.getMinMaxMessage('JP').getMessage()}
+								</span>
+
+
+								<p:outputPanel id="jpOutputPanel" >
+										<c:if test="#{ !roadOperationsServiceAction.isDisplayJPMsg()  }">
+										<!-- div style="display:#{operation.listOfJP.getSource().size()==0 or operation.currentTeam.operationParishList == null ?'none':'block'}"-->
+										<div style="display:#{operation.listOfJP.getSource().size()>0 or operation.listOfJP.getTarget().size()>0?'block':'none'}">
+												<div class="roms-picklist-holder">
+												    <p:pickList id="jppickList" value="#{operation.listOfJP}" var="jp"  itemDisabled="#{jp.scheduled and operation.onScheduledDate}"
+												                itemLabel="#{jp.personBO.lastName}, #{jp.personBO.firstName} - #{jp.regNumber}- #{jp.parishDescription}" itemValue="#{jp}" showCheckbox="true"
+												                showSourceFilter="true" showTargetFilter="true" filterMatchMode="startsWith" style="text-align:left"
+												                converter="pickListConverter" rendered="#{operation.listOfJP != null}" onTransfer="handleJPTransfer(e)">
+
+												                 <f:facet name="sourceCaption">Available</f:facet>  
+	        													<f:facet name="targetCaption">Assigned</f:facet>
+	        													<p:ajax event="transfer" listener="#{roadOperationsServiceAction.onJPTransferSort}" update="jppickList" />
+	        													<p:column style=""> 
+	        														<div>
+		        														<span>
+			        														#{jp.personBO.lastName}, #{jp.personBO.firstName}- #{jp.regNumber} <br/><span style="color: #808080;font-style: italic;">PARISH: #{jp.parishDescription}</span>
+		        														</span>
+	        														</div>													              
+													        	</p:column>  
+	        										</p:pickList>      
+												  	
+												</div>
+											</div>
+											</c:if>
+											</p:outputPanel>
+										
+									
+											<h:outputText id="jpTabTeamLead"  style="float:left" value="Team Lead: #{operation.currentTeam.teamLead.fullName}"/>
+											
+											<p:commandButton style="display:none"  id="buttHandleJPTransfer" action="buttHandleJPTransfer" ajax="true"
+											   		 processIds="*" > 
+											   	
+											   	</p:commandButton>
+										
+							        	</p:tab>
+							        	
+							        	
+							       	<p:tab id="veh-tab" title="Vehicle">  <!-- DO NOT CHANGE TAB ID -->
+
+										<p:outputPanel id="emptyMsg3" rendered="#{(operation.listOfVehicles.getSource() == null and operation.listOfVehicles.getTarget()== null) ||
+										(operation.listOfVehicles.getSource().size() == 0 and operation.listOfVehicles.getTarget().size()==0)}">
+												<span  class="info-alert">
+													Based on the Currently Selected Operation Details, No Vehicles Are Available 
+												</span>
+											</p:outputPanel>
+								<span class="info-alert" style="width: 98%">
+									#{roadOperationsServiceAction.getMinMaxMessage('VE').getMessage()}
+								</span>
+								<div style="display:#{operation.listOfVehicles.getSource().size()>0 or operation.listOfVehicles.getTarget().size()>0?'block':'none'}">
+											    <p:pickList id="vehpickList" value="#{operation.listOfVehicles}" var="veh"  itemDisabled="#{veh.scheduled and operation.onScheduledDate}"
+											                itemLabel="#{veh.vehicle.model}, #{veh.vehicle.typeDesc} , #{veh.vehicle.plateRegNo}" 
+											                itemValue="#{veh}" showCheckbox="true" showSourceFilter="true" showTargetFilter="true" 
+											                filterMatchMode="startsWith" converter="pickListConverter" style="text-align:left"
+											                rendered="#{operation.listOfVehicles != null}" onTransfer="handleVehTransfer(e)">
+											                
+											                 <f:facet name="sourceCaption">Available</f:facet>  
+        													<f:facet name="targetCaption">Assigned</f:facet>
+        													<p:ajax event="transfer" listener="#{roadOperationsServiceAction.onVehicleTransferSort}" update="vehpickList" />
+        										</p:pickList>  	
+											</div>
+										
+											<table>
+												<tr>	
+													<td><h:outputText style="float:left" styleClass="outputText" value="Number of Other Agency Vehicles : " /></td>
+													
+													<td>
+														<p:inputMask id="teamMtrCycles" size="10" maxlength="5" value="#{operation.currentTeam.numOfMotorCycle}" mask="9?9999" style="text-align: left;display:inherit;"/>
+													</td>
+												</tr>
+											</table>
+											
+
+							        	</p:tab>
+                               	
+                               	</p:tabView>
+			
+							
+
+                          </p:tab >
+				
+				
+				
+								
+				
+				</p:tabView>
+
+					<h:inputText id="listOfSelectedVehID" style="display:none" value="#{operation.currentTeam.listOfSelectedVehID}"></h:inputText>
+					<h:inputText id="listOfSelectedJPID" style="display:none" value="#{operation.currentTeam.listOfSelectedJPID}"></h:inputText>
+					<h:inputText id="listOfSelectedITAID" style="display:none" value="#{operation.currentTeam.listOfSelectedITAID}"></h:inputText>
+					<h:inputText id="listOfSelectedPoliceID" style="display:none" value="#{operation.currentTeam.listOfSelectedPoliceID}"></h:inputText>
+			
+		
+				<div id="buttons" style="text-align:center;margin-bottom:21px;width:100%;float:left;">
+						<p:commandButton id="addOneTeam" styleClass ="blue" value="Save" action="addTeam" 
+										processIds="*" ajax="true" widgetVar="theWidget" onstart="ensureAllValuesReturned();theWidget.disable();" 
+										update="addTeamMessages,closeTeamPopup,operTeams" oncomplete="theWidget.enable(); if(validate() == 'n'){PF('teamDialog').show();} else {PF('teamDialog').hide(); $('body').removeClass('stop-scrolling');}" >
+																				
+						</p:commandButton>
+						<p:commandButton id="exitTeamPopup" styleClass ="blue"  value="Cancel"  processIds="*" 
+										widgetVar="theExitWidget" onstart="theExitWidget.disable();" process="@this"
+										action="exitTeamWindow" ajax="true" update="addTeamMessages,closeTeamPopup,operTeams, resourceDetails"
+										oncomplete="theExitWidget.enable();PF('teamDialog').hide(); $('body').removeClass('stop-scrolling');setUpProgressBar();">
+										
+										<p:resetInput target="teampanelID" />
+						</p:commandButton>
+						
+						
+						
+						<p:inputText value="#{flowScope.closeTeamPopup}" id="closeTeamPopup" widgetVar="closeTeamPopup" style="display:none"/>
+					
+				</div>
+		</div>
+		<sf:commandButton style="display:none" id="hiddenButton" value="Exit" action="test" processIds="*" />
+	
+	
+	
+<!--    </h:form> -->
+    </p:panel>
+	</ui:fragment>
+</ui:composition>

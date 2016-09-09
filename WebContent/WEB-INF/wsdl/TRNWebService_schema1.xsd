@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://webservices.roms.toms.ta.fsl/" version="1.0" xmlns:ns1="http://dto.common.webservices.fsl.org" xmlns:tns="http://webservices.roms.toms.ta.fsl/">
+
+  <xs:import namespace="http://dto.common.webservices.fsl.org" schemaLocation="TRNWebService_schema3.xsd"/>
+
+  <xs:element name="InvalidTaxPayerException" type="tns:InvalidTaxPayerException"/>
+
+  <xs:element name="RequiredFieldMissingException" type="tns:RequiredFieldMissingException"/>
+
+  <xs:element name="TaxPayerClosedException" type="tns:TaxPayerClosedException"/>
+
+  <xs:element name="TaxPayerDeceasedException" type="tns:TaxPayerDeceasedException"/>
+
+  <xs:element name="TaxPayerRetiredException" type="tns:TaxPayerRetiredException"/>
+
+  <xs:element name="TaxPayerUnintendedException" type="tns:TaxPayerUnintendedException"/>
+
+  <xs:element name="getPersonBOByTrn" type="tns:getPersonBOByTrn"/>
+
+  <xs:element name="getPersonBOByTrnResponse" type="tns:getPersonBOByTrnResponse"/>
+
+  <xs:element name="getWreckingBOByTrn" type="tns:getWreckingBOByTrn"/>
+
+  <xs:element name="getWreckingBOByTrnResponse" type="tns:getWreckingBOByTrnResponse"/>
+
+  <xs:element name="getrnDTOByTrn" type="tns:getrnDTOByTrn"/>
+
+  <xs:element name="getrnDTOByTrnResponse" type="tns:getrnDTOByTrnResponse"/>
+
+  <xs:complexType name="getrnDTOByTrn">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="trn" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getrnDTOByTrnResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="ns1:TrnDTO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="RequiredFieldMissingException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="TaxPayerClosedException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="TaxPayerDeceasedException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="TaxPayerRetiredException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="TaxPayerUnintendedException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="InvalidTaxPayerException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getWreckingBOByTrn">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="trnNbr" type="xs:int"/>
+      <xs:element name="branchNbr" type="xs:short"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getWreckingBOByTrnResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:wreckingCompanyBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="wreckingCompanyBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntryBO" type="tns:auditEntryBO"/>
+      <xs:element minOccurs="0" name="companyName" type="xs:string"/>
+      <xs:element minOccurs="0" name="contactPersonFirstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="contactPersonLastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="contactPersonMiddleName" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="markText" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishName" type="xs:string"/>
+      <xs:element minOccurs="0" name="poBoxNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="poLocationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="shortDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetName" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneCell" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneHome" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneWork" type="xs:string"/>
+      <xs:element minOccurs="0" name="trnBranch" type="xs:string"/>
+      <xs:element minOccurs="0" name="trnNbr" type="xs:string"/>
+      <xs:element minOccurs="0" name="wreckingCompanyId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="auditEntryBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="createDTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="createUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="updateDTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="updateUsername" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getPersonBOByTrn">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="trn" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getPersonBOByTrnResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:personBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="personBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="addressLine1" type="xs:string"/>
+      <xs:element minOccurs="0" name="addressLine2" type="xs:string"/>
+      <xs:element minOccurs="0" name="addressLine2NL" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUserName" type="xs:string"/>
+      <xs:element minOccurs="0" name="dlNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="fullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="markText" type="xs:string"/>
+      <xs:element minOccurs="0" name="middleName" type="xs:string"/>
+      <xs:element minOccurs="0" name="occupation" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="personId" type="xs:int"/>
+      <xs:element minOccurs="0" name="poBoxNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="poLocationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetName" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneCell" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneHome" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneWork" type="xs:string"/>
+      <xs:element minOccurs="0" name="trnNbr" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

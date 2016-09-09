@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://webservices.roms.toms.ta.fsl/" version="1.0" xmlns:tns="http://webservices.roms.toms.ta.fsl/">
+
+  <xs:element name="ErrorSavingException" type="tns:ErrorSavingException"/>
+
+  <xs:element name="NoRecordFoundException" type="tns:NoRecordFoundException"/>
+
+  <xs:element name="RequiredFieldMissingException" type="tns:RequiredFieldMissingException"/>
+
+  <xs:element name="getLasRunProcesses" type="tns:getLasRunProcesses"/>
+
+  <xs:element name="getLasRunProcessesResponse" type="tns:getLasRunProcessesResponse"/>
+
+  <xs:element name="updateCourtRuling" type="tns:updateCourtRuling"/>
+
+  <xs:element name="updateCourtRulingResponse" type="tns:updateCourtRulingResponse"/>
+
+  <xs:element name="updatePlea" type="tns:updatePlea"/>
+
+  <xs:element name="updatePleaResponse" type="tns:updatePleaResponse"/>
+
+  <xs:element name="updatePoliceOfficer" type="tns:updatePoliceOfficer"/>
+
+  <xs:element name="updatePoliceOfficerResponse" type="tns:updatePoliceOfficerResponse"/>
+
+  <xs:element name="updateTAStaff" type="tns:updateTAStaff"/>
+
+  <xs:element name="updateTAStaffResponse" type="tns:updateTAStaffResponse"/>
+
+  <xs:element name="updateVerdict" type="tns:updateVerdict"/>
+
+  <xs:element name="updateVerdictResponse" type="tns:updateVerdictResponse"/>
+
+  <xs:complexType name="updateVerdict">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="currentUser" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="updateVerdictResponse">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="ErrorSavingException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="NoRecordFoundException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="RequiredFieldMissingException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="updatePoliceOfficer">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="currentUser" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="updatePoliceOfficerResponse">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="updatePlea">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="currentUser" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="updatePleaResponse">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="updateTAStaff">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="currentUser" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="updateTAStaffResponse">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="updateCourtRuling">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="currentUser" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="updateCourtRulingResponse">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="getLasRunProcesses">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="getLasRunProcessesResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:processControlBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="processControlBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="procCntrlId" type="xs:int"/>
+      <xs:element minOccurs="0" name="processName" type="xs:string"/>
+      <xs:element minOccurs="0" name="processUser" type="xs:string"/>
+      <xs:element minOccurs="0" name="runEndDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="runStartDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="statusCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="transProcessCnt" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

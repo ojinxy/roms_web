@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+        
+    <secured attributes="ROLE_ROMS_REF_TAVHCLE_SEARCH" />
+        
+    <var name="mode" class="java.lang.String" />
+	<var name="saved" class="java.lang.String" />
+	<var name="taVehicle" class="fsl.ta.toms.roms.bo.TAVehicleBO" />
+	<var name="taVehicles" class="org.fsl.roms.view.TAVehicleBean" />
+	<var name="criteria" class="fsl.ta.toms.roms.search.criteria.impl.TAVehicleCriteriaBO" />
+	<var name="officeLocationList" class="java.util.ArrayList" />
+	<var name="savehideBtn" class="java.lang.String" />
+	<var name="updatehideBtn" class="java.lang.String" />
+	<var name="hideActive" class="java.lang.String"/>
+	<on-start>
+			<evaluate expression="parishMaintenanceServiceAction.getOfficeLocation" ></evaluate>
+			<evaluate expression="taVehicleMaintenanceServiceAction.initTaVehicle"></evaluate>
+	</on-start>
+
+<view-state id="taVehicleMaintenanceSearch">
+	<transition on="search">
+			<evaluate expression="taVehicleMaintenanceServiceAction.search(flowRequestContext)"></evaluate>
+			<!-- <set name="flowScope.mode" value="'search'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+			<render fragments="tavehicleResults" /> -->
+	</transition>
+	
+	<transition on="view" to="taVehicleMaintenanceDetails">
+			<set name="flowScope.mode" value="'view'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+			<set name="flowScope.taVehicle" value="flowScope.taVehicles.selectedRow" />
+			<!-- <evaluate expression="arteryMaintenanceServiceAction.initUpdateMode(flowRequestContext)" /> -->
+	</transition>
+
+	<transition on="add" to="taVehicleMaintenanceDetails">
+			<evaluate expression="taVehicleMaintenanceServiceAction.add(flowRequestContext)"></evaluate>
+			<set name="flowScope.updatehideBtn" value="'none'"></set>
+			<set name="flowScope.savehideBtn" value="''"></set>
+			<set name="flowScope.mode" value="'save'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+			<set name="flowScope.hideActive" value="'false'"></set>
+			<render fragments="taVehicleMaintenanceDetails" /> 
+		</transition>
+		
+		<transition on="edit" to="taVehicleMaintenanceDetails">
+			<evaluate expression="taVehicleMaintenanceServiceAction.select(flowRequestContext)"></evaluate>
+			<set name="flowScope.savehideBtn" value="'none'"></set>
+			<set name="flowScope.updatehideBtn" value="''"></set>
+			<set name="flowScope.hideActive" value="'true'"></set>
+			<!-- <set name="flowScope.mode" value="'save'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+			<set name="flowScope.taVehicle.taVehicleId" value="taVehicle.taVehicleId"></set>
+			<set name="flowScope.taVehicle.vehicle.plateRegNo" value="taVehicle.vehicle.plateRegNo"></set>
+			<set name="flowScope.taVehicle.vehicle.makeDescription" value="taVehicle.vehicle.makeDescription"></set>
+			<set name="flowScope.taVehicle.vehicle.engineNo" value="taVehicle.vehicle.engineNo"></set>
+			<set name="flowScope.taVehicle.vehicle.model" value="taVehicle.vehicle.model"></set>
+			<set name="flowScope.taVehicle.vehicle.chassisNo" value="taVehicle.vehicle.chassisNo"></set>
+			<set name="flowScope.taVehicle.vehicle.typeDesc" value="taVehicle.vehicle.typeDesc"></set>
+			<set name="flowScope.taVehicle.vehicle.colour" value="taVehicle.vehicle.colour"></set>
+			<set name="flowScope.taVehicle.vehicle.year" value="taVehicle.vehicle.year"></set>
+			<set name="flowScope.taVehicle.vehicle.ownerName" value="taVehicle.vehicle.ownerName"></set>
+			<set name="flowScope.taVehicle.officeLocationCode" value="taVehicle.officeLocationCode" />
+			<set name="flowScope.taVehicle.statusId" value="taVehicle.statusId" />
+			<render fragments="taVehicleDetails" /> -->
+		</transition>
+		
+		<!-- Sort the values on the screen -->
+		<transition on="sort" to="taVehicleMaintenanceSearch">
+			<set name="criteria.sortOn" value="requestParameters.sortOn"/>
+			<evaluate expression="taVehicleMaintenanceServiceAction.sort" />	
+			<set name="flowScope.taVehicles" value="flowScope.datatable.pageElements" />					
+			<render fragments="taVehicleMaintenanceSearch,tavehicleResults" />
+		</transition>
+		
+		<!-- Next action on datatable -->
+		<transition on="next" to="taVehicleMaintenanceSearch">
+			<evaluate expression="taVehicleMaintenanceServiceAction.next" />	
+			<set name="flowScope.taVehicles" value="flowScope.datatable.pageElements" />	
+			<render fragments="taVehicleMaintenanceSearch,tavehicleResults" />
+		</transition>
+		
+		<!-- previous action on datatable -->
+		<transition on="previous" to="taVehicleMaintenanceSearch">
+			<evaluate expression="taVehicleMaintenanceServiceAction.previous" />	
+			<set name="flowScope.taVehicles" value="flowScope.datatable.pageElements" />				
+			<render fragments="taVehicleMaintenanceSearch,tavehicleResults" />
+		</transition>
+		
+		<!-- first action on datatable -->
+		<transition on="first" to="taVehicleMaintenanceSearch">
+			<evaluate expression="taVehicleMaintenanceServiceAction.first" />	
+			<set name="flowScope.taVehicles" value="flowScope.datatable.pageElements" />				
+			<render fragments="taVehicleMaintenanceSearch,tavehicleResults" />
+		</transition>
+		
+		<!-- last action on datatable -->
+		<transition on="last" to="taVehicleMaintenanceSearch">
+			<evaluate expression="taVehicleMaintenanceServiceAction.last" />	
+			<set name="flowScope.taVehicles" value="flowScope.datatable.pageElements" />				
+			<render fragments="taVehicleMaintenanceSearch,tavehicleResults" />
+		</transition>
+		
+		<transition on="clear" to="endState" />
+	
+</view-state>
+
+	<view-state id="taVehicleMaintenanceDetails" redirect="false">
+		
+		<transition on="searchPlate">
+			<evaluate expression="taVehicleMaintenanceServiceAction.searchPlate(flowRequestContext)" />
+		</transition>
+
+		<transition on="cancelUpdate" to="taVehicleMaintenanceSearch">
+			<set name="flowScope.saved" value="'false'"></set>
+			<evaluate expression="taVehicleMaintenanceServiceAction.search"></evaluate>
+			<render fragments="taVehicleSearch" />
+		</transition>
+		
+		<transition on="cancel" to="taVehicleMaintenanceSearch">
+			<evaluate expression="taVehicleMaintenanceServiceAction.back(flowRequestContext)" />
+			<set name="flowScope.saved" value="'false'"></set>			
+			<render fragments="taVehicleSearch" />
+		</transition>
+
+		<transition on="initEditMode" to="taVehicleMaintenanceDetails">
+			<set name="flowScope.mode" value="'update'"></set>
+		</transition>		
+			
+		<transition on="add" to="taVehicleMaintenanceDetails">
+			<set name="flowScope.mode" value="'save'"></set>						
+			<evaluate expression="taVehicleMaintenanceServiceAction.initAddMode(flowRequestContext)" />			
+			<set name="flowScope.taVehicle.status" value="'ACT'" />			
+			<render fragments="taVehicleMaintenanceDetails" />
+		</transition>
+
+		<transition on="success" to="taVehicleMaintenanceDetails">
+		</transition>
+
+		<transition on="error" to="taVehicleMaintenanceDetails">
+		</transition>
+
+		<transition on="save" >
+			<evaluate expression="taVehicleMaintenanceServiceAction.savetaVehicle(flowRequestContext)" />	
+		</transition>
+
+		<transition on="update" >
+			<evaluate expression="taVehicleMaintenanceServiceAction.updatetaVehicle(flowRequestContext)" />
+		</transition>
+	</view-state>
+
+	<!-- <action-state id="taVehiclePlateSearch" >
+			<evaluate expression="taVehicleMaintenanceServiceAction.searchPlate(flowRequestContext)" />
+			<transition on="success" to="taVehicleMaintenanceDetails">
+				
+			</transition>
+			<transition on="error" to="taVehicleMaintenanceDetails">
+				
+			</transition>
+	</action-state> -->
+	
+	<!-- <action-state id="search">
+		<evaluate expression="taVehicleMaintenanceServiceAction.search(flowRequestContext)"></evaluate>
+		<transition on="success" to="taVehicleMaintenanceSearch"></transition>
+		<transition on="error" to="taVehicleMaintenanceSearch" />
+		<transition on="yes" to="taVehicleMaintenanceSearch">
+			<set name="flowScope.mode" value="'view'"></set>
+		</transition>
+	</action-state> -->
+
+	<!-- <action-state id="savetaVehicle">
+		<evaluate expression="taVehicleMaintenanceServiceAction.savetaVehicle(flowRequestContext)" />		
+		<transition on="success" to="taVehicleMaintenanceDetails">
+			<set name="flowScope.saved" value="'true'"></set>
+			<set name="flowScope.mode" value="'view'"></set>		
+		</transition>
+		<transition on="error" to="taVehicleMaintenanceDetails">
+		</transition>
+	</action-state> -->
+
+	<!-- <action-state id="updatetaVehicle">
+		<evaluate expression="taVehicleMaintenanceServiceAction.updatetaVehicle(flowRequestContext)" />
+		<transition on="success" to="taVehicleMaintenanceDetails">
+		</transition>
+
+		<transition on="error" to="taVehicleMaintenanceDetails">
+		</transition>
+
+	</action-state>
+ -->	
+	<end-state id="endState" />
+	
+</flow>
+
+
+
+
+

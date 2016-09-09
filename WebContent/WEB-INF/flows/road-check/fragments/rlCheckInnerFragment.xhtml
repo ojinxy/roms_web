@@ -1,0 +1,182 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces" xmlns:hx="http://www.ibm.com/jsf/html_extended" xmlns:sec="http://www.springframework.org/security/tags" xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com" xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
+	<ui:fragment id="page">
+		<p:panel rendered="#{initiateView.noRlFound and rlResult.lmisApplicationBO eq null}">
+		<c:if test="#{initiateView.roadLicNo.length() > 0}" >
+			<h:outputText value="No Road Licence Record found for Road Licence No. " style="font-weight:bold;" /><h:outputText value="#{initiateView.roadLicNo}" style="font-weight:bold;"/>
+		</c:if>
+		<c:if test="#{initiateView.roadLicNo.length() == 0}" >
+			<h:outputText value="No Road Licence Record found" style="font-weight:bold;"/>
+		</c:if>
+		</p:panel>
+		<panel id="panelLMISApplicationInfo" style="vertical-align: top;" >
+			<p:panelGrid rendered="#{initiateView.noRlFound and rlResult.lmisApplicationBO ne null}">
+ 					   	<p:row >
+   							<p:column><h:outputLabel value="Road Licence Application Details" style="font-weight:bold;"/></p:column>
+   							<p:column><h:outputText value="APPLICATION NO." style="font-weight:bold;"/></p:column>
+   							<p:column><h:outputText value="APPLICATION DATE" style="font-weight:bold;"/></p:column>
+   							<p:column><h:outputText value="APPLICATION LICENCE TYPE" style="font-weight:bold;"/></p:column>
+   							<p:column><h:outputText value="APPLICATION STATUS" style="font-weight:bold;"/></p:column>
+   						</p:row>
+   						<p:row >
+   							<p:column></p:column>
+   							<p:column><h:outputText value="#{rlResult.lmisApplicationBO.applNo}" /></p:column>
+   							<p:column><h:outputText value="#{rlResult.lmisApplicationBO.applDate}" >
+   										
+   									  </h:outputText>
+   							</p:column>
+   							<p:column><h:outputText value="#{rlResult.lmisApplicationBO.licDesc}" /></p:column>
+   							<p:column><h:outputText value="#{rlResult.lmisApplicationBO.statusDesc}" /></p:column>
+   						</p:row>
+   			</p:panelGrid>
+		</panel>
+ 				<p:panel  id="rlTopPan" style="vertical-align: top;" rendered="#{!initiateView.noRlFound}">  
+ 					
+ 					
+ 					     <p:panelGrid>
+ 					   	<p:row >
+   							<p:column><h:outputLabel value="General Details" style="font-weight:bold;"/></p:column>
+   							<p:column><h:outputText value="MAKE" style="font-weight:bold;"/></p:column>
+   							<p:column><h:outputText value="MODEL" style="font-weight:bold;"/></p:column>
+   							<p:column><h:outputText value="LICENCE TYPE" style="font-weight:bold;"/></p:column>
+   							<p:column><h:outputText value="PLATE REGN NO." style="font-weight:bold;"/></p:column>
+   							<p:column><h:outputText value="Control NO." style="font-weight:bold;"/></p:column>
+   						</p:row>
+   						<p:row >
+   							<p:column></p:column>
+   							<p:column><h:outputText value="#{rlResult.vehicleMakeDesc}" /></p:column>
+   							<p:column><h:outputText value="#{rlResult.vehicleModelDesc}" /></p:column>
+   							<p:column><h:outputText value="#{rlResult.licenceType}" /></p:column>
+   							<p:column><h:outputText value="#{rlResult.vehiclePlateRegNo}" /></p:column>
+   							<p:column><h:outputText value="#{rlResult.controlNumber}" /></p:column>
+   						</p:row>
+   						<p:row >
+   							<p:column colspan="3"></p:column>
+   						</p:row>
+   						<p:row >
+   							<p:column></p:column>
+   							<p:column><h:outputText value="LICENCE NUMBER" style="font-weight:bold;"/></p:column>
+   							<p:column colspan="2"><h:outputText value="ROUTE" style="font-weight:bold;"/></p:column>
+   							<p:column><h:outputText value="ISSUE DATE" style="font-weight:bold;"/></p:column>
+   							<p:column><h:outputText value="EXPIRY DATE" style="font-weight:bold;"/></p:column>
+   						</p:row>
+   						<p:row >
+   							<p:column></p:column>
+   							<p:column><h:outputText value="#{rlResult.licenceNo}" /></p:column>
+   							<p:column colspan="2"><h:outputText value="#{rlResult.licenceRoute}" /></p:column>
+   							<p:column>
+   								<h:outputText value="#{roadCheckServiceAction.formatDate(rlResult.issueDate)}" />
+   							</p:column>
+   							<p:column>
+   								<h:outputText value="#{roadCheckServiceAction.formatDate(rlResult.expiryDate)}" styleClass="#{initiateView.rlExpire ? 'expiredDate' : ''}"/>
+   							</p:column>
+   						</p:row>
+   						<p:row >
+   							<p:column></p:column>
+   							<p:column><h:outputText value="ROUTE START" style="font-weight:bold;"/></p:column>
+   							<p:column><h:outputText value="ROUTE END" style="font-weight:bold;"/></p:column>
+   							<p:column><h:outputText value="SEATING" style="font-weight:bold;"/></p:column>
+   							<p:column><h:outputText value="STATUS" style="font-weight:bold;"/></p:column>
+   							<p:column></p:column>
+   						</p:row>
+   						<p:row >
+   							<p:column></p:column>
+   							<p:column><h:outputText value="#{rlResult.routeStart}" /></p:column>
+   							<p:column><h:outputText value="#{rlResult.routeEnd}" /></p:column>
+   							<p:column><h:outputText value="#{rlResult.seatCapacity}" /></p:column>
+   							<p:column><h:outputText value="#{rlResult.status}" /></p:column>
+   							<p:column></p:column>
+   						</p:row>
+
+
+		
+   						<p:row rendered="false">
+   							<p:column colspan="3"><h:outputText value="LASTNAME" /></p:column>
+   						</p:row>
+   						<p:row rendered="false">
+   							<p:column colspan="3"><h:outputText value="FIRSTNAME MID" /></p:column>
+   						</p:row>
+   						<p:row rendered="#{rlResult.roadLicenceOwners.size()>0}" >
+   							<p:column>
+   								<h:outputLabel value="Owner Details" style="font-weight:bold;"/>
+   							</p:column>
+   							<p:column colspan="3">
+   							<p:dataList columns="2" paginator="false" value="#{rlResult.roadLicenceOwners}" var="roadlicowner" type="ordered" id="ofc" rendered="#{rlResult.roadLicenceOwners.size() gt 0}">  
+								 #{roadlicowner.lastName}, #{roadlicowner.firstName} 
+								
+								 	<p:outputLabel value="- #{roadCheckServiceAction.doTRNBumpUp(roadlicowner.trn)}" rendered="#{roadlicowner.trn ne null}"></p:outputLabel>
+								 
+								 <p:outputLabel value=" (#{roadlicowner.ownerType eq 'P'? 'Primary' : 'Secondary'})" style="font-weight:bold;padding-right:10px;"></p:outputLabel>
+								 
+								 <br></br>
+								 <h:outputText value="     #{roadCheckServiceAction.getAddressLine1(roadlicowner.streetName,roadlicowner.mark,
+					  				roadlicowner.streetNo)}"/>
+					  			<h:outputText value="," rendered=" {roadCheckServiceAction.getAddressLine1(roadlicowner.streetName,'',
+					  				roadlicowner.streetNo) ne '' and roadCheckServiceAction.getAddressLine2(roadlicowner.poBox,roadlicowner.postOffice,
+					  				roadlicowner.parishCode) ne ''}"></h:outputText>  
+					  			<h:outputText value=" #{roadCheckServiceAction.getAddressLine2(roadlicowner.poBox,roadlicowner.postOffice,
+					  				roadlicowner.parishCode)}"/> 
+							</p:dataList>	
+    							
+ 						</p:column>
+   						</p:row>
+ 							</p:panelGrid>
+			        
+			   		<p:panelGrid>
+			       		
+   						<p:row>
+   							<p:column><h:outputLabel value="Assigned Driver(s)/Conductor(s)" style="font-weight:bold;"/></p:column>
+   							<p:column colspan="5">
+   								<p:dataList columns="2" paginator="false" value="#{rlResult.assignedDriverConductor}" var="assignedDrivers" type="ordered" id="rlad" rendered="#{rlResult.assignedDriverConductor.size()>0}">  
+								 		#{assignedDrivers.lastName}, #{assignedDrivers.firstName} - #{assignedDrivers.badgeNumber} (#{assignedDrivers.badgeType eq 'D'? 'Driver' : 'Conductor'})
+								</p:dataList>
+								
+									
+    							<h:outputText value="N/A" style="display:#{rlResult.assignedDriverConductor.size()>0 ? 'none' : 'inline'}"/>
+							</p:column>
+   						</p:row>
+			       	
+			       		<p:row >
+			       			<p:column><h:outputLabel value="Fitness Details" style="font-weight:bold;"/></p:column>
+   							<p:column rendered="#{not(rlResult.fitnessNumber eq null or rlResult.fitnessNumber eq '')}"><h:outputLabel value="FITNESS NUMBER" style="font-weight:bold;"/></p:column>
+   							<p:column colspan="2" rendered="#{not(rlResult.fitnessNumber eq null or rlResult.fitnessNumber eq '')}"><h:outputLabel value="EXAM DEPOT" style="font-weight:bold;"/></p:column>
+   							<p:column rendered="#{not(rlResult.fitnessNumber eq null or rlResult.fitnessNumber eq '')}"><h:outputLabel value="ISSUE DATE" style="font-weight:bold;"/></p:column>
+   							<p:column rendered="#{not(rlResult.fitnessNumber eq null or rlResult.fitnessNumber eq '')}"><h:outputLabel value="EXPIRY DATE" style="font-weight:bold;"/></p:column>
+   						</p:row>
+   						<p:row >
+   							<p:column  >
+   								<h:outputText rendered="#{rlResult.fitnessNumber eq null or rlResult.fitnessNumber eq ''}" value="NO FITNESS INFORMATION" styleClass="expiredDate"></h:outputText>
+   							</p:column>
+   							<p:column rendered="#{not(rlResult.fitnessNumber eq null or rlResult.fitnessNumber eq '')}"><h:outputText value="#{rlResult.fitnessNumber}" /></p:column>
+   							<p:column colspan="2" rendered="#{not(rlResult.fitnessNumber eq null or rlResult.fitnessNumber eq '')}"><h:outputText value="#{rlResult.depot}" /></p:column>
+   							<p:column rendered="#{not(rlResult.fitnessNumber eq null or rlResult.fitnessNumber eq '')}"><h:outputText value="#{roadCheckServiceAction.formatDate(rlResult.fitnessIssueDate)}" /></p:column>
+   							<p:column rendered="#{not(rlResult.fitnessNumber eq null or rlResult.fitnessNumber eq '')}"><h:outputText value="#{roadCheckServiceAction.formatDate(rlResult.fitnessExpDate)}" styleClass="#{initiateView.rlFtCkFl ? 'expiredDate' : ''}"/></p:column>
+   						</p:row>
+   						
+   					
+			       		
+			       		<p:row >
+			       			<p:column><h:outputLabel value="Insurance Details" style="font-weight:bold;"/></p:column>
+   							<p:column colspan="3" rendered="#{roadCheckServiceAction.shouldInuranceDetialsDisplay(rlResult)}"><h:outputLabel value="INSURANCE COMPANY" style="font-weight:bold;" /></p:column>
+   							<p:column rendered="#{roadCheckServiceAction.shouldInuranceDetialsDisplay(rlResult)}"><h:outputLabel value="ISSUE DATE" style="font-weight:bold;"/></p:column>
+   							<p:column rendered="#{roadCheckServiceAction.shouldInuranceDetialsDisplay(rlResult)}"><h:outputLabel value="EXPIRY DATE" style="font-weight:bold;"/></p:column>
+   						</p:row>
+   						<p:row >
+   							<p:column>
+   								<h:outputText value="NO INSURANCE INFORMATION" rendered="#{!roadCheckServiceAction.shouldInuranceDetialsDisplay(rlResult)}" styleClass="expiredDate"></h:outputText>
+   							</p:column>
+   							<p:column colspan="3" rendered="#{roadCheckServiceAction.shouldInuranceDetialsDisplay(rlResult)}"><h:outputText value="#{rlResult.insuranceComp}" /></p:column>
+   							<p:column rendered="#{roadCheckServiceAction.shouldInuranceDetialsDisplay(rlResult)}"><h:outputText value="#{roadCheckServiceAction.formatDate(rlResult.insuranceIssueDate)}" /></p:column>
+   							<p:column rendered="#{roadCheckServiceAction.shouldInuranceDetialsDisplay(rlResult)}"><h:outputText value="#{roadCheckServiceAction.formatDate(rlResult.insuranceExpDate)}" styleClass="#{initiateView.rlInCkFl ? 'expiredDate' : ''}"/></p:column>
+   						</p:row>
+   					</p:panelGrid>	
+   			  
+ 					</p:panel>
+ 					
+ 					
+ 					
+	</ui:fragment>
+</ui:composition>

@@ -1,0 +1,62 @@
+/*****************************************
+ *	Road Check Review Related Stylesheet *
+ *****************************************/
+
+	.even, .odd
+	{
+		border-bottom: solid 2px black;
+	}
+	
+	.gridOffDetails td
+	{
+		border-style:hidden;
+	}
+	
+	.panelOffDetails .ui-panel-titlebar
+	{
+		text-align:left
+	}
+	
+	.panelOffDetails
+	{
+		border-style:none;
+	}
+	
+	.gridQueriesPerformed td
+	{
+		border-style:hidden;
+	}
+	
+	.panelQueriesPerformed .ui-panel-titlebar
+	{
+		text-align:left
+	}
+	
+	.panelQueriesPerformed
+	{
+		border-style:none;
+	}
+	
+	.tableAssociatedDocs tr:hover .docSelections
+	{
+		display:none;
+	}
+	
+	.passiveA 
+	{
+		/*background-color: gainsboro !important;*/
+		color: black !important;
+		height:45px;
+	}
+
+	.passiveA td.ui-selection-column input 
+	{
+	   display:none;
+	}
+
+	.passiveA .ui-chkbox-box 
+	{
+		display:none;
+	}
+	
+	

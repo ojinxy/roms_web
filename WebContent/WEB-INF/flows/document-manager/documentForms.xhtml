@@ -1,0 +1,129 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/newTemplate.xhtml">
+
+	<ui:define name="title">Documents</ui:define>
+	<ui:define name="pageHeader"></ui:define>
+	<ui:define name="content">
+		<ui:fragment id="messages">
+			<div id="messagesInsertionPoint">
+				<h:messages errorClass="error" infoClass="info" layout="list" />
+			</div>
+		</ui:fragment>
+		
+		<p:panel id="panelUploadNew" header="Upload New Document">
+			<h:form styleClass="form" id="uploadNewDoc">
+				<p:fieldset label="Please provide the following details:">
+					 <div>
+					 	<strong style="width: 250px;"><h:outputText value="Manual Reference No." /></strong> <h:inputText value="" id="manualSerialNo" />
+					 </div>
+					 <div>
+					 	<strong><h:outputText value="Select a Manual Summons Document to upload:" /></strong><br/> 
+					 	<p:fileUpload fileUploadListener="#{fileUploadController.handleFileUpload}" mode="advanced" dragDropSupport="false" update="messages" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />  
+					    <p:growl id="messages" showDetail="true"/>  
+					 </div>
+					 <div style="text-align: center;">
+						<span style="margin: 0 10px;"><p:commandButton id="save" value="Save" action="save" ajax="false" /></span>
+						<span style="margin: 0 10px;"><p:commandButton id="cancel" value="Cancel" action="reset" ajax="false" /></span> 
+					</div>
+				</p:fieldset>
+			</h:form>	
+		</p:panel>
+		
+		<p:panel id="panelWithdrawCancel" header="Withdraw/Cancel [Document]">
+			<h:form styleClass="form" id="withdrawCancelDoc">
+				<p:fieldset label="Please provide the following details:">
+					 <div>
+					 	<strong style="width: 250px;"><h:outputText value="Username:" /></strong> <h:inputText value="" id="username" />
+					 </div>
+					 <div>
+					 	<strong style="width: 250px;"><h:outputText value="Password:" /></strong> <h:inputText value="" id="password" />
+					 </div>
+					 <div>
+					 	<strong style="width: 250px;"><h:outputText value="[Withdrawal] Reason:" /></strong> 
+					 	<h:selectOneMenu id="comboReason" value="#">
+								<f:selectItem itemValue="#" itemLabel="Dropdown" />
+						</h:selectOneMenu> 
+					 </div>
+					 <div>
+					 	<strong><h:outputText value="Additional Comment:" /></strong> 
+						<p:inputTextarea rows="6" cols="50" />   
+					 </div>
+					 <div style="text-align: center;">
+						<span style="margin: 0 10px;"><p:commandButton id="save" value="Save" action="save" ajax="false" /></span>
+						<span style="margin: 0 10px;"><p:commandButton id="cancel" value="Cancel" action="reset" ajax="false" /></span> 
+					</div>
+				</p:fieldset>
+			</h:form>	
+		</p:panel>
+		
+		<p:panel id="panelVerified" header="Verified [Document]">
+			<h:form styleClass="form" id="verifiedDoc">
+				<p:fieldset label="Please provide the following details:">
+					 <div>
+					 	<strong style="width: 250px;"><h:outputText value="Username:" /></strong> <h:inputText value="" id="username" />
+					 </div>
+					 <div>
+					 	<strong style="width: 250px;"><h:outputText value="Password:" /></strong> <h:inputText value="" id="password" />
+					 </div>
+					 <div>
+					 	<strong><h:outputText value="Additional Comment:" /></strong> 
+						<p:inputTextarea rows="6" cols="50" />   
+					 </div>
+					 <div style="text-align: center;">
+						<span style="margin: 0 10px;"><p:commandButton id="save" value="Save" action="save" ajax="false" /></span>
+						<span style="margin: 0 10px;"><p:commandButton id="cancel" value="Cancel" action="reset" ajax="false" /></span> 
+					</div>
+				</p:fieldset>
+			</h:form>	
+		</p:panel>
+		
+		<p:panel id="panelServe" header="Serve [Document]">
+			<h:form styleClass="form" id="serveDoc">
+				<p:fieldset label="Please provide the following details:">
+					 <div>
+					 	<strong style="width: 250px;"><h:outputText value="Served by:" /></strong> <h:inputText value="" id="servedBy" />
+					 	<p:watermark for="serveDoc:servedBy" value="LASTNAME, Firstname MI - ID" />
+					 </div>
+					 <div>
+					 	<strong style="width: 250px;"><h:outputText value="Date Served:" /></strong> <p:calendar value="" pattern="yyyy-MM-dd" id="dateServed" />
+					 	<p:watermark for="serveDoc:dateServed" value="yyyy-mm-dd" />
+					 </div>
+					 <div style="text-align: center;">
+						<span style="margin: 0 10px;"><p:commandButton id="save" value="Save" action="save" ajax="false" /></span>
+						<span style="margin: 0 10px;"><p:commandButton id="cancel" value="Cancel" action="reset" ajax="false" /></span> 
+					</div>
+				</p:fieldset>
+			</h:form>	
+		</p:panel>
+		
+		<p:panel id="panelEditOverride" header="Edit [Document] Override">
+			<h:form styleClass="form" id="EditDoc">
+				<p:fieldset label="Please provide the following details:">
+					 <div>
+					 	<strong style="width: 250px;"><h:outputText value="Username:" /></strong> <h:inputText value="" id="username" />
+					 </div>
+					 <div>
+					 	<strong style="width: 250px;"><h:outputText value="Password:" /></strong> <h:inputText value="" id="password" />
+					 </div>
+					 <div>
+					 	<strong><h:outputText value="Additional Comment:" /></strong> 
+						<p:inputTextarea rows="6" cols="50" />   
+					 </div>
+					 <div style="text-align: center;">
+						<span style="margin: 0 10px;"><p:commandButton id="save" value="Save" action="save" ajax="false" /></span>
+						<span style="margin: 0 10px;"><p:commandButton id="cancel" value="Cancel" action="reset" ajax="false" /></span> 
+					</div>
+				</p:fieldset>
+			</h:form>	
+		</p:panel>
+
+	</ui:define>
+</ui:composition>

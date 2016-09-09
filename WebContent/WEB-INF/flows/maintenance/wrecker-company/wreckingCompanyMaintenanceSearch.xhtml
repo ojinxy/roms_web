@@ -1,0 +1,162 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/WEB-INF/newTemplate.xhtml">
+
+	<ui:define name="title">Wrecker Company Maintenance</ui:define>
+	<ui:define name="pageHeader"></ui:define>
+	
+	<ui:define name="content">
+    	<script>
+    		$("document").ready(function(){
+    			
+    			$('#javax_faces_developmentstage_messages').css('display','none');
+    			
+    			$('#wreckingResults\\:searchResults').forceDatatablePagin();
+    		});
+    	</script>
+		<div class="tabs"><a href="#">Wrecker Company Maintenance</a></div>
+   		<div class="main borders">
+		 <p:messages autoupdate="true" id="msg" closable="true"/>
+		<h:form styleClass="form" id="wreckingCompanySearch">
+		<p:panelGrid style="margin-top:5px;width:100%;" id="gridVehicleDetails">
+				<p:row>
+					<p:column style="width:50%;">
+					<span style="padding-left:1px;width: 105px;display: inline-block;">
+						<h:outputText styleClass="outputText" value="Company Name: " />
+					</span>
+						<!-- <p:inputText value="#{criteria.companyName}"
+									id="companyName" maxlength="50" size="30"
+									style="text-align: left" /> -->
+						<p:autoComplete id="companyName" scrollHeight="200" size="33" cache="true" style="width:180px;" cacheTimeout="30000" value="#{criteria.companyName}" completeMethod="#{wreckingCompanyMaintenanceServiceAction.wreckerCoAutoComplete}"/>
+					</p:column>
+					<p:column style="width:50%;">
+					<span style="padding-left:1px;width: 80px;display: inline-block;">
+						<h:outputText styleClass="outputText" value="Parish: " style="margin-right:0px;margin-left:0px;"/>
+					</span>
+						<p:selectOneMenu value="#{criteria.parishCode}" id="parishCode" style="width:225px;">
+								<f:selectItem itemValue=""  itemLabel="All"/>
+	    						<f:selectItems value="#{parishList}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+					<span style="padding-left:50px;width: 60px;display: inline-block;">
+					<h:outputText styleClass="outputText" value="Status: " style="margin-right:0px;"/>
+					</span>
+					<p:selectOneMenu value="#{criteria.statusId}" id="statusSel" style="width:225px;">
+							<f:selectItem itemValue="" itemLabel="All"></f:selectItem>
+							<f:selectItem itemValue="ACT" itemLabel="ACTIVE"></f:selectItem>
+							<f:selectItem itemValue="INA" itemLabel="INACTIVE"></f:selectItem>
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2" style="padding-top:20px;text-align:center;">
+					<sec:authorize ifAnyGranted="ROLE_ROMS_REF_WRKCOM_SEARCH">
+						<p:commandButton styleClass="blue blue-icon icon-search icon-af" value="Search" action="search" processIds="*" ajax="false"/>
+					</sec:authorize>
+					<sec:authorize ifAnyGranted="ROLE_ROMS_REF_WRKCOM_ADD">	
+						<p:commandButton styleClass="blue blue-icon icon-plus icon-af" value="Add" action="add" processIds="*" ajax="false" />
+					</sec:authorize>	
+						<p:commandButton styleClass="blue blue-icon icon-refresh icon-af" value="Clear" action="clear" processIds="*" ajax="false"/>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			
+		</h:form>
+		</div>
+		<h:form id="wreckingResults">
+			<ui:fragment id="wreckingResultsFragment">
+				<div id="dataTableDiv" class="dataTableResults" style="height: auto;" >
+
+					<p:dataTable
+					id="searchResults" rows="10" 
+					value="#{wreckingCompanies.wreckingList}" var="obj"  paginator="true" rowKey="#{obj.wreckingCompanyId}" selection="#{wreckingCompanies.selectedWreckingCompany}"
+							selectionMode="single" rowsPerPageTemplate="10,50,100" rowIndexVar="rowIndex"
+							rendered="#{wreckingCompanies.wreckingList.size()>0}"
+							currentPageReportTemplate="Results: {startRecord}-{endRecord} of {totalRecords}"
+						     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						     paginatorPosition="bottom">
+					
+					<sec:authorize ifAnyGranted="ROLE_ROMS_REF_WRKCOM_EDIT">	
+					 	<p:ajax event="rowSelect" oncomplete="clickBtn();" >
+                   			</p:ajax>
+                   	</sec:authorize>
+					
+					<!-- <p:ajax event="page"  oncomplete="paginate();"/>  -->
+					
+					<f:facet name="header">
+						Wrecker Companies
+					</f:facet>
+					
+					<!-- <p:ajax event="rowSelect" listener="#{wreckingCompanyMaintenanceServiceAction.updatereason()}"   
+                    			update=":wreckingResults:searchResults" /> -->
+                   
+                    			
+					<p:column id="nameCol" headerText="Name" sortBy="companyName">
+					<h:outputText id="trnValue" value="TRN: #{obj.trnNbr}-#{obj.trnBranch}"></h:outputText>
+					<!-- <br/>
+					<h:outputText id="trnBranch" value="Branch - #{obj.trnBranch}"></h:outputText>-->
+					<br/>
+					<b><h:outputText id="nameValue" value="#{obj.companyName}"></h:outputText></b>
+					</p:column>
+					
+					<p:column id="parishCol" headerText="Parish" sortBy="parishName">
+						
+						<h:outputText id="parishValue" value="#{obj.parishName}"></h:outputText>
+					</p:column>
+					<p:column id="status" headerText="Status" sortBy="statusDescription">
+						
+						<h:outputText id="statusValue"
+							value="#{obj.statusDescription}"></h:outputText>
+					</p:column>
+					
+					<p:column id="LUpdate" headerText="Last Updated">
+						<h:outputText value="#{wreckingCompanyMaintenanceServiceAction.formatDate(obj.auditEntryBO.updateDTime!=null?obj.auditEntryBO.updateDTime:obj.auditEntryBO.createDTime)}" />
+					</p:column>
+					
+					<p:column id="updateBy" headerText="Updated By">
+						<h:outputText value="#{obj.auditEntryBO.updateUsername!=null?obj.auditEntryBO.updateUsername:obj.auditEntryBO.createUsername}" /> 
+						 <p:tooltip for="@(tr[role=row][data-ri=#{rowIndex}])" value="Click row to edit record." showEffect="fade" hideEffect="fade" 
+						            shared="false" showDelay="500" style="margin-left:200px;"/> 
+					</p:column>
+					
+				</p:dataTable>
+			
+				</div>
+				</ui:fragment>
+				
+				<script>
+					function clickBtn()
+						{
+						
+							$("button[id*='editBtn']").click();
+						}
+					function paginate()
+							 	{
+							 		$("button[id*='pageBtn']").click();
+							 	}
+				</script>
+				
+				<p:commandButton wigetVar="btnSel" id="pageBtn" value="Do select" style="display:none" processIds="*" update=":wreckingResults:searchResults" 
+							 ajax="false" ></p:commandButton>
+				
+				 <p:commandButton wigetVar="btnSel" id="editBtn" value="Do select" style="display:none" processIds="*" action="edit" 
+			 ajax="false" ></p:commandButton>
+				
+				
+		</h:form>
+		
+	</ui:define>
+	
+
+</ui:composition>

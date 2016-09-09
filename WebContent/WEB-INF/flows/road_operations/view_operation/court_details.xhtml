@@ -1,0 +1,177 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com"
+	template="/WEB-INF/newTemplate.xhtml">
+
+	<ui:define name="title">Schedule Operation</ui:define>
+	<ui:define name="pageHeader">Schedule Operation</ui:define>
+
+
+
+
+	<ui:define name="content">
+	
+		<p:messages id="errorMessages" closable="true"/>
+      	<p:panel id="courtDetailsPanel" header="Schedule Operation" >
+      	
+		<h:form id="courtDetails">
+			
+				
+				<div style="padding-bottom:30px">
+			
+				<ol class="progtrckr" data-progtrckr-steps="5">
+		  		
+		  		<c:if test="#{completeOpDetails}">
+	    			<li class="progtrckr-done" num="1">
+		    			<p:commandLink action="operation_details" id="opId" processIds="*" ajax="false" rendered="#{completeOpDetails}">
+		    			Operation Details
+						</p:commandLink>
+					</li>
+				</c:if>
+				
+				<c:if test="#{!completeOpDetails}">
+					<li class="progtrckr-todo" num="1">Operation Details</li>
+				</c:if> 
+			
+	    	 <c:if test="#{completeOpStrategy}">  
+	    			<li class="progtrckr-done" num="2">
+	    				<p:commandLink action="strategy" id="strategyId" processIds="*" ajax="false" rendered="#{completeOpStrategy}">
+	    				Strategy
+			    	 	</p:commandLink>
+			    	</li>
+			 </c:if>
+	    	<c:if test="#{!completeOpStrategy}"> 
+	    			<li class="progtrckr-todo" num="2">Strategy</li>
+	    	</c:if>
+	    	
+	    	<c:if test="#{completeOpResource}"> 
+				 	<li class="progtrckr-done" num="3">
+				 	<p:commandLink action="resources" id="resourceId" processIds="*" ajax="false" rendered="#{completeOpResource}">
+				 	Resources
+					</p:commandLink>
+					</li>
+			</c:if>
+			<c:if test="#{!completeOpResource}"> 
+				<li class="progtrckr-todo" num="3">Resources</li>
+			</c:if>
+			
+			
+			<li class="progtrckr-current" num="4">Court Details</li>
+			
+			
+			<c:if test="#{completeOpReview || completeOpCourtDetails}"> 
+			 	<li class="progtrckr-done" num="5">
+			 	<p:commandLink action="review" id="reviewId" processIds="*" ajax="false">
+			 	Review
+			 	</p:commandLink>
+			 	</li>
+			</c:if>
+			
+			<c:if test="#{!completeOpReview &amp;&amp; !completeOpCourtDetails}"> 
+					<li class="progtrckr-todo" num="5">Review</li>
+			</c:if>
+					</ol>
+				</div>
+				
+		<div style="padding-bottom:30px;margin-left:30px">
+		
+			          
+            <div style="padding-bottom:21px; padding-top:10px;">
+					<span  class="progress-label">Step 4: Enter Court Details - </span>
+					<span class="progress-label-key"><h:outputText value="Operation Name: " /><h:outputText id="operationName" name="operationName" value="#{operation.operationName} [#{operation.categoryDescription}]" /></span>
+			</div>
+				
+				
+				
+				
+				<table style="margin-left:15px;">
+				
+					<tr>
+						<td><h:outputText styleClass="outputText" value="Court: " /><h:outputText value=" * " styleClass="required"/></td> 
+						<td>
+								<p:selectOneMenu id="courtList" value="#{operation.courtId}" effect="fade" disabled="#{roadOperationsServiceAction.operationScheduleEditable('singlecomp')}">  
+								       <f:selectItem itemLabel="Select One" itemValue="" />  
+								       <f:selectItems value="#{courtList}"	var="crt" itemLabel="#{crt.shortDescription}" itemValue="#{crt.courtId}"/> 
+								       
+								       <p:ajax event="change" listener="#{roadOperationsServiceAction.setCourt}" update=":courtDetails"/>
+								</p:selectOneMenu>  
+								<c:if test="#{not empty operation.courtId}">	
+									<div>
+										<span  class="info-alert" style="display:#{operation.courtAddressLine1 == ''? 'none':'block' }">
+											<h:outputText styleClass="outputText" value="#{operation.courtAddressLine1}" /><br/>
+											<h:outputText styleClass="outputText" value="#{operation.courtAddressLine2}" />
+										</span>
+									</div>
+								</c:if>
+									        
+						</td>
+					</tr>
+									
+						
+					<tr>		
+						<td><h:outputText styleClass="outputText" value="Court Date: " /> <h:outputText value=" * " styleClass="required"/></td> 
+						<td style="text-align:left">
+							<p:calendar value="#{operation.courtDate}" id="courtDate" readonlyInput="true"  disabledWeekends="true" pattern="yyyy-MM-dd" showOn="both" size="30" 
+							disabled="#{roadOperationsServiceAction.operationScheduleEditable('singlecomp')}">
+		                        <fsl:dateTimeConverter showTime="false" />
+		                        
+	                     	</p:calendar>
+	                     </td>
+					</tr>
+				
+				</table>
+				
+				<div id="buttons"  style="text-align: center">	
+					 <p:commandButton styleClass ="blue"  id="backFromOpDetails" value="Back" action="back" processIds="*" ajax="false"></p:commandButton>
+					<p:commandButton styleClass ="blue"  id="continueFromCourt" value="Continue" action="continueFromCourt" processIds="*" ajax="false" widgetVar="theWidget" onstart="theWidget.disable();" oncomplete="theWidget.enable();"></p:commandButton>
+				</div>
+				
+			<!-- Invisible Button used for Navigation -->
+		     <p:commandButton style="display:none" action="operation_details" id="opIdLink" processIds="*" ajax="false"></p:commandButton>
+			 <p:commandButton style="display:none" action="strategy" id="strategyIdLink" processIds="*" ajax="false"></p:commandButton>
+			 <p:commandButton style="display:none" action="resources" id="resourceIdLink" processIds="*" ajax="false" ></p:commandButton>
+	    	 <p:commandButton style="display:none" action="court_details" id="courtIdLink" processIds="*" ajax="false" ></p:commandButton>
+			 <p:commandButton style="display:none" action="review" id="reviewIdLink" processIds="*" ajax="false" ></p:commandButton>
+			<!-- end -->
+			</div>
+		</h:form>
+		</p:panel>
+		<script type="text/javascript">
+			
+			$(document).ready( function() { 
+				
+	        	 $(".progtrckr li:has(a)").click(function() {
+	                  
+	               //TODO use if condition along with invisible buttons
+	                //alert($(this).attr('num'));//.click();
+	               if($(this).attr('num')== 1){
+	            	   $('button[id*=opIdLink]').click(); //rendered="#{completeOpDetails}"
+	               }if($(this).attr('num')== 2){
+	            	   $('button[id*=strategyIdLink]').click(); //rendered="#{completeOpStrategy}"
+	               } 
+	               else if($(this).attr('num')== 3){
+	                
+	            	   $('button[id*=resourceIdLink]').click(); //rendered="#{completeOpResource}"
+	               }else if($(this).attr('num')== 4){
+	            	   $('button[id*=courtIdLink]').click(); //rendered="#{completeOpCourtDetails}"
+	                	
+	               }else if($(this).attr('num')== 5){
+	            	   $('button[id*=reviewIdLink]').click(); //rendered="#{completeOpReview}"
+	               }
+	               
+	               });		
+	        	  
+	          });
+	
+			
+			</script>
+</ui:define>	
+</ui:composition>

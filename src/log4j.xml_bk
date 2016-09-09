@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+    <appender name="stderr" class="org.apache.log4j.rolling.RollingFileAppender">
+        <param name="Threshold" value="warn" />
+        <param name="File" value="C:\\TEMP\\ROMS\\ROMS.log"/>
+<!--         <param name="Target" value="System.err"/> -->
+  	<rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
+            <param name="FileNamePattern" value="C:\\TEMP\\ROMS\\ROMS_%d{yyyy_MM_dd_HH_mm}.log"/>
+            <param name="ActiveFileName" value="C:\\TEMP\\ROMS\\ROMS.log" />
+    </rollingPolicy>
+       <layout class="org.apache.log4j.PatternLayout">
+          <param name="ConversionPattern" value="[%p] %d %c %M - %m%n"/>          
+       </layout>
+    </appender>
+    <appender name="stdout" class="org.apache.log4j.rolling.RollingFileAppender">
+        <param name="Threshold" value="debug" />
+        <param name="File" value="C:\\TEMP\\ROMS\\ROMS.log"/>
+<!--         <param name="Target" value="System.out"/> -->
+  	<rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
+            <param name="FileNamePattern" value="C:\\TEMP\\ROMS\\ROMS_%d{yyyy_MM_dd_HH_mm}.log"/>
+            <param name="ActiveFileName" value="C:\\TEMP\\ROMS.log" />
+    </rollingPolicy>
+       <layout class="org.apache.log4j.PatternLayout">
+          <param name="ConversionPattern" value="[%p] %d %c %M - %m%n"/>          
+       </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="debug" />
+            <param name="LevelMax" value="info" />
+        </filter>
+    </appender>
+    
+    <root>
+        <priority value="debug"></priority>
+        <appender-ref ref="stderr" />
+        <appender-ref ref="stdout" />
+    </root>
+</log4j:configuration>

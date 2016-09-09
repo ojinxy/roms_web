@@ -1,0 +1,186 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"	
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/newTemplate.xhtml">
+
+	<ui:define name="title">Parish Maintenance</ui:define>
+	<ui:define name="pageHeader"></ui:define>
+	
+	<ui:define name="content">
+    	<script>
+    		$("document").ready(function(){
+    			
+    			$('#javax_faces_developmentstage_messages').css('display','none');
+    			
+    			$('#parishResults\\:searchResults').forceDatatablePagin();
+    		});
+    		
+    		function disablePen(){
+			 $('.ui-icon-pencil').each(function(){
+			 		  	$(this).css('display','none'); 
+			 		  });
+			$('.ui-tooltip').each(function(){
+					$(this).html('Save/Cancel');
+					});
+			}
+			
+			function cancelHide(){
+				  $('.ui-icon-pencil').each(function(){
+			 		  	//$(').addClass('rat');
+			 		  	// $(this).css({backgroundColor: '#0099ff'});
+			 		  	$(this).css('display',''); 
+			 		  });
+			 		  
+			 	$("button[id*='cancelBtnID']").click();  
+			}
+			function disablePag(){
+					$('#reasonMaintenanceDetails\\:reasonResults_paginator_bottom span').text("");
+			
+			}
+			
+			function refreshDatatable(){
+			$('#parishResults\\:searchResults').forceDatatablePagin();
+			
+		}
+    	</script>
+    	
+    	<style>
+    	
+    	.ui-selectonemenu-panel{
+    		width:185px !important;
+    		}
+    		
+    	</style>
+    	<div class="tabs"><a href="#">Parish Maintenance</a></div>
+   		<div class="main borders">
+		 <p:messages autoupdate="true" id="msg" closable="true"/>
+		<h:form styleClass="form" id="parishSearcg">
+		
+			<fieldset><legend title="parishDetails"></legend>
+			<div>
+				<div style="width:45%;float:left;margin:10px 0 10px 0;">
+				<h:outputText styleClass="outputText" value="Parish: " />
+					
+						<p:selectOneMenu value="#{criteria.parishCode}" id="parishDescription" style="margin-left:10px;width:200px;">
+							<f:selectItem itemValue=""  itemLabel="All"/>
+    						<f:selectItems value="#{parishList}" />
+						</p:selectOneMenu>
+				</div>
+				
+				<div style="width:45%;float:right;margin:10px 0 10px 0;">	
+					<h:outputText styleClass="outputText" value="Status: " />
+					<p:selectOneMenu value="#{criteria.statusId}" id="statusSel" style="margin-left:10px;width:200px;">
+							<f:selectItem itemValue="" itemLabel="All"></f:selectItem>
+							<f:selectItem itemValue="ACT" itemLabel="ACTIVE"></f:selectItem>
+							<f:selectItem itemValue="INA" itemLabel="INACTIVE"></f:selectItem>
+						</p:selectOneMenu>
+				</div>
+			</div>
+			
+			<div id="buttons" style="width:100%;float:left;text-align:center;padding-top:20px;">
+			<sec:authorize ifAnyGranted="ROLE_ROMS_REF_PARISH_SEARCH">
+				<p:commandButton styleClass="blue blue-icon icon-search icon-af" value="Search" action="search" processIds="*" ajax="false"/>
+				<p:commandButton styleClass="blue blue-icon icon-refresh icon-af" id="butReset1" style="padding-rght:1em;" value="Clear" processIds="*" action="clear" ajax="false" />
+			</sec:authorize>
+			</div>
+			
+			</fieldset>
+			
+		</h:form>
+		</div>
+		<h:form id="parishResults">
+			<ui:fragment id="parishResultsFragment">
+				<div id="dataTableDiv" class="dataTableResults" style="" >
+
+					<p:dataTable
+					style="width: 100%" id="searchResults" value="#{parishView.parishList}" var="obj"  editable="true"
+					paginator="true" rows="10" paginatorPosition="bottom" rowsPerPageTemplate="10,50,100"
+					 rendered="#{parishView.parishList.size()>0}"
+						 selectionMode="single" rowKey="#{obj.parishCode}" 
+						 selection="#{parishView.selectedParish}"
+						currentPageReportTemplate="Results: {startRecord}-{endRecord} of {totalRecords}"
+						 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+					<sec:authorize ifAnyGranted="ROLE_ROMS_REF_PARISH_EDIT">
+						<p:ajax event="rowEditInit" oncomplete="disablePen();disablePag();"/>
+						<p:ajax event="rowEdit" oncomplete="cancelHide();clickUpdate();refreshDatatable();"/>  
+	        			<p:ajax event="rowEditCancel"  oncomplete="cancelHide();paginate();refreshDatatable();"/>
+        			</sec:authorize>			 
+					<f:facet name="header">
+						Parish(es)
+					</f:facet>
+					
+					<p:column id="nameCol" headerText="Parish" sortBy="description">
+						
+						<h:outputText id="codeValue" value="#{obj.description}"></h:outputText>
+					</p:column>
+					
+					<p:column id="parishCol" headerText="Region" sortBy="officeLocationCode">
+					<p:cellEditor>
+					<f:facet name="output">
+					<h:outputText  value="#{obj.officeLocationCode}"></h:outputText> - <h:outputText  value="#{obj.officeLocationDescription}"></h:outputText>
+					</f:facet>
+					
+					<f:facet name="input">
+										<p:selectOneMenu value="#{obj.officeLocationCode}" style="width:205px;">											
+											<f:selectItems value="#{officeLocationList}" />
+										</p:selectOneMenu>
+					</f:facet>
+					</p:cellEditor>
+					</p:column>
+					<p:column id="statCol" headerText="Status" sortBy="statusDescription">
+						<h:outputText id="statValue" value="#{obj.statusDescription}"></h:outputText>
+					</p:column>
+					<p:column id="LUpdateCol" headerText="Last Updated">
+						<h:outputText value="#{parishMaintenanceServiceAction.formatDate(obj.auditEntryBO.updateDTime!=null?obj.auditEntryBO.updateDTime:obj.auditEntryBO.createDTime)}" >
+						 </h:outputText>
+					</p:column>
+					<p:column id="updateBy" headerText="Updated By">
+						<h:outputText  value="#{obj.auditEntryBO.updateUsername!=null?obj.auditEntryBO.updateUsername:obj.auditEntryBO.createUsername}"></h:outputText>
+					</p:column>
+					<sec:authorize ifAnyGranted="ROLE_ROMS_REF_PARISH_EDIT">
+					<p:column style="width:6%" headerText="Edit">
+								<p:rowEditor id="editID">
+									 <p:tooltip for="editID" value="Click to edit record." showEffect="fade" hideEffect="fade" 
+						            shared="false" showDelay="500" style="margin-left:200px;"/>
+								</p:rowEditor>
+								
+					</p:column>
+					</sec:authorize>
+				</p:dataTable>
+				
+				</div>
+				</ui:fragment>
+				<script>
+					function clickUpdate(){
+						$("button[id*='updateBtn']").click();
+						}
+						
+					function paginate()
+					 	{
+					 		$("button[id*='pageBtn']").click();
+					 	}
+				</script>
+					<p:commandButton  id="updateBtn"
+								value="Do select" style="display:none" processIds="*"
+								action="update" ajax="false" 
+								update=":parishResults:searchResults"></p:commandButton>
+					
+					<p:commandButton wigetVar="btnSel" id="cancelBtnID" value="Do select" style="display:none" processIds="*" 
+			 					ajax="true" update=":parishResults:searchResults" oncomplete="refreshDatatable();" onstart="refreshDatatable();"
+			 					onclick="refreshDatatable();"></p:commandButton> 
+			 
+			 		<p:commandButton wigetVar="btnSel" id="pageBtn" value="Do select" style="display:none" processIds="*" update=":reasonMaintenanceDetails:reasonResults" 
+							 	ajax="false" ></p:commandButton>
+		</h:form>
+			
+			
+	</ui:define>
+</ui:composition>

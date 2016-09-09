@@ -1,0 +1,804 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui" 
+	template="/WEB-INF/newTemplate.xhtml"
+	xmlns:fsl="http://org.fsl.com">
+
+	<ui:define name="title">Schedule Operation</ui:define>
+	<ui:define name="pageHeader">Schedule Operation</ui:define>
+	<ui:define name="content">
+		<script type="text/javascript"
+			src="${request.contextPath}/script/roadOpAttendance.js" />
+		<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+<script src="${request.contextPath}/script/js/TAMap 1.0.0.js"></script>
+<script	src="${request.contextPath}/script/roadOperations.js"></script>	
+<script>
+//<![CDATA[
+	$("document").ready( function(){
+			if(typeof google == 'undefined'){
+				$("#map-canvas").hide();
+				$("#divGoogleNotConnect").show();				
+				return;
+			}else{
+				$("#map-canvas").show();
+				$("#divGoogleNotConnect").hide();	
+			}});
+//]]>
+</script>
+		<p:panel id="reviewOperationsPanel" header="Schedule Operation">
+			<h:form id="reviewOperations">
+				<p:messages id="errorMessages" closable="true" autoUpdate="true"/>
+				
+				<p:panel id="progressBar">
+				<c:choose>
+					<c:when
+						
+						test="#{roadOperationsServiceAction.operationScheduleEditable('menu')}">
+						
+						<div style="padding-bottom: 30px">
+							<ol class="progtrckr" data-progtrckr-steps="5">
+
+								<c:if test="#{completeOpDetails}">
+									<li class="progtrckr-done" num="1"><p:commandLink
+											action="operation_details" id="opId" processIds="*"
+											ajax="false" rendered="#{completeOpDetails}">
+		    			Operation Details
+						</p:commandLink></li>
+								</c:if>
+
+								<c:if test="#{!completeOpDetails}">
+									<li class="progtrckr-todo" num="1">Operation Details</li>
+								</c:if>
+
+								<c:if test="#{completeOpStrategy}">
+									<li class="progtrckr-done" num="2"><p:commandLink
+											action="strategy" id="strategyId" processIds="*" ajax="false"
+											rendered="#{completeOpStrategy}">
+	    				Strategy
+			    	 	</p:commandLink></li>
+								</c:if>
+								<c:if test="#{!completeOpStrategy}">
+									<li class="progtrckr-todo" num="2">Strategy</li>
+								</c:if>
+
+								<c:if test="#{completeOpResource}">
+									<li class="progtrckr-done" num="3"><p:commandLink
+											action="resources" id="resourceId" processIds="*" ajax="false"
+											rendered="#{completeOpResource}">
+				 	Resources
+					</p:commandLink></li>
+								</c:if>
+								<c:if test="#{!completeOpResource}">
+									<li class="progtrckr-todo" num="3">Resources</li>
+								</c:if>
+
+								<c:if test="#{completeOpCourtDetails}">
+									<li class="progtrckr-done" num="4"><p:commandLink
+											action="court_details" id="courtId" processIds="*"
+											ajax="false" rendered="#{completeOpCourtDetails}">
+					Court Details
+					</p:commandLink></li>
+								</c:if>
+
+								<c:if test="#{!completeOpCourtDetails}">
+									<li class="progtrckr-todo" num="4">Court Details</li>
+								</c:if>
+
+
+								<li class="progtrckr-current" num="5">Review</li>
+
+							</ol>
+						</div>
+					</c:when>
+				</c:choose>
+				</p:panel>
+				
+				<div style="padding-bottom: 30px; margin-left: 30px">
+
+
+					<div style="padding-bottom: 21px; padding-top: 10px;">
+						<c:if test="#{(operation.statusId == 'RO_SCH' or operation.statusId == 'RO_NOA' or  operation.statusId == 'NONE' )and allowUpdate == 'true'}"><span class="progress-label" style="margin-right:0 !important;">
+							Step 5: Review - 
+						</span></c:if>
+						
+						<span
+							class="progress-label-key" style="margin-left: 21px;"><h:outputText
+								value="Operation Name: " />
+							<h:outputText id="operationName" name="operationName"
+								value="#{operation.operationName} [#{operation.categoryDescription}]" />
+						</span>
+					</div>
+
+
+					<div style="margin-left: 10px; font-size: 15px;">
+						<!-- 				<strong><h:outputText value="Operation Name: " /></strong><h:outputText id="operationName" name="operationName" value="#{operation.operationName}" /> -->
+						<!-- strong><h:outputText value="Status : " /> <h:outputText
+								id="opStatus" value="#{operation.statusId == 'RO_CAN'?'Cancelled':operation.statusDescription}" />
+						</strong-->
+						<p:outputPanel id="headerPanel">												
+							<p:panelGrid id="panelOpdetails" header="Road Operation Details">
+								<p:row>
+									<p:column id="opStatus">
+										<strong><h:outputLabel value="Status : " /></strong>
+									</p:column>
+									<p:column>
+										<span style="margin-left: 10px;"><h:outputText value="#{operation.statusDescription}"/></span>
+									</p:column>
+									<p:column id="opReason" rendered="#{operation.reasonId ne null}" style="padding-left: 7em;">
+										<strong><h:outputLabel value="Reason : " /></strong>
+									</p:column>
+									<p:column rendered="#{operation.reasonId ne null}">
+										<span style="margin-left: 10px;"><h:outputText value="#{operation.reasonDescription}"/></span>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<strong><h:outputLabel value="Region(s) : " /></strong>
+									</p:column>
+									<p:column>										
+										<p:dataList columns="2" paginator="false" value="#{selectedRegionList}" var="regionBO" itemType="disc" id="ofc">  
+										 #{regionBO.description} 
+										</p:dataList>										
+									</p:column>
+									<p:column rendered="#{operation.reasonId ne null}" style="padding-left: 7em;">
+										<strong><h:outputLabel value="Comment : " /></strong>
+									</p:column>
+									<p:column rendered="#{operation.reasonId ne null}">										
+										<span style="margin-left: 10px;"><h:outputText value="#{operation.comment}"/></span>
+									</p:column>
+								</p:row>
+								<p:row rendered="#{operation.backDated == 'Y'}">
+									<p:column><strong><h:outputLabel value="Authorized : " /></strong></p:column>
+									<p:column rendered="#{operation.authorized == 'Y'}"><span style="margin-left: 10px;">Yes</span></p:column>	
+									<p:column rendered="#{operation.authorized == 'N'}"><span style="margin-left: 10px;">Pending</span></p:column>								
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText value="*Created in Region: #{roadOperationsServiceAction.getOfficeLocationDesc(operation.officeLocCode)}"  style="font-weight: normal !important;
+										color: #808080;	font-style: italic;"/>									
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+							<!-- <h:outputText value="#{selectedRegionList}"></h:outputText> -->
+						</p:outputPanel>
+						
+						
+						
+                        
+                 
+						<!-- 					<p:outputPanel id="opStatus"> -->
+						<!-- 						<span style="float:left;color:#1365A0; font-size:16px;display:#{operation.statusId eq 'NONE' ?none :block}"> -->
+						<!-- 						<h:outputText value="#{operation.statusDescription}"></h:outputText> -->
+						<!-- 						</span> -->
+						<!-- 				</p:outputPanel> -->
+					</div>
+
+
+					<p:accordionPanel id="accordion" activeIndex="0" multiple="true"
+						style="margin-left:20px; width:90%;margin-top:10px;">
+						<p:tab title="Scheduled Details">
+							<div>
+								<span style="float: left; padding-right: 30px"> <strong><h:outputText
+											value="Scheduled Start :   "></h:outputText>
+								</strong> <h:outputText value="#{operation.scheduledStartDtime}">
+										<f:convertDateTime type="date" pattern="yyyy-MM-dd hh:mm a"
+											timeZone="EST" />
+									</h:outputText> </span> <span style="padding-right: 0px"> <strong><h:outputText
+											value="Scheduled End :   "></h:outputText>
+								</strong> <h:outputText value="#{operation.scheduledEndDtime}">
+										<f:convertDateTime type="date" pattern="yyyy-MM-dd hh:mm a"
+											timeZone="EST" />
+									</h:outputText> </span> <br /> <br />
+								<div style="clear: both : padding-top : 10px">
+									<span style="float: left; padding-right: 30px"> <strong><h:outputText
+												value="Expected Duration :"></h:outputText>
+									</strong> <h:outputText
+											value="#{operation.schedNumOfDays} day(s) #{operation.schedNumOfHours} hours #{operation.schedNumOfMinutes} minutes"></h:outputText>
+									</span>
+								</div>
+								<br /> <br />
+							</div>
+						</p:tab>
+						<p:tab title="Actual Details"
+							rendered="#{operation.statusId =='NONE' || operation.statusId =='RO_SCH' || operation.statusId =='RO_NOA' || operation.statusId =='RO_CAN'? false : true}">
+							<div>
+								<span style="float: left; padding-right: 30px"> <strong><h:outputText
+											value="Actual Start :"></h:outputText>
+								</strong> 
+											<h:outputText value="#{operation.actualStartDtime}">
+												<f:convertDateTime type="date" pattern="yyyy-MM-dd hh:mm a"
+													timeZone="EST" />
+											</h:outputText>
+									</span> <span style="padding-right: 0px"> <strong><h:outputText
+											value="Actual End :"></h:outputText>
+								</strong> 											
+								<h:outputText value="#{operation.actualEndDtime}">
+										<f:convertDateTime type="date" pattern="yyyy-MM-dd hh:mm a" timeZone="EST"/>
+											</h:outputText>
+										 </span> <br /> <br />
+								<div style="clear: both">
+									<span style="float: left; padding-right: 30px"> <strong><h:outputText
+												value="Actual Duration :"></h:outputText>
+									</strong> <h:outputText id="actualdurationDays"
+											value="#{operation.actualNumOfDays} day(s) #{operation.actualNumOfHours} hours #{operation.actualNumOfMinutes} minutes"></h:outputText>
+									</span>
+								</div>
+								<br /> <br />
+							</div>
+						</p:tab>
+						<p:tab title="Strategy" id="strategyTabID">						
+							<table style="width:80%;">
+								<tr>
+									<td style="width:90px;"><strong><h:outputText value="Strategies : "
+												id="lblstrategies" />
+									</strong></td>
+									<td><ui:repeat
+											value="#{operation.listOfStrategies.target}" var="strat"
+											varStatus="loop">
+								#{strat.strategyDescription}#{not loop.last ? ', ' : ''}
+								</ui:repeat> <!-- 										<h:outputText value="#{operation.strategiesStr}" id="strategiesStr" /> -->
+									</td>
+								</tr>
+							</table>
+							<f:facet name="title">
+								<div style="text-align: left">
+									<h:outputText style="text-align:left"
+										value="Strategy                  " />
+									<span> <h:outputText
+											style="text-align:left;color:#928a76 !important; margin-left:5px;font-weight:normal;"
+											value="[#{operation.numOfStrategies}] Strategies applied" />
+									</span>
+								</div>
+							</f:facet>
+							
+						</p:tab>
+						<p:tab title="Location" id="locationTabID">
+							<div style="width:50%;float:left;height:25%;">
+							<table style="width:100%;">
+								
+								<tr>
+									<td style="width:90px; padding:0px;"><strong><h:outputText value="Locations :"
+												id="lblLocations" />
+									</strong></td>
+									<td><p:tree
+											value="#{roadOperationsServiceAction.locationTreeView}"
+											var="node" id="tree">
+											<p:treeNode id="treeNode">
+												<h:outputText escape="false" style="text-align:left" value="#{node}"
+													id="lblNode" />
+											</p:treeNode>
+										</p:tree></td>
+								</tr>
+							</table>
+							<div  style="margin-top:10%;">
+								<span style='color:red;font-size:16px;'> * </span><h:outputText escape="false" style="text-align:left;font-size:10px;color:#282828;" value="denotes that all arteries have been included by default." />
+							</div>
+								
+							</div>
+							<div style="width:50%;float:right;">
+								<div style="width:350px;height:200px;">
+									<div id="map-canvas"  style="width:350px; height:200px; border:black 1px solid;position:relative !important;"></div>
+									<div id="divGoogleNotConnect" style="width:350px; height:200px; position:relative !important;display:none;">
+										<h:outputText style="color:red !important;" value="* Unable to retrieve Google Maps information" />
+									</div>
+								</div>
+								
+								
+								<h:inputText id="artDesc" value="#{listArteryDesc}" style="display:none;" /> 
+				                <h:inputText value="#{listDistance}" id="dlgDistanceBx" style="display:none;"/> 
+                                <h:inputText value="#{listStrtLat}" id="dlgStartLat" style="display:none;" />
+								<h:inputText value="#{listStrtLon}" id="dlgStartLong"  style="display:none;"/>
+								<h:inputText value="#{listEndLat}" id="dlgEndLat" style="display:none;"/>
+								<h:inputText value="#{listEndLon}" id="dlgEndLong" style="display:none;"/>
+								<h:inputText value="#{listPoints}" id="dlgPoints" style="display:none;"/>
+							</div>
+							
+							<!-- 							<f:facet name="title"> -->
+							<!-- 				               <h:outputText value="Strategy and Location"/> -->
+							<!-- 				               <p:graphicImage styleClass="ui-icon-pencil"/> -->
+							<!-- 				            </f:facet> -->
+							<f:facet name="title">
+								<div style="text-align: left">
+									<h:outputText style="text-align:left"
+										value="Location                  " />
+									<span> <h:outputText
+											style="text-align:left;color:#928a76 !important; margin-left:5px;font-weight:normal;"
+											value="[#{operation.numOfLocations}] Locations across [#{operation.totalCoverage}](km)" />
+									</span>
+								</div>
+							</f:facet>
+						</p:tab>
+						<p:tab title="Court Details"
+							rendered="#{operation.categoryId == 'REG'}">
+							
+							<f:facet name="title" style="text-align:left">
+								<div style="text-align: left">
+									<h:outputText style="text-align:left" value="Court Details" />
+									<span
+										style="margin-left: 5px; font-weight: normal; color: #928a76 !important;">
+										<h:outputText value="Court Name : "	id="lblcourtName" /><h:outputText value="#{operation.courtBO.shortDescription}"
+											id="courtName" />
+										<h:outputText value="; Scheduled For " /> 
+											<h:outputText value="#{operation.courtDate}">
+												<f:convertDateTime type="date" pattern="yyyy-MM-dd hh:mm a"
+												timeZone="EST" />
+										</h:outputText> 
+									</span>
+								</div>
+							</f:facet>
+							<table>
+								<tr>
+									<td><strong><h:outputText value="Court Name : "
+												id="lblcourtName" />
+									</strong></td>
+									<td><h:outputText value="#{operation.courtBO.shortDescription}"
+											id="courtName" /></td>
+								</tr>
+								<tr>
+									<td><strong><h:outputText value="Court Date : "
+												id="lblCourtDate" />
+									</strong></td>
+									<td><h:outputText value="#{operation.courtDate}">
+											<f:convertDateTime type="date" pattern="yyyy-MM-dd hh:mm a"
+												timeZone="EST" />
+										</h:outputText></td>
+								</tr>
+							</table>
+						</p:tab>
+						<p:tab title="Assigned Resources">
+							<f:facet name="title">
+								<div style="text-align: left">
+									<h:outputText style="text-align:left"
+										value="Assigned Resources                           " />
+									<span
+										style="margin-left: 5px; font-weight: normal; color: #928a76 !important;">
+										<h:outputText style="text-align:left;"
+											value="[#{operation.numOfTAStaff}] TA Staff, [#{operation.numOfITA}] ITA Examiners, [#{operation.numOfPolice}] Police Officers, [#{operation.numOfJP}] Justice Of Peace, [#{operation.numOfVeh}] Motor Vehicles" />
+									</span>
+								</div>
+							</f:facet>
+							<ui:include src="teamDetailsReview.xhtml"></ui:include>
+							<br></br>
+						</p:tab>
+					</p:accordionPanel>
+
+					<div style="display: none">
+						<sf:commandButton style="display:none" id="startHiddenButton"
+							value="StartHidden" action="startOperation" processIds="*" />
+					</div>
+
+					<div id="buttons"
+						style="margin-left: 30px; text-align: center; margin-top: 21px;">
+						<p:outputPanel id="panelButtons">
+						
+						<!-- rendered="#{(flowScope.saveOrUpdate == 'save' and operation.roadOperationId== null) or (flowScope.saveOrUpdate == 'update')}" -->
+							<p:commandButton styleClass="blue" id="backFromReview"
+								value="Back" action="back" processIds="*" ajax="false"
+								
+								></p:commandButton>
+							
+							<c:if test="#{operation.validUserToScheduleOp}">
+							
+							<p:commandButton styleClass="blue" value="Save Operation"
+								ajax="false"
+								rendered="#{operation.statusId == 'NONE' and flowScope.saveOrUpdate == 'save'}"
+								action="saveOperation" processIds="*" widgetVar="widgetSave"
+								onclick="disableButton(this);"
+								onstart="widgetSave.disable();"
+								oncomplete="widgetSave.enable();" id="butRoadOpSave"/>
+								
+								
+							<!-- <sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_OP_EDIT">
+								<p:commandButton styleClass="blue" value="Update Operation"
+									ajax="false"
+									rendered="#{(operation.statusId != 'NONE' and operation.statusId != 'RO_CAN' 
+									and operation.statusId != 'RO_TER' and operation.statusId != 'RO_CLO') and operation.validUserToScheduleOp }"
+									action="saveOperation" processIds="*" widgetVar="widgetUpd"
+									onstart="widgetUpd.disable();" oncomplete="widgetUpd.enable();" />
+							</sec:authorize>-->	
+																				
+					
+						<c:if test="#{flowScope.saveOrUpdate == 'update' and allowUpdate == 'true'}">	
+							<sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_OP_EDIT">
+							<p:commandButton styleClass="blue" value="Update Operation"
+									ajax="false"
+									rendered="#{roadOperationsServiceAction.operationScheduleEditable('menu')}"
+									onclick="disableButton(this);"
+									action="saveOperation" processIds="*" widgetVar="widgetUpd"
+									onstart="widgetUpd.disable();" oncomplete="widgetUpd.enable();" id="butRoadOpUpdate"/>
+								
+							</sec:authorize>
+							
+					
+							<sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_OP_CANCEL">
+								<p:commandButton styleClass="blue" value="Cancel Operation"
+									onclick="PF('canceldialog').show();"
+									rendered="#{operation.statusId == 'RO_SCH' || operation.statusId == 'RO_NOA'}" id="butRoadOpCancel"/>
+							</sec:authorize>
+
+							<sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_OP_START">
+								<p:commandButton styleClass="blue"
+									rendered="#{((operation.statusId == 'RO_SCH' || operation.statusId == 'RO_NOA') and operation.backDated == 'N') || ((operation.statusId == 'RO_SCH' || operation.statusId == 'RO_NOA') and operation.backDated == 'Y' and operation.authorized == 'Y')}"
+									value="Start Operation" processIds="*" ajax="true"
+									onclick="PF('notifyBeforeStartDialog').show();" id="butRoadOpStart">
+
+								</p:commandButton>
+							</sec:authorize>
+
+							
+								<p:commandButton styleClass="blue" value="Authorize Operation" id="butRoadOpAuth"
+									onclick="PF('authorizedialog').show();"
+									rendered="#{(operation.statusId == 'RO_SCH' || operation.statusId == 'RO_NOA')  and operation.backDated == 'Y' and operation.authorized == 'N'}" />
+							
+							
+							<sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_OP_COMPLETE">
+								<p:commandButton styleClass="blue" value="Complete Operation"
+									processIds="*" ajax="true" 
+									onclick="PF('notifyBeforeStartDialog').show();"
+									rendered="#{operation.statusId == 'RO_STA'}" id="butRoadOpComplete" />
+							
+							</sec:authorize>
+							
+							<sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_OP_CLOSE">
+								
+								<p:commandButton styleClass="blue" type="button" value="Close Operation" id="butCloseOperation" onclick="PF('cdOpClose').show()" rendered="#{operation.statusId == 'RO_COM'}"/>
+								<p:confirmDialog message="Are you sure you want to close the operation?"
+									header="Initiating Close Process" severity="alert"
+									widgetVar="cdOpClose">
+									<p:commandButton styleClass="blue" value="YES" actionListener="#{roadOperationsServiceAction.closeRoadOp}" update="@form" onsuccess="PF('cdOpClose').hide()" onerror="PF('cdOpClose').show()"/>
+									<p:commandButton styleClass="blue" value="NO" onclick="PF('cdOpClose').hide();" type="button" />
+									</p:confirmDialog>
+							
+							</sec:authorize>
+
+							<sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_OP_TERMINATE">
+								<p:commandButton styleClass="blue" value="Terminate Operation"
+									action="terminateOperationPopup" update="terminatedialog"
+									oncomplete="PF('terminatedialog').show();"
+									rendered="#{operation.statusId == 'RO_STA'}" id="butRoadOpTer"/>
+							</sec:authorize>
+					</c:if>
+					</c:if>
+						</p:outputPanel>
+					</div>
+
+
+				</div>
+
+				<p:dialog id="startdialog" header="#{operation.getStatusId().trim().toLowerCase() eq 'ro_sta'?'Complete':'Start'} Operation "
+					widgetVar="startdialog"  resizable="false"
+					showEffect="fade" hideEffect="fade" modal="true" width="70%"  style="overflow-y:scroll;height:90% !important; display:none;" onShow="$('body').addClass('stop-scrolling')" onHide="$('body').removeClass('stop-scrolling')">
+
+<!-- 					<ui:include src="roadOperationStart.xhtml"></ui:include> -->
+
+						<ui:include src="../roadOperationStart_InnerFragmentView.xhtml"></ui:include>
+				
+				</p:dialog>
+				<p:dialog id="canceldialog" header="Cancel Operation "
+					widgetVar="canceldialog"  resizable="false" style="display:none;"
+					showEffect="fade" modal="true" width="40%">
+					<ui:include src="roadOperationCancel.xhtml"></ui:include>
+				</p:dialog>
+				<p:dialog id="terminatedialog" header="Terminate Operation "
+					widgetVar="terminatedialog" style="display:none;position:fixed;top:50%;left:50%;" 
+					resizable="false"
+					showEffect="fade" hideEffect="fade" modal="true" width="40%">
+					<ui:include src="roadOperationTerminate.xhtml"></ui:include>
+				</p:dialog>
+				<p:dialog id="authorizedialog" header="Authorize Operation "
+					widgetVar="authorizedialog" style="display:none;" resizable="false"
+					showEffect="fade" hideEffect="fade" modal="true" width="35%" onShow="clearCache();usernamevr.jq.val('');passwordvr.jq.val('');">
+					<p:ajax event="close" oncomplete="clickExitAuthorizeButt();"></p:ajax>
+					<ui:include src="roadOperationAuthorize.xhtml"></ui:include>
+				</p:dialog>
+<!-- 				<p:dialog id="completeDialog" header="Complete Operation " -->
+<!-- 					widgetVar="completeDialog" resizable="false" showEffect="fade" -->
+<!-- 					hideEffect="fade" modal="true" width="70%"  style="overflow-y:scroll;height:90% !important" onShow="$('body').addClass('stop-scrolling')" onHide="$('body').removeClass('stop-scrolling')"> -->
+<!-- 						<ui:include src="../roadOperationStart_InnerFragmentView.xhtml"></ui:include> -->
+<!-- 				</p:dialog> -->
+
+
+				<!-- <p:dialog id="notifyBeforeStartDialog"
+					header="Proceed to #{operation.getStatusId().trim().toLowerCase() eq 'ro_sta'?'Complete':'Start'} Road Operation"
+					widgetVar="notifyBeforeStartDialog"
+					style="display:none;"
+					resizable="false" showEffect="fade" 
+					modal="true" width="40%">
+						<h:outputText style="text-align:center"
+							value="#{operation.getStatusId().trim().toLowerCase() eq 'ro_sta'?'Are you sure that you want to Complete this Road Operation '.concat(operation.operationName).concat(' ? '):'Please ensure that all changes made are saved before starting Road Operation.'}" />
+
+						<br></br>
+						<br></br>
+
+
+						<div id="buttons" style="text-align: center">
+							<p:commandButton styleClass="blue" id="continueToStart" action="openStartPopup"
+								value="Continue"  widgetVar="continueToStart"
+								onstart="continueToStart.disable();" 
+								oncomplete="continueToStart.enable(); PF('notifyBeforeStartDialog').hide(); PF('startdialog').show();"
+								processIds="*" update="startdialog">
+							</p:commandButton>
+
+
+							<p:commandButton styleClass="blue" id="cancelDontStart"
+								value="Cancel" 
+								widgetVar="cancelDontStart"
+								oncomplete="PF('notifyBeforeStartDialog').hide();" >
+							</p:commandButton>
+						</div>
+
+
+				</p:dialog> -->
+				
+				<p:dialog id="notifyBeforeStartDialog"
+					header="Proceed to #{operation.getStatusId().trim().toLowerCase() eq 'ro_sta'?'Complete':'Start'} Road Operation"
+					widgetVar="notifyBeforeStartDialog"
+					style="display:none;"
+					resizable="false" showEffect="fade" 
+					modal="true" width="40%">
+						<h:outputText style="text-align:center"
+							value="#{operation.getStatusId().trim().toLowerCase() eq 'ro_sta'?'Are you sure that you want to Complete this Road Operation : '.concat(operation.operationName).concat(' ? '):'Please ensure that all changes made are saved before starting Road Operation.'}" />
+
+						<br></br>
+						<br></br>
+
+
+						<div id="buttons" style="text-align: center">
+							<p:commandButton styleClass="blue" id="continueToStart" action="openStartPopup"
+								value="Continue"  widgetVar="continueToStart"
+								onstart="continueToStart.disable();" 
+								oncomplete="continueToStart.enable(); PF('notifyBeforeStartDialog').hide();"
+								processIds="*" ajax="false">
+							</p:commandButton>
+
+
+							<p:commandButton styleClass="blue" id="cancelDontStart"
+								value="Cancel" 
+								widgetVar="cancelDontStart"
+								oncomplete="PF('notifyBeforeStartDialog').hide();" >
+							</p:commandButton>
+						</div>
+
+
+				</p:dialog>
+
+
+				<p:outputPanel id="panelHiddenButtons">
+				<p:commandButton id="hiddenStartButton" style="display:none"
+					value="Hidden Buttonn" processIds="*" ajax="false"
+					update=":reviewOperations" action="openStartPopup" />
+
+				<p:commandLink id="butEditSchedule" widgetVar="butEditSchedule"
+					style="width: 50px;float: right;"					
+					rendered="#{roadOperationsServiceAction.operationScheduleEditable('tooltipcomp')}"
+					action="editSchedule" ajax="false">
+					<span class="icon icon-edit icon-large"></span>
+				</p:commandLink>
+
+				<p:commandLink id="butEditStrategies" widgetVar="butEditStrategies"
+					style="width: 50px;float: right;"
+					
+					rendered="#{roadOperationsServiceAction.operationScheduleEditable('tooltipcomp')}"
+					action="editStrategy" ajax="false">
+					<span class="icon icon-edit icon-large"></span>
+				</p:commandLink>
+
+				<p:commandLink id="butEditCourt" widgetVar="butEditCourt"
+					style="width: 50px;float: right;"
+					
+					rendered="#{roadOperationsServiceAction.operationScheduleEditable('tooltipcomp') and operation.categoryId == 'REG'}"
+					action="editCourt" ajax="false">
+					<span class="icon icon-edit icon-large"></span>
+				</p:commandLink>
+
+
+				<p:commandLink id="butEditResources" widgetVar="butEditResources"
+					style="width: 50px;float: right;"
+					
+					rendered="#{roadOperationsServiceAction.operationScheduleEditable('tooltipcomp') || (operation.statusId == 'RO_NOA' and roadOperationsServiceAction.operationScheduleEditable('menu'))}"
+					action="editResources" ajax="false">
+					<span class="icon icon-edit icon-large"></span>
+				</p:commandLink>
+				
+				<p:commandLink id="butEditLocations" widgetVar="butEditLocations"
+					style="width: 50px;float: right;"
+					
+					rendered="#{roadOperationsServiceAction.operationScheduleEditable('tooltipcomp') || (operation.statusId == 'RO_NOA' and roadOperationsServiceAction.operationScheduleEditable('menu'))}"
+					action="editResources" ajax="false">
+					<span class="icon icon-edit icon-large"></span>
+				</p:commandLink>
+
+				<p:tooltip for="butEditSchedule" value="Edit Schedule Details" />
+				<p:tooltip for="butEditStrategies" value="Edit Strategy Details" />
+				<p:tooltip for="butEditCourt" value="Edit Court Details" />
+				<p:tooltip for="butEditResources" value="Edit Resource Details" />
+				<p:tooltip for="butEditLocations" value="Edit Team Location Details" />
+				
+
+			<!-- Invisible Button used for Navigation -->
+		     <p:commandButton style="display:none" action="operation_details" id="opIdLink" processIds="*" ajax="false"></p:commandButton>
+			 <p:commandButton style="display:none" action="strategy" id="strategyIdLink" processIds="*" ajax="false"></p:commandButton>
+			 <p:commandButton style="display:none" action="resources" id="resourceIdLink" processIds="*" ajax="false" ></p:commandButton>
+	    	 <p:commandButton style="display:none" action="court_details" id="courtIdLink" processIds="*" ajax="false" ></p:commandButton>
+			 <p:commandButton style="display:none" action="review" id="reviewIdLink" processIds="*" ajax="false" ></p:commandButton>
+			<!-- end -->
+			</p:outputPanel>
+			</h:form>
+		</p:panel>
+		<script type="text/javascript">
+//<![CDATA[
+			$(document).ready( function(){
+					
+				setUpProgressBar();					
+					//function() {						
+						 loadMapDetails();
+						 buildTooltipIcons();
+						
+					//}
+					
+			});
+
+			
+			function setUpProgressBar (){
+				$(".progtrckr li:has(a)").click(function() {
+	                  
+		               //TODO use if condition along with invisible buttons
+		                //alert($(this).attr('num'));//.click();
+		               if($(this).attr('num')== 1){
+		            	   $('button[id*=opIdLink]').click(); //rendered="#{completeOpDetails}"
+		               }if($(this).attr('num')== 2){
+		            	   $('button[id*=strategyIdLink]').click(); //rendered="#{completeOpStrategy}"
+		               } 
+		               else if($(this).attr('num')== 3){
+		                
+		            	   $('button[id*=resourceIdLink]').click(); //rendered="#{completeOpResource}"
+		               }else if($(this).attr('num')== 4){
+		            	   $('button[id*=courtIdLink]').click(); //rendered="#{completeOpCourtDetails}"
+		                	
+		               }else if($(this).attr('num')== 5){
+		            	   $('button[id*=reviewIdLink]').click(); //rendered="#{completeOpReview}"
+		               }
+		               
+		               });		
+			}
+			function loadMapDetails(){
+				loadOptArteries();
+				 $("#reviewOperations\\:accordion\\:locationTabID").prev("h3").click(function(){
+					loadOptArteries();
+				}); 
+			}
+			function buildTooltipIcons(){
+				//alert('buildTooltipIcons');
+				//edit schedule icon 
+				$('a[id*=butEditSchedule]').click(function(e) {
+					e.stopPropagation();
+				});
+
+				$('a[id*=butEditSchedule]').prependTo(
+						$('h3:contains("Scheduled Details")'));
+
+			//edit strategy icon 
+			$('a[id*=butEditStrategies]').click(function(e) {
+				e.stopPropagation();
+			});
+
+			$('a[id*=butEditStrategies]').prependTo(
+					$('h3:contains("Strategy")'));
+
+			//edit court icon
+			$('a[id*=butEditCourt]').click(function(e) {
+				e.stopPropagation();
+			});
+
+			$('a[id*=butEditCourt]').prependTo(
+					$('h3:contains("Court Details")'));
+
+			//edit resources icon 
+			$('a[id*=butEditResources]').click(function(e) {
+				e.stopPropagation();
+			});
+
+			$('a[id*=butEditResources]').prependTo(
+					$('h3:contains("Assigned Resources")'));
+			
+			
+			//edit team location icon 
+			$('a[id*=butEditLocations]').click(function(e) {
+				e.stopPropagation();
+			});
+
+			$('a[id*=butEditLocations]').prependTo(
+					$('h3:contains("Location")'));
+
+			//handle start popup new flow
+			$('a[id*=continueToStart]').click(function(e) {
+				clickHiddenStart();
+			});
+				
+			}
+			
+			function clickExitAuthorizeButt()
+			{
+				$('button[id*=exitAuthorizeID]').click();
+			}
+			
+			function checkRoadOpTermination() {
+
+				var terminate = $(txtConfrmTerminate).attr('jq').val()
+						.toLowerCase().trim();
+
+				if (terminate == 'y') {
+					terminateRoadOp();
+					PF('terminatedialog').hide();
+				} else {
+					PF('terminatedialog').show();
+				}
+			}
+
+			function clickHiddenStart() {
+				//alert("here");
+				$('button[id*=hiddenStartButton]').click();
+
+			}
+			
+			function updateButtonsAfterterminate() {
+				//alert("here");
+				$('button[id*=updateTerminateButtons]').click();
+
+			}
+			
+			
+			function stripSquareBrace(v){
+		
+			var size = v.length;
+			var temp2 = new Array();
+			var temp1 = v.slice(0,size-1);
+			temp2 = temp1.split(",");
+			return temp2;
+			
+			}
+			
+			//Function load google map paths based on operation
+		function loadOptArteries(){
+		try{
+			var pathOptions = new Array();
+			tamap = new TAMap();
+			var editPathOptions = "";
+		
+			var artDesc = stripSquareBrace($('#reviewOperations\\:accordion\\:artDesc').val());
+			var dlgDistanceBx = stripSquareBrace($('#reviewOperations\\:accordion\\:dlgDistanceBx').val());
+			var dlgStartLat = stripSquareBrace($('#reviewOperations\\:accordion\\:dlgStartLat').val());
+			var dlgStartLong = stripSquareBrace($('#reviewOperations\\:accordion\\:dlgStartLong').val());
+			var dlgEndLat = stripSquareBrace($('#reviewOperations\\:accordion\\:dlgEndLat').val());
+			var dlgEndLong = stripSquareBrace($('#reviewOperations\\:accordion\\:dlgEndLong').val());
+			var dlgPoints = stripSquareBrace($('#reviewOperations\\:accordion\\:dlgPoints').val());
+			var size = artDesc.length;
+			if(size >= 1 && size != null && pathOptions.length != size){
+			
+				for(var i = 0;i < size;i++)
+				{	//alert(" Loc " + artDesc[i] + " Points " + dlgPoints[i]);
+					if(dlgPoints[i] != null && dlgPoints[i] != 0){
+					editPathOptions = jQuery.parseJSON('{"ID":'+i+',"name":", ","address":"name, , ","color":"red","start_location":{"lat":'+dlgStartLat[i]+',"lng":'+dlgStartLong[i]+'},"end_location":{"lat":'+dlgEndLat[i]+',"lng":'+dlgEndLong[i]+'},"points":"","distance":'+dlgDistanceBx[i]+' }');
+					editPathOptions.points = dlgPoints[i];
+					pathOptions.push(editPathOptions);
+					}else{
+						continue;
+						}
+						
+					}
+				//alert("Map arr size " + pathOptions.length + " Length of Disc " + size);
+				tamap.showPaths(pathOptions);
+			}
+			}catch(e){}
+		}
+		//]]>
+</script>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,145 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/WEB-INF/newTemplate.xhtml">
+
+	<ui:define name="title">Pound Maintenance</ui:define>
+	<ui:define name="pageHeader"></ui:define>
+	
+	<ui:define name="content">
+    	<!-- <ui:fragment id="messages">
+			<div id="messagesInsertionPoint"><h:messages errorClass="error"
+				infoClass="info" layout="list" /></div>
+		</ui:fragment> -->
+		<script>
+    		$("document").ready(function(){
+    			
+    			$('#javax_faces_developmentstage_messages').css('display','none');
+    			$('#poundResults\\:searchResults').forceDatatablePagin();
+    		});
+    	</script>
+    	<div class="tabs"><a href="#">Pound Maintenance</a></div>
+   		<div class="main borders">
+		 <p:messages autoupdate="true" id="msg" closable="true"/>
+		<h:form styleClass="form" id="poundSearch">
+		
+			<p:panelGrid style="margin-top:5px;width:100%;" id="gridVehicleDetails">
+				<p:row>
+					<p:column style="width:48%;">
+						<h:outputText styleClass="outputText" value="Pound:" />
+						<!-- <p:inputText value="#{criteria.poundName}"
+								id="poundName" maxlength="50" size="35" style="text-align: left;margin-left:10px;" /> -->
+						
+						<p:autoComplete id="poundName" scrollHeight="200" size="30" cache="true" style="margin-left:5px;width:200px;" cacheTimeout="30000" value="#{criteria.poundName}" completeMethod="#{poundMaintenanceServiceAction.poundAutoComplete}"/>
+					</p:column>
+					<p:column>		
+						<h:outputText styleClass="outputText" value="Parish:" style="margin-right:10px;margin-left:0px;"/>
+						<p:selectOneMenu value="#{criteria.parishCode}" id="parishCode" style="width:200px;">
+								<f:selectItem itemValue="" itemLabel="All" />
+								<f:selectItems value="#{parishList}" />
+							</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<h:outputText styleClass="outputText" value="Status:" />
+						<p:selectOneMenu value="#{criteria.statusId}" id="statusSel" style="width:200px;margin-left:10px;">
+							<f:selectItem itemValue="" itemLabel="All"></f:selectItem>
+							<f:selectItem itemValue="ACT" itemLabel="ACTIVE"></f:selectItem>
+							<f:selectItem itemValue="INA" itemLabel="INACTIVE"></f:selectItem>
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2" style="padding-top:20px;text-align:center;">
+					<sec:authorize ifAnyGranted="ROLE_ROMS_REF_POUND_SEARCH">
+						<p:commandButton styleClass="blue blue-icon icon-search icon-af" value="Search" action="search" processIds="*" ajax="false" update="poundSearch,poundResults"/>
+					</sec:authorize>
+					<sec:authorize ifAnyGranted="ROLE_ROMS_REF_POUND_ADD">	
+						<p:commandButton styleClass="blue blue-icon icon-plus icon-af" value="Add" action="add" processIds="*" ajax="false"/>
+					</sec:authorize>	
+						<p:commandButton styleClass="blue blue-icon icon-refresh icon-af" value="Clear" action="clear" processIds="*" ajax="false"/>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			
+		</h:form>
+		</div>
+		<h:form id="poundResults" >
+			<ui:fragment id="poundResultsFragment">
+				<div id="dataTableDiv" class="dataTableResults" style="height: auto;" >
+
+					<p:dataTable
+					id="searchResults" rows="10" value="#{pounds.poundList}" var="obj"  paginator="true" selectionMode="single" selection="#{pounds.selectedPound}" rowKey="#{obj.poundId}"
+						     rendered="#{pounds.poundList.size()>0}" rowsPerPageTemplate="10,50,100" rowIndexVar="rowIndex"
+							currentPageReportTemplate="Results: {startRecord}-{endRecord} of {totalRecords}"
+						     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						     paginatorPosition="bottom">
+					<sec:authorize ifAnyGranted="ROLE_ROMS_REF_POUND_EDIT">	
+							<p:ajax event="rowSelect" oncomplete="clickBtn();" >
+                   			</p:ajax>
+                   	</sec:authorize>
+                   <!-- 	<p:ajax event="page"  oncomplete="paginate();"/>  -->
+                   		
+					<f:facet name="header">
+						Pound(s)
+					</f:facet>
+					
+					<p:column id="nameCol" headerText="Name" sortBy="poundName">
+						
+						<h:outputText id="nameValue" value="#{obj.poundName} - #{obj.shortDesc}"></h:outputText>
+					</p:column>
+					
+					<p:column id="parishCol" headerText="Parish" sortBy="parishCode">
+						
+						<h:outputText id="parishValue" value="#{parishMaintenanceServiceAction.getParishDesc(obj.parishCode)}"></h:outputText>
+					</p:column>
+					<p:column id="status" headerText="Status" sortBy="statusDescription">
+						
+						<h:outputText id="statusValue"
+							value="#{obj.statusDescription}"></h:outputText>
+					</p:column>
+					<p:column id="LUpdate" headerText="Last Updated">
+					
+					<h:outputText value="#{poundMaintenanceServiceAction.formatDate(obj.auditEntryBO.updateDTime!=null?obj.auditEntryBO.updateDTime:obj.auditEntryBO.createDTime)}" />
+					</p:column>
+					<p:column id="UpdateByCol" headerText="Updated By">
+					
+					<h:outputText value="#{obj.auditEntryBO.updateUsername!=null?obj.auditEntryBO.updateUsername:obj.auditEntryBO.createUsername}" /> 
+					 <p:tooltip for="@(tr[role=row][data-ri=#{rowIndex}])" value="Click row to edit record." showEffect="fade" hideEffect="fade" 
+						            shared="false" showDelay="500" style="margin-left:200px;"/> 
+					</p:column>
+				</p:dataTable>
+				</div>
+				
+				</ui:fragment>
+				<script>
+					function clickBtn()
+						{
+						
+							$("button[id*='editBtn']").click();
+						}
+					
+					function paginate()
+					 	{
+					 		$("button[id*='pageBtn']").click();
+					 	}
+					
+				</script>
+				
+				<p:commandButton wigetVar="btnSel" id="pageBtn" value="Do select" style="display:none" processIds="*" update=":poundResults:searchResults" 
+							 ajax="false" ></p:commandButton>
+				
+				 <p:commandButton wigetVar="btnSel" id="editBtn" value="Do select" style="display:none" processIds="*" action="edit" 
+			 ajax="false" ></p:commandButton>
+		</h:form>
+		
+	</ui:define>
+</ui:composition>

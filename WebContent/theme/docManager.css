@@ -1,0 +1,200 @@
+/********************************
+ *	Road Ops Related Stylesheet *
+ ********************************/
+form { /*border: 1px solid gray;*/
+	
+}
+body
+{
+/* 	font-size:95%; */
+}
+
+
+#viewPanel1,#viewPanel2,#viewPanel3 {
+	width: 100%;
+}
+
+.ui-inputfield,.ui-selectonemenu {
+	min-width: 15%;
+}
+
+.ui-panelgrid td {
+	border: none !important;
+	max-width: 25% !important;
+	/*min-width: 16% !important;*/
+}
+
+
+table {
+	width: 100%;
+}
+
+label { /*text-transform: uppercase;*/
+	font-weight: bold;
+	margin-right: 50px;
+}
+
+#courtCaseDetails label {
+	font-weight: bold;
+	margin-right: 0px !important;
+	color: black;
+}
+
+#documentManagerView label {
+	text-transform: capitalize;
+	font-weight: bold;
+	margin: 0 !important;
+}
+
+.ui-widget-content { /*border: 0 none !important;*/
+	
+}
+
+/** DOC MANAGER **/
+.ui-fileupload-cancel {
+	display: none;
+}
+
+.ui-fileupload-buttonbar {
+	background: none;
+	border: none;
+	margin: 0px auto !important;
+}
+
+.pageHeadview{
+	background: -moz-linear-gradient(center top , #fec053, #e57804) repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+    background: -webkit-linear-gradient(#fec053, #e57804 ) repeat scroll 0 0 rgba(0, 0, 0, 0) !important; /* For Safari */
+	background: -o-linear-gradient(#fec053, #e57804) repeat scroll 0 0 rgba(0, 0, 0, 0) !important; /* For Opera 11.1 to 12.0 */
+	background: linear-gradient( #fec053, #e57804) repeat scroll 0 0 rgba(0, 0, 0, 0) !important; /* Standard syntax (must be last) */
+	/*color:#ffffff;*/
+	
+	}
+.pageHead {
+	background-color: blanchedalmond;	  
+	padding: 0.6em;
+	width: 96%;
+	min-height: 20px;
+}
+
+.pageHead2 {
+	background-color: #bedefd ;	  
+	padding: 0.6em;	
+	min-height: 20px;
+	font-size:120%;
+	color:black;
+}
+
+#scannedDocPanel {
+	width: 90%;
+	margin: 0px auto;
+}
+
+.ui-panel .ui-panel-content {
+	padding: 0;
+}
+
+
+
+.yellow {
+	background-color: blanchedalmond;
+}
+
+#panelCA {
+	
+}
+
+.ui-fieldset,.ui-fieldset .ui-fieldset-legend {
+	padding: 0px !important;
+	margin-bottom: 10px !important
+}
+
+h2 {
+	margin-bottom: 10px !important
+}
+
+h2 span {
+	/*top:0px;*/
+}
+
+.hasDatepicker{
+max-width:50%;
+}
+
+.ui-fileupload-content{
+display: inline;
+}
+
+.ui-fileupload-files{
+display: inline;
+}
+
+
+#documentManagerSearch .ui-inputfield{
+/*width:50%;*/
+}
+
+
+.activeA{    
+    background-image: none !important;   
+}
+
+.passiveA {
+	/*background-color: gainsboro !important;
+	color: black !important;*/
+}
+
+.passiveA td.ui-selection-column input {
+   display:none;
+}
+
+.passiveA .ui-chkbox-box {
+	display:none;
+}
+
+#courtCaseDetails .ui-fieldset-legend{
+background:none !important;
+border:none;
+padding-top:20px;
+font-size:80%;
+text-decoration: underline
+
+}
+
+
+/****/
+.lbl-display {
+padding-left:1px;
+width: 150px;
+display: inline-block;
+font-weight:bold;
+
+
+}
+
+.sml-lbl{
+width:120px;
+}
+
+.lbl-display-court {
+padding-left:1px;
+width: 130px;
+display: inline-block;
+font-weight:bold;
+}
+
+.align-ddl{
+vertical-align: top;
+padding-top: 5px;
+}
+
+#ofc_list{
+	list-style-type: disc;
+}
+
+.preformatted {
+    white-space: pre;
+}
+
+.ui-spinner-input{
+	text-align:left;
+}

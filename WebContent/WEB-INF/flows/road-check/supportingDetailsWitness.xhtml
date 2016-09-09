@@ -1,0 +1,250 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fsl="http://org.fsl.com"
+	template="/WEB-INF/newTemplate.xhtml">
+	
+<ui:define name="title">Road Check</ui:define>
+	<ui:define name="pageHeader">Perform Road Check
+	
+
+	</ui:define>
+	<ui:define name="content">
+	
+	<ui:fragment id="supDetWitnessFragment">	 
+		<h:form styleClass="form" id="supportingDetailsWitness" >
+			 
+		<p:panel id="panelSupDetWitness" header="Road Check">
+		  <p:panel id="panelMsg">
+			<p:messages id="msg" closable="true"/>
+		</p:panel>
+ 			<p:outputPanel id="customPanel">  
+	
+<div align="left" style="padding-bottom: 10px;">
+  			<span class="progress-label">
+  			<p:commandLink action="cancelWitness" id="backIcon" processIds="*" ajax="false"  >
+  			<i class="icon icon-chevron-left icon-1x"></i>  			
+  			</p:commandLink>
+  			<p:tooltip for="backIcon" value="Click to return to Supporting Details" showEffect="fade" hideEffect="fade" /> 
+  			<h:outputText value="    " /> 
+  			<h:outputText value="Step 3: Add Supporting Details - " styleClass=""/> 
+  			</span>
+    <h:outputText value="#{nameUtil.getLastNameCapsFirstNameMiddleName(initiateView.firstName, initiateView.lastName , initiateView.middleName)}" id="Name" styleClass="progress-label-key"/>
+		<f:subview rendered="#{!initiateView.trn.trim().equalsIgnoreCase('')}"	>
+		 <h:outputText value="[" styleClass="progress-label-key"/><h:outputText value="#{initiateView.trn}" id="trn"  styleClass="progress-label-key"/> 
+		 <h:outputText value="]" styleClass="progress-label-key"/>
+		 </f:subview>
+		</div>
+	
+
+		   <h2><span style=" text-align:left;">Add/Edit Witness Details</span></h2>
+ 				  <p:watermark for="supportingDetailsWitness:lname" value="LAST NAME" />
+  					<p:watermark for="supportingDetailsWitness:fname" value="FIRST NAME" />
+  					<p:watermark for="supportingDetailsWitness:midname" value="MIDDLE NAME" />
+  					
+  					
+  			<p:panelGrid styleClass="responsivetable" style="margin-bottom:0;">
+  				<p:row>
+					 <p:column>
+					 	<h:outputLabel value="Name: " />	<h:outputText value=" * " styleClass="required"/>   
+					</p:column>
+					 <p:column >
+					  <p:inputText value="#{supportingDetailsView.currentWitness.lastName}" id="lname" size="20" maxlength="40"/>
+					 </p:column>
+					  <p:column >
+					  <p:inputText value="#{supportingDetailsView.currentWitness.firstName}" id="fname" size="20" maxlength="40"/>
+					 </p:column>
+					  <p:column >
+					  <p:inputText value="#{supportingDetailsView.currentWitness.middleName}" id="midname" size="20" maxlength="25"/>
+					 </p:column>
+				
+				
+				</p:row>
+  			</p:panelGrid>
+  			<br/>		
+  			<div class="wrapper" style="padding:left:25px">
+ 				<div id ="one">
+ 				<p:panelGrid style="padding-left:15px" styleClass="responsivetable" >
+   				
+				<p:row></p:row>
+					 <p:row >
+					  <p:column colspan="4">
+					  	<h:outputLabel value="Address" styleClass="sub-label"/>	
+					 </p:column>
+					</p:row>
+					
+					<p:row >
+					 <p:column>
+					 <h:outputLabel value="Street Number: " />	
+					</p:column>
+					 
+					  <p:column colspan="3">
+					  <p:inputText value="#{supportingDetailsView.currentWitness.addressView.streetNo}" id="sNum" size="20" maxlength="15"/>
+					 </p:column>
+						
+					 
+					</p:row>
+						
+					<p:row >
+					 <p:column>
+					 <h:outputLabel value="Street Name: " />	  
+					</p:column>
+					 
+					  <p:column colspan="3">
+					  <p:inputText value="#{supportingDetailsView.currentWitness.addressView.streetName}" id="sName" size="79" maxlength="25"/>
+					 </p:column>
+						
+					  
+					</p:row>
+					
+					<p:row >
+					 <p:column>
+					 <h:outputLabel value="P.O. Box: " />	
+					</p:column>
+					 
+					  <p:column>
+					  <p:inputText value="#{supportingDetailsView.currentWitness.addressView.poBoxNo}" id="poBox" size="10" maxlength="6"/>
+					 </p:column>
+						
+						 <p:column>
+					 <h:outputLabel value="P.O. Location: " />	
+					</p:column>
+					 
+					  <p:column>
+					  <p:inputText value="#{supportingDetailsView.currentWitness.addressView.poLocationName}" id="poLoc" size="42" maxlength="25"/>
+					 </p:column>
+						
+						
+					  
+					</p:row>
+					<p:row >
+					 <p:column>
+					 <h:outputLabel value="Mark: " />	
+					</p:column>
+					 
+					  <p:column colspan="5">
+					  <p:inputText value="#{supportingDetailsView.currentWitness.addressView.markText}" id="mark" size="79" maxlength="40"/>
+					 </p:column>
+						
+					 
+					</p:row>
+					<p:row >
+					 <p:column>
+					 <h:outputLabel value="Parish: " />	<h:outputText value=" * " styleClass="required"/>  
+					</p:column>
+					 
+					  <p:column colspan="5">
+					<p:selectOneMenu 
+								id="comboParish" value="#{supportingDetailsView.currentWitness.addressView.parish}">
+								<f:selectItem itemValue="" noSelectionOption="true" itemLabel="[Select One]" />
+								<f:selectItems var="parish" itemValue="#{parish.parishCode}" itemLabel="#{parish.description}" value="#{parishList}" />
+									</p:selectOneMenu>
+					 </p:column>
+						
+					 
+					</p:row>
+					
+					
+		   
+		  	 </p:panelGrid>
+		  	 </div>
+		  	 <div id ="two">
+ 				<p:panelGrid style="padding-left:15px" styleClass="responsivetable" >
+   			
+					 <p:row >
+						<p:column colspan="2">
+					  	<h:outputLabel value="Contact Number" styleClass="sub-label"/>	
+					 </p:column>
+					</p:row>
+					<p:row>
+					<p:column>
+					 <h:outputLabel value="Mobile: " />	
+					</p:column>
+					 
+					  <p:column>
+					
+								<p:inputMask value="#{supportingDetailsView.currentWitness.mobilePhoneNo}" mask="(9?99)999-9999" size="15" onfocus="this.value = this.value==''?'876':this.value;" onblur="this.value = this.value=='(876)___-____'?'':this.value;"/>
+					   
+					
+					 </p:column>
+					</p:row>
+					
+					<p:row>
+						<p:column>
+					 <h:outputLabel value="Home: " />	
+					</p:column>
+					 
+					  <p:column>
+					  	<p:inputMask value="#{supportingDetailsView.currentWitness.homePhoneNo}" mask="(9?99)999-9999" size="15" onfocus="this.value = this.value==''?'876':this.value;" onblur="this.value = this.value=='(876)___-____'?'':this.value;"/>
+					 </p:column>
+					</p:row>
+					
+					<p:row>
+						<p:column>
+					 <h:outputLabel value="Work: " />	
+					</p:column>
+					 
+					  <p:column>
+					
+								<p:inputMask value="#{supportingDetailsView.currentWitness.workPhoneNo}" mask="(9?99)999-9999" size="15" onfocus="this.value = this.value==''?'876':this.value;" onblur="this.value = this.value=='(876)___-____'?'':this.value;"/>
+					 </p:column>
+					</p:row>
+					
+				</p:panelGrid>
+		  	 
+		  	 </div>
+		 
+			</div>
+			
+			<p:panelGrid style="margin-left:auto; margin-right:auto;">
+		   <p:row>
+		   <p:column>
+		   		  	<p:commandButton id="backBtn"  value="Back" action="cancelWitness" processIds="*"  ajax="false"  styleClass="blue"/>
+		   	</p:column>
+		   	<p:column>
+		   		  	<p:commandButton id="saveBtn"  value="Save" action="saveWitness" processIds="*"  ajax="false"  update=":addSupportingDetails:witnessDialog" styleClass="blue"/>
+		   	</p:column>
+		   		   	
+		   	<p:column>
+		   		  	<p:commandButton id="cancelBtn"  value="Cancel" action="cancelWitness" processIds="*"  ajax="false"  styleClass="blue"/>
+		   	</p:column>
+		   
+		   </p:row>
+		   
+		   </p:panelGrid>
+    		
+			</p:outputPanel>
+  	
+  		</p:panel>
+  		
+  		<script>
+  			$( document ).ready(function() {
+				//console.log( "ready!" );
+				
+				$(document).keyup(function(eve){
+				    				   
+				    if (eve.keyCode == 13) {
+				   		//console.log("Key clicked: "+eve.keyCode)
+				       $("[id*='saveBtn']").click();
+				    }
+				    
+		      		return true;        
+				});
+			
+			
+			}); 			
+  		
+  		</script>
+  		
+  		
+		</h:form>
+		</ui:fragment>
+	</ui:define>
+</ui:composition>

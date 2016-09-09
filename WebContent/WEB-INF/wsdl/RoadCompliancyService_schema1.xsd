@@ -1,0 +1,1365 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://webservices.roms.toms.ta.fsl/" version="1.0" xmlns:ns1="http://object.dl.ws.fsl.org" xmlns:ns2="http://object.ticket.ws.fsl.org" xmlns:tns="http://webservices.roms.toms.ta.fsl/">
+
+  <xs:import namespace="http://object.dl.ws.fsl.org" schemaLocation="RoadCompliancyService_schema3.xsd"/>
+
+  <xs:import namespace="http://object.ticket.ws.fsl.org" schemaLocation="RoadCompliancyService_schema2.xsd"/>
+
+  <xs:element name="ErrorSavingException" type="tns:ErrorSavingException"/>
+
+  <xs:element name="InvalidFieldException" type="tns:InvalidFieldException"/>
+
+  <xs:element name="NoRecordFoundException" type="tns:NoRecordFoundException"/>
+
+  <xs:element name="RequiredFieldMissingException" type="tns:RequiredFieldMissingException"/>
+
+  <xs:element name="checkValidROMSWSUrl" type="tns:checkValidROMSWSUrl"/>
+
+  <xs:element name="checkValidROMSWSUrlResponse" type="tns:checkValidROMSWSUrlResponse"/>
+
+  <xs:element name="createOtherCheck" type="tns:createOtherCheck"/>
+
+  <xs:element name="createOtherCheckResponse" type="tns:createOtherCheckResponse"/>
+
+  <xs:element name="getActiveOffenceMandatoryOutcomeList" type="tns:getActiveOffenceMandatoryOutcomeList"/>
+
+  <xs:element name="getActiveOffenceMandatoryOutcomeListResponse" type="tns:getActiveOffenceMandatoryOutcomeListResponse"/>
+
+  <xs:element name="getCitationOffence" type="tns:getCitationOffence"/>
+
+  <xs:element name="getCitationOffenceResponse" type="tns:getCitationOffenceResponse"/>
+
+  <xs:element name="getComplianceDetails" type="tns:getComplianceDetails"/>
+
+  <xs:element name="getComplianceDetailsResponse" type="tns:getComplianceDetailsResponse"/>
+
+  <xs:element name="getPersonFromDriversLicense" type="tns:getPersonFromDriversLicense"/>
+
+  <xs:element name="getPersonFromDriversLicenseResponse" type="tns:getPersonFromDriversLicenseResponse"/>
+
+  <xs:element name="getRequiredExcerptParams" type="tns:getRequiredExcerptParams"/>
+
+  <xs:element name="getRequiredExcerptParamsResponse" type="tns:getRequiredExcerptParamsResponse"/>
+
+  <xs:element name="lookupRoadCompliance" type="tns:lookupRoadCompliance"/>
+
+  <xs:element name="lookupRoadComplianceResponse" type="tns:lookupRoadComplianceResponse"/>
+
+  <xs:element name="performBadgeCheck" type="tns:performBadgeCheck"/>
+
+  <xs:element name="performBadgeCheckResponse" type="tns:performBadgeCheckResponse"/>
+
+  <xs:element name="performCitationHistoryCheck" type="tns:performCitationHistoryCheck"/>
+
+  <xs:element name="performCitationHistoryCheckResponse" type="tns:performCitationHistoryCheckResponse"/>
+
+  <xs:element name="performDriversLicenceCheck" type="tns:performDriversLicenceCheck"/>
+
+  <xs:element name="performDriversLicenceCheckResponse" type="tns:performDriversLicenceCheckResponse"/>
+
+  <xs:element name="performRoadLicMotorVehicleCheck" type="tns:performRoadLicMotorVehicleCheck"/>
+
+  <xs:element name="performRoadLicMotorVehicleCheckResponse" type="tns:performRoadLicMotorVehicleCheckResponse"/>
+
+  <xs:element name="performRoadLicMotorVehicleQuery" type="tns:performRoadLicMotorVehicleQuery"/>
+
+  <xs:element name="performRoadLicMotorVehicleQueryResponse" type="tns:performRoadLicMotorVehicleQueryResponse"/>
+
+  <xs:element name="performRoadLicenceCheckByPlateNumber" type="tns:performRoadLicenceCheckByPlateNumber"/>
+
+  <xs:element name="performRoadLicenceCheckByPlateNumberResponse" type="tns:performRoadLicenceCheckByPlateNumberResponse"/>
+
+  <xs:element name="recordOffenceOutcome" type="tns:recordOffenceOutcome"/>
+
+  <xs:element name="recordOffenceOutcomeMobile" type="tns:recordOffenceOutcomeMobile"/>
+
+  <xs:element name="recordOffenceOutcomeMobileResponse" type="tns:recordOffenceOutcomeMobileResponse"/>
+
+  <xs:element name="recordOffenceOutcomeResponse" type="tns:recordOffenceOutcomeResponse"/>
+
+  <xs:element name="saveCompliance" type="tns:saveCompliance"/>
+
+  <xs:element name="saveComplianceResponse" type="tns:saveComplianceResponse"/>
+
+  <xs:element name="searchForWreckerVehicle" type="tns:searchForWreckerVehicle"/>
+
+  <xs:element name="searchForWreckerVehicleResponse" type="tns:searchForWreckerVehicleResponse"/>
+
+  <xs:complexType name="recordOffenceOutcomeMobile">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="offenceOutcomeWrapper" type="tns:offenceOutcomeWrapper"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="offenceOutcomeWrapper">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="listOfCompliancyChecks" nillable="true" type="tns:compliancyCheckBO"/>
+      <xs:element minOccurs="0" name="updatedComplianceDetails" type="tns:complianceBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="compliancyCheckBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="allegation" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUserName" type="xs:string"/>
+      <xs:element name="excerptParams">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="entry">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" name="key" type="xs:string"/>
+                  <xs:element minOccurs="0" name="value" type="xs:string"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="inHouse" type="xs:boolean"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="listOfRoadChkOffOutcome" nillable="true" type="tns:roadCheckOffenceOutcomeBO"/>
+      <xs:element minOccurs="0" name="outcomeTypeID" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadCheckID" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadCheckOffenceOutcomeBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="courtBO" type="tns:courtBO"/>
+      <xs:element minOccurs="0" name="courtDateTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="courtId" type="xs:int"/>
+      <xs:element minOccurs="0" name="issueDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="jpBO" type="tns:jpbo"/>
+      <xs:element minOccurs="0" name="jpIdNumber" type="xs:int"/>
+      <xs:element minOccurs="0" name="jpRegNum" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenceBO" type="tns:offenceBO"/>
+      <xs:element minOccurs="0" name="offenceDateTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="offenceId" type="xs:int"/>
+      <xs:element minOccurs="0" name="outcomeTypeDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="outcomeTypeID" type="xs:string"/>
+      <xs:element minOccurs="0" name="owner" type="tns:vehicleOwnerBO"/>
+      <xs:element minOccurs="0" name="poundBO" type="tns:poundBO"/>
+      <xs:element minOccurs="0" name="poundID" type="xs:int"/>
+      <xs:element minOccurs="0" name="roadCheckOffenceOutcomeId" type="xs:int"/>
+      <xs:element minOccurs="0" name="vehicleMoverPersonID" type="xs:int"/>
+      <xs:element minOccurs="0" name="vehicleMoverPersonType" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="witnesses" nillable="true" type="tns:personBO"/>
+      <xs:element minOccurs="0" name="wreckerVehicleID" type="xs:int"/>
+      <xs:element minOccurs="0" name="wreckingCoBO" type="tns:wreckingCompanyBO"/>
+      <xs:element minOccurs="0" name="wreckingCoID" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="courtBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntryBO" type="tns:auditEntryBO"/>
+      <xs:element minOccurs="0" name="courtId" type="xs:int"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="markText" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishName" type="xs:string"/>
+      <xs:element minOccurs="0" name="poBoxNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="poLocationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="shortDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetName" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetNo" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="auditEntryBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="createDTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="createUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="updateDTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="updateUsername" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="jpbo">
+    <xs:complexContent>
+      <xs:extension base="tns:attendanceDetailsBO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="auditEntryBO" type="tns:auditEntryBO"/>
+          <xs:element minOccurs="0" name="confirmedPin" type="xs:string"/>
+          <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+          <xs:element minOccurs="0" name="idNumber" type="xs:int"/>
+          <xs:element minOccurs="0" name="newPin" type="xs:string"/>
+          <xs:element minOccurs="0" name="oldPin" type="xs:string"/>
+          <xs:element minOccurs="0" name="parishCode" type="xs:string"/>
+          <xs:element minOccurs="0" name="parishDescription" type="xs:string"/>
+          <xs:element minOccurs="0" name="personBO" type="tns:personBO"/>
+          <xs:element minOccurs="0" name="pinHash" type="xs:string"/>
+          <xs:element minOccurs="0" name="regNumber" type="xs:string"/>
+          <xs:element name="scheduled" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+          <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="attendanceDetailsBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="attended" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="personBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="addressLine1" type="xs:string"/>
+      <xs:element minOccurs="0" name="addressLine2" type="xs:string"/>
+      <xs:element minOccurs="0" name="addressLine2NL" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUserName" type="xs:string"/>
+      <xs:element minOccurs="0" name="dlNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="fullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="markText" type="xs:string"/>
+      <xs:element minOccurs="0" name="middleName" type="xs:string"/>
+      <xs:element minOccurs="0" name="occupation" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="personId" type="xs:int"/>
+      <xs:element minOccurs="0" name="poBoxNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="poLocationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetName" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneCell" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneHome" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneWork" type="xs:string"/>
+      <xs:element minOccurs="0" name="trnNbr" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="offenceBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntryBO" type="tns:auditEntryBO"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="excerpt" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenceDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenceId" type="xs:int"/>
+      <xs:element minOccurs="0" name="roadCheckTypeDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadCheckTypeId" type="xs:string"/>
+      <xs:element minOccurs="0" name="shortDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vehicleOwnerBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="address" type="tns:addressBO"/>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="midName" type="xs:string"/>
+      <xs:element minOccurs="0" name="ownerId" type="xs:int"/>
+      <xs:element minOccurs="0" name="trnBranch" type="xs:string"/>
+      <xs:element minOccurs="0" name="trnNbr" type="xs:string"/>
+      <xs:element minOccurs="0" name="vehicleCheckResultID" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="addressBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="city" type="xs:string"/>
+      <xs:element minOccurs="0" name="country" type="xs:string"/>
+      <xs:element minOccurs="0" name="markText" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="parish_code" type="xs:string"/>
+      <xs:element minOccurs="0" name="poBoxNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="poLocationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetName" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetNo" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="poundBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntryBO" type="tns:auditEntryBO"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="markText" type="xs:string"/>
+      <xs:element minOccurs="0" name="numberOfLots" type="xs:int"/>
+      <xs:element minOccurs="0" name="numberOfParkingSpaces" type="xs:int"/>
+      <xs:element minOccurs="0" name="parishCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishName" type="xs:string"/>
+      <xs:element minOccurs="0" name="poBoxNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="poLocationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="poundId" type="xs:int"/>
+      <xs:element minOccurs="0" name="poundName" type="xs:string"/>
+      <xs:element minOccurs="0" name="shortDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetName" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneCell" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneHome" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneWork" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="wreckingCompanyBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntryBO" type="tns:auditEntryBO"/>
+      <xs:element minOccurs="0" name="companyName" type="xs:string"/>
+      <xs:element minOccurs="0" name="contactPersonFirstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="contactPersonLastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="contactPersonMiddleName" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="markText" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishName" type="xs:string"/>
+      <xs:element minOccurs="0" name="poBoxNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="poLocationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="shortDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetName" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneCell" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneHome" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneWork" type="xs:string"/>
+      <xs:element minOccurs="0" name="trnBranch" type="xs:string"/>
+      <xs:element minOccurs="0" name="trnNbr" type="xs:string"/>
+      <xs:element minOccurs="0" name="wreckingCompanyId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="complianceBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="aidAbetVehicleOwner" type="tns:personBO"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element minOccurs="0" name="complianceDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="complianceId" type="xs:int"/>
+      <xs:element minOccurs="0" name="compliancyArteryid" type="xs:int"/>
+      <xs:element minOccurs="0" name="compliant" type="xs:string"/>
+      <xs:element minOccurs="0" name="court" type="tns:courtBO"/>
+      <xs:element minOccurs="0" name="courtDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="createdDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="currentUserName" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="listOfComplianceParams" nillable="true" type="tns:complianceParamBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="listOfOffences" nillable="true" type="tns:offenceBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="listOfRoadChecks" nillable="true" type="tns:roadCheckBO"/>
+      <xs:element minOccurs="0" name="otherRole" type="xs:string"/>
+      <xs:element minOccurs="0" name="person" type="tns:personBO"/>
+      <xs:element minOccurs="0" name="personRole" type="xs:string"/>
+      <xs:element minOccurs="0" name="reasonId" type="xs:int"/>
+      <xs:element minOccurs="0" name="roadOperation" type="xs:int"/>
+      <xs:element minOccurs="0" name="roadOperationBO" type="tns:roadOperationBO"/>
+      <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+      <xs:element minOccurs="0" name="taStaff" type="xs:string"/>
+      <xs:element minOccurs="0" name="taStaffBO" type="tns:taStaffBO"/>
+      <xs:element minOccurs="0" name="vehicle" type="tns:vehicleBO"/>
+      <xs:element minOccurs="0" name="vehicleInfoDifferent" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="complianceParamBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="complianceId" type="xs:int"/>
+      <xs:element minOccurs="0" name="paramMapId" type="xs:int"/>
+      <xs:element minOccurs="0" name="paramName" type="xs:string"/>
+      <xs:element minOccurs="0" name="paramValue" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadCheckBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element minOccurs="0" name="complianceID" type="xs:int"/>
+      <xs:element minOccurs="0" name="compliant" type="xs:unsignedShort"/>
+      <xs:element minOccurs="0" name="roadCheckId" type="xs:int"/>
+      <xs:element minOccurs="0" name="roadCheckTypeID" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadOperationBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="actualEndDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="actualEndDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="actualEndTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="actualStartDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="actualStartDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="actualStartTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="authorized" type="xs:string"/>
+      <xs:element minOccurs="0" name="authorizedDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="authorizedUserName" type="xs:string"/>
+      <xs:element minOccurs="0" name="backDated" type="xs:string"/>
+      <xs:element minOccurs="0" name="categoryDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="categoryId" type="xs:string"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element minOccurs="0" name="courtBO" type="tns:courtBO"/>
+      <xs:element minOccurs="0" name="courtDTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="courtDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="courtTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="dateCreated" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="firstOffenceDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="lastOffenceDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="officeLocCode" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="officeLocCodeList" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="operationName" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="operationStrategyList" nillable="true" type="tns:strategyBO"/>
+      <xs:element minOccurs="0" name="reasonId" type="xs:int"/>
+      <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+      <xs:element minOccurs="0" name="scheduledEndDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="scheduledEndDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="scheduledEndTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="scheduledStartDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="scheduledStartDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="scheduledStartTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="scheduler" type="tns:taStaffBO"/>
+      <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="strategyBO">
+    <xs:sequence>
+      <xs:element name="arteryRequired" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="auditEntryBO" type="tns:auditEntryBO"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+      <xs:element minOccurs="0" name="strategyDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="strategyId" type="xs:int"/>
+      <xs:element name="vehicleRequired" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="taStaffBO">
+    <xs:complexContent>
+      <xs:extension base="tns:attendanceDetailsBO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+          <xs:element minOccurs="0" name="fullName" type="xs:string"/>
+          <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+          <xs:element minOccurs="0" name="loginUsername" type="xs:string"/>
+          <xs:element minOccurs="0" name="middleName" type="xs:string"/>
+          <xs:element minOccurs="0" name="officeLocationCode" type="xs:string"/>
+          <xs:element minOccurs="0" name="personId" type="xs:int"/>
+          <xs:element name="scheduled" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="staffId" type="xs:string"/>
+          <xs:element minOccurs="0" name="staffTypeCode" type="xs:string"/>
+          <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="vehicleBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="chassisNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="colour" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUserName" type="xs:string"/>
+      <xs:element minOccurs="0" name="engineNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="makeDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="model" type="xs:string"/>
+      <xs:element minOccurs="0" name="ownerName" type="xs:string"/>
+      <xs:element minOccurs="0" name="plateRegNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="typeDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="vehicleId" type="xs:int"/>
+      <xs:element minOccurs="0" name="year" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="recordOffenceOutcomeMobileResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:documentViewBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="documentViewBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="allowUpload" type="xs:string"/>
+      <xs:element minOccurs="0" name="authorizeDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="authorizeUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="authorizedFlag" type="xs:string"/>
+      <xs:element minOccurs="0" name="automaticSerialNo" type="xs:int"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element minOccurs="0" name="complianceID" type="xs:int"/>
+      <xs:element minOccurs="0" name="courtCode" type="xs:int"/>
+      <xs:element minOccurs="0" name="courtDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="courtName" type="xs:string"/>
+      <xs:element minOccurs="0" name="courtTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element name="documentSelected" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="documentTypeCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="documentTypeName" type="xs:string"/>
+      <xs:element minOccurs="0" name="initialCourtDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="initialCourtId" type="xs:int"/>
+      <xs:element minOccurs="0" name="initialCourtName" type="xs:string"/>
+      <xs:element minOccurs="0" name="issueDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="issueUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="jpFirstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="jpFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="jpIdNumber" type="xs:int"/>
+      <xs:element minOccurs="0" name="jpLastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="jpParish" type="xs:string"/>
+      <xs:element minOccurs="0" name="jpRegNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="lastUpdateUser" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="listOfOffences" nillable="true" type="tns:offenceBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="listOfVehicleOwners" nillable="true" type="tns:vehicleOwnerBO"/>
+      <xs:element minOccurs="0" name="manualSerialNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="newComment" type="xs:string"/>
+      <xs:element minOccurs="0" name="newStatusId" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenceCode" type="xs:int"/>
+      <xs:element minOccurs="0" name="offenceDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenceDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="offenceDtimeString" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenceLocation" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenceParishCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderAddressWithNewLine" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderCellPhone" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderFirstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderFullNameNTRN" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderHomePhone" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderId" type="xs:int"/>
+      <xs:element minOccurs="0" name="offenderLastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderMiddleName" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderRoleObserved" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderTRN" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderWorkPhone" type="xs:string"/>
+      <xs:element minOccurs="0" name="operationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="origin" type="xs:string"/>
+      <xs:element minOccurs="0" name="printCount" type="xs:int"/>
+      <xs:element minOccurs="0" name="printDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="printUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="reasonCode" type="xs:int"/>
+      <xs:element minOccurs="0" name="referenceNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="reprintComment" type="xs:string"/>
+      <xs:element minOccurs="0" name="reprintDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="reprintReasonCode" type="xs:int"/>
+      <xs:element minOccurs="0" name="reprintUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadCheckOffenceOutcomeCode" type="xs:int"/>
+      <xs:element minOccurs="0" name="roadLicence" type="tns:roadLicenceBO"/>
+      <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="scannedDocList" nillable="true" type="tns:scannedDocBO"/>
+      <xs:element minOccurs="0" name="servedByFirstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="servedByLastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="servedByUserID" type="xs:string"/>
+      <xs:element minOccurs="0" name="servedOnDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+      <xs:element name="supervisorAuthorisationRequested" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="taStaffFirstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="taStaffFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="taStaffId" type="xs:string"/>
+      <xs:element minOccurs="0" name="taStaffLastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="taStaffMiddleName" type="xs:string"/>
+      <xs:element minOccurs="0" name="vehicle" type="tns:vehicleBO"/>
+      <xs:element minOccurs="0" name="verificationRequired" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadLicenceBO">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="assignedDriverConductor" nillable="true" type="tns:roadLicenceDriverConductorBO"/>
+      <xs:element minOccurs="0" name="controlNo" type="xs:int"/>
+      <xs:element minOccurs="0" name="depot" type="xs:string"/>
+      <xs:element minOccurs="0" name="expiryDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fitnessExpDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fitnessIssueDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fitnessNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="insuranceComp" type="xs:string"/>
+      <xs:element minOccurs="0" name="insuranceExpDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="insuranceIssueDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="issueDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="licPlate" type="xs:string"/>
+      <xs:element minOccurs="0" name="licType" type="xs:string"/>
+      <xs:element minOccurs="0" name="licenceNo" type="xs:int"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="licenceOwners" nillable="true" type="tns:roadLicenceOwnerBO"/>
+      <xs:element minOccurs="0" name="lmisApplicationBO" type="tns:lmisApplicationBO"/>
+      <xs:element minOccurs="0" name="modelDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="modelYear" type="xs:int"/>
+      <xs:element minOccurs="0" name="routeDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="routeEnd" type="xs:string"/>
+      <xs:element minOccurs="0" name="routeStart" type="xs:string"/>
+      <xs:element minOccurs="0" name="seatCapacity" type="xs:int"/>
+      <xs:element minOccurs="0" name="statusCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="vehMakeDesc" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadLicenceDriverConductorBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="badgeNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="badgeType" type="xs:string"/>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadLicenceOwnerBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="homePhoneNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="licenceNo" type="xs:int"/>
+      <xs:element minOccurs="0" name="mark" type="xs:string"/>
+      <xs:element minOccurs="0" name="mobilePhoneNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="ownerType" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="poBox" type="xs:string"/>
+      <xs:element minOccurs="0" name="postOffice" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetName" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="trn" type="xs:string"/>
+      <xs:element minOccurs="0" name="workPhoneNo" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lmisApplicationBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="applDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="applNo" type="xs:int"/>
+      <xs:element minOccurs="0" name="licDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="licPlate" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusDesc" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="scannedDocBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="createdDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="createdUser" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="docType" type="xs:string"/>
+      <xs:element minOccurs="0" name="fileContents" type="xs:base64Binary"/>
+      <xs:element minOccurs="0" name="manualSerialNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="mimeType" type="xs:string"/>
+      <xs:element minOccurs="0" name="newReprintComment" type="xs:string"/>
+      <xs:element minOccurs="0" name="printCount" type="xs:int"/>
+      <xs:element minOccurs="0" name="printDTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="printUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="relativePath" type="xs:string"/>
+      <xs:element minOccurs="0" name="reprintComment" type="xs:string"/>
+      <xs:element minOccurs="0" name="reprintReasonCode" type="xs:int"/>
+      <xs:element minOccurs="0" name="roadCheckOffence" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadCheckOffenceOutcomeId" type="xs:int"/>
+      <xs:element minOccurs="0" name="scannedDocId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="RequiredFieldMissingException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="InvalidFieldException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ErrorSavingException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="searchForWreckerVehicle">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="plateRegNo" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="searchForWreckerVehicleResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:vehicleBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="NoRecordFoundException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getCitationOffence">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="trn" type="xs:string"/>
+      <xs:element minOccurs="0" name="dln" type="xs:string"/>
+      <xs:element minOccurs="0" name="licencePlate" type="xs:string"/>
+      <xs:element name="isHandheld" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getCitationOffenceResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:citationOffenceBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="citationOffenceBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="caseStatus" type="xs:string"/>
+      <xs:element minOccurs="0" name="courtDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="courtOutcome" type="xs:string"/>
+      <xs:element minOccurs="0" name="dlNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenceDateTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="offenceDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenceShortDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenceType" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderFirstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderLastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderMidName" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderType" type="xs:string"/>
+      <xs:element minOccurs="0" name="otherRole" type="xs:string"/>
+      <xs:element minOccurs="0" name="plateRegNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadCheckOffenceID" type="xs:int"/>
+      <xs:element minOccurs="0" name="roadLicDetails" type="tns:roadLicenceBO"/>
+      <xs:element minOccurs="0" name="trnNbr" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="performRoadLicenceCheckByPlateNumber">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="mvCheck" type="tns:vehicleCheckResultBO"/>
+      <xs:element name="isQuickQuery" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vehicleCheckResultBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="chassisNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="colour" type="xs:string"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element minOccurs="0" name="complianceID" type="xs:int"/>
+      <xs:element minOccurs="0" name="currentUserName" type="xs:string"/>
+      <xs:element minOccurs="0" name="engineNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="fitnessInfo" type="tns:vehicleFitnessBO"/>
+      <xs:element minOccurs="0" name="insuranceInfo" type="tns:vehicleInsuranceBO"/>
+      <xs:element minOccurs="0" name="laNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="makeDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="model" type="xs:string"/>
+      <xs:element minOccurs="0" name="mvrcExpiryDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="mvrcIssueDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="onActiveRoadOperation" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="plateRegNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadCheckBO" type="tns:roadCheckBO"/>
+      <xs:element minOccurs="0" name="typeCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="typeDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="vehicleCheckId" type="xs:int"/>
+      <xs:element minOccurs="0" name="vehicleId" type="xs:int"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="vehicleOwners" nillable="true" type="tns:vehicleOwnerBO"/>
+      <xs:element minOccurs="0" name="year" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vehicleFitnessBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="examDepot" type="xs:string"/>
+      <xs:element minOccurs="0" name="expiryDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fitnessId" type="xs:int"/>
+      <xs:element minOccurs="0" name="fitnessNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="issueDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="vehicleCheckResultID" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vehicleInsuranceBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="companyName" type="xs:string"/>
+      <xs:element minOccurs="0" name="expiryDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="insuranceId" type="xs:int"/>
+      <xs:element minOccurs="0" name="issueDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="policyNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="vehicleCheckResultID" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="performRoadLicenceCheckByPlateNumberResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:roadLicCheckResultBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadLicCheckResultBO">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="assignedDriverConductor" nillable="true" type="tns:roadLicenceDriverConductorBO"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element minOccurs="0" name="complianceBO" type="tns:complianceBO"/>
+      <xs:element minOccurs="0" name="controlNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUserName" type="xs:string"/>
+      <xs:element minOccurs="0" name="depot" type="xs:string"/>
+      <xs:element minOccurs="0" name="expiryDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fitnessExpDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fitnessIssueDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="fitnessNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="insuranceComp" type="xs:string"/>
+      <xs:element minOccurs="0" name="insuranceExpDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="insuranceIssueDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="issueDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="licenceNo" type="xs:int"/>
+      <xs:element minOccurs="0" name="licenceRoute" type="xs:string"/>
+      <xs:element minOccurs="0" name="licenceType" type="xs:string"/>
+      <xs:element minOccurs="0" name="lmisApplicationBO" type="tns:lmisApplicationBO"/>
+      <xs:element minOccurs="0" name="roadCheck" type="tns:roadCheckDO"/>
+      <xs:element minOccurs="0" name="roadLicCheckId" type="xs:int"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="roadLicenceOwners" nillable="true" type="tns:roadLicenceOwnerBO"/>
+      <xs:element minOccurs="0" name="routeEnd" type="xs:string"/>
+      <xs:element minOccurs="0" name="routeStart" type="xs:string"/>
+      <xs:element minOccurs="0" name="seatCapacity" type="xs:int"/>
+      <xs:element minOccurs="0" name="status" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="vehicleMakeDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="vehicleModelDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="vehiclePlateRegNo" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadCheckDO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntry" type="tns:auditEntry"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element minOccurs="0" name="compliance" type="tns:complianceDO"/>
+      <xs:element minOccurs="0" name="compliant" type="xs:unsignedShort"/>
+      <xs:element minOccurs="0" name="isScheduled" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadCheckId" type="xs:int"/>
+      <xs:element minOccurs="0" name="roadCheckType" type="tns:cdRoadCheckTypeDO"/>
+      <xs:element minOccurs="0" name="status" type="tns:statusDO"/>
+      <xs:element minOccurs="0" name="versionNbr" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="auditEntry">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="createDTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="createUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="updateDTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="updateUsername" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="complianceDO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="aidAbetVehicleOwner" type="tns:personDO"/>
+      <xs:element minOccurs="0" name="auditEntry" type="tns:auditEntry"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element minOccurs="0" name="complianceId" type="xs:int"/>
+      <xs:element minOccurs="0" name="compliancyArtery" type="tns:arteryDO"/>
+      <xs:element minOccurs="0" name="compliant" type="xs:string"/>
+      <xs:element minOccurs="0" name="court" type="tns:courtDO"/>
+      <xs:element minOccurs="0" name="courtDateTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="offenceDateTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="otherRole" type="xs:string"/>
+      <xs:element minOccurs="0" name="person" type="tns:personDO"/>
+      <xs:element minOccurs="0" name="personRole" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadOperation" type="tns:roadOperationDO"/>
+      <xs:element minOccurs="0" name="status" type="tns:statusDO"/>
+      <xs:element minOccurs="0" name="taStaff" type="tns:taStaffDO"/>
+      <xs:element minOccurs="0" name="vehicle" type="tns:vehicleDO"/>
+      <xs:element minOccurs="0" name="vehicleInfoDifferent" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="versionNbr" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="personDO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="address" type="tns:addressDO"/>
+      <xs:element minOccurs="0" name="auditEntry" type="tns:auditEntry"/>
+      <xs:element minOccurs="0" name="dlNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="middleName" type="xs:string"/>
+      <xs:element minOccurs="0" name="occupation" type="xs:string"/>
+      <xs:element minOccurs="0" name="personId" type="xs:int"/>
+      <xs:element minOccurs="0" name="telephoneCell" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneHome" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephoneWork" type="xs:string"/>
+      <xs:element minOccurs="0" name="trnNbr" type="xs:string"/>
+      <xs:element minOccurs="0" name="versionNbr" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="addressDO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="markText" type="xs:string"/>
+      <xs:element minOccurs="0" name="parish" type="tns:parishDO"/>
+      <xs:element minOccurs="0" name="poBoxNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="poLocationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetName" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetNo" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="parishDO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntry" type="tns:auditEntry"/>
+      <xs:element minOccurs="0" name="auditInfo" type="tns:auditEntry"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="officeLocationCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="tns:statusDO"/>
+      <xs:element minOccurs="0" name="versionNbr" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="statusDO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntry" type="tns:auditEntry"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+      <xs:element minOccurs="0" name="type" type="xs:string"/>
+      <xs:element minOccurs="0" name="versionNbr" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="arteryDO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arteryId" type="xs:int"/>
+      <xs:element minOccurs="0" name="auditEntry" type="tns:auditEntry"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="distance" type="xs:float"/>
+      <xs:element minOccurs="0" name="endlatitude" type="xs:float"/>
+      <xs:element minOccurs="0" name="endlongitude" type="xs:float"/>
+      <xs:element minOccurs="0" name="location" type="tns:locationDO"/>
+      <xs:element minOccurs="0" name="points" type="xs:string"/>
+      <xs:element minOccurs="0" name="shortDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="startlatitude" type="xs:float"/>
+      <xs:element minOccurs="0" name="startlongitude" type="xs:float"/>
+      <xs:element minOccurs="0" name="status" type="tns:statusDO"/>
+      <xs:element minOccurs="0" name="versionNbr" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="locationDO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntry" type="tns:auditEntry"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="locationId" type="xs:int"/>
+      <xs:element minOccurs="0" name="parish" type="tns:parishDO"/>
+      <xs:element minOccurs="0" name="shortDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="tns:statusDO"/>
+      <xs:element minOccurs="0" name="versionNbr" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="courtDO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="address" type="tns:addressDO"/>
+      <xs:element minOccurs="0" name="auditEntry" type="tns:auditEntry"/>
+      <xs:element minOccurs="0" name="courtId" type="xs:int"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="shortDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="tns:statusDO"/>
+      <xs:element minOccurs="0" name="versionNbr" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadOperationDO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="actualEndDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="actualStartDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="auditEntry" type="tns:auditEntry"/>
+      <xs:element minOccurs="0" name="authorized" type="xs:string"/>
+      <xs:element minOccurs="0" name="authorizedDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="authorizedUserName" type="xs:string"/>
+      <xs:element minOccurs="0" name="backDated" type="xs:string"/>
+      <xs:element minOccurs="0" name="category" type="tns:cdCategoryDO"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element minOccurs="0" name="court" type="tns:courtDO"/>
+      <xs:element minOccurs="0" name="courtDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="officeLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="operationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="reason" type="tns:reasonDO"/>
+      <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+      <xs:element minOccurs="0" name="scheduledEndDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="scheduledStartDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="scheduler" type="tns:taStaffDO"/>
+      <xs:element minOccurs="0" name="status" type="tns:statusDO"/>
+      <xs:element minOccurs="0" name="statusDtime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="versionNbr" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="cdCategoryDO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntry" type="tns:auditEntry"/>
+      <xs:element minOccurs="0" name="categoryId" type="xs:string"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="tns:statusDO"/>
+      <xs:element minOccurs="0" name="versionNbr" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="reasonDO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntry" type="tns:auditEntry"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="isVisible" type="xs:string"/>
+      <xs:element minOccurs="0" name="reasonId" type="xs:int"/>
+      <xs:element minOccurs="0" name="reasonType" type="tns:reasonTypeDO"/>
+      <xs:element minOccurs="0" name="status" type="tns:statusDO"/>
+      <xs:element minOccurs="0" name="versionNbr" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="reasonTypeDO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntry" type="tns:auditEntry"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="reasonTypeCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="tns:statusDO"/>
+      <xs:element minOccurs="0" name="versionNbr" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="taStaffDO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntry" type="tns:auditEntry"/>
+      <xs:element minOccurs="0" name="loginUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="officeLocationCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="person" type="tns:personDO"/>
+      <xs:element minOccurs="0" name="staffId" type="xs:string"/>
+      <xs:element minOccurs="0" name="staffTypeCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="tns:statusDO"/>
+      <xs:element minOccurs="0" name="versionNbr" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vehicleDO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntry" type="tns:auditEntry"/>
+      <xs:element minOccurs="0" name="chassisNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="colour" type="xs:string"/>
+      <xs:element minOccurs="0" name="engineNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="makeDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="model" type="xs:string"/>
+      <xs:element minOccurs="0" name="ownerName" type="xs:string"/>
+      <xs:element minOccurs="0" name="plateRegNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="typeDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="vehicleId" type="xs:int"/>
+      <xs:element minOccurs="0" name="versionNbr" type="xs:int"/>
+      <xs:element minOccurs="0" name="year" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="cdRoadCheckTypeDO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntry" type="tns:auditEntry"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadCheckTypeId" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="tns:statusDO"/>
+      <xs:element minOccurs="0" name="versionNbr" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="saveCompliance">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="compliance" type="tns:complianceBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="saveComplianceResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:complianceBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupRoadCompliance">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="roadCompliancyCriteriaBO" type="tns:roadCompliancyCriteriaBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadCompliancyCriteriaBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="actualEndDateRange" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="actualStartDateRange" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="complianceId" type="xs:int"/>
+      <xs:element minOccurs="0" name="currentUserName" type="xs:string"/>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="middleName" type="xs:string"/>
+      <xs:element minOccurs="0" name="operationID" type="xs:int"/>
+      <xs:element minOccurs="0" name="operationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="region" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadCheckEndDateRange" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="roadCheckStartDateRange" type="xs:dateTime"/>
+      <xs:element name="scheduledDTime" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="scheduledEndDateRange" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="scheduledStartDateRange" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="staffID" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="xs:string"/>
+      <xs:element minOccurs="0" name="trn" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="lookupRoadComplianceResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:complianceBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="performBadgeCheck">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="badgeCheck" type="tns:badgeCheckResultBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="badgeCheckResultBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="badgeCheckId" type="xs:int"/>
+      <xs:element minOccurs="0" name="badgeNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="badgeType" type="xs:string"/>
+      <xs:element minOccurs="0" name="badgeTypeDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="biometricsSno" type="xs:int"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element minOccurs="0" name="complianceID" type="xs:int"/>
+      <xs:element minOccurs="0" name="currentUserName" type="xs:string"/>
+      <xs:element minOccurs="0" name="expiryDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="issueDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="middleName" type="xs:string"/>
+      <xs:element minOccurs="0" name="photograph" type="xs:base64Binary"/>
+      <xs:element minOccurs="0" name="roadCheckBO" type="tns:roadCheckBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="performBadgeCheckResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:badgeCheckResultBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="performDriversLicenceCheck">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="dlicenceCheck" type="tns:dlCheckResultBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dlCheckResultBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="address" type="ns1:Address"/>
+      <xs:element minOccurs="0" name="collectorateIssued" type="xs:string"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element minOccurs="0" name="complianceID" type="xs:int"/>
+      <xs:element minOccurs="0" name="currentUserName" type="xs:string"/>
+      <xs:element minOccurs="0" name="dateFirstIssued" type="xs:string"/>
+      <xs:element minOccurs="0" name="dateOfBirth" type="xs:string"/>
+      <xs:element minOccurs="0" name="dlClass" type="xs:string"/>
+      <xs:element minOccurs="0" name="dlNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="driversLicCheckId" type="xs:int"/>
+      <xs:element minOccurs="0" name="expiryDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="gender" type="xs:string"/>
+      <xs:element minOccurs="0" name="issueDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="middleName" type="xs:string"/>
+      <xs:element minOccurs="0" name="nationality" type="xs:string"/>
+      <xs:element minOccurs="0" name="photograph" type="xs:base64Binary"/>
+      <xs:element minOccurs="0" name="roadCheckBO" type="tns:roadCheckBO"/>
+      <xs:element minOccurs="0" name="trnNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="vehicleLicencedToDrive" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="performDriversLicenceCheckResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:dlCheckResultBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="performCitationHistoryCheck">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="citationCheck" type="tns:citationCheckResultBO"/>
+      <xs:element name="isHandheld" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="citationCheckResultBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="citationCheckId" type="xs:int"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="citationOffences" nillable="true" type="tns:citationOffenceBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="citationOffencesVehicle" nillable="true" type="tns:citationOffenceBO"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element minOccurs="0" name="complianceID" type="xs:int"/>
+      <xs:element minOccurs="0" name="currentUserName" type="xs:string"/>
+      <xs:element minOccurs="0" name="dlNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="includeTTMSResults" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="MAX_ROMS_OFFENCES" type="xs:int"/>
+      <xs:element minOccurs="0" name="MAX_TTMS_OFFENCES" type="xs:int"/>
+      <xs:element minOccurs="0" name="regPlateNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadCheckBO" type="tns:roadCheckBO"/>
+      <xs:element minOccurs="0" name="totalAmountOfROMSOffences" type="xs:int"/>
+      <xs:element minOccurs="0" name="totalAmountOfROMSOffencesVehicle" type="xs:int"/>
+      <xs:element minOccurs="0" name="totalAmountOfTTMSOffences" type="xs:int"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="trafficTickets" nillable="true" type="ns2:TrafficTicket"/>
+      <xs:element minOccurs="0" name="trnNbr" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="performCitationHistoryCheckResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:citationCheckResultBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="recordOffenceOutcome">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="listOfCompliancyChecks" type="tns:compliancyCheckBO"/>
+      <xs:element minOccurs="0" name="updatedComplianceDetails" type="tns:complianceBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="recordOffenceOutcomeResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:documentViewBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="checkValidROMSWSUrl">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="checkValidROMSWSUrlResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getComplianceDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="complianceId" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getComplianceDetailsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:complianceDetailsBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="complianceDetailsBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="allegation" type="xs:string"/>
+      <xs:element minOccurs="0" name="badgeCheckResult" type="tns:badgeCheckResultBO"/>
+      <xs:element minOccurs="0" name="citationCheckResult" type="tns:citationCheckResultBO"/>
+      <xs:element minOccurs="0" name="dlCheckResult" type="tns:dlCheckResultBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="listOfComplianceParams" nillable="true" type="tns:complianceParamBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="listOfCourts" nillable="true" type="tns:courtBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="listOfDocuments" nillable="true" type="tns:documentViewBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="listOfOutcomes" nillable="true" type="tns:roadCheckOffenceOutcomeBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="listOfWitnesses" nillable="true" type="tns:personBO"/>
+      <xs:element minOccurs="0" name="poundDetails" type="tns:poundBO"/>
+      <xs:element minOccurs="0" name="roadLicCheckResult" type="tns:roadLicCheckResultBO"/>
+      <xs:element minOccurs="0" name="vehicleCheckResult" type="tns:vehicleCheckResultBO"/>
+      <xs:element minOccurs="0" name="vehicleMover" type="tns:personBO"/>
+      <xs:element minOccurs="0" name="vehicleMoverType" type="xs:string"/>
+      <xs:element minOccurs="0" name="wreckerVehicle" type="tns:vehicleBO"/>
+      <xs:element minOccurs="0" name="wreckingCompanyDetails" type="tns:wreckingCompanyBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getRequiredExcerptParams">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="offences" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getRequiredExcerptParamsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:excerptParamMappingBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="excerptParamMappingBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="dataEntered" type="xs:string"/>
+      <xs:element minOccurs="0" name="mapColName" type="xs:string"/>
+      <xs:element minOccurs="0" name="paramDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="paramMapId" type="xs:int"/>
+      <xs:element minOccurs="0" name="paramName" type="xs:string"/>
+      <xs:element minOccurs="0" name="paramSize" type="xs:int"/>
+      <xs:element minOccurs="0" name="roadCheckTypeId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getPersonFromDriversLicense">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="dlNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUserName" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getPersonFromDriversLicenseResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:personBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="performRoadLicMotorVehicleCheck">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="mvCheck" type="tns:vehicleCheckResultBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="performRoadLicMotorVehicleCheckResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:roadLicVehCheckResultBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadLicVehCheckResultBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="roadLicCheckResult" type="tns:roadLicCheckResultBO"/>
+      <xs:element minOccurs="0" name="vehicleCheckResult" type="tns:vehicleCheckResultBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="performRoadLicMotorVehicleQuery">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="mvCheck" type="tns:vehicleCheckResultBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="performRoadLicMotorVehicleQueryResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:roadLicVehCheckResultBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getActiveOffenceMandatoryOutcomeList">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="getActiveOffenceMandatoryOutcomeListResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:offenceMandatoryOutcomeBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="offenceMandatoryOutcomeBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="offenceDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenceId" type="xs:int"/>
+      <xs:element minOccurs="0" name="outcomeTypeId" type="xs:string"/>
+      <xs:element minOccurs="0" name="shortDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="createOtherCheck">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="complianceId" type="xs:int"/>
+      <xs:element minOccurs="0" name="currentUserName" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="createOtherCheckResponse">
+    <xs:sequence/>
+  </xs:complexType>
+</xs:schema>

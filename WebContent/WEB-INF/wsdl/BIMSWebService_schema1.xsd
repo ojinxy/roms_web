@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://webservices.roms.toms.ta.fsl/" version="1.0" xmlns:tns="http://webservices.roms.toms.ta.fsl/">
+
+  <xs:element name="NoRecordFoundException" type="tns:NoRecordFoundException"/>
+
+  <xs:element name="RequiredFieldMissingException" type="tns:RequiredFieldMissingException"/>
+
+  <xs:element name="getBadgeByPersonDetails" type="tns:getBadgeByPersonDetails"/>
+
+  <xs:element name="getBadgeByPersonDetailsResponse" type="tns:getBadgeByPersonDetailsResponse"/>
+
+  <xs:element name="getBadgeDetails" type="tns:getBadgeDetails"/>
+
+  <xs:element name="getBadgeDetailsDriverConductor" type="tns:getBadgeDetailsDriverConductor"/>
+
+  <xs:element name="getBadgeDetailsDriverConductorResponse" type="tns:getBadgeDetailsDriverConductorResponse"/>
+
+  <xs:element name="getBadgeDetailsResponse" type="tns:getBadgeDetailsResponse"/>
+
+  <xs:complexType name="getBadgeDetailsDriverConductor">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="badgeNo" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getBadgeDetailsDriverConductorResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:badgeBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="badgeBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="badgeDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="badgeNo" type="xs:int"/>
+      <xs:element minOccurs="0" name="biometricsID" type="xs:int"/>
+      <xs:element minOccurs="0" name="expiryDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="issueDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="midName" type="xs:string"/>
+      <xs:element minOccurs="0" name="photoImg" type="xs:base64Binary"/>
+      <xs:element minOccurs="0" name="statusDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="trn" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="RequiredFieldMissingException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="NoRecordFoundException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getBadgeByPersonDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="midName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getBadgeByPersonDetailsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:badgeBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getBadgeDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="badgeNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="badgeType" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getBadgeDetailsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:badgeBO"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

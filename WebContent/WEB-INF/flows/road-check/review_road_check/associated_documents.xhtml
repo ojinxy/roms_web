@@ -1,0 +1,188 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"	>
+
+	<ui:fragment id="page1">	
+
+				
+					<p:inputText value="#{roadCheckReviewSummaryBean.allSelectedSummonsSigned }"  id="txtAllSelectedSummonsSigned" style="display:none" widgetVar="txtAllSelectedSummonsSigned" />
+					<p:commandButton id="butPrintViewDetails" widgetVar="butPrintViewDetails" action="openReportWindow" oncomplete="$('a[id*=generateDoc]').trigger('click')"  style="display:none" update="tableDocuments"></p:commandButton>
+					<p:dataTable value="#{roadCheckReviewSummaryBean.associatedDocViews}" var="associatedDocs" rowIndexVar="index" id="tableAssociatedDocs"
+						rows="10" paginator="true" paginatorAlwaysVisible="false"  rowKey="#{associatedDocs.index}"
+						selection="#{roadCheckReviewSummaryBean.selectedAssociatedDocViews}"
+						paginatorPosition="bottom"
+						currentPageReportTemplate="Results: {startRecord}-{endRecord} of {totalRecords}" rowsPerPageTemplate="10, 50, 100"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" widgetVar="widgetTableAssociatedDocs" styleClass="tableAssociatedDocsStyle" 
+						rendered="#{!  roadCheckReviewSummaryBean.isViewDetailsScreen()}" 
+						>
+						<p:ajax event="page" global="false" oncomplete="hideDocSelections();" />
+						<f:facet name="header">
+							<!-- Document(s)-->
+						 </f:facet>
+						<p:column headerText="Document Type">
+							<h:outputText value="#{associatedDocs.documentType}"></h:outputText>
+							<sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_CHK_UPLOAD">
+								<span style="float:right;vertical-align:middle" id="docSelections">
+									<p:commandLink  update="tableAssociatedDocs,:roadCheckReview:accordOffences:panelDocUpload" id="linkUploadDoc" action="uploadAssociatedDoc"
+										rendered="#{not roadCheckReviewSummaryBean.isMobile() and (associatedDocs.serialNum == null or associatedDocs.serialNum == '')}" 
+										oncomplete="PF('dlg').show();" ajax="false"
+										>
+										
+										<f:setPropertyActionListener value="#{associatedDocs}"
+											target="#{roadCheckReviewSummaryBean.selectedAssociatedDocView}" />
+<!-- 										<span style="float:left;margin-left:10px;text-decoration: none;" class="icon icon-upload icon-large"> -->
+<!-- 											<span style="padding-left:5px;vertical-align:sub"> -->
+<!-- 												Upload -->
+<!-- 											</span>						 -->
+<!-- 										</span> -->
+									</p:commandLink>
+								</span>
+								<span style="float:right;vertical-align:middle;display:not roadCheckReviewSummaryBean.isMobile() and (associatedDocs.serialNum != null and associatedDocs.serialNum != '')?'inline':'none'" >
+									<p:commandLink   id="linkCancelUploadDoc" rendered="#{not roadCheckReviewSummaryBean.isMobile() and (associatedDocs.serialNum != null and associatedDocs.serialNum != '')}" 
+											onclick="PF('cd').show();">
+											
+											<f:setPropertyActionListener value="#{associatedDocs}"
+												target="#{roadCheckReviewSummaryBean.selectedAssociatedDocView}" />
+													
+													<span>
+														<h:outputText style="text-transform: uppercase" value="[#{associatedDocs.serialNum}]"></h:outputText>		
+													</span>		
+													<span class="icon icon-times icon-large" />													
+									</p:commandLink>
+								</span>
+								<p:confirmDialog message="Are you sure you want to remove this document?"
+									header="Removing File" severity="alert"
+									widgetVar="cd" style="background-color:white !important">
+									<p:commandButton value="Yes" styleClass="blue" update="tableAssociatedDocs" oncomplete="PF('cd').hide();hideDocSelections();" action="cancelUploadDoc"/>
+									<p:commandButton value="No" styleClass="blue" onclick="PF('cd').hide();"  />
+								</p:confirmDialog>
+							</sec:authorize>
+						</p:column>
+						<p:column headerText="Associated Offences" >
+							
+							<f:subview rendered="#{fn:length(associatedDocs.getAssociatedOffences()) eq 1}">
+								<ui:repeat  var="offence" value="#{associatedDocs.getAssociatedOffences()}">
+                        			<h:outputText value="#{offence}"></h:outputText>
+                    			</ui:repeat>
+							</f:subview>
+							<f:subview rendered="#{fn:length(associatedDocs.getAssociatedOffences()) gt 1}">
+                    			<h:outputText value="#{associatedDocs.getAssociatedOffences().get(0)}; "></h:outputText>
+                    			<h:outputText value="#{associatedDocs.getAssociatedOffences().get(1) }"></h:outputText>
+                    			<h:outputText value="#{'... '}"></h:outputText>
+                    			<p:rowToggler />  
+							</f:subview>
+						
+						</p:column>
+						<p:column headerText="Printed">
+							<h:outputText value="#{associatedDocs.printed?'Yes':'No'}"></h:outputText>
+						</p:column>
+						<p:rowExpansion>  
+				            		<p:dataTable value="#{associatedDocs.getAssociatedOffences()}" var="offence">
+										<p:column headerText="Offences">
+											<h:outputText value="#{offence}"></h:outputText>
+										</p:column>
+											
+									</p:dataTable>	
+				        </p:rowExpansion>  
+					</p:dataTable>
+					<p:dataTable value="#{roadCheckReviewSummaryBean.docViews}" var="associatedDocs" rowIndexVar="index" id="tableDocuments"
+						rows="10" paginator="true" paginatorAlwaysVisible="true"  rowKey="#{associatedDocs.automaticSerialNo}"
+						rowsPerPageTemplate="10, 50, 100"
+						selection="#{roadCheckReviewSummaryBean.selectedDocViews}"
+						currentPageReportTemplate="Results: {startRecord}-{endRecord} of {totalRecords}" 
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						paginatorPosition="bottom" widgetVar="widgetTableAssociatedDocs" styleClass="tableAssociatedDocsStyle"
+						rendered="#{roadCheckReviewSummaryBean.isViewDetailsScreen()}" 
+						rowStyleClass="#{roadCheckServiceAction.documentPrintable(associatedDocs)?'':'passiveA' }">
+						<sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_CHK_PRINT">
+						<p:ajax global="false" event="rowSelectCheckbox"  update="linkPrint" oncomplete="paginatorForDocTable();" />
+						<p:ajax global="false" event="rowUnselectCheckbox" update="linkPrint" oncomplete="paginatorForDocTable();" />
+						<p:ajax global="false" event="toggleSelect" update="linkPrint"  oncomplete="paginatorForDocTable();" listener="#{roadCheckServiceAction.removeUprintableDocuments}"/>
+						<p:ajax global="false" event="rowSelect" disabled="#{roadCheckServiceAction.isHandHeldNoFlow()}" listener="#{roadCheckServiceAction.removeUprintableDocuments}"  oncomplete="$('button[id*=butViewDocDetails]').click();" update="linkPrint" />
+						<p:ajax global="false" event="rowSelect" disabled="#{not roadCheckServiceAction.isHandHeldNoFlow()}" listener="#{roadCheckServiceAction.removeUprintableDocuments}"  update="linkPrint" />
+						<c:if test="#{roadCheckReviewSummaryBean.isViewDetailsScreen() and not roadCheckServiceAction.onlyPrintAllDocs()}">
+							<p:column disabledSelection="true"  ajax="true" rendered="true" selectionMode="multiple" editingRow="false" oncomplete="paginatorForDocTable();" update="tableDocuments">
+							</p:column>
+						</c:if>
+						</sec:authorize>
+						<p:ajax event="page" global="false" oncomplete="paginatorForDocTable();" />
+						
+						<f:facet name="header">
+							Document(s)
+							<sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_CHK_PRINT">
+								<p:commandButton id="linkPrint" action="printSelectedDocs" icon="ui-icon-print" disabled="#{roadCheckReviewSummaryBean.selectedDocViews.size() > 0  and roadCheckServiceAction.showPrintButton()?'false':'true'}" value="Print"
+									 rendered="#{roadCheckReviewSummaryBean.isViewDetailsScreen() and ! roadCheckServiceAction.onlyPrintAllDocs() and ! roadCheckServiceAction.showVerify()}" processIds="*" ajax="false" style="margin-left:10px">
+								</p:commandButton>
+								<p:commandButton id="linkPrintAllDocs" action="printAllDocs" icon="ui-icon-print" rendered="#{roadCheckReviewSummaryBean.isViewDetailsScreen() and roadCheckServiceAction.onlyPrintAllDocs() and ! roadCheckServiceAction.showVerify()}" value="Print Documents"
+									  processIds="*" ajax="false" style="margin-left:10px" disabled="#{not roadCheckServiceAction.allDocsVerified() || ! roadCheckServiceAction.showPrintDocuments()}">
+								</p:commandButton>
+							</sec:authorize>
+				
+						 </f:facet>
+						<p:column headerText="Document Type">
+							<h:outputText value="#{associatedDocs.documentTypeName}"></h:outputText>
+								<span style="float:right;vertical-align:middle;display:#{(associatedDocs.manualSerialNo != null and associatedDocs.manualSerialNo != '')?'':'none'}" id="ManualDoc">
+												<h:outputText  value="[Manual Serial # : "></h:outputText>
+												<h:outputText value="#{associatedDocs.manualSerialNo}]" style="text-transform: uppercase"/>
+								</span>
+							
+							<span class="icon icon-tags icon-large" 
+								style="padding-right:5px;vertical-align:text-bottom;display:#{(associatedDocs.jpIdNumber eq null or  associatedDocs.jpRegNumber eq '') and associatedDocs.documentTypeCode eq 'SUM'?'inline':'none'};
+								padding-left:5px"/>
+						</p:column>
+						<p:column headerText="Associated Offences" >
+							
+							<f:subview rendered="#{fn:length(associatedDocs.listOfOffences) eq 1}">
+								<ui:repeat  var="offence" value="#{associatedDocs.listOfOffences}">
+                        			<h:outputText value="#{offence.shortDescription}"></h:outputText>
+                    			</ui:repeat>
+							</f:subview>
+							<f:subview rendered="#{fn:length(associatedDocs.listOfOffences) gt 1}">
+                    			<h:outputText value="#{associatedDocs.listOfOffences.get(0).shortDescription}; "></h:outputText>
+                    			<h:outputText value="#{associatedDocs.listOfOffences.get(1).shortDescription }"></h:outputText>
+                    			<h:outputText value="#{'... '}"></h:outputText>
+                    			<p:rowToggler />  
+							</f:subview>
+						
+						</p:column>
+						<p:column headerText="Status">
+							<h:outputText value="#{associatedDocs.statusDescription}"/>
+						</p:column>
+						<p:column headerText="Printed">
+							<h:outputText value="#{associatedDocs.printCount > 0 ?'Yes':'No'}"></h:outputText>
+						</p:column>
+						<p:column headerText="Verified">
+							<h:outputText value="#{associatedDocs.verificationRequired ne null and associatedDocs.verificationRequired.trim().toLowerCase() eq 'y' 
+								or ((associatedDocs.authorizedFlag ne null?associatedDocs.authorizedFlag.toLowerCase():'') eq 'n')?'No':'Yes'}"></h:outputText>
+						</p:column>
+						<p:rowExpansion>  
+				            		<p:dataTable value="#{associatedDocs.listOfOffences}" var="offence">
+										<p:column headerText="Offences">
+											<h:outputText value="#{offence.shortDescription}"></h:outputText>
+										</p:column>
+											
+									</p:dataTable>	
+				        </p:rowExpansion>  
+					</p:dataTable>
+
+					<p:outputPanel rendered="#{roadCheckReviewSummaryBean.isViewDetailsScreen() }" style="margin-top:10px;">
+						<span class="icon icon-tags icon-large" style="padding-right:5px;vertical-align:text-bottom"/>No JP has been assigned to sign the document.
+					</p:outputPanel>
+					<p:commandLink id="butEditOffencesDetailsForAssDocs" widgetVar="butEditOffencesDetailsForAssDocs" style="width: 50px;float: right;"
+						disabled="#{roadCheckReviewSummaryBean.getDocViews() != null}" action="toStep2" ajax="false" rendered="#{! roadCheckReviewSummaryBean.isViewDetailsScreen()}">
+						<span class="icon icon-edit icon-large"></span>
+					</p:commandLink>
+					<p:tooltip for="butEditOffencesDetailsForAssDocs" value="Edit observed offences details."/>
+					<!-- This Remote Command carries you to document manager-->
+					<p:commandButton ajax="false" style="display:none"  action="viewDocDetails" id="butViewDocDetails" widgetVar="widgetViewDocDetails" ></p:commandButton>
+</ui:fragment>
+</ui:composition>

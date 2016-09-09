@@ -1,0 +1,277 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"	
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:fsl="http://org.fsl.com"
+	xmlns:display="urn:jsptld:http://displaytag.sf.net"	
+	template="/WEB-INF/newTemplate.xhtml">
+
+	<ui:define name="title">Strategy Maintenance </ui:define>
+	<ui:define name="pageHeader">
+		<!-- div id="tabs">Strategy Maintenance</div--> 
+	</ui:define>
+    
+    <ui:define name="content">
+    	<script>
+    		$("document").ready(function(){
+    		
+		
+    			$('#javax_faces_developmentstage_messages').css('display','none');
+    			
+    			refreshDatatable();
+    			
+    			
+    		});
+    		 function refreshDatatable(){
+    		 //alert();
+    		 	$('#strategyMaintenanceDetails\\:strategyresults').forceDatatablePagin();
+				$('#strategyMaintenanceDetails\\:rulesTable').forceDatatablePagin();
+				
+				}
+					
+		
+    	</script>
+		
+		<style>
+		
+		.ui-panelgrid td{
+			padding:5px !important;
+		}
+		
+		#vehicleRequired{
+			margin-botttom:0px;
+		}
+		
+		.ui-spinner-input{
+			text-align:left !important;
+		}
+		</style>
+		
+		<h:form styleClass="form" id="strategyMaintenanceDetails">
+		<div class="tabs"><a href="#">Strategy Maintenance</a></div>
+   		<div class="main borders">
+			<p:messages id="msg" autoupdate="true" closable="true"></p:messages >
+			<p:panelGrid style="margin-top:5px;width:100%;" id="gridVehicleDetails">
+				<p:row>
+					<p:column style="width:50%;">
+						<h:outputText value="Strategy:" styleClass="outputText" style="margin-right:10px;"/>
+						<p:autoComplete id="stratId" value="#{criteria.strategyDescription}" 
+						completeMethod="#{strategyMaintenanceServiceAction.completeStrategy}" size="29" maxlength="50" />
+						<p:watermark for="stratId" value="" />
+					</p:column>
+					<p:column>
+						<h:outputText value="Status:" style="margin-right:10px;"></h:outputText>											
+						<p:selectOneMenu value="#{criteria.statusId}" id="statusSel" style="margin-left:10px;width:200px;">
+							<f:selectItem itemValue="" itemLabel="All"></f:selectItem>
+							<f:selectItem itemValue="ACT" itemLabel="ACTIVE"></f:selectItem>
+							<f:selectItem itemValue="INA" itemLabel="INACTIVE"></f:selectItem>
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2" style="padding-top:20px;text-align:center;">
+					<sec:authorize ifAnyGranted="ROLE_ROMS_REF_STRATEGY_SEARCH">
+						<p:commandButton styleClass="blue blue-icon icon-search icon-af" id="butSearch" value="Search" action="search" processIds="*" ajax="false" ></p:commandButton>
+					</sec:authorize>
+					<sec:authorize ifAnyGranted="ROLE_ROMS_REF_STRATEGY_ADD">	
+						<p:commandButton styleClass="blue blue-icon icon-plus icon-af" id="butAdd"  style="padding-rght:1em;" value="Add" processIds="*" action="add" ajax="true" oncomplete="PF('editdlg').show();" update=":strategyMaintenanceDetails:displayStrategy">
+						</p:commandButton>
+					</sec:authorize>
+						<p:commandButton styleClass="blue blue-icon icon-refresh icon-af" id="butReset1" style="padding-rght:1em;" value="Clear" processIds="*" action="clear" ajax="false" />
+			 		</p:column>
+				</p:row>
+			</p:panelGrid>
+			</div>
+			 <div>
+					<p:dataTable id="strategyresults" var="str" widgetVar="strtTable"
+						value="#{strategies.strategyList}"  paginator="true" rows="10" paginatorPosition="bottom" 
+						 selectionMode="single" rowKey="#{str.strategyId}" selection="#{strategies.selectedStrategy}" 
+						  rendered="#{strategies.strategyList.size()>0}" rowsPerPageTemplate="10,50,100" rowIndexVar="rowIndex"
+						currentPageReportTemplate="Results: {startRecord}-{endRecord} of {totalRecords}"
+						 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+						
+						<sec:authorize ifAnyGranted="ROLE_ROMS_REF_STRATEGY_EDIT">	
+							<p:ajax event="rowSelect" oncomplete="selectStrategy(); " >
+                    		</p:ajax>
+                    	</sec:authorize>
+                    	 <!-- <p:ajax event="page"  oncomplete="paginate();"/>  -->
+                    	 
+                    	<f:facet name="header">  
+            				Strategies
+        				</f:facet>    
+						
+						<p:column sortBy="strategyDescription" headerText="Strategy Description">
+							
+							<h:outputText value="#{str.strategyDescription}" />
+						</p:column>
+						
+						<p:column sortBy="vehicleRequired" headerText="Vehicle Required">
+							<h:outputText id="vechReqTxt" value="#{str.vehicleRequired?'Yes':'No'}"></h:outputText>
+						</p:column>
+	
+						<p:column sortBy="arteryRequired" headerText="Artery Required">
+							<h:outputText id="artReq" value="#{str.arteryRequired?'Yes':'No'}"></h:outputText>															
+						</p:column>
+						
+						<p:column sortBy="statusId" headerText="Status">
+							<h:outputText id="statId" value="#{str.statusId == 'ACT'?'ACTIVE':'INACTIVE'}" />
+						</p:column>
+						
+						<p:column headerText="Last Updated">
+							<h:outputText value="#{str.auditEntryBO.updateDTime!=null?str.auditEntryBO.updateDTime:str.auditEntryBO.createDTime}" >									
+								<fsl:dateTimeConverter showTime="false"/>
+							</h:outputText>							
+						</p:column>
+						
+						<p:column headerText="Updated by">
+							<h:outputText value="#{str.auditEntryBO.updateUsername!=null?str.auditEntryBO.updateUsername:str.auditEntryBO.createUsername} " />						
+							 <p:tooltip for="@(tr[role=row][data-ri=#{rowIndex}])" value="Click row to edit record." showEffect="fade" hideEffect="fade" 
+						            shared="false" showDelay="500" style="margin-left:200px;"/> 
+						</p:column>
+						
+	
+						
+					</p:dataTable>
+	
+	
+				</div>
+			 
+			 <p:commandButton wigetVar="btnSel" id="selectBtn" value="Do select" style="display:none" processIds="*" action="select" 
+			 ajax="true" oncomplete="PF('editdlg').show();"
+			 update=":strategyMaintenanceDetails:displayStrategy " ></p:commandButton>
+			 
+			 <p:commandButton wigetVar="btnSel" id="pageBtn" value="Do select" style="display:none" processIds="*" update=":strategyMaintenanceDetails:strategyresults" 
+							 ajax="false" ></p:commandButton>
+			 <script>
+			 	function selectStrategy(){
+			 	$("button[id*='selectBtn']").click()			 	
+			 	}
+			 	
+			 	function paginate()
+			 	{
+			 		$("button[id*='pageBtn']").click();
+			 	}
+			
+				function refreshBtn()
+						{
+						
+							$("button[id*='refreshBtn']").click();
+						}
+						
+				function cancel()
+				{
+					$("button[id*='cancel']").click();
+				}
+				</script>
+				<p:commandButton wigetVar="refreshBtn" id="refreshBtn" value="refreshDtable" style="display:none" processIds="*" ajax="false" update=":strategyMaintenanceDetails:strategyresults"/>
+			
+				 
+			 
+			 	<p:dialog id="displayStrategy" header="#{savehideBtn == 'none'?'Edit Strategy Details':'Add Strategy'}" widgetVar="editdlg" resizable="false" showEffect="fade" hideEffect="fade" modal="true" width="50%" >
+					<p:ajax event="close" onclick="cancel();"/>
+					<p:messages id="msg2" autoupdate="true" closable="true"></p:messages >
+					<p:panelGrid style="margin-top:0px;margin-bottom:0px;width:100%;" id="gridVehicleDetails">	
+						
+						
+						
+						<p:row>
+							<p:column colspan="2">
+							<span style="padding-left:1px;width: 0px;">
+								<h:outputText value="Strategy Description: "></h:outputText>
+								<h:outputText value="*" styleClass="required" />
+							</span>
+								<p:inputText value="#{strategy.strategyDescription}" size="29" maxlength="50"></p:inputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:50%">
+							<span style="padding-left:1px;width: 0px;">
+								<h:outputText styleClass="outputText" value="Vehicle Required" />
+								<h:outputText value="?" style="padding-left:2px;" />
+							</span>
+								<p:selectOneRadio value="#{strategy.vehicleRequired}" id="vehicleRequired" dir="ltr" style="margin-bottom:0px;">
+									<f:selectItem itemLabel="Yes" itemValue="true"></f:selectItem>
+									<f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+								</p:selectOneRadio>
+							</p:column>
+							<p:column>
+							<span style="padding-left:1px;width: 0px;">
+								<h:outputText styleClass="outputText" value="Artery Required" />
+								<h:outputText value="?" style="padding-left:2px;" />
+							</span>
+								<p:selectOneRadio value="#{strategy.arteryRequired}" id="arteryRequired" dir="ltr">
+									<f:selectItem itemLabel="Yes" itemValue="true"></f:selectItem>
+									<f:selectItem itemLabel="No" itemValue="false"></f:selectItem>
+								</p:selectOneRadio>
+							</p:column>
+						</p:row>
+						
+						<p:row>
+							<p:column colspan="2" >
+							<span style="padding-left:1px;width: 70px;">
+							<h:outputText styleClass="outputText" value="Status: " />
+							</span>
+							<c:choose>
+								<c:when test="#{hideActive == true}">
+								<p:selectOneMenu  value="#{strategy.statusId}" id="statusId" style="margin-left:20px;">
+									<f:selectItem itemValue="ACT" itemLabel="ACTIVE"></f:selectItem>
+									<f:selectItem itemValue="INA" itemLabel="INACTIVE"></f:selectItem>
+								</p:selectOneMenu>
+								</c:when>
+								<c:otherwise>
+										<p:inputText value="" id="statId" style="text-align: left; margin-left: 20px;width:120px;background:#dddddd;" readonly="true"/>
+										<p:watermark for="statId" value="Active" />
+								</c:otherwise>
+								</c:choose>
+							</p:column>						
+						</p:row>		
+					</p:panelGrid>
+						
+						
+						<fieldset><legend title="resource"><b>Resources Required</b></legend>
+						
+						 <p:dataTable value="#{strategyrules}" var="ruleObj" id="rulesTable">
+							
+							<p:column >
+								<h:outputText value="#{ruleObj.personTypeDescription}" />
+							</p:column>
+							
+							<p:column headerText="Minimum" style="text-align:left;padding-right:10px;">
+								<p:spinner value="#{ruleObj.minimum}"  size="5" max="9999" min="0" />								
+							</p:column>
+							
+							<p:column headerText="Maximum" >
+								<p:spinner value="#{ruleObj.maximum}" size="5" max="9999" min="0" style="text-align:left;"/>								
+							</p:column>
+					
+						</p:dataTable>
+						</fieldset>	
+						<br></br>
+					
+						<div style="text-align:center;">
+						
+						
+						<p:commandButton styleClass="blue" wigetVar="btnSave" id="saveBtn" value="Save" action="save" processIds="*" oncomplete="if(args.validationFailed){PF('editdlg').show();}refreshDatatable();" update=":strategyMaintenanceDetails:strategyresults,:strategyMaintenanceDetails:displayStrategy,:strategyMaintenanceDetails:msg,:strategyMaintenanceDetails:msg2" ajax="true" style="display:#{savehideBtn}"/>
+						<p:commandButton styleClass="blue" value="Save" action="save"  oncomplete="if(args.validationFailed){PF('editdlg').show();}else{refreshDatatable();}" update=":strategyMaintenanceDetails:strategyresults,:strategyMaintenanceDetails:displayStrategy,:strategyMaintenanceDetails:msg,:strategyMaintenanceDetails:msg2" ajax="true" style="display:#{updatehideBtn}"/>
+						<p:commandButton styleClass="blue" value="Clear" processIds="*" actionListener="#{strategyMaintenanceServiceAction.add(flowRequestContext)}" update=":strategyMaintenanceDetails:displayStrategy" ajax="true" oncomplete="PF('editdlg').show();" style="display:#{savehideBtn}"/>
+						<p:commandButton id="cancel" styleClass="blue" value="Back" action="cancel" ajax="true" oncomplete="PF('editdlg').hide();refreshDatatable();" update=":strategyMaintenanceDetails"/>
+						</div>
+						
+				</p:dialog>
+			
+		
+			<!-- </fieldset> -->
+			
+		</h:form>
+		
+				
+	</ui:define>
+
+</ui:composition>

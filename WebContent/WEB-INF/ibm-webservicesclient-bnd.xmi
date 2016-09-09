@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.ibm.etools.webservice.wscbnd:ClientBinding xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:com.ibm.etools.webservice.wscbnd="http://www.ibm.com/websphere/appserver/schemas/5.0.2/wscbnd.xmi" xmi:id="ClientBinding_1385749465882">
+  <serviceRefs xmi:id="ServiceRef_1385749465882" serviceRefLink="service/AMVSWebService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385749465898" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="AMVSWebServicePort" overriddenEndpointURI="http://localhost:9080/ROMSWS/AMVSWebService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385749664800" serviceRefLink="service/AuthorizationService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385749664800" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="AuthorizationPort" overriddenEndpointURI="http://localhost:9082/ROMSWS/AuthorizationService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385749737888" serviceRefLink="service/BIMSWebService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385749737888" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="BIMSWebServicePort" overriddenEndpointURI="http://localhost:9080/ROMSWS/BIMSWebService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385749809117" serviceRefLink="service/CourtCaseMaintenanceService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385749809117" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="CourtCaseMaintenancePort" overriddenEndpointURI="http://localhost:9085/ROMSWS/CourtCaseMaintenanceService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385749851020" serviceRefLink="service/DLWebService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385749851020" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="DLWebServicePort" overriddenEndpointURI="http://localhost:9080/ROMSWS/DLWebService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385749874409" serviceRefLink="service/LMISWebService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385749874409" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="LMISWebServicePort" overriddenEndpointURI="http://localhost:9080/ROMSWS/LMISWebService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385749911922" serviceRefLink="service/MaintenanceService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385749911922" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="MaintenancePort" overriddenEndpointURI="http://localhost:9080/ROMSWS/MaintenanceService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385749963559" serviceRefLink="service/RecordingCourtOutcomeService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385749963559" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="RecordingCourtOutcomePort" overriddenEndpointURI="http://localhost:9082/ROMSWS/RecordingCourtOutcomeService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385750007291" serviceRefLink="service/ReferenceCodeService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385750007291" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="ReferenceCodePort" overriddenEndpointURI="http://localhost:9082/ROMSWS/ReferenceCodeService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385750082489" serviceRefLink="service/ReportService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385750082489" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="ReportPort" overriddenEndpointURI="http://localhost:9082/ROMSWS/ReportService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385750127877" serviceRefLink="service/RoadCompliancyService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385750127877" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="RoadCompliancyPort" overriddenEndpointURI="http://localhost:9080/ROMSWS/RoadCompliancyService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385750164718" serviceRefLink="service/RoadOperationService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385750164718" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="RoadOperationPort" overriddenEndpointURI="http://localhost:9080/ROMSWS/RoadOperationService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385750218793" serviceRefLink="service/ROMSUserDetailsService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385750218793" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="ROMSUserDetailsPort" overriddenEndpointURI="http://localhost:9085/ROMSWS/ROMSUserDetailsService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385750284086" serviceRefLink="service/ScannedDocUploadService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385750284086" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="ScannedDocUploadPort" overriddenEndpointURI="http://localhost:9080/ROMSWS/ScannedDocUploadService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385750330161" serviceRefLink="service/SchedulerService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385750330161" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="SchedulerPort" overriddenEndpointURI="http://localhost:9083/ROMSWS/SchedulerService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385750800603" serviceRefLink="service/StaffUserMappingService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385750800603" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="StaffUserMappingPort" overriddenEndpointURI="http://localhost:9080/ROMSWS/StaffUserMappingService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385750836094" serviceRefLink="service/SummonsService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385750836094" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="SummonsPort" overriddenEndpointURI="http://localhost:9085/ROMSWS/SummonsService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385750867943" serviceRefLink="service/TRNWebService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385750867943" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="TRNWebServicePort" overriddenEndpointURI="http://localhost:9082/ROMSWS/TRNWebService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385750920988" serviceRefLink="service/WarningNoProsecutionService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385750920988" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="WarningNoProsecutionPort" overriddenEndpointURI="http://localhost:9085/ROMSWS/WarningNoProsecutionService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1385750963881" serviceRefLink="service/WarningNoticeService">
+    <portQnameBindings xmi:id="PortQnameBinding_1385750963881" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="WarningNoticePort" overriddenEndpointURI="http://localhost:9085/ROMSWS/WarningNoticeService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1403542979473" serviceRefLink="service/DocumentsManagerService">
+    <portQnameBindings xmi:id="PortQnameBinding_1403542979473" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="DocumentsManagerPort" overriddenEndpointURI="http://localhost:9080/ROMSWS/DocumentsManagerService"/>
+  </serviceRefs>
+  <serviceRefs xmi:id="ServiceRef_1403629184951" serviceRefLink="service/TRNWebServiceService">
+    <portQnameBindings xmi:id="PortQnameBinding_1403629184952" portQnameNamespaceLink="http://webservices.roms.toms.ta.fsl/" portQnameLocalNameLink="TRNWebServicePort" overriddenEndpointURI="http://localhost:9082/ROMSWS/TRNWebServiceService"/>
+  </serviceRefs>
+</com.ibm.etools.webservice.wscbnd:ClientBinding>

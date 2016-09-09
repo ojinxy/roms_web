@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://object.ticket.ws.fsl.org" version="1.0">
+
+  <xs:complexType name="TrafficTicket">
+    <xs:sequence>
+      <xs:element name="ticketNo" nillable="true" type="xs:string"/>
+      <xs:element name="driversLicenceNo" nillable="true" type="xs:string"/>
+      <xs:element name="trnNo" nillable="true" type="xs:string"/>
+      <xs:element name="issueDate" nillable="true" type="xs:string"/>
+      <xs:element name="issueTime" nillable="true" type="xs:string"/>
+      <xs:element name="offenceCode" nillable="true" type="xs:string"/>
+      <xs:element name="offenceDesc" nillable="true" type="xs:string"/>
+      <xs:element name="fineAmount" nillable="true" type="xs:string"/>
+      <xs:element name="statusCode" nillable="true" type="xs:string"/>
+      <xs:element name="statusDesc" nillable="true" type="xs:string"/>
+      <xs:element name="mandatoryCourtApp" nillable="true" type="xs:string"/>
+      <xs:element name="courtDate" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://webservices.roms.toms.ta.fsl/" version="1.0" xmlns:tns="http://webservices.roms.toms.ta.fsl/">
+
+  <xs:element name="NoRecordFoundException" type="tns:NoRecordFoundException"/>
+
+  <xs:element name="RequiredFieldMissingException" type="tns:RequiredFieldMissingException"/>
+
+  <xs:element name="getRoadLicenceDetails" type="tns:getRoadLicenceDetails"/>
+
+  <xs:element name="getRoadLicenceDetailsResponse" type="tns:getRoadLicenceDetailsResponse"/>
+
+  <xs:complexType name="getRoadLicenceDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="roadLicenceNo" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getRoadLicenceDetailsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:roadLicenceBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadLicenceBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="expiryDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="issueDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="licPlate" type="xs:string"/>
+      <xs:element minOccurs="0" name="licType" type="xs:string"/>
+      <xs:element minOccurs="0" name="licenceNo" type="xs:int"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="licenceOwners" nillable="true" type="tns:roadLicenceOwnerBO"/>
+      <xs:element minOccurs="0" name="modelDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="modelYear" type="xs:int"/>
+      <xs:element minOccurs="0" name="routeDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="routeEnd" type="xs:string"/>
+      <xs:element minOccurs="0" name="routeStart" type="xs:string"/>
+      <xs:element minOccurs="0" name="seatCapacity" type="xs:int"/>
+      <xs:element minOccurs="0" name="statusDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="vehMakeDesc" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadLicenceOwnerBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+      <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+      <xs:element minOccurs="0" name="licenceNo" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="RequiredFieldMissingException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="NoRecordFoundException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

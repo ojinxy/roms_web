@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://dto.common.webservices.fsl.org" version="1.0">
+
+  <xs:complexType name="TrnDTO">
+    <xs:sequence>
+      <xs:element name="formattedName" nillable="true" type="xs:string"/>
+      <xs:element name="businessTrn" type="xs:boolean"/>
+      <xs:element name="individualTrn" type="xs:boolean"/>
+      <xs:element name="address" nillable="true" type="xs:string"/>
+      <xs:element name="badChequeId" nillable="true" type="xs:int"/>
+      <xs:element name="branchRefNbr" nillable="true" type="xs:string"/>
+      <xs:element name="firstName" nillable="true" type="xs:string"/>
+      <xs:element name="flgStatus" nillable="true" type="xs:string"/>
+      <xs:element name="flgTrnType" nillable="true" type="xs:string"/>
+      <xs:element name="lastName" nillable="true" type="xs:string"/>
+      <xs:element name="middleName" nillable="true" type="xs:string"/>
+      <xs:element name="nbrBranch" nillable="true" type="xs:string"/>
+      <xs:element name="nbrReferenceTrn" nillable="true" type="xs:string"/>
+      <xs:element name="nbrTrn" nillable="true" type="xs:string"/>
+      <xs:element name="registered" nillable="true" type="xs:int"/>
+      <xs:element name="rpdAlert" nillable="true" type="xs:string"/>
+      <xs:element name="transId" nillable="true" type="xs:int"/>
+      <xs:element name="trnEntryDate" nillable="true" type="xs:dateTime"/>
+      <xs:element name="trnEntryStatus" nillable="true" type="xs:string"/>
+      <xs:element name="lastUpdate" nillable="true" type="xs:dateTime"/>
+      <xs:element name="addrCountryCode" nillable="true" type="xs:string"/>
+      <xs:element name="addrMarkText" nillable="true" type="xs:string"/>
+      <xs:element name="addrParishCode" nillable="true" type="xs:string"/>
+      <xs:element name="addrPoBoxNo" nillable="true" type="xs:string"/>
+      <xs:element name="addrPoLocName" nillable="true" type="xs:string"/>
+      <xs:element name="addrStreetName" nillable="true" type="xs:string"/>
+      <xs:element name="addrStreetNo" nillable="true" type="xs:string"/>
+      <xs:element name="maritalStat" nillable="true" type="xs:string"/>
+      <xs:element name="addrCountryDesc" nillable="true" type="xs:string"/>
+      <xs:element name="addrParishDesc" nillable="true" type="xs:string"/>
+      <xs:element name="birthFirstName" nillable="true" type="xs:string"/>
+      <xs:element name="birthLastName" nillable="true" type="xs:string"/>
+      <xs:element name="birthMiddleName" nillable="true" type="xs:string"/>
+      <xs:element name="genderType" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

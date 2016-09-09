@@ -1,0 +1,46 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:sf="http://www.springframework.org/tags/faces" xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/newTemplate.xhtml"
+	xmlns:fsl="http://org.fsl.com" xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
+	<ui:fragment id="page">
+	
+	<p:overlayPanel id="imgPanel" for="img" showEffect="blind"  showEvent="mouseover" hideEvent="mousedown"  
+                dismissable="false" showCloseIcon="true">  
+        <p:imageSwitch id="imgSwitch" effect="fade" style="width:300px;height:188px;">  
+            <ui:repeat value="#{imageSwitchBean.images}" var="image">  
+                <p:graphicImage value="/images/#{image}" width="300"/>  
+            </ui:repeat>  
+        </p:imageSwitch>  
+    </p:overlayPanel>  
+	
+		<p:dialog id="cadialog" header="Court Appearance Details" widgetVar="cadialog" resizable="false"  
+			modal="false"
+		>
+			<p:fieldset>
+				<p:panelGrid columns="2" id="recca" style="width:60%">
+					<h:outputLabel for="comboCourt" value="Court:" />
+					<h:outputText id="comboCourt" value="#{newCourtAppearance.courtName}" />
+
+					<h:outputLabel for="courtDate1" value="Court Date &amp; Time:" />
+					<h:outputText value="#{newCourtAppearance.courtDate}" pattern="yyyy-MM-dd hh:mm a" id="courtDate">
+						<fsl:dateTimeConverter showTime="true" />
+					</h:outputText>
+
+					<h:outputLabel for="comboPlea1" value="Plea:" />
+					<h:outputText id="comboPlea1" value="#{newCourtAppearance.pleaDescription}" />
+					
+					<h:outputLabel for="verdict1" value="Ruling:" />
+					<h:outputText id="verdict1" value="#{newCourtAppearance.courtRulingDescription}" />
+
+					<h:outputLabel for="comm2" value="Comments:" />
+					<p:inputTextarea rows="6" cols="50" value="#{fn:replace(newCourtAppearance.comment,'\\n','&lt;br/&gt;&#9;')}" id="comm2" />
+				</p:panelGrid>
+
+			</p:fieldset>
+				<p:ajax event="close"  listener="#{documentManagerServiceAction.handleDialogClose}"/>
+		</p:dialog>
+	</ui:fragment>
+
+</ui:composition>

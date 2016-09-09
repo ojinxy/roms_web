@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	    http://www.springframework.org/schema/beans
+       	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        ">
+ 
+
+	<!-- DAO Factory -->
+	<bean id="daoFactory" class="fsl.ta.toms.roms.dao.impl.SpringAwareDAOFactory" />
+		
+	<bean name="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+		<property name="sessionFactory" ref="romsSessionFactory"></property>
+	</bean>
+		
+	<bean name="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="romsDatasource"></property>
+	</bean>
+	
+	<bean id="schedulerDAO" class="fsl.ta.toms.roms.dao.impl.SchedulerDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="eventAuditDAO" class="fsl.ta.toms.roms.dao.impl.EventAuditDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="roadCompliancyDAO" class="fsl.ta.toms.roms.dao.impl.RoadCompliancyDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="categoryDAO" class="fsl.ta.toms.roms.dao.impl.CategoryDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="strategyDAO" class="fsl.ta.toms.roms.dao.impl.StrategyDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+		
+	<bean id="taStaffDAO" class="fsl.ta.toms.roms.dao.impl.TAStaffDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>	
+	
+	<bean id="JPDAO" class="fsl.ta.toms.roms.dao.impl.JPDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>	
+	
+	<bean id="policeOfficerDAO" class="fsl.ta.toms.roms.dao.impl.PoliceOfficerDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>	
+	
+	<bean id="ITAExaminerDAO" class="fsl.ta.toms.roms.dao.impl.ITAExaminerDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>	
+	
+	<bean id="statusDAO" class="fsl.ta.toms.roms.dao.impl.StatusDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>	
+	
+
+	<bean id="courtRulingDAO" class="fsl.ta.toms.roms.dao.impl.CourtRulingDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>	
+	
+	<bean id="pleaDAO" class="fsl.ta.toms.roms.dao.impl.PleaDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="TAVehicleDAO" class="fsl.ta.toms.roms.dao.impl.TAVehicleDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="outcomeTypeDAO" class="fsl.ta.toms.roms.dao.impl.OutcomeTypeDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="offenceDAO" class="fsl.ta.toms.roms.dao.impl.OffenceDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="roadCheckTypeDAO" class="fsl.ta.toms.roms.dao.impl.RoadCheckTypeDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="personTypeDAO" class="fsl.ta.toms.roms.dao.impl.PersonTypeDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="eventDAO" class="fsl.ta.toms.roms.dao.impl.EventDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+		<bean id="excerptParameterMappingDAO" class="fsl.ta.toms.roms.dao.impl.ExcerptParameterMappingDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<!-- Reference Codes -->
+	<bean id="configurationDAO" class="fsl.ta.toms.roms.dao.impl.ConfigurationDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="governingLawDAO" class="fsl.ta.toms.roms.dao.impl.GoverningLawDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="courtDAO" class="fsl.ta.toms.roms.dao.impl.CourtDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>	
+	
+	<bean id="parishDAO" class="fsl.ta.toms.roms.dao.impl.ParishDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="poundDAO" class="fsl.ta.toms.roms.dao.impl.PoundDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="wreckingCompanyDAO" class="fsl.ta.toms.roms.dao.impl.WreckingCompanyDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="locationDAO" class="fsl.ta.toms.roms.dao.impl.LocationDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>	
+	
+	<bean id="arteryDAO" class="fsl.ta.toms.roms.dao.impl.ArteryDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>	
+	
+	<bean id="holidayExceptionsDAO" class="fsl.ta.toms.roms.dao.impl.HolidayExceptionsDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>	
+	
+	<!--  End Reference Codes -->
+	
+	<bean id="staffUserMappingDAO" class="fsl.ta.toms.roms.dao.impl.StaffUserMappingDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="TAOfficeLocationDAO" class="fsl.ta.toms.roms.dao.impl.TAOfficeLocationDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="authorizationDAO" class="fsl.ta.toms.roms.dao.impl.AuthorizationDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="verdictDAO" class="fsl.ta.toms.roms.dao.impl.VerdictDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="courtAppearanceDAO" class="fsl.ta.toms.roms.dao.impl.CourtAppearanceDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="courtCaseDAO" class="fsl.ta.toms.roms.dao.impl.CourtCaseDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	
+	<bean id="summonsDAO" class="fsl.ta.toms.roms.dao.impl.SummonsDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="roadOperationDAO" class="fsl.ta.toms.roms.dao.impl.RoadOperationDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="roadLicenceDAO" class="fsl.ta.toms.roms.dao.impl.RoadLicenceDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="warningNoticeDAO" class="fsl.ta.toms.roms.dao.impl.WarningNoticeDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="warningNoProsecutionDAO" class="fsl.ta.toms.roms.dao.impl.WarningNoProsecutionDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="badgeDAO" class="fsl.ta.toms.roms.dao.impl.BadgeDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="reportDAO" class="fsl.ta.toms.roms.dao.impl.ReportDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+		
+	<bean id="userDAO" class="fsl.ta.toms.roms.dao.impl.UserDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<!-- Report Information Bean -->
+	<bean id="reportDisplayInformation" class="fsl.ta.toms.roms.dao.impl.ReportDisplayInformationDAOImpl">
+		<property name="applicationName" value="Road Operations Management System (ROMS) - dev"></property>
+		<property name="vehicleSeizedReportTitle" value="Vehicle Seized During The Period "></property>
+		<property name="roadOperationSummaryTitle" value="Road Operation Summary Report For Period "></property>
+		<property name="summonsOutstandingReportTitle" value="Summonses Not Yet Served For Period "></property>
+		<property name="courtScheduleReportTitle" value="Court Schedule Report For Period "></property>
+		<property name="performanceStatisticsReportTitle" value="Performance Satistics Report For Period  "></property>
+		<property name="eventAuditReportTitle" value="Event Audit Report For Period  "></property>
+		<property name="courtCasesOpenedReportTitle" value="Court Cases Not Closed Report For Period  "></property>
+		<property name="summonsReportTitle" value="Summons Report For Period  "></property>
+		<property name="warningNoticeNoProsecutionReportTitle" value="Warning Notice No Prosecution For Period  "></property>
+	</bean>
+	
+	<bean id="reasonDAO" class="fsl.ta.toms.roms.dao.impl.ReasonDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="scannedDocDAO" class="fsl.ta.toms.roms.dao.impl.ScannedDocDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="scannedDocumentTypeDAO" class="fsl.ta.toms.roms.dao.impl.ScannedDocumentTypeDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	
+	<bean id="personDAO" class="fsl.ta.toms.roms.dao.impl.PersonDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+	<bean id="otherRoleDAO" class="fsl.ta.toms.roms.dao.impl.OtherRoleDAOImpl"> 
+		<property name="sessionFactory" ref="romsSessionFactory" />
+	</bean>
+	
+</beans>
+
+	

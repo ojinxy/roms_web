@@ -1,0 +1,30 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com">
+
+	<ui:fragment id="page">	
+				<h2><span>Summary of Queries Performed</span></h2>
+				<p:panel id="panelQueriesPerformed" header="Summary of Queries Performed" styleClass="panelQueriesPerformed" style="width: 75%">
+					<p:dataGrid var="queryPerformed" columns="2" value="#{listOfQueriesPerformed}">
+							<p:column >
+					  			<span>
+					  				<b style="padding-left:1px;width: auto;display: inline-block;"><h:outputText value="#{queryPerformed.key} : "></h:outputText></b>
+					  			</span>
+					  			<span>
+					  				<h:outputText value="#{queryPerformed.value}"></h:outputText>
+					  			</span>
+					  		</p:column>
+					</p:dataGrid>
+					
+					  
+				</p:panel>
+	  	
+</ui:fragment>
+</ui:composition>

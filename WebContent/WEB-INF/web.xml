@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="3.0"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+	<display-name>roms-web</display-name>
+
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+	<context-param>
+                  <param-name>javax.faces.PROJECT_STAGE</param-name>
+                  <param-value>Development</param-value>
+    </context-param>
+	<context-param>
+		<param-name>primefaces.UPLOADER</param-name>
+		<param-value>commons</param-value>
+	</context-param>
+	
+	
+	
+<error-page>
+    <exception-type>java.lang.Exception</exception-type>
+    <location>/spring/error</location>
+</error-page>
+<error-page>
+	<exception-type>javax.faces.application.ViewExpiredException</exception-type>
+	<location>/spring/error</location>
+</error-page>
+
+  <error-page>
+	<error-code>404</error-code>
+	<location>/spring/error</location>
+  </error-page>
+  
+  <error-page>
+	<error-code>403</error-code>
+	<location>/spring/error</location>
+  </error-page>
+  
+   <error-page>
+	<error-code>401</error-code>
+	<location>/spring/error</location>
+  </error-page>
+  
+   <error-page>
+	<error-code>400</error-code>
+	<location>/WEB-INF/error.xhtml</location>
+  </error-page>
+ 
+ 
+  
+	<!-- SESSION TIMEOUT for Inactivity  -->
+	<session-config>
+    	<session-timeout>30</session-timeout>
+  	</session-config>
+	
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/config/web-application-config.xml</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>
+			org.springframework.web.context.request.RequestContextListener
+		</listener-class>
+	</listener>
+	
+	<listener>
+		<listener-class>
+			org.fsl.roms.spring.security.ROMSHttpSessionListener
+		</listener-class>
+	</listener>
+
+	<listener>
+      <listener-class>
+            org.fsl.roms.listener.Config
+      </listener-class>  
+	</listener>
+
+	<listener>
+		<listener-class>
+			org.springframework.security.web.session.HttpSessionEventPublisher
+		</listener-class>
+	</listener>	
+	
+	<servlet>
+		<servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value></param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+
+	<servlet-mapping>
+		<servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
+		<url-pattern>/spring/*</url-pattern>
+	</servlet-mapping>
+
+	<filter>
+		<filter-name>RestAuthFilter</filter-name>
+		<filter-class>fsl.ta.toms.roms.security.auth.filter.RestAuthFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>RestAuthFilter</filter-name>
+		<url-pattern>/spring/roms_rest/*</url-pattern>
+	</filter-mapping>
+
+
+	<filter>
+		<filter-name>SSOFilter</filter-name>
+		<filter-class>com.sso.client.filter.SSOFilter</filter-class>
+		<init-param>
+			<param-name>LOGIN_PATH</param-name>
+			<param-value>/spring/login</param-value>
+		</init-param>
+		<init-param>
+			<param-name>SSO_CONTEXT_PATH</param-name>
+			<param-value></param-value>
+		</init-param>
+		<init-param>
+			<param-name>LOGOUT_PATH</param-name>
+			<param-value>/spring/ssologout</param-value>
+		</init-param>
+		<init-param>
+			<param-name>USER_CLASS</param-name>
+			<param-value>org.fsl.roms.security.sso.SSOUser</param-value>
+		</init-param>
+		<init-param>
+			<param-name>APPLICATION_NAME</param-name>
+			<param-value>
+				
+			</param-value>
+		</init-param>
+	</filter>
+	
+	<filter>
+		<filter-name>PrimeFaces FileUpload Filter</filter-name>
+		<filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+		<init-param>
+		<param-name>thresholdSize</param-name>
+		<param-value>15000000</param-value>
+		</init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>PrimeFaces FileUpload Filter</filter-name>
+		<servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
+	</filter-mapping>
+
+	<!--
+		Serves static resource content from .jar files such as
+		spring-faces.jar
+	-->
+	<servlet>
+		<servlet-name>Resource Servlet</servlet-name>
+		<servlet-class>org.springframework.js.resource.ResourceServlet</servlet-class>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>
+		PhotoServlet</display-name>
+		<servlet-name>PhotoServlet</servlet-name>
+		<servlet-class>org.fsl.roms.servlet.PhotoServlet</servlet-class>
+	</servlet>
+	
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>
+		ViewScannedDocServlet</display-name>
+		<servlet-name>ViewScannedDocServlet</servlet-name>
+		<servlet-class>org.fsl.roms.servlet.ViewScannedDocServlet</servlet-class>
+	</servlet>
+	
+	<servlet>
+	<description>
+    		Generates pdf document from a JRDataSource object
+    	</description>
+		<display-name>GenerateDocServlet</display-name>
+		<servlet-name>GenerateDocServlet</servlet-name>
+		<servlet-class>org.fsl.roms.servlet.GenerateDocServlet</servlet-class>
+	</servlet>
+	
+	<servlet>
+	<description>
+    		Generates pdf documents from a List of Document Objects
+    	</description>
+		<display-name>GenerateDocsServlet</display-name>
+		<servlet-name>GenerateDocsServlet</servlet-name>
+		<servlet-class>org.fsl.roms.servlet.GenerateDocsServlet</servlet-class>
+	</servlet>
+	
+	<servlet>
+          <description>
+                Facilitate download of print app
+          </description>
+          <display-name>DownloadsServlet</display-name>
+          <servlet-name>DownloadsServlet</servlet-name>
+          <servlet-class>org.fsl.roms.servlet.DownloadsServlet</servlet-class>
+    </servlet>
+	<!--
+		Map all /resources requests to the Resource Servlet for handling
+	-->
+	<servlet-mapping>
+		<servlet-name>Resource Servlet</servlet-name>
+		<url-pattern>/resources/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PhotoServlet</servlet-name>
+		<url-pattern>/PhotoServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ViewScannedDocServlet</servlet-name>
+		<url-pattern>/ViewScannedDoc</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>GenerateDocServlet</servlet-name>
+		<url-pattern>/GenerateDocument</url-pattern>
+	</servlet-mapping> 
+	
+	<servlet-mapping>
+		<servlet-name>GenerateDocsServlet</servlet-name>
+		<url-pattern>/ROMS_Documents</url-pattern>
+	</servlet-mapping> 
+	
+	    <servlet-mapping>
+          <servlet-name>DownloadsServlet</servlet-name>
+          <url-pattern>/DownloadFile</url-pattern>
+    </servlet-mapping>
+	
+	
+	<!-- Enforce UTF-8 Character Encoding -->
+<!--  	<filter>
+		<filter-name>charEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>charEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>-->
+
+
+  <!-- Faces Servlet -->
+        <servlet>
+            <servlet-name>Faces Servlet</servlet-name>
+            <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        </servlet>
+
+        <!-- Faces Servlet Mapping -->
+        <servlet-mapping>
+            <servlet-name>Faces Servlet</servlet-name>
+            <url-pattern>*.jsf</url-pattern>
+        </servlet-mapping>
+        
+        	<servlet>
+		<description />
+		<display-name>Report Servlet</display-name>
+		<servlet-name>ReportServlet</servlet-name>
+		<servlet-class>org.fsl.servlet.PdfServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ReportServlet</servlet-name>
+		<url-pattern>/view/pdf/*</url-pattern>
+	</servlet-mapping>
+
+<servlet>
+<servlet-name>SSOTimeOut</servlet-name>
+<servlet-class>org.fsl.roms.spring.security.sso.SSOTimeOutServlet</servlet-class>
+<init-param>
+	<param-name>APPLICATION_NAME</param-name>
+	<param-value>ROMS</param-value>
+</init-param>
+</servlet>
+<servlet-mapping>
+	<servlet-name>SSOTimeOut</servlet-name>
+	<url-pattern>/SSOTimeOut</url-pattern>
+</servlet-mapping>
+
+<context-param>
+<param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
+<param-value>false</param-value>
+</context-param>
+<context-param>
+    <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
+    <param-value>/WEB-INF/springsecurity.taglib.xml</param-value>
+</context-param>
+
+
+	
+	<env-entry>
+            <env-entry-name>HTTP_PORT</env-entry-name>
+            <env-entry-type>java.lang.String</env-entry-type>
+            <env-entry-value>82</env-entry-value>
+      </env-entry>	
+	
+	<env-entry>
+            <env-entry-name>HTTPS_PORT</env-entry-name>
+            <env-entry-type>java.lang.String</env-entry-type>
+            <env-entry-value>445</env-entry-value>
+      </env-entry>	
+     
+      
+    <context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>redmond</param-value>
+	</context-param>
+	
+	<filter>
+	    <filter-name>deviceResolverRequestFilter</filter-name>
+	    <filter-class>org.springframework.mobile.device.DeviceResolverRequestFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>SSOFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	
+	<env-entry>
+		<description>VPN URL for landing page</description>
+		<env-entry-name>SSO_CONTEXT_PATH</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>http://localhost:9080/TAMS/</env-entry-value>
+	</env-entry>
+	
+	<env-entry>
+		<description>Mobile URL for landing page</description>
+		<env-entry-name>SSO_CONTEXT_PATH_MOB</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>http://localhost:9080/TAMS/</env-entry-value>
+	</env-entry>
+	
+	<env-entry>
+		<env-entry-name>APPLICATION_NAME</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>ROMS</env-entry-value>
+	</env-entry>
+	
+	<env-entry>
+		<description>Path on server to print app</description>
+		<env-entry-name>PRINT_APP_PATH</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<!-- <env-entry-value>C:\Users\jreid.FSLADS\Desktop\</env-entry-value> -->
+		<env-entry-value>/home/wsdev/ROMS_FILES/PrintApp/</env-entry-value>
+	</env-entry>
+	<env-entry>
+		<description>Print app name</description>
+		<env-entry-name>PRINT_APP_NAME</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>PrinterApp.apk</env-entry-value>
+		<!-- ROMSPrint.apk<env-entry-value>/home/wsdev/ROMS_FILES/</env-entry-value> -->
+	</env-entry>
+	
+	<!-- CONFIGURE MAIL SERVER DETAILS -->
+	<env-entry>
+		<description>The mail server host name.</description>
+		<env-entry-name>MAIL_SMTP_HOST</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>email.fsl.org.jm</env-entry-value>
+	</env-entry>
+
+	<env-entry>
+		<description>Email address ROMS emails will be sent from.</description>
+		<env-entry-name>MAIL_FROM</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>roms@fsl.org.jm</env-entry-value>
+	</env-entry>
+
+	<env-entry>
+		<description>Email address/group error and system information is sent to.</description>
+		<env-entry-name>MAIL_TO</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>roms@fsl.org.jm</env-entry-value>
+	</env-entry>
+	<!-- END -->
+
+	<!-- CONFIGURE FILE MANAGER DETAILS eg. /home/wsdev/ROMS_FILES/ -->
+	<env-entry>
+		<description>The root directory where files are stored.</description>
+		<env-entry-name>FM_ROOT</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<!-- <env-entry-value>C:\</env-entry-value>-->
+		<env-entry-value>/home/wsdev/ROMS_FILES/</env-entry-value> 
+	</env-entry>
+	<env-entry>
+		<description>Email address ROMS emails will be sent from.</description>
+		<env-entry-name>FM_EMAIL_LST</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>roms@fsl.org.jm</env-entry-value>
+	</env-entry>
+
+	<env-entry>
+		<description>Prefix for the ROMS folders used to store files</description>
+		<env-entry-name>FM_FLDR_PRE</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>ROMS_FLDR</env-entry-value>
+	</env-entry>
+
+	<env-entry>
+		<description>Max file size (for each file)</description>
+		<env-entry-name>FM_MAX_FILE</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>100</env-entry-value>
+	</env-entry>
+
+	<env-entry>
+		<description>Max number of files in each folder.</description>
+		<env-entry-name>FM_MAX_FLDR</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>1000</env-entry-value>
+	</env-entry>
+
+	<env-entry>
+		<description>Percentage at which email is sent to indicate folder is full</description>
+		<env-entry-name>FM_FULL_PCNT</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>90</env-entry-value>
+	</env-entry>
+
+	<env-entry>
+		<description>Percentage at which email is sent to indicate folder is NEARING full</description>
+		<env-entry-name>FM_NOTI_PCNT</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>80</env-entry-value>
+	</env-entry>
+
+	<env-entry>
+		<description>Enable Rest call Authentication</description>
+		<env-entry-name>REST_AUTH_ENABLE</env-entry-name>
+		<env-entry-type>java.lang.Boolean</env-entry-type>
+		<env-entry-value>true</env-entry-value>
+	</env-entry>
+	
+	<env-entry>
+		<description>Rest call Authentication interval(seconds) for which the call is valid</description>
+		<env-entry-name>REST_AUTH_INTERVAL</env-entry-name>
+		<env-entry-type>java.lang.Integer</env-entry-type>
+		<env-entry-value>60</env-entry-value>
+	</env-entry>
+		
+	<resource-ref>
+		<description>BIMS Datasource Reference</description>
+		<res-ref-name>server/ds/jdbc/bims</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+		<res-sharing-scope>Shareable</res-sharing-scope>
+	</resource-ref>
+	 
+</web-app>

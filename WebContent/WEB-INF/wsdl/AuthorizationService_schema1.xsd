@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://webservices.roms.toms.ta.fsl/" version="1.0" xmlns:tns="http://webservices.roms.toms.ta.fsl/">
+
+  <xs:element name="InvalidFieldException" type="tns:InvalidFieldException"/>
+
+  <xs:element name="RequiredFieldMissingException" type="tns:RequiredFieldMissingException"/>
+
+  <xs:element name="hasPermission" type="tns:hasPermission"/>
+
+  <xs:element name="hasPermissionResponse" type="tns:hasPermissionResponse"/>
+
+  <xs:element name="validatePerson" type="tns:validatePerson"/>
+
+  <xs:element name="validatePersonResponse" type="tns:validatePersonResponse"/>
+
+  <xs:complexType name="hasPermission">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="authorizationBO" type="tns:authorizationBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="authorizationBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="password" type="xs:string"/>
+      <xs:element minOccurs="0" name="permission" type="xs:string"/>
+      <xs:element minOccurs="0" name="personType" type="xs:string"/>
+      <xs:element minOccurs="0" name="username" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="hasPermissionResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="RequiredFieldMissingException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="validatePerson">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="authorizationBO" type="tns:authorizationBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="validatePersonResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="InvalidFieldException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

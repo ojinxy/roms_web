@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+>
+
+		<secured attributes="ROLE_ROMS_ROAD_OP_CALENDAR" />
+	<var name="roadOpCal" class="org.fsl.roms.view.RoadOpCalView" />
+	<var name="initialDate" class="java.util.Date" />
+	<var name="closeStatus"   class="java.lang.String" />
+	<var name="screen" class="java.lang.String" />
+
+	<on-start>
+		<set name="closeStatus" value="'close'"></set>
+		<set name="screen" value="'cal'"></set>
+		<evaluate expression="new org.fsl.roms.view.RoadOpCalView(roadOperationsServiceAction)" result="roadOpCal"></evaluate>
+		
+	</on-start>
+	
+	<view-state id="roadOperationCalendar" redirect="false">
+		
+		<on-entry>
+			<evaluate expression="roadOperationsServiceAction.validateUserMapping(flowRequestContext)"></evaluate>
+		</on-entry>	
+		
+		<transition on="roadOperationStart" to="roadOperationStartAction" />
+		<transition on="close" to="roadOperationCalendar"></transition>
+		
+		<transition on="viewOne" to="viewOneOperationSub">
+		</transition>
+		
+		<transition on="setDataTableForViewOne" to="roadOperationCalendar">
+			<evaluate expression="roadOperationsServiceAction.getResults(flowRequestContext,flowScope.roadOperationId)"></evaluate>
+		</transition>
+		
+	</view-state>
+	
+	<view-state id="roadOperationStartView"  redirect="false" view="../roadOperationStart_view.xhtml">
+		<transition on="backToRoadOpCal" to="roadOperationCalendar"></transition>
+		<transition on="closeRoadOpStartPop" to="roadOperationCalendar"/>
+		
+		<transition on="beforeStart">
+			<evaluate expression="roadOperationsServiceAction.getUnattendedResources"></evaluate>
+		</transition>
+		
+		<transition on="start">
+			<evaluate expression="roadOperationsServiceAction.roadOperationsServiceAction.startCompleteRoadOperation(flowRequestContext,roadOperationsServiceAction.ROAD_OPERATION_STARTED)"></evaluate>
+		</transition>
+		
+		<transition on="roadOpPopCancel" to="roadOperationCalendar"></transition>
+		
+		<transition on="startRoadOpCompleteMessage" to="roadOperationStartSuccessAction"/>
+		
+		<transition on="updateResources" to="updateResourceSub"/>			
+		
+		
+	</view-state>		
+	
+	<action-state id="roadOperationStartSuccessAction">
+		<evaluate expression="roadOperationsServiceAction.startRoadOpCompleteMessage"></evaluate>
+		<transition on="success" to="roadOperationCalendar"/>
+	</action-state>
+	
+	<action-state id="roadOperationStartAction">
+		<evaluate expression="roadOperationsServiceAction.startOperationLoadPopUp(flowRequestContext,flowScope.roadOperationId)"></evaluate>
+		<transition on="success" to="roadOperationStartView"></transition>
+		<transition on="error" to="roadOperationCalendar"></transition>
+	</action-state>
+	
+	<subflow-state id="viewOneOperationSub" subflow="road_operations/view_operation">
+		<input name="fromStart" value="'no'"/>
+		<input name="fromWhere" value="'search'"/>
+		<input name="opStatus" value="roadOperationsServiceAction.getStatusOfSelectedOp(dataTable)"/>
+		<input name="theTable" value="dataTable" type="org.fsl.datatable.DataTableMemory"/>
+		<transition on="backToSearchScr" to="roadOperationCalendar"/>
+	</subflow-state>
+	
+	<subflow-state id="updateResourceSub" subflow="road_operations/view_operation">
+		<input name="fromStart" value="'yes'"/>
+		<input name="fromWhere" value="'search'"/>
+		<input name="opStatus" value="roadOperationsServiceAction.getStatusOfSelectedOp(dataTable)"/>
+		<input name="theTable" value="dataTable" type="org.fsl.datatable.DataTableMemory"/>
+		<transition on="backToSearchScr" to="roadOperationSearch">
+			<evaluate expression="roadOperationsServiceAction.getResults"></evaluate>
+		</transition>
+	</subflow-state>
+	
+	<end-state id="endState" />
+	
+
+
+</flow>

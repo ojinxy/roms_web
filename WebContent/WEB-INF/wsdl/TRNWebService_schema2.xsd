@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://exceptions.common.webservices.fsl.org" version="1.0" xmlns:tns="http://exceptions.common.webservices.fsl.org">
+
+  <xs:element name="InvalidTrnBranchException" nillable="true" type="tns:InvalidTrnBranchException"/>
+
+  <xs:element name="NotValidTrnTypeException" nillable="true" type="tns:NotValidTrnTypeException"/>
+
+  <xs:element name="RetiredTRNException" nillable="true" type="tns:RetiredTRNException"/>
+
+  <xs:element name="SystemErrorException" nillable="true" type="tns:SystemErrorException"/>
+
+  <xs:complexType name="InvalidTrnBranchException">
+    <xs:sequence>
+      <xs:element name="strException" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="NotValidTrnTypeException">
+    <xs:sequence>
+      <xs:element name="strException" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="SystemErrorException">
+    <xs:sequence>
+      <xs:element name="strException" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="RetiredTRNException">
+    <xs:sequence>
+      <xs:element name="strException" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

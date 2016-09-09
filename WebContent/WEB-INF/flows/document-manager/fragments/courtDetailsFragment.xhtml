@@ -1,0 +1,74 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:sf="http://www.springframework.org/tags/faces" xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags" xmlns:p="http://primefaces.org/ui" xmlns:fsl="http://org.fsl.com"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
+
+	<ui:fragment id="page">
+		<p:panel id="panelCA" header="Court Case Details - Case No.  ${flowScope.summons.courtCase.courtCaseId}" style="margin-bottom:0px">
+			<p:panelGrid id="panelCD" >							
+				<p:row>
+					<p:column style="width:152px">
+						<h:outputLabel for="ccn" value="Court Case No.:" styleClass="lbl-display "/>				
+					</p:column>	
+					<p:column>
+						<h:outputText value="#{(empty flowScope.summons.courtCase.courtCaseNo ? '[not yet assigned]':  flowScope.summons.courtCase.courtCaseNo)}" id="ccn" />				
+					</p:column>
+					<p:column style="width:152px">		
+						<h:outputLabel for="stat2" value="Case Status:" styleClass="lbl-display sml-lbl"/>
+					</p:column>	
+					<p:column>	
+						<h:outputText value="#{flowScope.summons.courtCase.caseStatusDescription}" id="stat2" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputLabel for="con" value="Court Name:" styleClass="lbl-display"/>
+					</p:column>	
+					<p:column>	
+						<h:outputText value="#{flowScope.summons.courtCase.courtName}" id="con" />
+					</p:column>
+					<p:column rendered="#{flowScope.summons.courtCase.caseStatusCode =='CC_OPE' }">
+						<h:outputLabel for="ic" value="Initial Court:" styleClass="lbl-display sml-lbl" rendered="#{flowScope.summons.courtCase.caseStatusCode =='CC_OPE' }"/>
+					</p:column>	
+					<p:column rendered="#{flowScope.summons.courtCase.caseStatusCode =='CC_OPE' }">	
+						<h:outputText value="#{flowScope.document.initialCourtName}" id="ic" rendered="#{flowScope.summons.courtCase.caseStatusCode =='CC_OPE' }"/>
+					</p:column>
+					<p:column>
+						<h:outputLabel for="ver" value="Verdict:"  styleClass="lbl-display sml-lbl" rendered="#{!empty flowScope.summons.courtCase.verdictDescription }"/>
+					</p:column>	
+					<p:column>	
+						<h:outputText value=" #{!empty flowScope.summons.courtCase.verdictDescription ? flowScope.summons.courtCase.verdictDescription : 'N/A'}" id="ver"  rendered="#{!empty flowScope.summons.courtCase.verdictDescription }" />				
+			 		</p:column>
+					
+			 	</p:row>
+			 	<p:row>
+					<p:column>
+						<h:outputLabel for="cod" value="Next Court Date:" styleClass="lbl-display" rendered="#{flowScope.summons.courtCase.caseStatusCode =='CC_OPE' }"/>
+					</p:column>	
+					<p:column>	
+						<h:outputText value="#{flowScope.summons.courtCase.nextAppearanceCourtDate}" id="cod" rendered="#{flowScope.summons.courtCase.caseStatusCode =='CC_OPE' }">
+							<fsl:dateTimeConverter showTime="true" />
+						</h:outputText>
+					</p:column>
+					<p:column>
+						<h:outputLabel for="coid" value="Initial Court Date:" styleClass="lbl-display sml-lbl" rendered="#{flowScope.summons.courtCase.caseStatusCode =='CC_OPE' }"/>
+					</p:column>	
+					<p:column>	
+						<h:outputText value="#{flowScope.document.initialCourtDtime}" id="coid" rendered="#{flowScope.summons.courtCase.caseStatusCode =='CC_OPE' }">
+							<fsl:dateTimeConverter showTime="true" />
+						</h:outputText>
+					</p:column>
+				</p:row>				
+			</p:panelGrid>
+			
+			<!-- 	
+				<h:outputLabel for="ncd" value="Next Court Date:  " />
+				<h:outputText value="#{flowScope.summons.courtCase.nextAppearanceCourtDate}" id="ncd" >
+				<fsl:dateTimeConverter showTime="true" />
+				</h:outputText> -->
+			
+		</p:panel>
+	</ui:fragment>
+</ui:composition>

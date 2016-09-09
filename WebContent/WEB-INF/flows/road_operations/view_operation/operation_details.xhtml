@@ -1,0 +1,363 @@
+
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:c="http://java.sun.com/jsp/jstl/core"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:sf="http://www.springframework.org/tags/faces"
+   xmlns:hx="http://www.ibm.com/jsf/html_extended"
+   xmlns:sec="http://www.springframework.org/security/tags"
+   xmlns:p="http://primefaces.org/ui"
+   template="/WEB-INF/newTemplate.xhtml"
+   xmlns:fsl="http://org.fsl.com">
+   
+   <ui:define name="title">Schedule Operation</ui:define>
+   
+   <ui:define name="pageHeader">Schedule Operation		
+		
+	
+	</ui:define>
+   
+   <ui:define name="content" style="padding-left: 10%">
+      <p:messages id="errorMessages" closable="true"/>
+      <p:panel id="schedRoadOpPanel" header="Schedule Operation">
+         <h:form id="operationDetails">
+            <div style="padding-bottom:30px">
+              
+              <ol class="progtrckr" data-progtrckr-steps="5">
+             
+	    			<li class="progtrckr-current" num="1">Operation Details</li>
+	    	 
+	    	 		<c:if test="#{completeOpStrategy}"> 
+	    			<li class="progtrckr-done" num="2"> 
+		    			<p:commandLink action="strategy" id="strategyId" processIds="*" ajax="false" rendered="#{completeOpStrategy}">
+		    			Strategy
+		    	 		</p:commandLink>
+		    	 	</li>
+		    	 	</c:if>
+			    	<c:if test="#{!completeOpStrategy}"> 
+			    			<li class="progtrckr-todo" num="2">Strategy</li>
+			    	</c:if>
+	    	
+	    			<c:if test="#{completeOpResource}"> 
+				 	<li class="progtrckr-done" num="3">
+				 		<p:commandLink action="resources" id="resourceId" processIds="*" ajax="false" rendered="#{completeOpResource}">
+				 		Resources
+						</p:commandLink>
+					</li>
+					</c:if>
+					<c:if test="#{!completeOpResource}"> 
+						<li class="progtrckr-todo" num="3">Resources</li>
+					</c:if>
+			
+					<c:if test="#{completeOpCourtDetails}"> 
+				 	<li class="progtrckr-done" num="4">
+				 		<p:commandLink action="court_details" id="courtId" processIds="*" ajax="false" rendered="#{completeOpCourtDetails}">
+				 		Court Details
+						</p:commandLink>
+					</li>
+					</c:if>
+					<c:if test="#{!completeOpCourtDetails}"> 
+							<li class="progtrckr-todo" num="4">Court Details</li>
+					</c:if>	
+			
+					<!-- <c:if test="#{completeOpReview}"> 
+				 	<li class="progtrckr-done" num="5">
+				 		<p:commandLink action="review" id="reviewId" processIds="*" ajax="false" rendered="#{completeOpReview}">
+				 		Review
+				 		</p:commandLink>	
+				 	</li>
+				 	</c:if>-->
+			
+			
+					<c:if test="#{completeOpReview || completeOpCourtDetails}"> 
+					 	<li class="progtrckr-done" num="5">
+					 	<p:commandLink action="review" id="reviewId" processIds="*" ajax="false">
+					 	Review
+					 	</p:commandLink>
+					 	</li>
+					</c:if>
+					<c:if test="#{!completeOpReview &amp;&amp; !completeOpCourtDetails}"> 
+							<li class="progtrckr-todo" num="5">Review</li>
+					</c:if>
+			 </ol>
+            
+			</div>
+            <div style="padding-bottom:21px; padding-top:10px;">
+             
+               <span  class="progress-label">Step 1 : Enter Operation Details</span>
+            </div>
+            
+            
+            <table id="table" style="margin-left:15px;">
+               <tr>
+                  <td>
+                     <h:outputText styleClass="outputText" value="Operation Name :" ></h:outputText>
+                  </td>
+                  <td>
+                     <span>
+	                     <p:inputText id="operationName" name="operationName" value="#{operation.operationName}" maxlength="64" size="75" disabled="#{roadOperationsServiceAction.operationScheduleEditable('singlecomp')}" >
+	                     	<p:ajax event="change" oncomplete="opNameChanged();" />
+	                     </p:inputText>
+	                     <p:watermark for="operationName" value="If no Operation Name is entered, a default one will be generated"></p:watermark>
+                     </span>
+                  </td>
+                  
+                  <td><input type="text" name="userRegion" id="userRegion" value="#{roadOperationsServiceAction.getUserRegion()}" style="display:none"></input></td>
+                  
+               </tr>
+               <tr></tr>
+               <tr></tr>
+               <tr>
+                  <td>
+                     <h:outputText styleClass="outputText" value="Category: "/><h:outputText value=" * " styleClass="required"/> 
+                  </td>
+                  <td style="text-align:left">
+                  	<c:choose>
+                  	<c:when test="#{operation.statusId !='NONE'}">
+						<h:outputText styleClass="outputText" value="#{operation.categoryDescription}"/>
+					</c:when>
+					<c:otherwise>	
+						<!-- only disabled after the Operation is placed into the scheduling state -->
+	                     <p:selectOneMenu id="categoryList" value ="#{operation.categoryId}" disabled="#{operation.statusId !='NONE'}"  widgetVar="operationCat">
+	                       <sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_OP_SCHEDULE_SPC">
+	                        <f:selectItem itemValue="" itemLabel="[Select One]"/>
+	                        </sec:authorize>
+	                         <f:selectItem itemValue="REG" itemLabel="Regional"/>
+	                          <sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_OP_SCHEDULE_SPC">
+	                         		 <f:selectItem itemValue="SPC" itemLabel="Special"/>
+	                          </sec:authorize>
+	                        <!-- <f:selectItems value="#{categoryList}"/> -->
+	                        
+<!-- 	                        <p:ajax update=":operationDetails:regionList,operationName" event="change" listener="#{roadOperationsServiceAction.setRegions}" oncomplete="generateAutoOpName();"  /> -->
+	                         <p:ajax  event="change"  oncomplete="showConfirmDialog(#{flowScope.resourcesRetrieved});" />	         <!-- update=":operationDetails:regionList" "listener="#{roadOperationsServiceAction.setRegions}" -->                	
+                         </p:selectOneMenu >
+                          
+                          
+	                     <p:confirmDialog message="Changing the category will remove All team(s) that were previously added. Are you sure you want to proceed?"
+									header="Change Category" severity="alert"
+									widgetVar="cd" style="background-color:white !important;">
+									
+					        <p:commandButton id="confirmYes" value="Yes"  styleClass="blue"  oncomplete="PF('cd').hide(); clearOpName();" action="setRegion" update="regionList" ajax="true" />
+					        <p:commandButton id="confirmNo" value="No"  styleClass="blue"  onclick="resetOpCategory();"/>     
+					    </p:confirmDialog>
+	                </c:otherwise>
+	                </c:choose>    	                     
+                  </td>
+               </tr>
+               <tr></tr>
+               <tr></tr>
+               <tr>
+                  <td>
+                     <h:outputText styleClass="outputText" value="Regions: "  /><h:outputText value=" * " styleClass="required"/> 
+                  </td>
+                  <td style="text-align:left">
+                  <c:choose>
+                  <c:when test="#{operation.statusId !='NONE'}">
+                  	<p:dataList columns="2" paginator="false" value="#{selectedRegionList}" var="regionBO" itemType="disc" id="regionList">  
+						#{regionBO.description} 
+					</p:dataList>	
+                  </c:when>
+                  <c:otherwise>
+                     <p:selectManyCheckbox id="regionList" layout="pageDirection"  value="#{operation.selectedRegions}" disabled="#{operation.categoryId eq 'REG' || operation.statusId !='NONE'?'true':'false'}"  >
+                        <c:forEach items="#{regionList}" var="reg">
+                           <f:selectItem  itemValue="#{reg.id}" itemLabel="#{reg.description}"/>
+                        </c:forEach>
+                        <p:ajax event="valueChange" listener="#{roadOperationsServiceAction.regionChangeListener}" />
+                     </p:selectManyCheckbox>
+                  </c:otherwise>
+                  </c:choose>
+                  </td>
+               </tr>
+               <tr>
+                  <td>
+                     <h:outputText styleClass="outputText" value="Scheduled Start: " /><h:outputText value=" * " styleClass="required"/> 
+                  </td>
+                  <td style="text-align:left">
+                     <p:calendar value="#{operation.scheduledStartDtime}" size="30" id="txtScheduledStartDate" readonlyInput="true"  pattern="yyyy-MM-dd hh:mm a" showOn="both" disabled="#{roadOperationsServiceAction.operationScheduleEditable('singlecomp')}">
+                        <fsl:dateTimeConverter showTime="true"/>
+                        <p:ajax event="dateSelect" listener="#{roadOperationsServiceAction.calculateDuration}" update="durationDays,durationHrs,durationMinutes" />
+                     </p:calendar>
+                  </td>
+               </tr>
+               <tr></tr>
+               <tr></tr>
+               <tr>
+                  <td>
+                     <h:outputText styleClass="outputText" value="Scheduled End: "  /><h:outputText value=" * " styleClass="required"/> 
+                  </td>
+                  <td style="text-align:left">
+                  
+                     <p:calendar value="#{operation.scheduledEndDtime}" size="30"  id="txtScheduledEndDate" readonlyInput="true"  pattern="yyyy-MM-dd hh:mm a" showOn="both" disabled="#{roadOperationsServiceAction.operationScheduleEditable('singlecomp')}">
+                        <fsl:dateTimeConverter showTime="true"/>
+                       <p:ajax event="dateSelect" listener="#{roadOperationsServiceAction.calculateDuration}" update="durationDays,durationHrs,durationMinutes" />
+                     </p:calendar>
+                     
+                  </td>
+               </tr>
+               <tr></tr>
+               <tr></tr>
+               <tr>
+                    <td>
+	                     <h:outputText styleClass="outputText" value="Scheduled Duration:  " />
+	                 </td>
+	                  <td style="text-align:left">
+	                     <h:outputText id="durationDays" styleClass="outputText" value="#{operation.schedNumOfDays}" />
+	                     <a> day(s) </a>
+	                     <h:outputText id="durationHrs" styleClass="outputText" value=" #{operation.schedNumOfHours}" />
+	                     <a> hour(s)</a>
+	                     <h:outputText id="durationMinutes" styleClass="outputText" value=" #{operation.schedNumOfMinutes}" />
+	                     <a> Minutes(s)</a>
+	                     
+	                 </td>
+	            </tr>
+               <tr></tr>
+               <tr></tr>
+            </table>
+            <div id="buttons"  style="text-align: center">
+               <p:commandButton styleClass="blue"  id="backFromOpDetails" value="Back" action="backFromOpDetails" processIds="*" ajax="false" ></p:commandButton>
+               <p:commandButton styleClass="blue"  id="continueFromOpDetails" rendered="#{operation.validUserToScheduleOp}" value="Continue" action="continueFromOpDetails" processIds="*" ajax="false" widgetVar="theWidget" onstart="theWidget.disable();" oncomplete="theWidget.enable();"></p:commandButton>
+            </div>
+            
+            <!-- Invisible Button used for Navigation -->
+		     <p:commandButton style="display:none" action="operation_details" id="opIdLink" processIds="*" ajax="false"></p:commandButton>
+			 <p:commandButton style="display:none" action="strategy" id="strategyIdLink" processIds="*" ajax="false"></p:commandButton>
+			 <p:commandButton style="display:none" action="resources" id="resourceIdLink" processIds="*" ajax="false" ></p:commandButton>
+	    	 <p:commandButton style="display:none" action="court_details" id="courtIdLink" processIds="*" ajax="false" ></p:commandButton>
+			 <p:commandButton style="display:none" action="review" id="reviewIdLink" processIds="*" ajax="false" ></p:commandButton>
+			<!-- end -->
+            <input type="text" name="opName" id="opName" value="#{roadOperationsServiceAction.getOpName()}" style="display:none"></input>
+            <h:inputText id="autoGeneratedName" style="display:none" value="#{operation.autoGeneratedName}"></h:inputText>
+            <h:inputText id="opNameChanged" style="display:none" value="#{flowScope.opNameChanged}"></h:inputText>
+            <h:inputText id="toWhere" style="display:none" value="#{flowScope.toWhere}"></h:inputText>
+            <h:inputText id="prevOpCategory" style="display:none" value="#{flowScope.oldCategoryId}"></h:inputText>
+           
+         </h:form>
+      </p:panel>
+      <script type="text/javascript">
+          $(document).ready( function() { 
+        	  $('input[id*="opNameChanged"]').val('N');
+        	 $('input[id*="autoGeneratedName"]').val('Y');//by default it is assumed auto
+        	//  $('input[id*="prevOpCategory"]').val($('input[id*="prevOpCategory"]').val(););
+
+
+        	  $(".progtrckr li:has(a)").click(function() {
+                  
+               //TODO use if condition along with invisible buttons
+                //alert($(this).attr('num'));//.click();
+               if($(this).attr('num')== 1){
+            	   $('button[id*=opIdLink]').click(); //rendered="#{completeOpDetails}"
+               }if($(this).attr('num')== 2){
+            	   $('button[id*=strategyIdLink]').click(); //rendered="#{completeOpStrategy}"
+               } 
+               else if($(this).attr('num')== 3){
+                
+            	   $('button[id*=resourceIdLink]').click(); //rendered="#{completeOpResource}"
+               }else if($(this).attr('num')== 4){
+            	   $('button[id*=courtIdLink]').click(); //rendered="#{completeOpCourtDetails}"
+                	
+               }else if($(this).attr('num')== 5){
+            	   $('button[id*=reviewIdLink]').click(); //rendered="#{completeOpReview}"
+               }
+               
+               });		
+        	  
+          });
+
+       
+          function generateAutoOpName() 
+          { 
+			  var currentOpName = $('input[id*="opName"]').val();
+        	  var autoGen  = $('input[id*="autoGeneratedName"]').val();
+			  
+        	  //alert(currentOpName);
+        	  //if(currentOpName.length == 0 || autoGen == 'Y')
+        	  //{
+	        	  var cat= $('input[id*="opCategory"]').val().charAt(0);
+	        	  var reg= $('input[id*="userRegion"]').val();
+	        
+	        	  
+	        	  var options = {regionCode:reg,
+	        				category:cat};
+	        	  $('span[id*="operationName"]').Default_RO_Name(options);
+	        	  
+	        	  var newOpName = $('span[id*="operationName"]').val();
+	        	// alert(newOpName);
+	        	  $('input[id*="operationName"]').val(newOpName);
+	        	  
+          //	}
+        	
+         	
+          } 
+          
+          
+          function opNameChanged()
+          {
+        	  //only called when triggered by onchange event
+        	 // $('input[id*="opNameChanged"]').val('Y');
+        	 
+        	 var autoGeneratedName = $('input[id*="autoGeneratedName"]').val();
+        	 var currentOpName = $('input[id*="operationName"]').val();
+        	 //alert("name changed"+ currentOpName);
+        	if( currentOpName.length==0)
+        		$('input[id*="autoGeneratedName"]').val('Y');
+        	else
+        		$('input[id*="autoGeneratedName"]').val('N');
+        	  
+        	  //alert("name changed"+ autoGeneratedName);
+          }
+          
+          function setToWhereValue(x)
+          {
+        	  
+        	  $('input[id*="opNameChanged"]').val('Y');
+          }
+         	
+          function showConfirmDialog(resourcesRetrieved)
+          {
+        	  var prevCat = $('input[id*="prevOpCategory"]').val();
+        	  var newCat = operationCat.getSelectedValue().toString();
+        	  //alert(prevCat);
+        	  
+        	 // alert("resourcesRetrieved"+resourcesRetrieved);
+        	 if(newCat!= prevCat){
+        	  if(resourcesRetrieved == true ){
+        		  PF('cd').show();
+        		         		  
+        	  }else{
+        		  //alert('inside false');
+        		  PF('cd').hide();
+        		  $('button[id*=confirmYes]').click();//set Regions Action esp for REG
+        	  }
+        	 }
+          }
+          
+          
+          function clearOpName(){
+        	//only remove the autogenerated name when switching between categories
+        	  var autoGeneratedName = $('input[id*="autoGeneratedName"]').val();
+        	//alert(autoGeneratedName);
+        	  if((autoGeneratedName == 'Y')){
+  		  		$('input[id*="operationName"]').val('');
+  		 	 }
+        	 
+        	 
+        	// var prevOpCategory = $('input[id*="prevOpCategory"]').val();
+        	 //operationCat.getSelected().toString();
+        	// alert(prevOpCategory);
+          }
+          
+          function setPrevOpCategory(){
+        	  $('input[id*="prevOpCategory"]').val(operationCat.getSelectedValue().toString());
+          }
+          
+          function resetOpCategory(){
+        	  var prevCat = $('input[id*="prevOpCategory"]').val();
+        	//  alert(prevCat);
+        	  operationCat.selectValue(prevCat);
+        	  PF('cd').hide();
+          }
+       </script>	 
+   </ui:define>
+</ui:composition>

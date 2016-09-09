@@ -1,0 +1,284 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/WEB-INF/newTemplate.xhtml">
+
+	<ui:define name="title">Court Maintenance</ui:define>
+	<ui:define name="pageHeader"></ui:define>
+	
+	<ui:define name="content">
+    	
+    	<script>
+    	
+    		$("document").ready(function(){
+    			
+    			$('#javax_faces_developmentstage_messages').css('display','none');
+    		
+    			refreshDatatable();
+    			
+    		});
+    		
+    	
+					function hide()
+					{
+					var Zee = "#{savehideBtn}";
+					return Zee;
+					}
+					
+					
+					function refreshDatatable(){
+					$('#courtSearch\\:searchResults').forceDatatablePagin();
+					}
+    		
+    	</script>
+		
+		<fieldset>
+		
+		<h:form styleClass="form" id="courtSearch">
+		<div class="tabs"><a href="#">Court Maintenance</a></div>
+   		<div class="main borders">
+			 <p:messages autoupdate="true" id="msg" closable="true"/>
+				<p:panelGrid style="margin-top:5px;width:100%;" id="gridVehicleDetails">
+				<p:row>
+					<p:column style="width:55%;">
+						<h:outputText styleClass="outputText" value="Court: " />
+						<p:autoComplete id="courtShortDescription" scrollHeight="200" size="33" cache="true" style="margin-left:10px;width:180px;" cacheTimeout="30000" value="#{criteria.shortDesc}" completeMethod="#{courtMaintenanceServiceAction.courtAutoComplete}"/>
+						
+						
+					</p:column>
+					<p:column>
+						<h:outputText styleClass="outputText" value="Parish: " />
+						<p:selectOneMenu value="#{criteria.parishCode}"
+								id="parishCode" style="width:200px;text-align:left;margin:0px 0 0px 10px;">
+								<f:selectItem itemValue="" itemLabel="All" />
+								<f:selectItems value="#{parishList}" />
+							</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<h:outputText styleClass="outputText" value="Status: " />
+						<p:selectOneMenu value="#{criteria.statusId}" id="statusSel" style="width:225px;margin-left:5px;margin-top:0px;">
+							<f:selectItem itemValue="" itemLabel="All"></f:selectItem>
+							<f:selectItem itemValue="ACT" itemLabel="ACTIVE"></f:selectItem>
+							<f:selectItem itemValue="INA" itemLabel="INACTIVE"></f:selectItem>
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>	
+				<p:row>
+					<p:column colspan="2" style="text-align:center;">
+					<sec:authorize ifAnyGranted="#{constants.ROLE_ROMS_REF_COURT_SEARCH}">	
+						<p:commandButton styleClass="blue blue-icon icon-search icon-af" value="Search" action="search" processIds="*" ajax="false" />
+					</sec:authorize>
+					<sec:authorize ifAnyGranted="#{constants.ROLE_ROMS_REF_COURT_ADD}">
+						<p:commandButton styleClass="blue blue-icon icon-plus icon-af" value="Add" action="add" processIds="*" ajax="true" update=":courtDetails:modalDialog" oncomplete="PF('dlgCourt').show();"/>
+					</sec:authorize>	
+						<p:commandButton styleClass="blue blue-icon icon-refresh icon-af" id="butReset1" style="padding-rght:1em;" value="Clear" processIds="*" action="clear" ajax="false" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			</div>
+			
+			
+			<div id="dataTableDiv" class="dataTableResults" style="margin-top:10px;" >
+
+					<p:dataTable
+					id="searchResults" rowsPerPageTemplate="10,50,100"  paginator="true" rows="10"
+					rowKey="#{obj.courtId}" selection="#{courts.selectedCourt}"
+							sortOrder="descending" rowIndexVar="rowIndex"
+							selectionMode="single" rendered="#{courts.courtList.size()>0}"
+							currentPageReportTemplate="Results: {startRecord}-{endRecord} of {totalRecords}"
+						     paginatorTemplate="Items: {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						     paginatorPosition="bottom" value="#{courts.courtList}" var="obj">
+						    
+						    <sec:authorize ifAnyGranted="#{constants.ROLE_ROMS_REF_COURT_EDIT}"> 
+						 		<p:ajax event="rowSelect" oncomplete="clickBtn();" >
+	                   			</p:ajax>	      
+						  	</sec:authorize>
+						  	<f:facet name="header">
+								Court(s)
+							</f:facet>
+						     
+					<p:column id="descriptionCol" headerText="Court" sortBy="shortDescription">
+						<b><h:outputText value="#{obj.shortDescription}"/></b><br/>
+						<h:outputText value="#{obj.description}"/>
+					</p:column>
+					<p:column id="locationCol" sortBy="parishName" headerText="Parish">
+						<h:outputText value="#{obj.parishName}"/>
+					</p:column>
+					
+					<p:column id="status" sortBy="statusDescription" headerText="Status">
+						<h:outputText value="#{obj.statusDescription}"/>
+					</p:column>
+					<p:column headerText="Last Updated">
+						<h:outputText value="#{courtMaintenanceServiceAction.formatDate(obj.auditEntryBO.updateDTime!=null?obj.auditEntryBO.updateDTime:obj.auditEntryBO.createDTime)}" />
+					</p:column>
+					<p:column headerText="Updated By">
+						<h:outputText value="#{obj.auditEntryBO.updateUsername!=null?obj.auditEntryBO.updateUsername:obj.auditEntryBO.createUsername}" /> 
+						 <p:tooltip for="@(tr[role=row][data-ri=#{rowIndex}])" value="Click row to edit record." showEffect="fade" hideEffect="fade" 
+						            shared="false" showDelay="500" style="margin-left:200px;"/> 
+					</p:column>
+				</p:dataTable>
+			 
+				</div>
+					<script>
+					function clickBtn()
+						{
+						
+							$("button[id*='editBtn']").click();
+						}
+					function refreshBtn()
+						{
+						
+							$("button[id*='refreshBtn']").click();
+						}
+						
+						function cancel()
+						{
+							$("button[id*='cancel']").click();
+						}
+				</script>
+				<p:commandButton wigetVar="refreshBtn" id="refreshBtn" value="refreshDtable" style="display:none" processIds="*" ajax="false" update=":courtSearch:searchResults"/>
+				 <p:commandButton wigetVar="btnSelID" id="editBtn" value="Do select" style="display:none" processIds="*" action="edit" oncomplete="PF('dlgCourt').show();" ajax="true" update=":courtDetails:modalDialog"/>
+			</h:form>
+			
+			<h:form styleClass="form" id="courtDetails">
+				<p:dialog id="modalDialog" header="#{savehideBtn == 'none'?'Edit Court':'Add Court'}" widgetVar="dlgCourt" modal="true" style="min-width:600px;width:auto;height:380px;">
+			 <fieldset><legend ></legend> 
+			 <p:ajax event="close" onclick="cancel();"/>
+			 <p:messages autoupdate="true" id="msg2" closable="true"/>
+		
+				<p:panelGrid style="margin-top:5px;width:100%;" id="gridVehicleDetails">
+					<p:row>
+						<p:column colspan="2">	
+							<span style="padding-left:1px;width: 150px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Court Name:" />
+							<h:outputText value="*" styleClass="required" />
+							</span>
+							<p:inputText value="#{court.shortDescription}" id="shortDesc"
+									maxlength="64" size="49" style="text-align:left;" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2">
+							<span style="padding-left:1px;width: 150px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Court Description:" />
+							<h:outputText value="*" styleClass="required" />
+							</span>
+							<p:inputTextarea value="#{court.description}" id="description" maxlength="64"
+								size="66" style="text-align:left;width:47%;" cols="25"/>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2">
+							<span style="padding-left:1px;width: 150px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Street Number:" />
+							</span>
+							<p:inputText value="#{court.streetNo}" id="streetNo"
+								maxlength="15" size="17" style="text-align: left;" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2">
+							<span style="padding-left:1px;width: 150px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Street Name:" />
+							</span>
+							<p:inputText value="#{court.streetName}" id="streetName"
+								maxlength="25" size="27" style="text-align: left;width:68%;" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2">
+							<span style="padding-left:1px;width: 150px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="P.O. Box:" />
+							</span>
+							<p:inputText value="#{court.poBoxNo}" id="poBoxNo"
+								maxlength="6" size="8" style="text-align: left;width:8%;" />
+							<h:outputText styleClass="outputText" value="P.O. Location:" style="margin:0 5px;"/>
+							<p:inputText value="#{court.poLocationName}"
+								id="poLocationName" maxlength="25" size="27"
+								style="text-align: left;width:34%;" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2">
+							<span style="padding-left:1px;width: 150px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Mark:" />
+							</span>
+							<p:inputText value="#{court.markText}" id="markText"
+									maxlength="40" size="42" style="text-align: left;width:68%;" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2">
+							<span style="padding-left:1px;width: 150px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Parish:" />
+							<h:outputText value="*" styleClass="required" />
+							</span>
+							<p:selectOneMenu value="#{court.parishCode}"
+								id="parishCodeId" style="width:200px;text-align:left;margin:0px 0 0px 0px;">
+								<f:selectItem itemValue="" itemLabel="[Select One]" />
+								<f:selectItems value="#{parishList}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2">	
+							<c:choose>
+							<c:when test="#{hideActive == true}">
+								<span style="padding-left:1px;width: 150px;display: inline-block;">
+								<h:outputText styleClass="outputText" value="Status:" />
+								<h:outputText value="*" styleClass="required" />
+								</span>
+								<p:selectOneMenu value="#{court.statusId}" id="statusSelId" style="width:200px;">
+									<f:selectItem itemValue="ACT" itemLabel="ACTIVE"></f:selectItem>
+									<f:selectItem itemValue="INA" itemLabel="INACTIVE"></f:selectItem>
+								</p:selectOneMenu>
+							</c:when>
+							<c:otherwise>
+								<span style="padding-left:1px;width: 150px;display: inline-block;">
+								<h:outputText styleClass="outputText" value="Status:" />
+								<h:outputText value="*" styleClass="required" />
+								</span>
+								<p:inputText value="" id="statId" style="text-align: left; margin-left: 0px;width:120px;background:#dddddd;" readonly="true"/>
+								<p:watermark for="statId" value="Active" />
+							</c:otherwise>
+							</c:choose>
+						</p:column>
+					</p:row>
+					
+				
+				<p:row>
+					<p:column colspan="2" style="text-align:center;">	
+						<p:commandButton styleClass="blue" value="Save" action="save" processIds="*" oncomplete="if(args.validationFailed){PF('dlgCourt').show();}refreshDatatable();" update=":courtDetails:modalDialog,:courtSearch:searchResults,:courtDetails:msg2,:courtSearch:msg" ajax="true" style="display:#{savehideBtn}"/>
+						<p:commandButton styleClass="blue" value="Save" action="update" processIds="*" oncomplete="if(args.validationFailed){PF('dlgCourt').show();}refreshDatatable();" update=":courtDetails:modalDialog,:courtSearch:searchResults,:courtSearch:msg,:courtDetails:msg2" ajax="true" style="display:#{updatehideBtn}"/>
+						<!-- <p:commandButton styleClass="blue" value="Clear" >  
+						        <p:ajax update=":courtDetails:modalDialog" resetValues="true" oncomplete="PF('dlgCourt').show();"/>
+						</p:commandButton>   -->
+						<p:commandButton styleClass="blue" value="Clear" processIds="*" actionListener="#{courtMaintenanceServiceAction.clear(flowRequestContext)}" update=":courtDetails:modalDialog" ajax="true" oncomplete="PF('dlgCourt').show();" style="display:#{savehideBtn}"/>
+						<p:commandButton id="cancel" styleClass="blue" value="Back" action="cancel" processIds="*" oncomplete="PF('dlgCourt').hide" ajax="false"/>
+							
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			</fieldset>
+			</p:dialog>
+				
+		</h:form>
+		
+		
+		 
+		</fieldset>
+		
+		
+	</ui:define>
+	
+
+</ui:composition>

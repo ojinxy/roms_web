@@ -1,0 +1,270 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com">
+
+	<ui:fragment id="page">	
+				<p:panel  id="rlPanel" header="Road Licence Query Results" style="vertical-align: top; text-align:left;" rendered="true">  
+	    				<ui:include src="fragments/rlCheckInnerFragment.xhtml"></ui:include>
+	    					<p:panel>
+	    						<br/>
+	    						 <div align="left">
+	    				<h:outputText value="Indicate Action to be taken " style="font-weight:bold;"/> <br/>
+	    			 <p:selectOneRadio id="customRadioRL" value="#{recordOffenceOutcomeView.rlActionToBeTaken}" style="margin-bottom: 0px;">  
+	      					  <f:selectItem itemLabel="All is in Order" itemValue="A" itemDisabled="#{initiateView.rlCkFl}"/>  
+	      					  <f:selectItem itemLabel="Record Offences and Outcomes" itemValue="R" /> 
+	      					  
+	      					   <p:ajax oncomplete="addRLRowOnComplete(); updateRLTable(); " listener="#{roadCheckServiceAction.indicateActionRL}" update=":recordOffenceOutcome:tabV:panelDataTableRL :recordOffenceOutcome:panelButtons" ></p:ajax>      
+	  					  </p:selectOneRadio>  
+	  					  </div>
+	    				</p:panel>
+	    				
+	    				<br/>
+	    				 <p:panel id="panelDataTableRLErr">
+						<h:outputText value="#{recordOffenceOutcomeView.rlTableError}" id="rlTableErr" style="display:none"/> 
+						<h:outputText value="#{rlOffenceList.size()}" id="rlOffListSize" style="display:none"/> 
+						<h:outputText value="#{recordOffenceOutcomeView.rlOpenRecordCount}" style="display:none"/>
+						</p:panel>
+						<p:panel id="panelMsgRL">
+						<p:messages id="msgMV" closable="true"/>
+						</p:panel>
+	    			 <p:panel id="panelDataTableRL">
+	  					  
+	  					  <p:panel rendered="#{recordOffenceOutcomeView.rlActionToBeTaken=='R' &amp;&amp; rlOffenceList.size() == 0}">
+	    			 		<h:outputText value="No Offence related to Road Licence Check" style="font-weight:bold;"/>
+	    			 	</p:panel>
+	    			 	
+	  					  <p:dataTable  var="offOutcome" value="#{rlOffenceOutcomes}" editable="true" rendered="#{recordOffenceOutcomeView.rlActionToBeTaken=='R' &amp;&amp; rlOffenceList.size() > 0}"
+	  					   rows="50" id="rlOffenceOutcomeList" >  
+  
+						       <f:facet name="header" >  
+						           <div align="left" >
+						             <h:outputText value=" Offences/Outcomes Observed " style="padding-right:30px"/>  
+						           <p:commandButton icon="ui-icon-plusthick" id="addRLBtn"  value="Add" action="rlAddOffenceOutcome" processIds="*"  ajax="true" style="padding-right:20px" oncomplete="addRLRowOnComplete();" update=":recordOffenceOutcome:tabV:panelDataTableRL" disabled="#{recordOffenceOutcomeView.rlOpenRecordCount > 0 || rlOffenceList.size() == rlOffenceOutcomes.size()}"/>
+						           <p:commandButton icon="ui-icon-trash"  id="deleteRLBtn"  value="Delete" action="rlDeleteOffenceOutcome" processIds="*"  ajax="true" update=":recordOffenceOutcome:tabV:panelDataTableRL :recordOffenceOutcome:panelButtons" disabled="#{!recordOffenceOutcomeView.rlOffenceOutcomeSelected || recordOffenceOutcomeView.rlOpenRecordCount > 0 || rlOffenceOutcomes.size() == 0}"/>
+						           </div>
+						           
+						       </f:facet>  
+						 
+						 		<p:ajax event="rowEditInit"  listener="#{roadCheckServiceAction.initRowEditRL}" oncomplete="updateRLTable();disablePenRL();disableCheckBoxRL();"/> 
+						 		  <p:ajax event="rowEdit" listener="#{roadCheckServiceAction.editRLSelectedOffenceOutcome}"  update=":recordOffenceOutcome:tabV:panelMsgRL :recordOffenceOutcome:tabV:rlTableErr" oncomplete="updateRLTableEdit();editAndCancelHideRL();" />  
+						       <p:ajax event="rowEditCancel" listener="#{roadCheckServiceAction.cancelRLEditSelectedOffenceOutcome}" update=":recordOffenceOutcome:tabV:panelMsgRL" oncomplete="updateRLTable();selectRLAll();cancelHideRL();"  />  
+						       
+						 		  <p:column  style="width:6%" id="checkBoxes">  
+						         <f:facet  name="header">
+									 <p:selectBooleanCheckbox id="rlSelectAllBox" value="#{recordOffenceOutcomeView.rlSelectAllOffenceOutcome}" onchange="selectRLAll();" disabled="#{recordOffenceOutcomeView.rlOpenRecordCount > 0}">
+									 		
+									 </p:selectBooleanCheckbox> 
+									</f:facet>
+						                <p:selectBooleanCheckbox value="#{offOutcome.rowSelected}" styleClass="ui-corner-checkbox">
+						                <p:ajax oncomplete="selectRLRow();" />
+						                </p:selectBooleanCheckbox>  
+						            
+						       </p:column>  
+						     
+						       <p:column headerText="Offence(s)" style="width:41%; text-align:left">  
+						         
+						                  <p:cellEditor>  
+						               <f:facet name="output">  
+						                    <h:outputText value="#{offOutcome.offenceShortDescription}" /> 
+						               </f:facet>  
+						               <f:facet name="input">  
+						                  <p:selectOneMenu style="width:100%"
+								id="comboOffenceInput" value="#{offOutcome.offenceId}">
+								<f:selectItem itemValue="" itemLabel="[Select One]" />
+								<f:selectItems var="offence" itemValue="#{offence.offenceId}" itemLabel="#{offence.shortDescription}" value="#{rlOffenceList}" />
+									</p:selectOneMenu>  
+						               </f:facet>  
+						           </p:cellEditor>
+						            
+						       </p:column>  
+						         <p:column headerText="Issue Summons" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">  
+						                   <f:subview rendered="#{offOutcome.issueSummons}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.issueSummons}" />  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column> 
+						        <p:column headerText="Issue Warning Notice" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">    
+						                   <f:subview rendered="#{offOutcome.issuewWarningNotice}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.issuewWarningNotice}" />  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column>  
+						       <p:column headerText="Warning No Prosecution" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">  
+						                   <f:subview rendered="#{offOutcome.issueWarningNP}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.issueWarningNP}" />  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column> 
+						       <p:column headerText="Warning For Prosecution" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">   
+						                    <f:subview rendered="#{offOutcome.warnForProsecution}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.warnForProsecution}" />  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column>
+<!-- 						        <p:column headerText="Remove Plate" style="width:10%">   -->
+<!-- 						           <p:cellEditor>   -->
+<!-- 						               <f:facet name="output">    -->
+<!-- 						                     <f:subview rendered="#{offOutcome.removePlate}"> -->
+<!-- 												<i class="icon icon-check icon-1x"></i> -->
+<!-- 											</f:subview> -->
+<!-- 						               </f:facet>   -->
+						             
+<!-- 						               <f:facet name="input">   -->
+<!-- 						                   <p:selectBooleanCheckbox value="#{offOutcome.removePlate}" disabled="#{initiateView.activityType == 'U'}"/>   -->
+<!-- 						               </f:facet>   -->
+<!-- 						           </p:cellEditor>   -->
+<!-- 						       </p:column>  -->
+						         <p:column >  
+           							 <p:rowEditor id="rlRowEditor"/>  
+           							  <p:tooltip for="rlRowEditor" value="Click to Add/Edit" showEffect="fade" hideEffect="fade" /> 
+        							</p:column>  
+						   </p:dataTable>
+						   
+						   <p:commandButton wigetVar="allBtnSelRL" id="allSelectBtnRL" value="Do select" style="display:none" processIds="*" action="rlSelectAllOffenceOutcome" 
+			 ajax="true" update=":recordOffenceOutcome:tabV:panelDataTableRL" ></p:commandButton>
+			 
+			    <p:commandButton wigetVar="allBtnSelRL" id="selectBtnRLRow" value="Do select" style="display:none" processIds="*" action="rlSelectRowOffenceOutcome" 
+			 ajax="true" update=":recordOffenceOutcome:tabV:panelDataTableRL" ></p:commandButton>
+			 
+			 
+			  <p:commandButton wigetVar="updateRLTableVar" id="updateRLTable" value="Do select2" style="display:none" processIds="*" 
+			 ajax="true" update=":recordOffenceOutcome:tabV:rlOffenceOutcomeList:addRLBtn :recordOffenceOutcome:tabV:rlOffenceOutcomeList:deleteRLBtn :recordOffenceOutcome:tabV:rlOffenceOutcomeList:rlSelectAllBox :recordOffenceOutcome:panelButtons :recordOffenceOutcome:progressPanel " ></p:commandButton>
+			
+			<h:inputText id="hiddenrlCkFl" style="display:none" value="#{initiateView.rlCkFl}" ></h:inputText>
+			
+			
+			
+			 <script>
+			
+			 
+			 
+			 
+			//<![CDATA[
+			    function selectRLRow(){
+			    $("button[id*='selectBtnRLRow']").click();	
+			    }
+			 	function selectRLAll(){
+			 	$("button[id*='allSelectBtnRL']").click()			 	
+			 	}
+			 	function addRLRowOnComplete() {
+					var x = $('[name="recordOffenceOutcome:tabV:customRadioRL"]:checked').val();
+			 		
+			 		//var x = $('input[type="radio"]:checked').val();
+			 		//alert(x);
+			 		
+			 		var y = $('#recordOffenceOutcome\\:tabV\\:rlOffListSize').text();
+			 		if((x=='R') && (y > 0)){
+			 			jQuery('#recordOffenceOutcome\\:tabV\\:rlOffenceOutcomeList\\:0\\:rlRowEditor .ui-icon-pencil')[0].id = 'supercoolnewrowRL';
+			 		  	jQuery('#supercoolnewrowRL').trigger('click');
+			 		}
+			 		}
+			 	
+				function updateRLTableEdit(){
+			 		var x = $('#recordOffenceOutcome\\:tabV\\:rlTableErr').text().trim();
+			 		
+			 		if(x=='false'){
+				 		$("button[id*='updateRLTable']").click();	
+			 		}
+				 }
+				
+				function updateRLTable(){
+			 		
+				 		$("button[id*='updateRLTable']").click();	
+			 		
+				 }
+				
+				function disableCheckBoxRL(){		 		 
+			 		$('#recordOffenceOutcome\\:tabV\\:rlOffenceOutcomeList .ui-corner-checkbox').each(function(){
+			        	 $(this).css('display','none');
+			        	 });
+			 		
+	        	 }
+				function disablePenRL(){
+		        	 $('#recordOffenceOutcome\\:tabV\\:rlOffenceOutcomeList .ui-icon-pencil').each(function(){
+		        	 $(this).css('display','none');
+		        	 });
+		        	 		        	 
+	        	 }
+			 	function cancelHideRL(){
+		        	 $('#recordOffenceOutcome\\:tabV\\:rlOffenceOutcomeList .ui-icon-pencil').each(function(){
+		        	 //$(').addClass('rat');
+		        	 // $(this).css({backgroundColor: '#0099ff'});
+		        	 $(this).css('display','');
+		        	 });
+		        	 $('#recordOffenceOutcome\\:tabV\\:rlOffenceOutcomeList .ui-corner-checkbox').each(function(){
+			        	 $(this).css('display','');
+			        	 });
+	        	 }
+	        	 
+	        	 function editAndCancelHideRL(){
+				 		var x = $('#recordOffenceOutcome\\:tabV\\:rlTableErr').text().trim();
+				 		//alert(x);
+				 		if(x=='false'){
+				 			cancelHideRL();
+				 		}
+					 }
+	        	//]]>
+			 </script>
+			
+			 </p:panel>
+			 
+			 
+			 
+			 <script>
+			//<![CDATA[	 
+			 $(document).ready( function() { 
+		           var chkFl = $('input[id*="hiddenrlCkFl"]').val();
+		          		           
+		    	   if(chkFl && $('div[id*=panelDataTableRL]').find('table').find('tbody').find('tr[class*=empty]').size() != 0)
+		    		{   
+		    		   
+		    	   		$("button[id*='addRLBtn']").click();
+		    		   
+		    		}
+		          });
+			 
+			 
+			 
+			 
+			//]]>
+			 </script>
+			 
+			 
+			 
+			 
+	    		</p:panel>
+	    		
+	  	
+</ui:fragment>
+</ui:composition>

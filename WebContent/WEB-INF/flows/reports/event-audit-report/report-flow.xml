@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+        
+        
+     <var name="criteria" class="fsl.ta.toms.roms.search.criteria.impl.EventAuditReportCriteriaBO" />
+   
+     <view-state id="eventAuditReport" >
+	    
+	    <on-entry>
+	    	<evaluate expression="reportServiceAction.getLMISUSers" />
+	    	<evaluate expression="reportServiceAction.getEventTypeList" />
+	    	<evaluate expression="reportServiceAction.getRegionList" />
+	    	<evaluate expression="reportServiceAction.init" />
+	    	<set name="flowScope.taOfficeRegion"  value="new java.util.ArrayList()"  type="java.io.Serializable"></set>
+	    </on-entry>
+		
+		<transition on="generateAuditReport">
+			<evaluate expression="reportServiceAction.generate(flowRequestContext)"/>
+			<render fragments="pdfView, eventAuditReport" />
+		</transition>
+		
+    	<transition on="clear" to="endState" />
+	
+	</view-state>
+	
+	<end-state id="endState" />
+	
+	
+</flow>

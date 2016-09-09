@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+    
+    <secured attributes="ROLE_ROMS_REF_ITA_SEARCH" />	
+        
+    <var name="mode" class="java.lang.String" />
+	<var name="saved" class="java.lang.String" />
+	<var name="itaExaminer" class="fsl.ta.toms.roms.bo.ITAExaminerBO" />
+	<var name="itaExaminers" class="org.fsl.roms.view.ITA_ExaminerBean" />
+	<var name="criteria" class="fsl.ta.toms.roms.search.criteria.impl.ITAExaminerCriteriaBO" />
+	<var name="parishList" class="java.util.ArrayList" />
+	<var name="officeLocationList" class="java.util.ArrayList" />
+	<var name="savehideBtn" class="java.lang.String" />
+	<var name="updatehideBtn" class="java.lang.String" />
+	<var name="hideActive" class="java.lang.String"/>
+	<var name="fullName" class="java.lang.String"/>
+	<var name="disable" class="java.lang.String"/>
+	<var name="constants" class="org.fsl.roms.constants.Constants.UserPermissions" />
+
+	<on-start>
+			<evaluate expression="parishMaintenanceServiceAction.getParishes" ></evaluate>
+			<evaluate expression="parishMaintenanceServiceAction.getOfficeLocation" ></evaluate>
+			<evaluate expression="itaExaminerMaintenanceServiceAction.initITAExaminer" ></evaluate>
+	</on-start>
+
+
+<view-state id="ITA_ExaminerMaintenanceSearch">
+	<transition on="search" to="search">
+			<set name="flowScope.mode" value="'search'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+			<render fragments="itaResults" />
+	</transition>
+	
+	
+	
+	<transition on="view" to="ITA_ExaminerMaintenanceDetails">
+			<set name="flowScope.mode" value="'view'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+			<set name="flowScope.itaExaminer" value="flowScope.itaExaminers.selectedRow" />
+	</transition>
+
+	<transition on="add" to="ITA_ExaminerMaintenanceDetails">
+			<evaluate expression="itaExaminerMaintenanceServiceAction.add(flowRequestContext)" ></evaluate>
+			<set name="flowScope.mode" value="'view'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+			<set name="flowScope.updatehideBtn" value="'none'"></set>
+			<set name="flowScope.savehideBtn" value="''"></set>
+			<set name="flowScope.hideActive" value="'false'"></set>
+		</transition>
+		
+		<transition on="edit" to="ITA_ExaminerMaintenanceDetails">
+			<evaluate expression="itaExaminerMaintenanceServiceAction.select(flowRequestContext)"></evaluate>
+			<set name="flowScope.savehideBtn" value="'none'"></set>
+			<set name="flowScope.updatehideBtn" value="''"></set>
+			<set name="flowScope.hideActive" value="'true'"></set>
+		</transition>
+		
+		<!-- Sort the values on the screen -->
+		<transition on="sort" to="ITA_ExaminerMaintenanceSearch">
+			<set name="criteria.sortOn" value="requestParameters.sortOn"/>
+			<evaluate expression="itaExaminerMaintenanceServiceAction.sort" />	
+			<set name="flowScope.itaExaminers" value="flowScope.datatable.pageElements" />					
+			<render fragments="ITA_ExaminerMaintenanceSearch,itaResults" />
+		</transition>
+		
+		<!-- Next action on datatable -->
+		<transition on="next" to="ITA_ExaminerMaintenanceSearch">
+			<evaluate expression="itaExaminerMaintenanceServiceAction.next" />	
+			<set name="flowScope.itaExaminers" value="flowScope.datatable.pageElements" />	
+			<render fragments="ITA_ExaminerMaintenanceSearch,itaResults" />
+		</transition>
+		
+		<!-- previous action on datatable -->
+		<transition on="previous" to="ITA_ExaminerMaintenanceSearch">
+			<evaluate expression="itaExaminerMaintenanceServiceAction.previous" />	
+			<set name="flowScope.itaExaminers" value="flowScope.datatable.pageElements" />				
+			<render fragments="ITA_ExaminerMaintenanceSearch,itaResults" />
+		</transition>
+		
+		<!-- first action on datatable -->
+		<transition on="first" to="ITA_ExaminerMaintenanceSearch">
+			<evaluate expression="itaExaminerMaintenanceServiceAction.first" />	
+			<set name="flowScope.itaExaminers" value="flowScope.datatable.pageElements" />				
+			<render fragments="ITA_ExaminerMaintenanceSearch,itaResults" />
+		</transition>
+		
+		<!-- last action on datatable -->
+		<transition on="last" to="ITA_ExaminerMaintenanceSearch">
+			<evaluate expression="itaExaminerMaintenanceServiceAction.last" />	
+			<set name="flowScope.itaExaminers" value="flowScope.datatable.pageElements" />				
+			<render fragments="ITA_ExaminerMaintenanceSearch,itaResults" />
+		</transition>
+		
+		<transition on="clear" to="endState" />
+	
+</view-state>
+	
+	<view-state id="ITA_ExaminerMaintenanceDetails" redirect="false">
+		<on-render>
+			<evaluate expression="itaExaminerMaintenanceServiceAction.getParishListfrmRegion()"></evaluate>
+		</on-render>
+							
+		<transition on="searchTrn" to="itaTrnSearch">
+		</transition>
+	
+		<transition on="cancelUpdate" to="ITA_ExaminerMaintenanceSearch">
+			<set name="flowScope.saved" value="'false'"></set>
+			<evaluate expression="itaExaminerMaintenanceServiceAction.search"></evaluate>
+			<render fragments="itaExaminerSearch" />
+		</transition>
+		
+		<transition on="cancel" to="ITA_ExaminerMaintenanceSearch">
+			<evaluate expression="itaExaminerMaintenanceServiceAction.back(flowRequestContext)" />
+			<set name="flowScope.saved" value="'false'"></set>			
+			<render fragments="itaExaminerSearch" />
+		</transition>
+
+		<transition on="initEditMode" to="ITA_ExaminerMaintenanceDetails">
+			<set name="flowScope.mode" value="'update'"></set>
+		</transition>		
+			
+		<transition on="add" to="ITA_ExaminerMaintenanceDetails">
+			<set name="flowScope.mode" value="'save'"></set>						
+			<evaluate expression="itaExaminerMaintenanceServiceAction.initAddMode(flowRequestContext)" />			
+			<set name="flowScope.itaExaminerView.status" value="'ACT'" />			
+			<render fragments="ITA_ExaminerMaintenanceDetails" />
+		</transition>
+
+		<transition on="success" to="ITA_ExaminerMaintenanceDetails">
+		</transition>
+
+		<transition on="error" to="ITA_ExaminerMaintenanceDetails">
+		</transition>
+
+		<transition on="save" to="saveitaExaminer" />
+
+		<transition on="update" to="updateitaExaminer" />
+		
+		<transition on="clear" to="endState" />
+	</view-state>	
+
+	<action-state id="search">
+		<evaluate expression="itaExaminerMaintenanceServiceAction.search"></evaluate>
+		<transition on="success" to="ITA_ExaminerMaintenanceSearch"></transition>
+		<transition on="error" to="ITA_ExaminerMaintenanceSearch" />
+		<transition on="yes" to="ITA_ExaminerMaintenanceSearch">
+			<set name="flowScope.mode" value="'view'"></set>
+		</transition>
+	</action-state>
+	
+	<action-state id="itaTrnSearch" >
+			<evaluate expression="itaExaminerMaintenanceServiceAction.searchTrn"></evaluate>
+			<transition on="success" to="ITA_ExaminerMaintenanceDetails">
+				<!-- <set name="flowScope.errorMsg" value="''"></set> -->
+			</transition>
+			<transition on="error" to="ITA_ExaminerMaintenanceDetails">
+				<!-- <set name="flowScope.errorMsg" value="'true'"></set> -->
+			</transition>
+	</action-state>
+
+	<action-state id="saveitaExaminer">
+		<evaluate expression="itaExaminerMaintenanceServiceAction.saveitaExaminer(flowRequestContext)" />		
+		<transition on="success" to="ITA_ExaminerMaintenanceDetails">
+			<set name="flowScope.saved" value="'true'"></set>
+			<set name="flowScope.mode" value="'view'"></set>		
+		</transition>
+		<transition on="error" to="ITA_ExaminerMaintenanceDetails">
+		</transition>
+	</action-state>
+
+	<action-state id="updateitaExaminer">
+		<evaluate expression="itaExaminerMaintenanceServiceAction.updateitaExaminer(flowRequestContext)" />
+		<transition on="success" to="ITA_ExaminerMaintenanceDetails">
+		</transition>
+
+		<transition on="error" to="ITA_ExaminerMaintenanceDetails">
+		</transition>
+
+	</action-state>
+	
+	<end-state id="endState" />
+	
+</flow>
+
+
+
+
+

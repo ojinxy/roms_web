@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 5.2.0-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CourtScheduleSummaryReport" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5e87332a-af2e-4791-bd8e-9df20d983c69">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<queryString language="SQL">
+		<![CDATA[]]>
+	</queryString>
+	<field name="offenderFullName" class="java.lang.String"/>
+	<field name="roadOperationName" class="java.lang.String"/>
+	<field name="offenceDetails" class="java.lang.String"/>
+	<field name="taOfficeRegion" class="java.lang.String"/>
+	<field name="courtDetails" class="java.lang.String"/>
+	<field name="courtCaseStatus" class="java.lang.String"/>
+	<field name="offenceDate" class="java.lang.String"/>
+	<field name="courtDate" class="java.lang.String"/>
+	<field name="taOfficeRegionDescription" class="java.lang.String"/>
+	<field name="courtName" class="java.lang.String"/>
+	<field name="taStaffFullName" class="java.lang.String"/>
+	<variable name="taOfficeRegionDescription1" class="java.lang.Integer" resetType="Group" resetGroup="TA_Office_Region" calculation="Count">
+		<variableExpression><![CDATA[$F{taOfficeRegionDescription}]]></variableExpression>
+	</variable>
+	<group name="TA_Office_Regions">
+		<groupExpression><![CDATA[$F{taOfficeRegion}]]></groupExpression>
+	</group>
+	<group name="Group1">
+		<groupExpression><![CDATA[$F{taOfficeRegion}]]></groupExpression>
+	</group>
+	<group name="Group2">
+		<groupExpression><![CDATA[$F{taOfficeRegionDescription}]]></groupExpression>
+	</group>
+	<group name="TA_Office_Region">
+		<groupExpression><![CDATA[$F{taOfficeRegionDescription}]]></groupExpression>
+		<groupFooter>
+			<band height="23">
+				<textField>
+					<reportElement x="190" y="2" width="260" height="20" uuid="1364754b-e421-4f1a-847e-75d760d7792f"/>
+					<textFieldExpression><![CDATA["Total No. of Cases for " + $F{taOfficeRegionDescription} + ":"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="526" y="2" width="120" height="20" uuid="1127aa99-c9bd-4940-b8bd-39512cde3056"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$V{taOfficeRegionDescription1}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<summary>
+		<band height="40">
+			<textField>
+				<reportElement x="190" y="6" width="260" height="20" uuid="fccc1962-86f0-4668-8208-008a96520b0e"/>
+				<textFieldExpression><![CDATA["Total No. of Cases:"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="526" y="6" width="120" height="20" uuid="987f3ed1-b0a5-48fb-aa26-21f284de289e"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="189" y="0" width="462" height="1" uuid="a77cc675-525b-44ad-ae0a-aa15f4d77b9f"/>
+			</line>
+			<line>
+				<reportElement x="189" y="30" width="460" height="1" uuid="877070fb-6af7-444e-af1e-cc38cee9c36e"/>
+			</line>
+			<line>
+				<reportElement x="189" y="35" width="460" height="1" uuid="aed2663b-83f0-47aa-be00-57ce9587ed23"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

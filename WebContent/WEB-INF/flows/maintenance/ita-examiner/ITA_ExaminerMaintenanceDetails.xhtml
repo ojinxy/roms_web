@@ -1,0 +1,258 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/WEB-INF/newTemplate.xhtml">
+
+	<ui:define name="title">ITA Examiner Maintenance </ui:define>
+	<ui:define name="pageHeader"> </ui:define>
+    
+    <ui:define name="content">
+    <!-- <script type="text/javascript" src="${request.contextPath}/script/js/mask.js" />-->
+    	<script>
+    	$("document").ready(function(){
+    			
+    			$('#javax_faces_developmentstage_messages').css('display','none');
+    		
+    			addFields();
+    			//$('#itaExaminerDetails\\:trnNbr').mask('999999999',{placeholder:""});
+    		});
+    		
+    		 function addFields(){
+					//alert();
+					  var fname =  $('#itaExaminerDetails\\:origFName').val();
+					  var lname =  $('#itaExaminerDetails\\:origLName').val();
+				var mname =  $('#itaExaminerDetails\\:origMName').val(); 
+					//alert(fname + " " + lname); 
+					 $('#itaExaminerDetails\\:FName').val(fname);
+					  $('#itaExaminerDetails\\:LName').val(lname);
+					$('#itaExaminerDetails\\:MName').val(mname);
+					 
+				 }
+    	</script>
+    	
+		
+		<h:form styleClass="form" id="itaExaminerDetails">
+		 <div class="tabs"><a href="#">#{savehideBtn == 'none'?'Edit ':'Add '}ITA Examiner Details</a></div>
+		 <div class="main borders">
+			 <p:messages autoupdate="true" id="msg" closable="true"/>
+			
+					<p:panelGrid style="margin-top:5px;width:100%" id="gridVehicleDetails">
+						<p:row>
+							<p:column colspan="2">	
+							<span style="padding-left:1px;width: 92px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="TRN: " />
+							<h:outputText value="*" styleClass="required" />
+							</span>
+							
+							<c:choose>
+								<c:when test="#{updatehideBtn == 'none'}">
+							
+								<!--<p:inputText value="#{itaExaminer.personBO.trnNbr}" id="trnNbr" maxlength="9" size="11" style="text-align: left;width:150px;margin:0 0 0 0px;" /> --> 
+								<p:inputMask value="#{itaExaminer.personBO.trnNbr}" id="trnNbr" size="11" style="text-align: left;width:150px;margin:0 0 0 0px;" mask="9?99999999" maxlength="9" placeHolder=""/>
+								
+								</c:when>
+								<c:otherwise>
+									<p:inputText value="#{itaExaminer.personBO.trnNbr}" id="trnNbr" maxlength="9" size="11" style="text-align: left;width:150px;margin:0 0 0 0px;background:#dddddd;" disabled="true"/>
+								</c:otherwise>
+							</c:choose>
+							
+							<p:commandLink action="searchTrn" id="searchTrnLink" processIds="*" ajax="true" oncomplete="addFields();" update="itaExaminerDetails,:itaExaminerDetails:msg" disabled="" style="width: 10px; margin: 0px; text-align: center; padding: 0px;">
+	     		  				<img id="trnSearchIcon" src="${request.contextPath}/images/search-icon.gif"  alt="Input search criteria" style="margin:0px;padding:0px;"></img>
+	      	 				</p:commandLink>
+      	 					 
+      	 					<p:tooltip for="searchTrnLink" value="Enter TRN and click to search" showEffect="fade" hideEffect="fade" />
+							
+							
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2">
+							<span style="padding-left:1px;width: 100px;display: inline-block;">
+							<h:outputText value="Name:" style="margin: 0px 0px 0px 0px;" />
+							</span>
+							<p:inputText  value="#{itaExaminer.personBO.lastName}" id="LName" style="text-align: left;margin: 0px 10px 0px 0px;width:120px;background:#dddddd;" disabled="true" />
+							<p:watermark for="LName" value="Last Name" />  
+							<p:inputText value="#{itaExaminer.personBO.firstName}" id="FName" style="text-align: left; margin-right: 10px;width:120px;background:#dddddd;" disabled="true"/>
+							<p:watermark for="FName" value="First Name" />  
+							<p:inputText value="#{itaExaminer.personBO.middleName}" id="MName" style="text-align: left;width:100px;background:#dddddd;" disabled="true" />
+							<p:watermark for="MName" value="Middle Name" />
+							
+							<h:inputHidden id="origLName" value="#{itaExaminer.personBO.lastName}"></h:inputHidden>
+							<h:inputHidden id="origFName" value="#{itaExaminer.personBO.firstName}"></h:inputHidden>
+							<h:inputHidden id="origMName" value="#{itaExaminer.personBO.middleName}"></h:inputHidden>  
+							</p:column>
+						</p:row>
+						
+						<p:row>
+							<p:column>	
+							<span style="padding-left:1px;width: 100px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="ID #:" style="margin: 0px 0px 0px;"/>
+							<h:outputText value="*" styleClass="required" />
+							</span>
+							<p:inputText value="#{itaExaminer.examinerId}" validatorMessage="Please enter an appropriate ID#." id="idNumber" style="text-align: left;margin: 0px 10px 0px 0px;width:150px;"  maxlength="9" size="9">
+								<f:validateRegex pattern="^[a-zA-Z0-9]*$" />
+								<p:ajax event="keyup" update="msg" global="false" />
+								
+							</p:inputText>
+							
+							
+							</p:column>
+						</p:row>
+					
+					<!-- <p:row>
+						<p:column colspan="2">
+							<br/> <h2 class="sectionTitle"><span>ITA Examiner Contact Details</span></h2>
+						</p:column>
+					</p:row> -->
+					
+					
+					<p:row>
+						<p:column >	
+							<h:outputText styleClass="outputText" value="Address" />
+						</p:column>
+						<p:column>
+							<h:outputText styleClass="outputText" value="Contact Number" />
+						</p:column>
+					</p:row>	
+					
+					<p:row>
+						<p:column >
+						<span style="padding-left:1px;width: 100px;display: inline-block;">	
+							<h:outputText styleClass="outputText" value="Street Number:" />
+						</span>
+							<p:inputText value="#{itaExaminer.personBO.streetNo}"
+								id="streetNo" maxlength="15" size="17" style="text-align: left;width:100px;margin:0 0 0 0px;" />
+						</p:column>
+						<p:column>
+							<span style="padding-left:1px;width: 50px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Home:" style="width: 151px" />
+							</span>
+							<p:inputMask id="telephoneHome" value="#{itaExaminer.personBO.telephoneHome}" mask="(9?99)999-9999" style="text-align:left;width:110px;margin:0 0 0 0px;" onfocus="this.value = this.value==''?'876':this.value;" onblur="this.value = this.value=='(876)___-____'?'':this.value;"/>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column >	
+						<span style="padding-left:1px;width: 100px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Street Name:" />
+							
+						</span>
+							<p:inputText value="#{itaExaminer.personBO.streetName}" id="streetName"	maxlength="25" size="27" style="text-align: left;margin: 5px 0px 0px 0px; width: 70%;" />
+						</p:column>
+						<p:column>
+						<span style="padding-left:1px;width: 50px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Cell:" />
+						</span>
+							<p:inputMask id="telephoneCell" styleClass="telephoneCell2" value="#{itaExaminer.personBO.telephoneCell}" mask="(9?99)999-9999" style="text-align:left;width:110px;margin:0 0 0 0px;" onfocus="this.value = this.value==''?'876':this.value;" onblur="this.value = this.value=='(876)___-____'?'':this.value;"/>
+						</p:column>					
+					</p:row>	
+					<p:row>
+						<p:column style="width:65%;">
+							<span style="padding-left:1px;width: 100px;display: inline-block;">
+								<h:outputText styleClass="outputText" value="P.O. Box:" />
+							</span>
+								<p:inputText value="#{itaExaminer.personBO.poBoxNo}" id="poBoxNo"
+									maxlength="6" size="10" style="text-align: left;margin:0 0 0 0px;width:30px;" />
+								
+								<h:outputText styleClass="outputText" value="P.O. Location:" style="margin-left:10px;"/>
+								<p:inputText value="#{itaExaminer.personBO.poLocationName}" id="poLocationName" maxlength="25" size="40" style="text-align: left;margin: 5px 0px 0px 5px;width:105px;" />
+						</p:column>
+						<p:column>
+							<span style="padding-left:1px;width: 50px;display: inline-block;">
+								<h:outputText styleClass="outputText" value="Work:" />
+							</span>
+								<p:inputMask id="telephoneWork" value="#{itaExaminer.personBO.telephoneWork}" mask="(9?99)999-9999" style="text-align:left;width:110px;margin:0 0 0 0px;" onfocus="this.value = this.value==''?'876':this.value;" onblur="this.value = this.value=='(876)___-____'?'':this.value;"/>
+						</p:column>
+					
+					</p:row>
+					<p:row>
+						<p:column colspan="2">
+						<span style="padding-left:1px;width: 100px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Mark:" />
+						</span>
+							<p:inputText value="#{itaExaminer.personBO.markText}" id="markText" maxlength="40" size="42" style="text-align: left;width:46%;margin:0 0 0 0px;" />
+						</p:column>
+					</p:row>	
+					
+					<p:row>
+						<p:column colspan="2">
+						<span style="padding-left:1px;width: 100px;display: inline-block;">
+							<h:outputText styleClass="outputText" value=" Region:" /> <h:outputText value="*" styleClass="required" />
+						</span>
+							<c:choose>
+									<c:when test="#{hideActive == true}">
+											<p:selectOneMenu value="#{itaExaminer.officeLocationCode}"
+												id="officeLocationCodes" style="width:200px;text-align:left;margin:0px 0 0px 0px;">
+												<p:ajax event="change" listener="#{itaExaminerMaintenanceServiceAction.getParishListfrmRegion()}" update=":itaExaminerDetails:parishCode" />
+												<f:selectItem itemValue="" itemLabel="[Select One]" />
+												<f:selectItems value="#{officeLocationListAll}" />
+											</p:selectOneMenu>
+									</c:when>
+									<c:otherwise>
+											<p:selectOneMenu value="#{itaExaminer.officeLocationCode}"
+												id="officeLocationCode" style="width:200px;text-align:left;margin:0px 0 0px 0px;">
+												<p:ajax event="change" listener="#{itaExaminerMaintenanceServiceAction.getParishListfrmRegion()}" update=":itaExaminerDetails:parishCode" />
+												<f:selectItem itemValue="" itemLabel="[Select One]" />
+												<f:selectItems value="#{officeLocationList}" />
+											</p:selectOneMenu>
+									</c:otherwise>
+								</c:choose>
+							
+							
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2">
+						<span style="padding-left:1px;width: 100px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Parish: " /> 
+							<h:outputText value="*" styleClass="required"/>
+						</span>
+							<p:selectOneMenu value="#{itaExaminer.personBO.parishCode}"
+								id="parishCode" style="width:200px;text-align:left;margin:0px 0 0px 0px;" disabled="#{disable}">
+								<f:selectItem itemValue="" itemLabel="[Select One]" />
+								<f:selectItems value="#{parishList}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="2">
+						<span style="padding-left:1px;width: 100px;display: inline-block;">
+							<h:outputText styleClass="outputText" value="Status:" />
+						</span>
+							<c:choose>
+								<c:when test="#{hideActive == true}">
+								<p:selectOneMenu value="#{itaExaminer.statusId}" id="statusSel" style="width:170px;text-align:left;margin:0px 0 0px 0px;">
+									<f:selectItem itemValue="ACT" itemLabel="ACTIVE"></f:selectItem>
+									<f:selectItem itemValue="INA" itemLabel="INACTIVE"></f:selectItem>
+								</p:selectOneMenu>
+								</c:when>
+								<c:otherwise>
+										<p:inputText value="" id="statId" style="text-align: left; margin-left: 0px;width:120px;background:#dddddd;" readonly="true"/>
+										<p:watermark for="statId" value="Active" />
+								</c:otherwise>
+							</c:choose>
+						</p:column>
+					</p:row>
+				
+				<p:row>
+					<p:column colspan="2" style="padding-top:20px;text-align:center;">
+					<p:commandButton styleClass="blue" value="Save" action="save" processIds="*" ajax="false" style="display:#{savehideBtn}"/>
+					<p:commandButton styleClass="blue" value="Save" action="update" processIds="*" ajax="false" style="display:#{updatehideBtn}"/>
+					<p:commandButton styleClass="blue" value="Clear" processIds="*" actionListener="#{itaExaminerMaintenanceServiceAction.clearDetail(flowRequestContext)}" update="itaExaminerDetails" ajax="true" oncomplete="addFields" style="display:#{savehideBtn}"/>
+					<p:commandButton styleClass="blue" value="Back" action="cancel" processIds="*" ajax="false"/>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
+		</h:form>
+		
+		
+	</ui:define>
+
+</ui:composition>

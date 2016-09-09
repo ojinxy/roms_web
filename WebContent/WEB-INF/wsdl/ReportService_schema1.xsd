@@ -1,0 +1,758 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://webservices.roms.toms.ta.fsl/" version="1.0" xmlns:tns="http://webservices.roms.toms.ta.fsl/">
+
+  <xs:element name="NoRecordFoundException" type="tns:NoRecordFoundException"/>
+
+  <xs:element name="RequiredFieldMissingException" type="tns:RequiredFieldMissingException"/>
+
+  <xs:element name="courtCasesNotClosed" type="tns:courtCasesNotClosed"/>
+
+  <xs:element name="courtCasesNotClosedResponse" type="tns:courtCasesNotClosedResponse"/>
+
+  <xs:element name="courtScheduleReport" type="tns:courtScheduleReport"/>
+
+  <xs:element name="courtScheduleReportResponse" type="tns:courtScheduleReportResponse"/>
+
+  <xs:element name="eventAuditReport" type="tns:eventAuditReport"/>
+
+  <xs:element name="eventAuditReportResponse" type="tns:eventAuditReportResponse"/>
+
+  <xs:element name="operationSummaryReport" type="tns:operationSummaryReport"/>
+
+  <xs:element name="operationSummaryReportResponse" type="tns:operationSummaryReportResponse"/>
+
+  <xs:element name="performanceStatisticsReport" type="tns:performanceStatisticsReport"/>
+
+  <xs:element name="performanceStatisticsReportResponse" type="tns:performanceStatisticsReportResponse"/>
+
+  <xs:element name="summonsReport" type="tns:summonsReport"/>
+
+  <xs:element name="summonsReportResponse" type="tns:summonsReportResponse"/>
+
+  <xs:element name="summonsesNotYetServed" type="tns:summonsesNotYetServed"/>
+
+  <xs:element name="summonsesNotYetServedResponse" type="tns:summonsesNotYetServedResponse"/>
+
+  <xs:element name="vehicleSeizedReport" type="tns:vehicleSeizedReport"/>
+
+  <xs:element name="vehicleSeizedReportResponse" type="tns:vehicleSeizedReportResponse"/>
+
+  <xs:element name="warningNoticeNoProsecution" type="tns:warningNoticeNoProsecution"/>
+
+  <xs:element name="warningNoticeNoProsecutionResponse" type="tns:warningNoticeNoProsecutionResponse"/>
+
+  <xs:complexType name="eventAuditReport">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="reportCriteria" type="tns:eventAuditReportCriteriaBO"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUserRegion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="eventAuditReportCriteriaBO">
+    <xs:complexContent>
+      <xs:extension base="tns:parentReportCriteria">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="createUserName" type="xs:string"/>
+          <xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="eventCode" type="xs:int"/>
+          <xs:element minOccurs="0" name="refType" type="xs:string"/>
+          <xs:element minOccurs="0" name="sortBy" type="xs:string"/>
+          <xs:element minOccurs="0" name="startDate" type="xs:dateTime"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="TAOfficeRegion" nillable="true" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="parentReportCriteria">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="eventAuditReportResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:eventAuditReportBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="eventAuditReportBO">
+    <xs:complexContent>
+      <xs:extension base="tns:reportBO">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="results" nillable="true" type="tns:eventAuditReportResultsBO"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="reportBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="applicationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="region" type="xs:string"/>
+      <xs:element minOccurs="0" name="regionDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="reportName" type="xs:string"/>
+      <xs:element minOccurs="0" name="searchCriteria" type="xs:string"/>
+      <xs:element minOccurs="0" name="startDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="userName" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="eventAuditReportResultsBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element minOccurs="0" name="createUserFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="createUserName" type="xs:string"/>
+      <xs:element minOccurs="0" name="eventDate" type="xs:string"/>
+      <xs:element minOccurs="0" name="eventDesc" type="xs:string"/>
+      <xs:element minOccurs="0" name="officeLocation" type="xs:string"/>
+      <xs:element minOccurs="0" name="refType1Desc" type="xs:string"/>
+      <xs:element minOccurs="0" name="refType1Label" type="xs:string"/>
+      <xs:element minOccurs="0" name="refType1Value" type="xs:string"/>
+      <xs:element minOccurs="0" name="refType2Desc" type="xs:string"/>
+      <xs:element minOccurs="0" name="refType2Label" type="xs:string"/>
+      <xs:element minOccurs="0" name="refType2Value" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="RequiredFieldMissingException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="NoRecordFoundException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="courtCasesNotClosed">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="reportCriteria" type="tns:courtScheduleCriteriaBO"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUserRegion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="courtScheduleCriteriaBO">
+    <xs:complexContent>
+      <xs:extension base="tns:parentReportCriteria">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="courtId" type="xs:int"/>
+          <xs:element minOccurs="0" name="offenderFirstName" type="xs:string"/>
+          <xs:element minOccurs="0" name="offenderId" type="xs:int"/>
+          <xs:element minOccurs="0" name="offenderLastName" type="xs:string"/>
+          <xs:element minOccurs="0" name="offenderTRN" type="xs:string"/>
+          <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+          <xs:element minOccurs="0" name="roadOperationName" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="TAOfficeRegions" nillable="true" type="xs:string"/>
+          <xs:element minOccurs="0" name="TAStaffId" type="xs:string"/>
+          <xs:element minOccurs="0" name="TAStaffTRN" type="xs:string"/>
+          <xs:element minOccurs="0" name="trialEndDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="trialStartDate" type="xs:dateTime"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="courtCasesNotClosedResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:courtCasesOpenedReportBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="courtCasesOpenedReportBO">
+    <xs:complexContent>
+      <xs:extension base="tns:reportBO">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="courtCaseList" nillable="true" type="tns:courtCasesOpenedReportResultsBO"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="courtCasesOpenedReportResultsBO">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="courtAppearanceList" nillable="true" type="tns:courtAppearanceReportResultsBO"/>
+      <xs:element minOccurs="0" name="courtCaseStatus" type="xs:string"/>
+      <xs:element minOccurs="0" name="courtDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="courtDetails" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenceDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="offenceDetails" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadOperationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAOfficeRegion" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAOfficeRegionDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAStaffFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="verdict" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="courtAppearanceReportResultsBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element minOccurs="0" name="courtAppearanceStatus" type="xs:string"/>
+      <xs:element minOccurs="0" name="courtDateTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="courtDetails" type="xs:string"/>
+      <xs:element minOccurs="0" name="courtRuling" type="xs:string"/>
+      <xs:element minOccurs="0" name="plea" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="performanceStatisticsReport">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="reportCriteria" type="tns:performanceStatisticsReportCriteriaBO"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUserRegion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="performanceStatisticsReportCriteriaBO">
+    <xs:complexContent>
+      <xs:extension base="tns:parentReportCriteria">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="operationCategory" type="xs:string"/>
+          <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+          <xs:element minOccurs="0" name="roadOperationName" type="xs:string"/>
+          <xs:element minOccurs="0" name="startDate" type="xs:dateTime"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="strategyIds" nillable="true" type="xs:int"/>
+          <xs:element minOccurs="0" name="TAOfficeRegion" type="xs:string"/>
+          <xs:element minOccurs="0" name="TAStaffId" type="xs:string"/>
+          <xs:element minOccurs="0" name="TAStaffTRN" type="xs:string"/>
+          <xs:element minOccurs="0" name="teamLeadId" type="xs:string"/>
+          <xs:element minOccurs="0" name="teamLeadTRN" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="performanceStatisticsReportResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:roadOperationsStatisticsReportBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadOperationsStatisticsReportBO">
+    <xs:complexContent>
+      <xs:extension base="tns:reportBO">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="regionStatistics" nillable="true" type="tns:regionStatisticsBO"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="regionStatisticsBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="officeLocCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="officeLocDescription" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="roadOpSummary" nillable="true" type="tns:roadOperationSummaryResultsBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="roadOperationStatistics" nillable="true" type="tns:roadOperationStatisticsBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadOperationSummaryResultsBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="actualEndDateTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="actualStartDateTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="allInOrders" type="xs:int"/>
+      <xs:element minOccurs="0" name="countAbsentITAExaminers" type="xs:int"/>
+      <xs:element minOccurs="0" name="countAbsentJPs" type="xs:int"/>
+      <xs:element minOccurs="0" name="countAbsentMembers" type="xs:int"/>
+      <xs:element minOccurs="0" name="countAbsentPoliceOfficers" type="xs:int"/>
+      <xs:element minOccurs="0" name="countAbsentTAInspectors" type="xs:int"/>
+      <xs:element minOccurs="0" name="countBadgesChecked" type="xs:int"/>
+      <xs:element minOccurs="0" name="countCitationChecks" type="xs:int"/>
+      <xs:element minOccurs="0" name="countCompliancyActivitiesCommited" type="xs:int"/>
+      <xs:element minOccurs="0" name="countDrivesLicenceChecked" type="xs:int"/>
+      <xs:element minOccurs="0" name="countITAExaminers" type="xs:int"/>
+      <xs:element minOccurs="0" name="countJPs" type="xs:int"/>
+      <xs:element minOccurs="0" name="countMotorVehiclesChecked" type="xs:int"/>
+      <xs:element minOccurs="0" name="countOtherChecks" type="xs:int"/>
+      <xs:element minOccurs="0" name="countPlatesRemoved" type="xs:int"/>
+      <xs:element minOccurs="0" name="countPoliceOfficers" type="xs:int"/>
+      <xs:element minOccurs="0" name="countRoadLicencesChecked" type="xs:int"/>
+      <xs:element minOccurs="0" name="countSummonsIssued" type="xs:int"/>
+      <xs:element minOccurs="0" name="countTAInspectors" type="xs:int"/>
+      <xs:element minOccurs="0" name="countTeamMembers" type="xs:int"/>
+      <xs:element minOccurs="0" name="countVehiclesSeized" type="xs:int"/>
+      <xs:element minOccurs="0" name="countWaningNoticesIssued" type="xs:int"/>
+      <xs:element minOccurs="0" name="countWarningNoProsecutions" type="xs:int"/>
+      <xs:element minOccurs="0" name="durationOfOperationInMinutes" type="xs:int"/>
+      <xs:element minOccurs="0" name="operationCategory" type="xs:string"/>
+      <xs:element minOccurs="0" name="operationCreateDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="operationId" type="xs:int"/>
+      <xs:element minOccurs="0" name="operationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="operationStatus" type="xs:string"/>
+      <xs:element minOccurs="0" name="scheduledEndDateTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="scheduledStartDateTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="TAOfficeRegion" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAOfficeRegionDescription" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="teamSummaries" nillable="true" type="tns:roadOperationTeamSummaryResults"/>
+      <xs:element minOccurs="0" name="warningsForProcecution" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadOperationTeamSummaryResults">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="allInOrders" type="xs:int"/>
+      <xs:element minOccurs="0" name="countAbsentMembers" type="xs:int"/>
+      <xs:element minOccurs="0" name="countBadgesChecked" type="xs:int"/>
+      <xs:element minOccurs="0" name="countCitationChecks" type="xs:int"/>
+      <xs:element minOccurs="0" name="countCompliancyActivitiesCommited" type="xs:int"/>
+      <xs:element minOccurs="0" name="countDrivesLicenceChecked" type="xs:int"/>
+      <xs:element minOccurs="0" name="countMotorVehiclesChecked" type="xs:int"/>
+      <xs:element minOccurs="0" name="countOtherChecks" type="xs:int"/>
+      <xs:element minOccurs="0" name="countPlatesRemoved" type="xs:int"/>
+      <xs:element minOccurs="0" name="countRoadLicencesChecked" type="xs:int"/>
+      <xs:element minOccurs="0" name="countSummonsIssued" type="xs:int"/>
+      <xs:element minOccurs="0" name="countTeamMembers" type="xs:int"/>
+      <xs:element minOccurs="0" name="countVehiclesSeized" type="xs:int"/>
+      <xs:element minOccurs="0" name="countWaningNoticesIssued" type="xs:int"/>
+      <xs:element minOccurs="0" name="operationId" type="xs:int"/>
+      <xs:element minOccurs="0" name="teamId" type="xs:int"/>
+      <xs:element minOccurs="0" name="teamLeadName" type="xs:string"/>
+      <xs:element minOccurs="0" name="teamName" type="xs:string"/>
+      <xs:element minOccurs="0" name="warningsForProcecution" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadOperationStatisticsBO">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ITAExaminerSummary" nillable="true" type="tns:itaExaminerStatisticsBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="JPSummary" nillable="true" type="tns:jpStatisticsBO"/>
+      <xs:element minOccurs="0" name="operationName" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="policeOfficerSummary" nillable="true" type="tns:policeOfficerStatisticsBO"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="TAOfficerSummary" nillable="true" type="tns:taOfficerStatisticsBO"/>
+      <xs:element minOccurs="0" name="teamLeadFullNames" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="itaExaminerStatisticsBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="attended" type="xs:string"/>
+      <xs:element minOccurs="0" name="fullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="idNumber" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="jpStatisticsBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="attended" type="xs:string"/>
+      <xs:element minOccurs="0" name="countSummonsSigned" type="xs:int"/>
+      <xs:element minOccurs="0" name="fullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="regNumber" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="policeOfficerStatisticsBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="attended" type="xs:string"/>
+      <xs:element minOccurs="0" name="fullName" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="taOfficerStatisticsBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="allInOrders" type="xs:int"/>
+      <xs:element minOccurs="0" name="attended" type="xs:string"/>
+      <xs:element minOccurs="0" name="countBadgeChecks" type="xs:int"/>
+      <xs:element minOccurs="0" name="countCitationChecks" type="xs:int"/>
+      <xs:element minOccurs="0" name="countCompliancyChecks" type="xs:int"/>
+      <xs:element minOccurs="0" name="countDLChecks" type="xs:int"/>
+      <xs:element minOccurs="0" name="countMVChecks" type="xs:int"/>
+      <xs:element minOccurs="0" name="countOtherChecks" type="xs:int"/>
+      <xs:element minOccurs="0" name="countPlatesRemoved" type="xs:int"/>
+      <xs:element minOccurs="0" name="countRLChecks" type="xs:int"/>
+      <xs:element minOccurs="0" name="countSummonsIssued" type="xs:int"/>
+      <xs:element minOccurs="0" name="countVehiclesSeized" type="xs:int"/>
+      <xs:element minOccurs="0" name="countWarningNoticesIssued" type="xs:int"/>
+      <xs:element minOccurs="0" name="fullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="staffId" type="xs:string"/>
+      <xs:element minOccurs="0" name="staffType" type="xs:string"/>
+      <xs:element minOccurs="0" name="warningsForProcecution" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="courtScheduleReport">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="reportCriteria" type="tns:courtScheduleCriteriaBO"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUserRegion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="courtScheduleReportResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:courtScheduleReportBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="courtScheduleReportBO">
+    <xs:complexContent>
+      <xs:extension base="tns:reportBO">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="results" nillable="true" type="tns:courtScheduleReportResultsBO"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="courtScheduleReportResultsBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="courtAppearanceStatus" type="xs:string"/>
+      <xs:element minOccurs="0" name="courtBO" type="tns:courtBO"/>
+      <xs:element minOccurs="0" name="courtCaseStatus" type="xs:string"/>
+      <xs:element minOccurs="0" name="courtDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="offenceDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="offenceDetails" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadOperationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAOfficeRegion" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAOfficeRegionDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAStaffFullName" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="courtBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="auditEntryBO" type="tns:auditEntryBO"/>
+      <xs:element minOccurs="0" name="courtId" type="xs:int"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="markText" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="parishName" type="xs:string"/>
+      <xs:element minOccurs="0" name="poBoxNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="poLocationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="shortDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetName" type="xs:string"/>
+      <xs:element minOccurs="0" name="streetNo" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="auditEntryBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="createDTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="createUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="updateDTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="updateUsername" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="summonsReport">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="reportCriteria" type="tns:summonsReportCriteriaBO"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUserRegion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="summonsReportCriteriaBO">
+    <xs:complexContent>
+      <xs:extension base="tns:parentReportCriteria">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="issuedEndDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="issuedStartDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="offenceEndDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="offenceStartDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="offenderFirstName" type="xs:string"/>
+          <xs:element minOccurs="0" name="offenderId" type="xs:int"/>
+          <xs:element minOccurs="0" name="offenderLastName" type="xs:string"/>
+          <xs:element minOccurs="0" name="offenderTRN" type="xs:string"/>
+          <xs:element minOccurs="0" name="operationCategory" type="xs:string"/>
+          <xs:element minOccurs="0" name="operationEndDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="operationStartDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="printEndDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="printStartDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+          <xs:element minOccurs="0" name="roadOperationName" type="xs:string"/>
+          <xs:element minOccurs="0" name="status" type="xs:string"/>
+          <xs:element minOccurs="0" name="TAOfficeRegion" type="xs:string"/>
+          <xs:element minOccurs="0" name="TAStaffId" type="xs:string"/>
+          <xs:element minOccurs="0" name="TAStaffTRN" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="summonsReportResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:summonsReportBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="summonsReportBO">
+    <xs:complexContent>
+      <xs:extension base="tns:reportBO">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="results" nillable="true" type="tns:summonsReportResultsBO"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="summonsReportResultsBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element minOccurs="0" name="courtDetails" type="xs:string"/>
+      <xs:element minOccurs="0" name="dateOfOffence" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="issueDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="JPFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="locationOfOffence" type="xs:string"/>
+      <xs:element minOccurs="0" name="manualSerialNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenceDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="printDateTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="rePrintDateTime" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="reason" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadOperationDetails" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="statusId" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAOfficeRegion" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAOfficeRegionDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAStaffFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="vehicleDetails" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="warningNoticeNoProsecution">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="reportCriteria" type="tns:warningNoProReportCriteriaBO"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUserRegion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="warningNoProReportCriteriaBO">
+    <xs:complexContent>
+      <xs:extension base="tns:parentReportCriteria">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="issuedEndDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="issuedStartDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="offenderFirstName" type="xs:string"/>
+          <xs:element minOccurs="0" name="offenderId" type="xs:int"/>
+          <xs:element minOccurs="0" name="offenderLastName" type="xs:string"/>
+          <xs:element minOccurs="0" name="offenderTRN" type="xs:string"/>
+          <xs:element minOccurs="0" name="operationCategory" type="xs:string"/>
+          <xs:element minOccurs="0" name="operationEndDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="operationStartDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="printEndDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="printStartDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+          <xs:element minOccurs="0" name="roadOperationName" type="xs:string"/>
+          <xs:element minOccurs="0" name="status" type="xs:string"/>
+          <xs:element minOccurs="0" name="TAOfficeRegion" type="xs:string"/>
+          <xs:element minOccurs="0" name="TAStaffId" type="xs:string"/>
+          <xs:element minOccurs="0" name="TAStaffTRN" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="warningNoticeNoProsecutionResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:warningNoProsecutionReportBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="warningNoProsecutionReportBO">
+    <xs:complexContent>
+      <xs:extension base="tns:reportBO">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="warningNoProsecutionDetailsList" nillable="true" type="tns:warningNoProsecutionDetailsBO"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="warningNoProsecutionDetailsBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="allegation" type="xs:string"/>
+      <xs:element minOccurs="0" name="dateOfOffence" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="locationOfOffence" type="xs:string"/>
+      <xs:element minOccurs="0" name="manualSerialNumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenceDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenceShortDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderVehicleDetials" type="xs:string"/>
+      <xs:element minOccurs="0" name="offendersDriverLicence" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadOperationName" type="xs:string"/>
+      <xs:element minOccurs="0" name="status" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAStaffFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAStaffID" type="xs:string"/>
+      <xs:element minOccurs="0" name="TATeamLeadFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="vehicleOwnerFullNames" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="operationSummaryReport">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="reportCriteria" type="tns:operationSummaryReportCriteriaBO"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUserRegion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="operationSummaryReportCriteriaBO">
+    <xs:complexContent>
+      <xs:extension base="tns:parentReportCriteria">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="operationCategory" type="xs:string"/>
+          <xs:element minOccurs="0" name="operationEndDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="operationStartDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="roadOperationIds" nillable="true" type="xs:int"/>
+          <xs:element minOccurs="0" name="roadOperationName" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="TAOfficeRegions" nillable="true" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="teamLeadStaffIds" nillable="true" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="teamLeadTRNs" nillable="true" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="operationSummaryReportResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:roadOperationSummaryBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roadOperationSummaryBO">
+    <xs:complexContent>
+      <xs:extension base="tns:reportBO">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="results" nillable="true" type="tns:roadOperationSummaryResultsBO"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="vehicleSeizedReport">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="reportCriteria" type="tns:vehicleSeizedReportCriteriaBO"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUserRegion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vehicleSeizedReportCriteriaBO">
+    <xs:complexContent>
+      <xs:extension base="tns:parentReportCriteria">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="offenceEndDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="offenceStartDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="offenderFirstName" type="xs:string"/>
+          <xs:element minOccurs="0" name="offenderId" type="xs:int"/>
+          <xs:element minOccurs="0" name="offenderLastName" type="xs:string"/>
+          <xs:element minOccurs="0" name="offenderTRN" type="xs:string"/>
+          <xs:element minOccurs="0" name="poundId" type="xs:int"/>
+          <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+          <xs:element minOccurs="0" name="roadOperationName" type="xs:string"/>
+          <xs:element minOccurs="0" name="TAOfficeRegion" type="xs:string"/>
+          <xs:element minOccurs="0" name="TAStaffId" type="xs:string"/>
+          <xs:element minOccurs="0" name="TAStaffTRN" type="xs:string"/>
+          <xs:element minOccurs="0" name="wreckingCompanyId" type="xs:int"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="vehicleSeizedReportResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:vehicleSeizedReportBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vehicleSeizedReportBO">
+    <xs:complexContent>
+      <xs:extension base="tns:reportBO">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="results" nillable="true" type="tns:vehicleSeizedReportResultsBO"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="vehicleSeizedReportResultsBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="dateOfOffence" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="locationOfOffence" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenceDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenceShortDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="poundName" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadOperationDetails" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAOfficeRegion" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAOfficeRegionDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAStaffFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="vehicleDetails" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="witnessesFullName" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="wreckingCompanyName" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="summonsesNotYetServed">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="reportCriteria" type="tns:summonsOutstandingReportCriteriaBO"/>
+      <xs:element minOccurs="0" name="currentUsername" type="xs:string"/>
+      <xs:element minOccurs="0" name="currentUserRegion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="summonsOutstandingReportCriteriaBO">
+    <xs:complexContent>
+      <xs:extension base="tns:parentReportCriteria">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="offenderFirstName" type="xs:string"/>
+          <xs:element minOccurs="0" name="offenderId" type="xs:int"/>
+          <xs:element minOccurs="0" name="offenderLastName" type="xs:string"/>
+          <xs:element minOccurs="0" name="offenderTRN" type="xs:string"/>
+          <xs:element minOccurs="0" name="operationCategory" type="xs:string"/>
+          <xs:element minOccurs="0" name="operationEndDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="operationStartDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="roadOperationId" type="xs:int"/>
+          <xs:element minOccurs="0" name="roadOperationName" type="xs:string"/>
+          <xs:element minOccurs="0" name="TAOfficeRegion" type="xs:string"/>
+          <xs:element minOccurs="0" name="TAStaffId" type="xs:string"/>
+          <xs:element minOccurs="0" name="TAStaffTRN" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="summonsesNotYetServedResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:summonsOutstandingReportBO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="summonsOutstandingReportBO">
+    <xs:complexContent>
+      <xs:extension base="tns:reportBO">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="results" nillable="true" type="tns:summonsOutstandingReportResultsBO"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="summonsOutstandingReportResultsBO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="courtDetails" type="xs:string"/>
+      <xs:element minOccurs="0" name="dateOfOffence" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="JPFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="locationOfOffence" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenceDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="offenderFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="roadOperationDetails" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAOfficeRegion" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAOfficeRegionDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAStaffFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="vehicleDetails" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

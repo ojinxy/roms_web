@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	    http://www.springframework.org/schema/beans
+       	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        ">
+		
+
+ 	<!-- Message Bundle --> 	
+ 	<!--  <bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="messages" />
+	</bean>-->
+	
+	<!--  <bean id="applicationRunTimeStorage" class="fsl.ta.toms.roms.beans.ApplicationRunTimeStorage"></bean>
+	<bean id="roadCheckOperationConverter" class="org.fsl.converter.RoadCheckOperationConverter" scope="prototype"></bean>-->
+	
+			
+	<!-- properties file  -->
+	<!--
+	<bean id="properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+	    <property name="locations">
+	        <list><value>classpath:application.properties</value></list>
+	    </property>
+	</bean>
+	-->
+
+
+	
+</beans>

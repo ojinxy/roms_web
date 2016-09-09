@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+ 
+ <secured attributes="ROLE_ROMS_REF_COURT_SEARCH" />	
+        
+    <var name="mode" class="java.lang.String" />
+	<var name="saved" class="java.lang.String" />
+	<var name="court" class="fsl.ta.toms.roms.bo.CourtBO" />
+	<var name="courts" class="org.fsl.roms.view.CourtBean" />
+	<var name="criteria" class="fsl.ta.toms.roms.search.criteria.impl.CourtCriteriaBO" />
+	<var name="locationList" class="java.util.ArrayList" />
+	<var name="courtList" class="java.util.ArrayList" />
+	<var name="errorMsg" class="java.lang.String" />
+	<var name="savehideBtn" class="java.lang.String" />
+	<var name="updatehideBtn" class="java.lang.String" />
+	<var name="hideActive" class="java.lang.String"/>
+	<var name="constants" class="org.fsl.roms.constants.Constants.UserPermissions" />
+	
+	<on-start>
+			<evaluate expression="parishMaintenanceServiceAction.getParishes" ></evaluate>
+			<evaluate expression="courtMaintenanceServiceAction.getCourts" ></evaluate>
+	</on-start>
+
+<view-state id="courtMaintenanceSearch" redirect="false">
+	<transition on="search">
+		<evaluate expression="courtMaintenanceServiceAction.search"></evaluate>
+			<!-- <set name="flowScope.mode" value="'search'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+			<render fragments="courtResults" /> -->
+	</transition>
+	
+	<transition on="view" to="courtMaintenanceDetails">
+			<set name="flowScope.mode" value="'view'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+			<set name="flowScope.court" value="flowScope.courts.selectedRow" />
+	</transition>
+
+	<transition on="add">
+		<evaluate expression="courtMaintenanceServiceAction.add(flowRequestContext)"></evaluate>
+			<set name="flowScope.updatehideBtn" value="'none'"></set>
+			<set name="flowScope.savehideBtn" value="''"></set>
+			<set name="flowScope.hideActive" value="'false'"></set>
+			<set name="flowScope.mode" value="'save'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+			
+		</transition>
+		
+		<transition on="edit">
+			<evaluate expression="courtMaintenanceServiceAction.select(flowRequestContext)"></evaluate>
+			<set name="flowScope.savehideBtn" value="'none'"></set>
+			<set name="flowScope.updatehideBtn" value="''"></set>
+			<set name="flowScope.hideActive" value="'true'"></set>
+			
+		</transition>
+		
+		
+		<transition on="save">
+			<evaluate expression="courtMaintenanceServiceAction.savecourt(flowRequestContext)" />	
+		</transition>
+		
+		<transition on="update">
+			<evaluate expression="courtMaintenanceServiceAction.updatecourt(flowRequestContext)" />
+		</transition>
+		
+		<!-- Sort the values on the screen -->
+		<transition on="sort" to="courtMaintenanceSearch">
+			<set name="criteria.sortOn" value="requestParameters.sortOn"/>
+			<evaluate expression="courtMaintenanceServiceAction.sort" />	
+			<set name="flowScope.courts" value="flowScope.datatable.pageElements" />					
+			<render fragments="courtMaintenanceSearch,courtResults" />
+		</transition>
+		
+		<!-- Next action on datatable -->
+		<transition on="next" to="courtMaintenanceSearch">
+			<evaluate expression="courtMaintenanceServiceAction.next" />	
+			<set name="flowScope.courts" value="flowScope.datatable.pageElements" />	
+			<render fragments="courtMaintenanceSearch,courtResults" />
+		</transition>
+		
+		<!-- previous action on datatable -->
+		<transition on="previous" to="courtMaintenanceSearch">
+			<evaluate expression="courtMaintenanceServiceAction.previous" />	
+			<set name="flowScope.courts" value="flowScope.datatable.pageElements" />				
+			<render fragments="courtMaintenanceSearch,courtResults" />
+		</transition>
+		
+		<!-- first action on datatable -->
+		<transition on="first" to="courtMaintenanceSearch">
+			<evaluate expression="courtMaintenanceServiceAction.first" />	
+			<set name="flowScope.courts" value="flowScope.datatable.pageElements" />				
+			<render fragments="courtMaintenanceSearch,courtResults" />
+		</transition>
+		
+		<!-- last action on datatable -->
+		<transition on="last" to="courtMaintenanceSearch">
+			<evaluate expression="courtMaintenanceServiceAction.last" />	
+			<set name="flowScope.courts" value="flowScope.datatable.pageElements" />				
+			<render fragments="courtMaintenanceSearch,courtResults" />
+		</transition>
+		
+		<transition on="clear" to="endState" />
+		
+		<transition on="cancel" to="courtMaintenanceSearch">
+			<evaluate expression="courtMaintenanceServiceAction.back(flowRequestContext)" />	
+			<set name="flowScope.saved" value="'false'"></set>			
+			<render fragments="courtSearch" />
+		</transition>
+		
+		
+	
+</view-state>
+
+	
+
+	<!-- <action-state id="search">
+		<evaluate expression="courtMaintenanceServiceAction.search"></evaluate>
+		<transition on="success" to="courtMaintenanceSearch"></transition>
+		<transition on="error" to="courtMaintenanceSearch" />
+		<transition on="yes" to="courtMaintenanceSearch">
+			<set name="flowScope.mode" value="'view'"></set>
+		</transition>
+	</action-state>-->
+
+	<!-- <action-state id="savecourt">
+		<evaluate expression="courtMaintenanceServiceAction.savecourt(flowRequestContext)" />		
+		<transition on="success" to="courtMaintenanceSearch">
+			<set name="flowScope.saved" value="'true'"></set>
+			<set name="flowScope.mode" value="'view'"></set>
+			<set name="flowScope.errorMsg" value="''"></set>	
+		</transition>
+		<transition on="error" to="courtMaintenanceSearch">
+			<set name="flowScope.errorMsg" value="'true'"></set>
+		</transition>
+	</action-state>-->
+
+	<!-- <action-state id="updatecourt">
+		<evaluate expression="courtMaintenanceServiceAction.updatecourt(flowRequestContext)" />
+		<transition on="success" to="courtMaintenanceSearch">
+			<set name="flowScope.errorMsg" value="''"></set>
+		</transition>
+
+		<transition on="error" to="courtMaintenanceSearch">
+			<set name="flowScope.errorMsg" value="'true'"></set>
+		</transition>
+
+	</action-state> -->
+	
+	<end-state id="endState" />
+	
+</flow>
+
+
+
+
+

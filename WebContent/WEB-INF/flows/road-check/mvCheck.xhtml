@@ -1,0 +1,269 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com">
+
+	<ui:fragment id="page">	
+					<p:panel  id="mvPanel" header="Motor Vehicle Query Results" style="vertical-align: top; text-align:left;" rendered="true">  
+	    				<p:panel  id="mvTopPan" style="vertical-align: top;" >  
+	    				
+						<ui:include src="fragments/mvCheckInnerFragment.xhtml"></ui:include>	    					
+
+	    					
+	    					<br/>
+	    					 <div align="left">
+	    				<h:outputLabel value="Indicate Action to be taken " style="font-weight:bold;"/> <br/>
+	    			 	<p:selectOneRadio id="customRadioMV" value="#{recordOffenceOutcomeView.mvActionToBeTaken}" style="margin-bottom: 0px;" >  
+	      					  <f:selectItem  itemLabel="All is in Order" itemValue="A" />  
+	      					  <f:selectItem itemLabel="Record Offences and Outcomes" itemValue="R"  />   
+	      					  
+	      					  <p:ajax oncomplete="addMVRowOnComplete(); updateMVTable();"  listener="#{roadCheckServiceAction.indicateActionMV}" update=":recordOffenceOutcome:tabV:panelDataTableMV :recordOffenceOutcome:panelButtons"></p:ajax>   
+	  					  </p:selectOneRadio>
+	  					    
+	  					  </div>
+	  					  	  					  
+	    				</p:panel>
+	    				
+	    				<br/>
+						<p:panel id="panelDataTableMVErr">
+						<h:outputLabel value="#{recordOffenceOutcomeView.mvTableError}" id="mvTableErr1" style="display:none"/> 
+						<h:outputLabel value="#{mvOffenceList.size()}" id="mvOffListSize" style="display:none"/> 
+							 <h:outputLabel value="#{recordOffenceOutcomeView.mvOpenRecordCount}" style="display:none"/>
+						</p:panel>
+						
+						<p:panel id="panelMsgMV">
+						<p:messages id="msgMV" closable="true"/>
+						</p:panel>
+	    			 <p:panel id="panelDataTableMV">
+	    		
+	    			  <p:panel rendered="#{recordOffenceOutcomeView.mvActionToBeTaken=='R' &amp;&amp; mvOffenceList.size() == 0}">
+	    			 		<h:outputLabel value="No Offence related to Motor Vehicle Check" style="font-weight:bold;"/>
+	    			 	</p:panel>
+	    			 	
+	  					  <p:dataTable var="offOutcome" value="#{mvOffenceOutcomes}" editable="true" rendered="#{recordOffenceOutcomeView.mvActionToBeTaken=='R' &amp;&amp; mvOffenceList.size() > 0}"
+	  					   rows="50" id="mvOffenceOutcomeList" style="width:100%">  	
+  
+						       <f:facet name="header" >  
+						           <div align="left" id ="mvTableHeader">
+						           <h:outputLabel value=" Offences/Outcomes Observed " style="padding-right:30px"/>  
+						           <p:commandButton icon="ui-icon-plusthick"  id="addMVBtn1"  value="Add" action="mvAddOffenceOutcome" processIds="*"  ajax="true" style="padding-right:20px" oncomplete="addMVRowOnComplete();" update=":recordOffenceOutcome:tabV:panelDataTableMV" disabled="#{recordOffenceOutcomeView.mvOpenRecordCount > 0 || mvOffenceList.size() == mvOffenceOutcomes.size()}"/>
+						           <p:commandButton icon="ui-icon-trash"  id="deleteBtn1"  value="Delete" action="mvDeleteOffenceOutcome" processIds="*"  ajax="true" update=":recordOffenceOutcome:tabV:panelDataTableMV :recordOffenceOutcome:panelButtons" disabled="#{!recordOffenceOutcomeView.mvOffenceOutcomeSelected || recordOffenceOutcomeView.mvOpenRecordCount > 0 || mvOffenceOutcomes.size() == 0}"
+						           	/>
+						           </div>
+						           
+						       </f:facet>   
+						 
+						 		<p:ajax event="rowEditInit"  listener="#{roadCheckServiceAction.initRowEditMV}" oncomplete="updateMVTable();disablePenMV();disableCheckBoxMV();"  /> 
+						 		
+						 		  <p:ajax event="rowEdit"  listener="#{roadCheckServiceAction.editMVSelectedOffenceOutcome}" oncomplete="updateMVTableEdit();editAndCancelHideMV();"  update=":recordOffenceOutcome:tabV:panelMsgMV :recordOffenceOutcome:tabV:mvTableErr1" />  
+						      <p:ajax event="rowEditCancel" listener="#{roadCheckServiceAction.cancelMVEditSelectedOffenceOutcome}" update=":recordOffenceOutcome:tabV:panelMsgMV" oncomplete="updateMVTable();selectMVAll();cancelHideMV();"/>  
+						      
+						 		  <p:column  style="width:6%" id="checkBoxes">  
+						         <f:facet  name="header">
+									 <p:selectBooleanCheckbox id="mvSelectAllBox" value="#{recordOffenceOutcomeView.mvSelectAllOffenceOutcome}" onchange="selectMVAll();" disabled="#{recordOffenceOutcomeView.mvOpenRecordCount > 0}">
+									 		
+									 </p:selectBooleanCheckbox> 
+									</f:facet>
+									
+						                <p:selectBooleanCheckbox value="#{offOutcome.rowSelected}"  id="mvSelected" styleClass="ui-corner-checkbox">
+						                <p:ajax oncomplete="selectMVRow();" disabled="#{recordOffenceOutcomeView.mvOpenRecordCount > 0}"/>   
+						                </p:selectBooleanCheckbox>  
+						             
+						       </p:column>  
+						     
+						       <p:column headerText="Offence(s)" style="width:41%; text-align:left">  
+						         
+						                  <p:cellEditor>  
+						               <f:facet name="output">  
+						               <h:outputLabel value="#{offOutcome.offenceShortDescription}" /> 
+						                   
+						               </f:facet>  
+						               <f:facet name="input">  
+						                  <p:selectOneMenu style="width:100%"
+								id="comboOffenceInput" value="#{offOutcome.offenceId}">
+								<f:selectItem itemValue="" itemLabel="[Select One]" />
+								<f:selectItems var="offence" itemValue="#{offence.offenceId}" itemLabel="#{offence.shortDescription}" value="#{mvOffenceList}" />
+									</p:selectOneMenu>  
+									
+									   </f:facet>  
+						           </p:cellEditor>
+						            
+						       </p:column>  
+						        <p:column headerText="Issue Summons" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">  
+						                   <f:subview rendered="#{offOutcome.issueSummons}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.issueSummons}"/>  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column> 
+						        <p:column headerText="Issue Warning Notice" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">    
+						                   <f:subview rendered="#{offOutcome.issuewWarningNotice}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.issuewWarningNotice}"/>  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column>  
+						       <p:column headerText="Warning No Prosecution" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">  
+						                   <f:subview rendered="#{offOutcome.issueWarningNP}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.issueWarningNP}"/>  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column> 
+						       <p:column headerText="Warning For Prosecution" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">   
+						                    <f:subview rendered="#{offOutcome.warnForProsecution}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.warnForProsecution}"/>  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column>
+<!-- 						        <p:column headerText="Remove Plate" style="width:10%">   -->
+<!-- 						           <p:cellEditor>   -->
+<!-- 						               <f:facet name="output">    -->
+<!-- 						                     <f:subview rendered="#{offOutcome.removePlate}"> -->
+<!-- 												<i class="icon icon-check icon-1x"></i> -->
+<!-- 											</f:subview> -->
+<!-- 						               </f:facet>   -->
+						             
+<!-- 						               <f:facet name="input">   -->
+<!-- 						                   <p:selectBooleanCheckbox value="#{offOutcome.removePlate}" disabled="#{initiateView.activityType == 'U'}"/>   -->
+<!-- 						               </f:facet>   -->
+<!-- 						           </p:cellEditor>   -->
+<!-- 						       </p:column>  -->
+						       
+						         <p:column>  
+           							 <p:rowEditor id="mvRowEditor"/>  
+           							  <p:tooltip for="mvRowEditor" value="Click to Add/Edit" showEffect="fade" hideEffect="fade" /> 
+        							</p:column>  
+						   </p:dataTable>
+						   
+						   <p:commandButton wigetVar="allBtnSelMV" id="allSelectBtnMV" value="Do select" style="display:none" processIds="*" action="mvSelectAllOffenceOutcome" 
+			 ajax="true" update=":recordOffenceOutcome:tabV:panelDataTableMV" ></p:commandButton>
+			
+			   <p:commandButton wigetVar="selBtnSelMV" id="selectBtnMVRow" value="Do select" style="display:none" processIds="*" action="mvSelectRowOffenceOutcome" 
+			 ajax="true" update=":recordOffenceOutcome:tabV:panelDataTableMV" ></p:commandButton>
+			
+			
+			 <p:commandButton wigetVar="updateMVTableVar" id="updateMVTable" value="Do select2" style="display:none" processIds="*" 
+			 ajax="true"  update=" :recordOffenceOutcome:tabV:panelDataTableMVErr :recordOffenceOutcome:tabV:mvOffenceOutcomeList:addMVBtn1 :recordOffenceOutcome:tabV:mvOffenceOutcomeList:deleteBtn1 :recordOffenceOutcome:tabV:mvOffenceOutcomeList:mvSelectAllBox :recordOffenceOutcome:panelButtons :recordOffenceOutcome:progressPanel "></p:commandButton>
+			
+			
+		<!--	<h:inputText value="#{recordOffenceOutcomeView.mvTableError}" id="mvTableErr1"/>  
+			 <h:outputLabel value="#{recordOffenceOutcomeView.mvTableError}" id="mvTableErr1"/>  	   
+			<h:inputHidden id="tabErrHidd" value="#{recordOffenceOutcomeView.mvTableError}" />         -->
+		
+			 
+			 <script>
+			 
+			
+			//<![CDATA[
+			    function selectMVRow(){
+			    	
+			    $("button[id*='selectBtnMVRow']").click();	
+			    }
+			 	function selectMVAll(){
+			 	$("button[id*='allSelectBtnMV']").click();			 	
+			 	}
+			 	
+			 	function updateMVTableEdit(){
+			 		var x = $('#recordOffenceOutcome\\:tabV\\:mvTableErr1').text().trim();
+			 		
+			 		if(x=='false'){
+			 			$("button[id*='updateMVTable']").click();	
+				 		
+			 		}
+				 }
+			 	
+			 	function updateMVTable(){
+			 		
+				 		$("button[id*='updateMVTable']").click();	
+			 		
+				 }
+			 
+			 	function addMVRowOnComplete() {
+			 				
+			 		var x = $('[name="recordOffenceOutcome:tabV:customRadioMV"]:checked').val();
+			 		
+			 		//var x = $('input[type="radio"]:checked').val();
+			 		//alert(x);
+			 		
+			 		var y = $('#recordOffenceOutcome\\:tabV\\:mvOffListSize').text();
+			 		if((x=='R') && (y > 0)){
+			 			jQuery('#recordOffenceOutcome\\:tabV\\:mvOffenceOutcomeList\\:0\\:mvRowEditor .ui-icon-pencil')[0].id = 'mvPencilEdit';
+			 			//jQuery('#recordOffenceOutcome:mvROweditor')[0].id = 'supercoolnewrow';
+			 			//recordOffenceOutcome:0:mvROweditor
+			 			//alert('here supercoolnewrow');
+			 			
+			 		  	jQuery('#mvPencilEdit').trigger('click');
+			 		  	//alert('after supercoolnewrow');
+			 		}
+			 	}
+			 	
+			 	
+			 	 function disableCheckBoxMV(){
+			 		
+			 		 
+			 		$('#recordOffenceOutcome\\:tabV\\:mvOffenceOutcomeList .ui-corner-checkbox').each(function(){
+			        	 $(this).css('display','none');
+			        	 });
+			 		
+	        	 }
+			 	
+			 	 function disablePenMV(){
+		        	 $('#recordOffenceOutcome\\:tabV\\:mvOffenceOutcomeList .ui-icon-pencil').each(function(){
+		        	 $(this).css('display','none');
+		        	 });
+	        	 }
+			 	function cancelHideMV(){
+		        	 $('#recordOffenceOutcome\\:tabV\\:mvOffenceOutcomeList .ui-icon-pencil').each(function(){
+		        	 //$(').addClass('rat');
+		        	 // $(this).css({backgroundColor: '#0099ff'});
+		        	 $(this).css('display','');
+		        	 });
+		        	 
+		        	 $('#recordOffenceOutcome\\:tabV\\:mvOffenceOutcomeList .ui-corner-checkbox').each(function(){
+			        	 $(this).css('display','');
+			        	 });
+	        	 }
+	        	 
+	        	 function editAndCancelHideMV(){
+				 		var x = $('#recordOffenceOutcome\\:tabV\\:mvTableErr1').text().trim();
+				 		//alert(x);
+				 		if(x=='false'){
+				 			cancelHideMV();
+				 		}
+					 }
+	        	//]]>
+			 </script>
+			
+			 </p:panel>
+	    		</p:panel>	
+	  	
+</ui:fragment>
+</ui:composition>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://webservices.roms.toms.ta.fsl/" version="1.0" xmlns:ns1="http://object.dl.ws.fsl.org" xmlns:tns="http://webservices.roms.toms.ta.fsl/">
+
+  <xs:import namespace="http://object.dl.ws.fsl.org" schemaLocation="DLWebService_schema2.xsd"/>
+
+  <xs:element name="RequiredFieldMissingException" type="tns:RequiredFieldMissingException"/>
+
+  <xs:element name="getDriversLicence" type="tns:getDriversLicence"/>
+
+  <xs:element name="getDriversLicenceResponse" type="tns:getDriversLicenceResponse"/>
+
+  <xs:complexType name="getDriversLicence">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="dl" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getDriversLicenceResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="ns1:DriverLicenceDetails"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="RequiredFieldMissingException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

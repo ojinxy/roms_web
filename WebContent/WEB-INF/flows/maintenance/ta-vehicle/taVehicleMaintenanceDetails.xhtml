@@ -1,0 +1,240 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/WEB-INF/newTemplate.xhtml">
+
+	<ui:define name="title">TA Vehicle Maintenance </ui:define>
+	<ui:define name="pageHeader"></ui:define>
+    
+    <ui:define name="content">
+    	<script>
+    		$("document").ready(function(){
+    			
+    			$('#javax_faces_developmentstage_messages').css('display','none');
+    			addFields();
+    		});
+    		
+    		
+    		
+    		 function addFields(){
+					//alert();
+					  var plate =  $('#taVehicleMaintenanceDetails\\:origPlateRegNo').val();
+					  var make =  $('#taVehicleMaintenanceDetails\\:origMake').val();
+					  var engine = $('#taVehicleMaintenanceDetails\\:origEngine').val();
+					  var model = $('#taVehicleMaintenanceDetails\\:origModel').val();
+					  var chassis = $('#taVehicleMaintenanceDetails\\:origChassis').val();
+					  var type = $('#taVehicleMaintenanceDetails\\:origType').val();
+					  var owner = $('#taVehicleMaintenanceDetails\\:origOwner').val();
+					  var year = $('#taVehicleMaintenanceDetails\\:origYear').val();
+					  var colour = $('#taVehicleMaintenanceDetails\\:origColour').val();
+					  
+					 $('#taVehicleMaintenanceDetails\\:plateRegNo').val(plate);
+					 $('#taVehicleMaintenanceDetails\\:makeDescription').val(make);
+					 $('#taVehicleMaintenanceDetails\\:engNumber').val(engine);
+					 $('#taVehicleMaintenanceDetails\\:model').val(model);
+					 $('#taVehicleMaintenanceDetails\\:chasNumber').val(chassis);
+					 $('#taVehicleMaintenanceDetails\\:typeDescription').val(type);
+					 $('#taVehicleMaintenanceDetails\\:ownerName').val(owner);
+					 $('#taVehicleMaintenanceDetails\\:year').val(year);
+					 $('#taVehicleMaintenanceDetails\\:colour').val(colour);
+					 
+					
+				 }
+    	</script>
+    	
+		 
+		<h:form styleClass="form" id="taVehicleMaintenanceDetails">
+			 <div class="tabs"><a href="#">#{savehideBtn == 'none'?'Edit ':'Add '}TA Vehicle Details </a></div>
+			<div class="main borders">
+			 <p:messages autoupdate="true" id="msg" closable="true"/>
+			<fieldset>
+					
+					<p:panelGrid style="margin-top:5px;width:100%" id="gridVehicleDetails">
+						<p:row>
+							<p:column style="width:25%">
+							<span style="padding-left:1px;width: 150px;display: inline-block;">
+								<h:outputText styleClass="outputText" value="Plate Registration #: "/>
+								<h:outputText value="*" styleClass="required" />
+							</span>
+								
+							<c:choose>
+								<c:when test="#{hideActive == true}">
+									<p:inputText value=""
+									id="plateRegNo" style="text-align: left;width:30%;background:#dddddd;text-transform:uppercase;" disabled="true" maxlength="20"
+									size="32" />
+									<h:inputHidden id="origPlateRegNo" value="#{taVehicle.vehicle.plateRegNo}"></h:inputHidden>
+								</c:when>
+								<c:otherwise>
+										<p:inputText value="#{taVehicle.vehicle.plateRegNo}"
+									id="plateRegNoOrig" style="text-align: left;width:30%;text-transform:uppercase;" maxlength="20"
+									size="32" />
+								</c:otherwise>
+							</c:choose>
+								
+								
+								<!-- <p:inputText value="#{taVehicle.vehicle.plateRegNo}"
+									id="plateRegNo" style="text-align: left;width:30%;" maxlength="20"
+									size="32" />-->
+								<p:commandLink action="searchPlate" id="searchPlateId" processIds="*" ajax="true" oncomplete="addFields();" update="taVehicleMaintenanceDetails,:taVehicleMaintenanceDetails:msg" style="width: 10px; margin: 0px; text-align: center; padding: 0px;" >
+	     		  					<img id="plateSearchIcon" src="${request.contextPath}/images/search-icon.gif"  alt="Input search criteria" style="margin:0px;padding:0px;"></img>
+	     		  				</p:commandLink>
+	     		  				<p:tooltip for="searchPlateId" value="Enter Plate Registration number and click to search" showEffect="fade" hideEffect="fade" />
+							</p:column>
+							<p:column>
+								<span style="padding-left:1px;width: 150px;display: inline-block;">
+								<h:outputText styleClass="outputText" value="Owner Name: " />
+								<h:outputText value="*" styleClass="required" />
+								</span>
+								<p:inputTextarea value=""
+									id="ownerName" style="text-align: left;width:50%;background:#dddddd;" disabled="true" cols="25" rows="3" />
+								<h:inputHidden id="origOwner" value="#{taVehicle.vehicle.ownerName}"></h:inputHidden>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:50%;">
+								<span style="padding-left:1px;width: 150px;display: inline-block;">
+								<h:outputText styleClass="outputText" value="Engine #: " />
+								<h:outputText value="*" styleClass="required" />
+								</span>
+								<p:inputText value="" id="engNumber" style="text-align: left;width:50%;background:#dddddd;" disabled="true" 
+								maxlength="30" size="32"/>
+								<h:inputHidden id="origEngine" value="#{taVehicle.vehicle.engineNo}"></h:inputHidden>
+							</p:column>
+							<p:column>
+								<span style="padding-left:1px;width: 150px;display: inline-block;">
+								<h:outputText
+									styleClass="outputText" value="Year: " />
+								<h:outputText value="*" styleClass="required" />
+								</span>
+								<p:inputText value="" id="year"
+									maxlength="4" size="10" style="text-align: left;width:50%;background:#dddddd;" disabled="true" />
+								<h:inputHidden id="origYear" value="#{taVehicle.vehicle.year}"></h:inputHidden>
+							</p:column>
+						</p:row>
+						
+						<p:row>
+							<p:column style="width:50%;">
+								<span style="padding-left:1px;width: 150px;display: inline-block;">
+								<h:outputText
+								styleClass="outputText" value="Make Description: " />
+								<h:outputText value="*" styleClass="required" />
+								</span>
+								<p:inputText
+									value=""
+									id="makeDescription" maxlength="40" size="42"
+									style="text-align: left;width:50%;background:#dddddd;" disabled="true"/>
+								<h:inputHidden id="origMake" value="#{taVehicle.vehicle.makeDescription}"></h:inputHidden>
+							</p:column>
+							<p:column>
+							<span style="padding-left:1px;width: 150px;display: inline-block;">
+								<h:outputText styleClass="outputText" value="Colour: " />
+								<h:outputText value="*" styleClass="required" />
+							</span>
+								<p:inputText value="" id="colour" maxlength="30"
+								size="32" style="text-align: left;width:50%;background:#dddddd;" disabled="true"/>
+							<h:inputHidden id="origColour" value="#{taVehicle.vehicle.colour}"></h:inputHidden>	
+							</p:column>
+						</p:row>
+						
+						<p:row>
+							<p:column style="width:50%;">
+							<span style="padding-left:1px;width: 150px;display: inline-block;">
+								<h:outputText
+								styleClass="outputText" value="Model: " />
+								<h:outputText value="*" styleClass="required" />
+							</span>
+								<p:inputText value=""
+									id="model" maxlength="30" size="42" style="text-align: left;width:50%;background:#dddddd;" disabled="true" />
+							<h:inputHidden id="origModel" value="#{taVehicle.vehicle.model}"></h:inputHidden>	
+							</p:column>
+							<p:column>
+							<span style="padding-left:1px;width: 150px;display: inline-block;">
+								<h:outputText styleClass="outputText" value="Status: " />
+								<h:outputText value="*" styleClass="required" />
+							</span>
+								<c:choose>
+									<c:when test="#{hideActive == true}">
+									<p:selectOneMenu value="#{taVehicle.statusId}" id="statusSel" style="width:190px;">
+										<f:selectItem itemValue="ACT" itemLabel="ACTIVE"></f:selectItem>
+										<f:selectItem itemValue="INA" itemLabel="INACTIVE"></f:selectItem>
+									</p:selectOneMenu>
+									</c:when>
+									<c:otherwise>
+											<p:inputText value="" id="statId" style="text-align: left; margin-left: 0px;width:50%;background:#dddddd;" disabled="true"/>
+											<p:watermark for="statId" value="Active" />
+									</c:otherwise>
+								</c:choose>
+							</p:column>
+						</p:row>
+						
+						<p:row>
+							<p:column>
+							<span style="padding-left:1px;width: 150px;display: inline-block;">
+								<h:outputText styleClass="outputText" value="Chassis #: " />
+								<h:outputText value="*" styleClass="required" />
+							</span>
+								<p:inputText value="" id="chasNumber" style="text-align: left;width:50%;background:#dddddd;" disabled="true" 
+								maxlength="30" size="32" />
+								<h:inputHidden id="origChassis" value="#{taVehicle.vehicle.chassisNo}"></h:inputHidden>	
+							</p:column>
+							<p:column>
+							<span style="padding-left:1px;width: 150px;display: inline-block;">
+								<h:outputText styleClass="outputText"
+									value="Region: " />
+								<h:outputText value="*" styleClass="required" />
+							</span>
+							<c:choose>
+									<c:when test="#{hideActive == true}">
+											<p:selectOneMenu value="#{taVehicle.officeLocationCode}" id="officeLocationCodes" style="width:190px;">
+												<f:selectItem itemValue=""  itemLabel="[Select One]"/>
+				    							<f:selectItems value="#{officeLocationListAll}" />
+											</p:selectOneMenu>
+									</c:when>
+									<c:otherwise>
+										<p:selectOneMenu value="#{taVehicle.officeLocationCode}" id="officeLocationCode" style="width:190px;">
+											<f:selectItem itemValue=""  itemLabel="[Select One]"/>
+			    							<f:selectItems value="#{officeLocationList}" />
+										</p:selectOneMenu>
+									</c:otherwise>
+								</c:choose>
+							</p:column>
+						</p:row>
+						
+						<p:row>
+							<p:column>
+							<span style="padding-left:1px;width: 150px;display: inline-block;">
+								<h:outputText
+								styleClass="outputText" value="Type Description: " />
+								<h:outputText value="*" styleClass="required" />
+							</span>
+								<p:inputText value=""
+									id="typeDescription" maxlength="40" size="42"
+									style="text-align: left;width:50%;background:#dddddd;" disabled="true" />
+								<h:inputHidden id="origType" value="#{taVehicle.vehicle.typeDesc}"></h:inputHidden>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2" style="text-align:center;width:100%;padding-top:20px;">
+								<p:commandButton styleClass="blue" value="Save" action="save" processIds="*" ajax="false" style="display:#{savehideBtn}"/>
+								<p:commandButton styleClass="blue" value="Save" action="update" processIds="*" ajax="false" style="display:#{updatehideBtn}"/>
+								<p:commandButton styleClass="blue" value="Clear" processIds="*" actionListener="#{taVehicleMaintenanceServiceAction.add(flowRequestContext)}" update="taVehicleMaintenanceDetails" ajax="true" style="display:#{savehideBtn}"/>
+								<p:commandButton styleClass="blue" value="Back" action="cancel" processIds="*" ajax="false"/>
+							</p:column>
+						</p:row>
+				
+			</p:panelGrid>
+			
+			</fieldset>
+			</div>
+		</h:form>
+		
+	</ui:define>
+
+</ui:composition>

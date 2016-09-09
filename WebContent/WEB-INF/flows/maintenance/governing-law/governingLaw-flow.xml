@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+>
+        
+    <var name="mode" class="java.lang.String" />
+	<var name="saved" class="java.lang.String" />
+	<var name="governingLaw" class="fsl.ta.toms.roms.bo.GoverningLawBO" />
+	<var name="governingLaws" class="java.util.ArrayList" />
+	<var name="criteria" class="fsl.ta.toms.roms.search.criteria.impl.GoverningLawCriteriaBO" />
+
+<view-state id="governingLawMaintenanceSearch">
+	<transition on="search" to="search">
+			<set name="flowScope.mode" value="'search'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+			<render fragments="lawResults" />
+	</transition>
+	
+	<transition on="view" to="governingLawMaintenanceDetails">
+			<set name="flowScope.mode" value="'view'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+			<set name="flowScope.governingLaw" value="flowScope.governingLaws.selectedRow" />
+	</transition>
+
+	<transition on="add" to="governingLawMaintenanceDetails">
+			<set name="flowScope.mode" value="'save'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+			<set name="flowScope.governingLaw.description" value="criteria.description" />
+			<set name="flowScope.governingLaw.shortDesc" value="criteria.shortDesc" />
+			<set name="flowScope.governingLaw.statusId" value="'ACT'" />
+			<render fragments="governingLawDetails" />
+		</transition>
+		
+		<!-- Sort the values on the screen -->
+		<transition on="sort" to="governingLawMaintenanceSearch">
+			<set name="criteria.sortOn" value="requestParameters.sortOn"/>
+			<evaluate expression="governingLawMaintenanceServiceAction.sort" />	
+			<set name="flowScope.governingLaws" value="flowScope.datatable.pageElements" />					
+			<render fragments="governingLawMaintenanceSearch,lawResults" />
+		</transition>
+		
+		<!-- Next action on datatable -->
+		<transition on="next" to="governingLawMaintenanceSearch">
+			<evaluate expression="governingLawMaintenanceServiceAction.next" />	
+			<set name="flowScope.governingLaws" value="flowScope.datatable.pageElements" />	
+			<render fragments="governingLawMaintenanceSearch,lawResults" />
+		</transition>
+		
+		<!-- previous action on datatable -->
+		<transition on="previous" to="governingLawMaintenanceSearch">
+			<evaluate expression="governingLawMaintenanceServiceAction.previous" />	
+			<set name="flowScope.governingLaws" value="flowScope.datatable.pageElements" />				
+			<render fragments="governingLawMaintenanceSearch,lawResults" />
+		</transition>
+		
+		<!-- first action on datatable -->
+		<transition on="first" to="governingLawMaintenanceSearch">
+			<evaluate expression="governingLawMaintenanceServiceAction.first" />	
+			<set name="flowScope.governingLaws" value="flowScope.datatable.pageElements" />				
+			<render fragments="governingLawMaintenanceSearch,lawResults" />
+		</transition>
+		
+		<!-- last action on datatable -->
+		<transition on="last" to="governingLawMaintenanceSearch">
+			<evaluate expression="governingLawMaintenanceServiceAction.last" />	
+			<set name="flowScope.governingLaws" value="flowScope.datatable.pageElements" />				
+			<render fragments="governingLawMaintenanceSearch,lawResults" />
+		</transition>
+		
+		<transition on="clear" to="endState" />
+	
+</view-state>
+
+	<view-state id="governingLawMaintenanceDetails">
+
+		<transition on="cancelUpdate" to="governingLawMaintenanceSearch">
+			<set name="flowScope.saved" value="'false'"></set>
+			<evaluate expression="governingLawMaintenanceServiceAction.search"></evaluate>
+			<render fragments="governingLawSearch" />
+		</transition>
+		
+		<transition on="cancel" to="governingLawMaintenanceSearch">
+			<set name="flowScope.saved" value="'false'"></set>			
+			<render fragments="governingLawSearch" />
+		</transition>
+
+		<transition on="initEditMode" to="governingLawMaintenanceDetails">
+			<set name="flowScope.mode" value="'update'"></set>
+		</transition>		
+			
+		<transition on="add" to="governingLawMaintenanceDetails">
+			<set name="flowScope.mode" value="'save'"></set>						
+			<evaluate expression="governingLawMaintenanceServiceAction.initAddMode(flowRequestContext)" />			
+			<set name="flowScope.governingLaw.statusId" value="'ACT'" />			
+			<render fragments="governingLawMaintenanceDetails" />
+		</transition>
+
+		<transition on="success" to="governingLawMaintenanceDetails">
+		</transition>
+
+		<transition on="error" to="governingLawMaintenanceDetails">
+		</transition>
+
+		<transition on="save" to="savegoverningLaw" />
+
+		<transition on="update" to="updategoverningLaw" />
+	</view-state>
+
+	<action-state id="search">
+		<evaluate expression="governingLawMaintenanceServiceAction.search"></evaluate>
+		<transition on="success" to="governingLawMaintenanceSearch"></transition>
+		<transition on="error" to="governingLawMaintenanceSearch" />
+		<transition on="yes" to="governingLawMaintenanceDetails">
+			<set name="flowScope.mode" value="'view'"></set>
+		</transition>
+	</action-state>
+
+	<action-state id="savegoverningLaw">
+		<evaluate expression="governingLawMaintenanceServiceAction.savegoverninglaw(flowRequestContext)" />		
+		<transition on="success" to="governingLawMaintenanceDetails">
+			<set name="flowScope.saved" value="'true'"></set>
+			<set name="flowScope.mode" value="'view'"></set>		
+		</transition>
+		<transition on="error" to="governingLawMaintenanceDetails">
+		</transition>
+	</action-state>
+
+	<action-state id="updategoverningLaw">
+		<evaluate expression="governingLawMaintenanceServiceAction.updategoverninglaw(flowRequestContext)" />
+		<transition on="success" to="governingLawMaintenanceDetails">
+		</transition>
+
+		<transition on="error" to="governingLawMaintenanceDetails">
+		</transition>
+
+	</action-state>
+	
+	<end-state id="endState" />
+	
+</flow>
+
+
+
+
+

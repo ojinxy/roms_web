@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+          http://www.springframework.org/schema/security
+          http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+	
+	<!-- Configure Spring Security -->
+
+	<!-- <security:debug />  -->
+	
+
+	
+	<security:http auto-config="false"
+		entry-point-ref="loginUrlAuthenticationEntryPoint" >
+
+			
+		<security:intercept-url pattern="/*"
+			access="IS_AUTHENTICATED_ANONYMOUSLY"  />
+
+		<!-- Intercept calls for login page -->
+		<security:intercept-url pattern="/spring/login*"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="https" />
+		
+		<security:intercept-url pattern="/spring/timeOut*"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="https" />
+			
+		<security:intercept-url pattern="/spring/ssologout*"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="https" />	
+		
+		<security:intercept-url pattern="/spring/logout*"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" requires-channel="https" />
+	
+		<security:intercept-url pattern="/spring/roms_rest/**"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" />
+
+		<security:intercept-url pattern="/spring/roms_rest/isMobileURL*"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" />
+
+		<!--	
+			<security:intercept-url pattern="/spring/script/**"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		-->
+		<!--
+			Intercept error page and makes sure only user can access it. Had to
+			do this because I could not not get 404 errors to resolve to
+			error.xhtml. added error.xhtml as flow
+		-->
+		
+		<security:intercept-url pattern="/spring/error*"
+			access="ROLE_USER"  />
+
+		<!-- You must be an authenticated user to access these resources -->
+		<security:intercept-url pattern="/spring/**"
+			access="ROLE_USER" />
+
+	
+		<!-- map http/https ports -->
+		<!-- <security:port-mappings>
+			<security:port-mapping http="9082" https="9445" />
+		</security:port-mappings> -->
+		
+			
+		<!--
+			defines filter to handle concurrent log in. If the user is logging in
+			more than once and error will be thrown when trying to log in the
+			second time
+		-->
+		<!-- <security:custom-filter position="CONCURRENT_SESSION_FILTER"
+			ref="concurrencyFilter" /> -->
+
+		<!--
+			Logout filter configured. This handles logout or authenticated
+			person.logout-success-url="/spring/login?logged_out=true"
+			logout-url="/spring/logout" invalidate-session="true"
+			logout-success-url="/spring/login?logged_out=true"
+		-->
+		<security:logout logout-url="/spring/logout"
+			invalidate-session="true" success-handler-ref="logoutSuccessHandler" />
+		<!--
+			This handles for login by resloving input values with authenticator
+		-->
+		<security:custom-filter after="BASIC_AUTH_FILTER" ref="romsUsernamePasswordAuthenticationFilter" />
+		
+		<!-- <security:session-management
+			invalid-session-url="/spring/login?session_expired=true"
+			session-fixation-protection="newSession" /> -->
+
+		<!--
+			If access to a page is denied then the url will redirect to this page
+		-->
+		<security:access-denied-handler
+			error-page="/spring/accessDenied" />
+
+		
+			<security:session-management
+			session-fixation-protection="migrateSession">
+			<security:concurrency-control max-sessions="1"
+			error-if-maximum-exceeded="false" expired-url="/spring/timeOut.xhtml" />
+			</security:session-management>
+		
+	</security:http>
+	
+	
+	
+	<!-- CONCURRENCY -->
+	<!-- <bean id="concurrencyFilter"
+		class="org.springframework.security.web.session.ConcurrentSessionFilter">
+		<constructor-arg name="sessionRegistry" ref="sessionRegistry" />
+		<property name="expiredUrl" value="/spring/login?logged_in_twice=true" />
+		
+	</bean> -->
+
+
+
+	<bean id="sas"
+		class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+		<constructor-arg name="sessionRegistry" ref="sessionRegistry" />
+	<property name="maximumSessions" value="1" />
+	<property name="exceptionIfMaximumExceeded" value="false" />
+		
+	</bean>
+
+
+	<bean id="sessionRegistry"	class="org.springframework.security.core.session.SessionRegistryImpl" />
+
+	<!-- END -->
+	
+	
+	 <!-- CUSTOM AUTHENTICATION MANAGER -->
+	 <!-- <security:authentication-manager alias="authenticationManager">
+			<security:authentication-provider		user-service-ref="romsUserDetailsService">
+					<security:password-encoder hash="md5" />
+			</security:authentication-provider>
+	</security:authentication-manager> -->
+	
+	
+	<security:authentication-manager alias="authenticationManager" >
+		<security:authentication-provider ref="authenticationManager-sso" />
+	</security:authentication-manager>	
+	
+	<bean id="authenticationManager-sso" class="org.fsl.roms.security.SSOAuthenticationProvider">
+		<property name="userDetailsService" ref="romsUserDetailsService"></property>
+	</bean>
+	
+  	<bean id="romsUserDetailsService"
+      class="org.fsl.roms.security.ROMSUserDetailsService">  		
+  	</bean>
+  
+  	<!-- <bean id="baseServiceAction" class="org.fsl.roms.service.action.BaseServiceAction">
+	</bean>	 -->		
+  <!-- -->
+  <!-- <bean id="portMapper" class="org.springframework.security.web.PortMapperImpl">
+		<property name="portMappings">
+			
+			<map>
+				<entry key="9082" value="9445" />
+			</map>
+		</property>
+	</bean> -->
+  
+ 	<bean id="portMapper" class="org.fsl.roms.spring.security.ROMSPortMapper">		
+	</bean> 
+   
+  
+  	<!-- these settings are a result of the custom filter -->
+   	<bean id="loginUrlAuthenticationEntryPoint"
+		class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		 <property name="loginFormUrl" value="/spring/loginProcess" />	
+		  <property name="portResolver">
+			<bean class="org.springframework.security.web.PortResolverImpl">
+				<property name="portMapper" ref="portMapper" />
+			</bean>
+		</property>	 
+	</bean>
+	
+	<bean id="romsUsernamePasswordAuthenticationFilter"    class="org.fsl.roms.security.ROMSUsernamePasswordAuthenticationFilter" >
+		 <property name="authenticationManager" ref="authenticationManager" />
+		 <property name="authenticationFailureHandler" ref="failureHandler" />
+		 <property name="authenticationSuccessHandler" ref="successHandler" />
+		 <property name="filterProcessesUrl" value="/spring/loginProcess"/>
+		 <property name="sessionAuthenticationStrategy" ref="sas" />		 
+	</bean>
+	
+	
+	<!-- <bean id="failureHandler" class="org.fsl.roms.spring.security.ROMSSimpleUrlAuthenticationFailureHandler">
+	 	<property name="defaultFailureUrl" value="/spring/login?login_error=1" />
+	</bean>
+	 -->
+	 
+	 <bean id="failureHandler" class="org.fsl.roms.spring.security.ROMSSimpleUrlAuthenticationFailureHandler">
+	 	<property name="defaultFailureUrl" value="/spring/timeOut" />
+	</bean> 
+	
+	
+	<!--  <bean id="failureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+	 	<property name="defaultFailureUrl" value="/spring/timeOut" />
+	</bean> -->
+	
+	
+	
+	<bean id="successHandler" class="org.fsl.roms.spring.security.ROMSSimpleUrlAuthenticationSuccessHandler">
+		<property name="defaultTargetUrl" value="/spring/home" />
+	</bean>
+	
+
+	<bean id="logoutSuccessHandler"
+		class="org.fsl.roms.spring.security.ROMSLogoutSuccessHandler">
+	</bean>
+	
+	<!-- end custom filter --> 
+	
+	<!--  <security:debug /> -->
+	
+
+	
+	
+ 
+ 
+ 	
+	
+</beans>

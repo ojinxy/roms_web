@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html class="no-js"
+ 	lang="en" 
+ 	xmlns:p="http://primefaces.org/ui"
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"	
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:fsl="http://org.fsl.com"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	>
+	
+	<h:head>	
+		<f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+            
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes" />
+
+        </f:facet>
+		<title>ROMS-<ui:insert name="title">Road Operation Management System</ui:insert></title>
+	
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<!-- meta charset="utf-8" /-->
+		
+		
+		<!-- Demo page js and css files -->
+		<!--script src="http://code.jquery.com/jquery-1.10.2.min.js"></script-->
+ <!-- script type="text/javascript" src="${request.contextPath}/script/JQueryUI/js/jquery-1.9.1.min.js"></script--> 
+ <script type="text/javascript" src="${request.contextPath}/script/util.js" />	
+	
+<script type="text/javascript" src="${request.contextPath}/script/JQueryUI/labelauty/jquery-labelauty.js" />
+<link rel="stylesheet" href="${request.contextPath}/script/JQueryUI/labelauty/jquery-labelauty.css" type="text/css"/> 
+
+
+		<link rel="stylesheet" href="${request.contextPath}/css/reset.css"/>
+		<link rel="stylesheet" href="${request.contextPath}/css/960_24_col.css"/>
+		<link rel="stylesheet" href="${request.contextPath}/css/text.css"/>
+		<link rel="stylesheet" href="${request.contextPath}/css/style.css" />
+		
+		
+		<link rel="stylesheet" href="${request.contextPath}/css/fonts/awesomeIconFonts/font-awesome.css" type="text/css"/> 
+		<link rel="stylesheet" href="${request.contextPath}/css/fonts/awesomeIconFonts/font-awesome-helper.css" type="text/css"/> 
+
+		<!-- Add JQuery cookie plugin (optional) -->
+		<script src="${request.contextPath}/script/src/jquery.cookie.js"></script>
+		<!-- Add navgoco main js and css files  -->
+		<script type="text/javascript" src="${request.contextPath}/script/src/jquery.navgoco.js"></script>
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/script/src/jquery.navgoco.css" media="screen" />
+
+
+<script type="text/javascript" 	src="${request.contextPath}/script/jquery.balloon.js" />
+<script type="text/javascript" src="${request.contextPath}/script/force-place.js" />
+<script type="text/javascript" src="${request.contextPath}/script/ajaxLoaderscript.js" />
+
+    
+    <script type="text/javascript" 	src="${request.contextPath}/script/MobiScroll/mobiscroll.core.js" />
+    <script type="text/javascript" 	src="${request.contextPath}/script/MobiScroll/mobiscroll.scroller.js" />
+<script type="text/javascript" 	src="${request.contextPath}/script/MobiScroll/mobiscroll.datetime.js" />
+<link rel="stylesheet" href="${request.contextPath}/script/MobiScroll/mobiscroll.scroller.css" />
+<link rel="stylesheet" href="${request.contextPath}/script/MobiScroll/mobiscroll.scroller.android-ics.css" />
+
+<!-- CSS Used for Road Operation Screens -->
+<link href="${request.contextPath}/theme/roadOp.css" rel="stylesheet" />
+	
+
+
+
+
+<script type="text/javascript"> 
+
+window.history.forward(1); 
+var $buoop = {vs:{i:9,f:5,o:12,s:5,n:9}, reminder: 0}; 
+$buoop.ol = window.onload; 
+window.onload=function(){ 
+ try {if ($buoop.ol) $buoop.ol();}catch (e) {} 
+ var e = document.createElement("script"); 
+ e.setAttribute("type", "text/javascript"); 
+ e.setAttribute("src", "//browser-update.org/update.js"); 
+ document.body.appendChild(e); 
+} 
+
+
+</script> 
+	
+
+<script type="text/javascript">
+/* <![CDATA[ */
+$(function(){
+	switch($.cookie('menu-state')){
+		case "regular":
+			$('#main').removeClass('use-slimsidebar');
+		break;
+		case "slim":
+			$('#main').addClass('use-slimsidebar');
+		break;
+	}
+});
+function mobileCheck() {
+	var check = false;
+	(function(a){
+		if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)))
+			check = true
+	})(navigator.userAgent||navigator.vendor||window.opera);
+	return check; 
+}
+$(document).ready(function() {
+	
+   //$('.nav').navgoco();
+   	 console.log($.cookie('menu-state'));
+	//$("#tabs").after('<div id="seperatoron"></div>');
+	$('button[class*=ui-datepicker-trigger]').addClass('icon-calendar');
+  	$('button[class*=ui-datepicker-trigger]').removeClass('ui-corner-all');
+			//find('span[class*=ui-button-text]').addClass('menu-icon');
+			//$('table[id*=documentManagerView]').find('[class*=ui-widget-header]').addClass('header-removed');
+	
+	$("#reg-menu").navgoco({
+		caret: '',//<span class="caret"></span>',
+		accordion: true,
+		/*openClass: 'open',*/
+		save: true,
+		cookie: {
+			name: 'navgoco',
+			expires: false,
+			path: '/'
+		},
+		slide: {
+			duration: 400,
+			easing: 'swing'
+		}/*,
+		onClickBefore: function(e, submenu) {
+            alert('Clicked on '+ (submenu === false ? 'leaf' : 'branch') + ' `'+$(this).text()+'`');
+        },
+        onClickAfter: function(e, submenu) {
+           // e.preventDefault();
+            $('#reg-menu').find('li').removeClass('active');
+                var li =  $(this).parent();
+                var lis = li.parents('li');
+                li.addClass('active');
+                lis.addClass('active');
+                $.cookie("submenu", li.attr('id'), { path: '/' });
+            alert($.cookie("navgoco"));
+                
+                
+        },
+        onToggleBefore: function(submenu, opening) {
+            var idx = submenu.attr('data-index');
+            var message = opening ? 'opening' : 'closing';
+            //console.log('I am ' + message + ' menu ' + idx + ' just after this.');
+            
+        },
+        onToggleAfter: function(submenu, opened) {
+            var idx = submenu.attr('data-index');
+            var message = opened ? 'opened' : 'closed';
+            //console.log('I ' + message + ' menu ' + idx + ' just before this.');
+        }*/
+        
+	});
+	if($('#main').hasClass('use-slimsidebar')){
+		$('#reg-menu li ul').hide();
+	}
+	 
+	$(".menuLink").each(function(){				
+        		$(this).click(function(){
+        		$('#reg-menu').find('li').removeClass('active');
+                var li =  $(this).parent();
+                var lis = li.parents('li');
+                li.addClass('active');
+                lis.addClass('active');
+              //  $.cookie("submenu", li, { path: '/' });
+          //  console.log("I am here  test"+($.cookie("submenu")).text());
+          menuId = $(this).attr('id');
+          $.cookie("menuId", menuId, { path: '/' });
+          //alert("click function "+menuId);
+          
+        		
+	});
+	});
+	$('[id='+$.cookie("menuId")+']').parent().addClass("active"); 
+	
+	 
+	 $(".submenu").each(function(){
+	// alert("testing");				
+        	$(this).click(function(){
+        		$('.submenu').parent().removeClass('active');
+                var li =  $(this).parent();
+                li.addClass('active');
+               	submenuId = $(this).attr('id');
+               $.cookie("submenuId", submenuId, { path: '/' });
+          //  console.log("I am here  test"+($.cookie("submenu")).text());
+          menuId = $(this).attr('id');
+          //$.cookie("menuId", menuId, { path: '/' });
+        //  alert("click sub function "+$.cookie("submenuId"));
+          
+        		
+	});
+	});
+	$('[id='+$.cookie("submenuId")+']').parent().addClass("active");
+	
+	/*$("#reg-menu").find("li:not(:has(ul)) > a").click(function(e) {
+		$(this).parent().parents('ul').each(function() {
+			idx = $(this).attr('data-index');
+			if (!idx) {
+				return false;
+			}
+			$("#reg-menu").navgoco('toggle', true,  idx);
+		});
+
+});*/
+	
+	//Date displyed
+	 //$('#date-span').html($.datepicker.formatDate( 'DD, MM dd, yy', new Date(), null ));
+	
+	// Toggle sidebar
+	$('#button-toggle').click(function(){
+		//show/hide sidebar
+	    //$('#main').toggleClass('use-regsidebar');
+	   
+	   
+	   //uncomment to include slim-menu functionality
+	    $('#main').toggleClass('use-slimsidebar'); 
+	    if($("#isHandHeld").val() == 'false'){
+			$.cookie('menu-state', $('#main').hasClass("use-slimsidebar") ? 'slim' : 'regular' );
+		}
+		
+		//$('.title').toggleClass('hideMenu');
+		//$("#reg-menu").navgoco({caret: ''});
+		
+	});
+	
+	//logout dropdown
+	$('#user').click(function(){
+		$('#userMenu').toggleClass('hideMenu');
+		
+	});
+		
+	
+	$(".progtrckr li:has(a)").click(function() {
+      //window.location = $("a:first",this).attr("href");
+      //window.location = $("a:first",this).attr("onclick");
+    //  return false;
+   });	
+		
+	//to be removed not used	
+		$('.desktop').each(function() {
+  var table = $(this); // cache table object
+  var head = table.find('thead th');
+  var rows = table.find('tbody tr').clone(); // appending afterwards does not break original table
+
+  // create new table
+  var newtable = $(
+    '<table class="generated_for_mobile">' +
+    '  <tbody>' +
+    '  </tbody>' +
+    '</table>'
+  );
+
+  // cache tbody where we'll be adding data
+ // var newtable_tbody = newtable.find('tbody');
+  var newtable_tbody = table.find('tbody');
+
+  rows.each(function(i) {
+    var cols = $(this).find('td');
+    var classname = i % 2 ? 'even' : 'odd';
+    cols.each(function(k) {
+      var new_tr = $('<tr class="' + classname + '"></tr>').appendTo(newtable_tbody);
+      new_tr.append(head.clone().get(k));
+      new_tr.append($(this));
+    });
+  });
+
+  $(this).after(newtable);
+});
+
+ $('form').attr('autocomplete','off');
+ $('input').attr('autocomplete','off');
+ 
+ $("#copyYear").text( (new Date).getFullYear() );
+});//End document.ready function
+
+ tmout = 100; //delay constant ensure page load before clearing password
+ 
+
+
+//Clear Password fields on forms  
+function clearCache(){
+	$('input[type*="password"]').val("");
+	$('input[type*="password"]').focus(function(){
+		$(this).val("");
+	});
+ }
+ 
+ //Enable use of: $('').on('show/hide', call funtion())
+(function ($) {
+      $.each(['show', 'hide'], function (i, ev) {
+        var el = $.fn[ev];
+        $.fn[ev] = function () {
+          this.trigger(ev);
+          return el.apply(this, arguments);
+        };
+      });
+    })(jQuery);
+    
+ /***removes the backspace functionality from the user outside of forms********/   
+ $(function(){
+    /*
+     * this swallows backspace keys on any non-input element.
+     * stops backspace -> back
+     */
+    var rx = /INPUT|SELECT|TEXTAREA/i;
+
+    $(document).bind("keydown keypress", function(e){
+        if( e.which == 8 ){ // 8 == backspace
+            if(!rx.test(e.target.tagName) || e.target.disabled || e.target.readOnly ){
+                e.preventDefault();
+            }
+        }
+    });
+});
+function page(){
+	$("button[id*='selectBtn']").click();
+}
+function reloadPage(){
+	//setTimeout(page(),2000);
+	$("button[id*='selectBtn']").click();
+			}
+			
+var timeout;
+
+function setAjaxTimeOut(){
+	timeout = window.setTimeout(function(){$("div[id*='aLongProcess']").css("display","block");},300000)
+	
+}
+
+function cancelAjaxTimeOut(){
+	$("div[id*='aLongProcess']").css("display","none");
+	window.clearTimeout(timeout);
+}
+
+
+/* ]]> */
+</script>
+
+<style type="text/css">
+
+.ui-chkbox .ui-chkbox-box {
+display: inline-block;
+}
+
+.ui-chkbox .ui-chkbox-label{
+	margin:0 5px 0 5px !important;
+	vertical-align: text-bottom !important;
+}
+
+tr{
+	height: inherit;
+}
+
+thead[id*='tableDocuments_head']{
+	height:50px;
+}
+
+th{
+	vertical-align:baseline;
+}
+
+.ui-datatable .ui-selection-column .ui-chkbox-all{
+	display: initial !important;
+}
+
+
+
+
+/* ********* Timeout Dialog ************/
+#alertIcon{
+float:left;
+	-ms-transform: scale(2); /* IE 9 */
+ 	-webkit-transform: scale(2); /* Chrome, Safari, Opera */
+ 	transform: scale(2);
+ 	margin:0px 10px 0px 10px;
+}
+
+
+/* Make Table Responsive --- */
+@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px)  {
+.responsivetable table, .responsivetable thead, .responsivetable th, .responsivetable tr, .responsivetable td {
+display: block;
+}
+/* Hide table headers (but not display:none, for accessibility) */
+.responsivetable thead tr {
+position: absolute;
+top: -9999px;
+left: -9999px;
+}
+.responsivetable tr {
+border: 1px solid #ccc;
+}
+.responsivetable td {
+/* Behave like a row */
+border: none;
+/*padding-left: 50%;*/
+border-bottom: 1px solid #eee;
+position: relative;
+}
+.responsivetable td:before {
+/* Now, like a table header */
+position: absolute;
+/* Top / left values mimic padding */
+top: 6px; left: 6px;
+width: 45%;
+padding-right: 10px;
+white-space: nowrap;
+}
+
+ 
+}/* End responsive query */
+
+
+.ui-outputlabel-rfi
+{
+	color:red;
+}
+
+
+
+
+
+</style>
+<c:if test="#{roadCheckServiceAction.isHandHeldNoFlow()}">
+	<link rel="stylesheet" href="${request.contextPath}/css/mobileStyleSheet.css" />
+
+</c:if>
+<!-- 
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache"></META>
+<META HTTP-EQUIV="Expires" CONTENT="-1"></META>
+ -->
+
+
+<meta http-equiv="cache-control" content="max-age=0" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="cache-control" content="no-store" />
+<meta http-equiv="expires" content="0" />
+<meta http-equiv="pragma" content="no-cache" />
+</h:head>
+	
+<body>
+		<div style="text-align:center;position: relative;top: 50%; z-index: 10000" id="divWait">
+			Please wait while your request is being processed <br/>
+			<p:graphicImage value="/images/ajax-loader_blue.gif" />
+
+		</div>
+		<script>
+			window.onload = function(){
+				$('#divWait').hide();
+				$('#topMenu').show();
+				$('#page-content').css('visibility','');
+			}
+			
+		</script>
+		<c:if test="#{roadCheckServiceAction.isHandHeldNoFlow()}">
+			<p:growl autoUpdate="true" life="8000"/>
+		</c:if>
+
+	<h:inputHidden id="isHandHeld" value="#{roadCheckServiceAction.isHandHeldNoFlow()}"></h:inputHidden>
+ <f:loadBundle basename="application" var="app"/>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+<!--input type="button" class="dhe-input-button" value="Toggle sidebar" id="button-toggle2"-->
+		<p:ajaxStatus onstart="PF('statusDialog').show();setAjaxTimeOut();" onsuccess="PF('statusDialog').hide();cancelAjaxTimeOut();"/> 
+		<p:dialog modal="true" widgetVar="statusDialog" header="Status" resizable="false"  draggable="false" closable="false">  
+			<div style="text-align:center;">
+				Please wait while your request is being processed <br/>
+				<p:graphicImage value="/images/ajax-loader_blue.gif" />
+				<div id="aLongProcess" style="display:none;font-style: italic;text-decoration: none;margin-bottom: 10px;color:mediumblue;margin-top:20px;">
+				
+					<i class="icon icon-exclamation-triangle" style="margin-right:3px"></i>
+						This process may be in a hung state. 
+					<br/>
+					<p  onclick="window.location.reload(false)"  style="color: inherit;text-decoration: inherit;cursor:pointer;" >
+						Click here to reset.
+					</p>
+				</div> 
+			</div>
+		</p:dialog>
+		<div id="header"  class="container_24" >
+			<div id="topMenu" class="grid_24" style="display:none;">
+				<ul class="header-taskbar" style="float:right; text-align:right;">
+					<li><a href="${request.contextPath}/spring/home">Home</a></li>
+					<li id="user">
+						<a  href="#">
+							<span class="username"><i class="icon-user icon-lg"></i>${currentUser.name}</span>
+							<i class="icon-angle-down"></i>
+						</a>
+							<ul class="hideMenu" id="userMenu" style="">
+								<li><a href="${request.contextPath}/spring/logout">Log Out</a></li>
+							</ul>
+						<!--a href="#">UserName <img src="img/icons/logout-icon.png" alt="Log Out"/></a></li-->
+					</li>
+				</ul>	
+			</div>
+			<div  class="grid_24" style="background-color:#ffffff; -webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px; -moz-border-radius-topleft: 5px; -moz-border-radius-topright: 5px; border-top-left-radius: 5px; border-top-right-radius: 5px;">
+				<div class="grid_1 alpha" style="background-color:#0e6fc4; -webkit-border-top-left-radius: 5px;-moz-border-radius-topleft: 5px;
+												 border-top-left-radius: 5px; padding:25px 15px;">
+					<span id="test"><!--a href="#menu">
+					i class="icon-bars icon-lg"></i-->
+					<!--img src="img/icons/menu-icon.png" alt="menu"/></a-->
+					<input type="image" src="${request.contextPath}/img/icons/menu-bars.png" id="button-toggle" style="width:24px; color:#fff;"  />
+					<c:if test="#{roadCheckServiceAction.isHandHeldNoFlow()}">
+							<script type="text/javascript">
+								$(document).ready(function() {
+	        						$('input[id*=toggle]').click();
+								});
+								
+								$(document).on("click", function(event){
+							  		if($(event.target).is(".nav, .nav *")) return;
+							  		if($(".nav .open > ul").is(":visible"))
+							  			$(".nav .open a").trigger("click");
+								});
+							</script>
+					</c:if>
+		
+					</span>
+					
+					
+				</div>
+				<span class="grid_16" style="padding-top:13px;"><a href="#"><img src="${request.contextPath}/img/logo.png" alt="Road Operation Management"/></a></span>
+<!-- 				<span class="grid_6" style="margin-top:4%; float:right; text-align:right"><span id="date-span" ></span></span>				 -->
+				<span class="grid_6" style="margin-top:4%; float:right; text-align:right;white-space: nowrap;"><p:clock style="background: none !important;color: #A9A9A9 !important;border: none !important;" pattern="EEE, dd MMM, yyyy hh:mm a" mode="server" autoSync="false" /></span>
+			</div>
+
+			
+		</div>
+		
+		<div id="main-content" class="container_24"  style="clear:both; transition:width 2s;-webkit-transition:width 2s;">
+			<div id="main" class="use-regsidebar sidebar-at-left grid_24 grad1" style="/*background:#fff;*/ transition: width 2s;
+-webkit-transition: width 2s; /* Safari */" >
+				<!--input type="checkbox" id="toggleexpand" />
+				<label for="toggleexpand"><span>></span>
+				</label-->
+				<div id="content" style="background-color:#fff; min-height:850px;" >
+					<div id="page-header" style="background-color:none; height:height: 47px;" class="grad2">
+						<span id="wrapper-welcome" class="grid_12" style="font-size:16px;">
+							<ui:insert name="welcome" />
+						</span>
+						<span id="region-wrapper" class ="grid_12" style="text-align:right; float:right;">
+							<i class="icon-map-marker icon-large"></i>${baseServiceAction.romsLoggedInUser.location}
+						</span>
+					</div>
+					
+					<div id="page-content" style="clear:both; background-color:#fff; min-height:700px;visibility: hidden;">
+					<article>
+						<header>
+							<h3 class="page-title"><ui:insert name="pageHeader">Page Header</ui:insert></h3>
+							<hr/>
+							
+
+						</header>
+						<section>
+							<p:outputPanel id="mainContent">  
+							
+											
+<!-- 	<div id="dialog" title="Your session is about to expire!">  -->
+<!-- 	<p>  -->
+<!-- 	<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 50px 0;"></span>  -->
+<!-- 	You will be logged off in <span id="dialog-countdown" style="font-weight:bold"></span> seconds.  -->
+<!--  	</p>  -->
+	
+<!--#{msg['logoff.soon.2']}  #{msg['logoff.soon.1']}#{session.maxInactiveInterval * 1000 - 60000}	<p>Do you want to continue your session?</p>#{session.maxInactiveInterval * 1000 - 125000} #{msg['move.cursor']} -->
+<!--  </div>  -->
+<!-- <c:if test="${request.getRequestURL().indexOf('error') == -1}">  -->
+<h:form prependId="false">
+
+<p:idleMonitor
+         timeout="#{session.maxInactiveInterval * 1000 - 60000}"
+         onidle="startIdleMonitor()"
+         onactive="timeoutDialog.hide()" />
+ 
+      <p:dialog id="timeoutSession"
+         header="Session warning"
+         widgetVar="timeoutDialog"
+         showEffect="fade" hideEffect="fade"
+         modal="true"
+         width="350"
+         height="150"
+         closable="false"
+         draggable="false"
+         resizable="false"
+         appendTo="@(body)"
+         onHide="stopCount()"
+         onShow="doTimer()">
+         <br />
+         <p>
+           <span id="alertIcon" class="ui-icon ui-icon-alert"></span>
+               You will be logged off in
+               <span id="dialog-countdown" style="font-weight: bold">seconds.</span>
+               seconds.
+         </p>
+         <br />
+         <p style="font-weight: bold;">Move your cursor to continue your session.</p> 
+      </p:dialog>
+      <p:remoteCommand name="keepAlive" actionListener="#{auth.keepSessionAlive}" />
+  </h:form>
+
+   <script type="text/javascript">
+      var TIME = 60; // in seconds
+      var countTimer = TIME;
+      var processTimer;
+      var timer_is_on = 0;
+      var redirectPage = newUrl()+"timeOut";
+     console.log(redirectPage);
+      var countDownDiv = "dialog-countdown";
+      var txtCountDown = null;
+      if (!txtCountDown)
+        txtCountDown = document.getElementById(countDownDiv);
+ 
+      function startIdleMonitor() {
+        countTimer = TIME;
+        txtCountDown.innerHTML = countTimer;
+        timeoutDialog.show();
+      }
+      function newUrl(){
+       var url = "${request.getRequestURL()}";
+       console.log(url);
+ 	   var sep = url.lastIndexOf('/');
+ 	   var sub = url.substring(sep + 1);
+ 	   //var newurl = url.replace(sub,"");
+ 	  var newurl = "${request.contextPath}/spring/";
+ 	   console.log(newurl);
+  	   return newurl;
+      }
+      function timedCount() {
+        txtCountDown.innerHTML = countTimer;
+        if (countTimer == 0) {
+            stopCount();
+            console.log(redirectPage+"sdsdsdsd");
+            location.href = redirectPage;
+            return;
+        }
+        countTimer = countTimer - 1;
+        processTimer = setTimeout("timedCount()", 1000);
+      }
+      function doTimer() {
+        if (!timer_is_on) {
+            timer_is_on = 1;
+            timedCount();
+        }
+      }
+      function stopCount() {
+        clearTimeout(processTimer);
+        timer_is_on = 0;
+        keepAlive();
+      }
+      </script>
+
+
+
+				
+							
+								<ui:insert name="content" />
+							</p:outputPanel>					
+						
+						</section>
+						
+					</article>
+				</div>
+
+				</div>
+				<div id="sidebar" ><!-- class="grad1"-->
+					<div id="menu" class="" style="border-top:5px solid #0e6fc4">
+					<h:form styleClass="form" id="downloads" prependId="false">
+						<ul id="reg-menu" class="nav">
+								<li><a href="${request.contextPath}/spring/home" id="menu-item-1" class="menuLink" onClick="javascript:;"><i class="icon-home icon-large"></i><span class="title">Dash Board</span>
+								</a></li>
+								
+								<sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_OP_SEARCH">
+								<li ><a href="#"  id="menu-item-2" class="menuLink"  onClick="javascript:;"><i class="icon-calendar icon-large"></i><span class="title">Road Operations</span></a>
+									<ul>	
+										<li><a href="${request.contextPath}/spring/road_operations" id="menu-item-2-1" class="submenu">Search</a></li>
+										
+										<sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_OP_SCHEDULE">
+										<li style="display:#{roadCheckServiceAction.isHandHeldNoFlow()?'none':'block'}">
+											<a  href="${request.contextPath}/spring/road_operations/view_operation" id="menu-item-2-2" class="submenu">Schedule Operation</a></li>
+										</sec:authorize>
+										<!-- h:outputText value="Is Mobile: #{roadCheckServiceAction.isHandHeldNoFlow() }"></h:outputText-->
+										<sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_OP_CALENDAR">
+										<li style="display:#{roadCheckServiceAction.isHandHeldNoFlow()?'none':'block'}">
+											<h:outputLink  rendered="#{not roadCheckServiceAction.isHandHeldNoFlow()}" value="${request.contextPath}/spring/road_operations/road_op_cal" id="menu-item-2-3" styleClass="submenu">Calendar</h:outputLink>
+										</li>	
+										</sec:authorize>								
+									</ul>
+								</li>
+								</sec:authorize>
+								
+								<sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_CHK_SEARCH">
+								<li ><a href="#" id="menu-item-3" class="menuLink" onClick="javascript:;"><i class="icon-road icon-large"></i><span class="title">Road Check</span></a>
+									<ul >	
+										<li ><a href="${request.contextPath}/spring/road-check/search_road_check" id="menu-item-3-1" class="submenu" >Search</a></li>
+										<li>
+											<a href="${request.contextPath}/spring/road-check/vehicle_quick_query" id="menu-item-3-2" class="submenu" >Perform Motor Vehicle Query</a>
+										</li>
+										<sec:authorize ifAnyGranted="ROLE_ROMS_ROAD_CHK_PERFORM">
+										<!-- style="display:#{baseServiceAction.romsLoggedInUser.currentRoadOperationId == null and roadCheckServiceAction.isHandHeldNoFlow()? 'none':'block'}" -->
+										<li>
+											<a href="${request.contextPath}/spring/road-check" id="menu-item-3-2" class="submenu" >Perform Road Check</a>
+										</li>
+										</sec:authorize>
+									</ul>
+								</li>
+								</sec:authorize>
+								
+								<sec:authorize ifAnyGranted="ROLE_ROMS_DOC_MAN_SEARCH" >
+								<li style="display:#{roadCheckServiceAction.isHandHeldNoFlow()?'none':'block'}">
+									<a href="#" id="menu-item-4" class="menuLink" onClick="javascript:;">
+										<i class="icon-folder-o icon-large"></i><span class="title">Documents Manager</span>
+									</a>
+									<ul >
+										<li><a href="${request.contextPath}/spring/document-manager" id="menu-item-4-1" class="submenu">Search</a>
+										</li>
+									</ul>
+								</li>
+							 	</sec:authorize >
+							 	<sec:authorize ifAnyGranted="ROLE_ROMS_REF_MAIN_MENU,ROLE_ROMS_USR_SET_SEARCH " >
+									<li style="display:#{roadCheckServiceAction.isHandHeldNoFlow()?'none':'block'}"><a href="#" id="menu-item-5" class="menuLink"><i class="icon-cogs icon-large"></i><span class="title">Administration</span></a>
+										<ul>	
+											<sec:authorize ifAnyGranted="ROLE_ROMS_USR_SET_SEARCH" >
+											<li><a href="${request.contextPath}/spring/administration/user-setup" id="menu-item-5-1" class="submenu">User Setup</a></li>
+											</sec:authorize>
+											<!-- <li><a href="#">System Configuration</a></li> -->
+											<sec:authorize ifAnyGranted="ROLE_ROMS_REF_MAIN_MENU" >
+											<li><a href="#" id="menu-item-5-2" class="submenu">Reference Maintenance</a>
+												<ul>
+													 <sec:authorize ifAnyGranted="ROLE_ROMS_REF_ART_SEARCH" >
+													 <li><a href="${request.contextPath}/spring/maintenance/artery" id="menu-item-5-2-1" class="submenu">Artery</a></li>  
+										             </sec:authorize>
+										             <!-- <li><a href="${request.contextPath}/spring/maintenance/configuration">Configuration</a></li> --> 
+										              <sec:authorize ifAnyGranted="ROLE_ROMS_REF_COURT_SEARCH" >
+										             <li><a href="${request.contextPath}/spring/maintenance/court" id="menu-item-5-2-2" class="submenu">Court</a></li> 
+										             </sec:authorize>
+										             <!-- <li><a href="${request.contextPath}/spring/maintenance/governing-law">Governing Law</a></li> -->      
+										             <sec:authorize ifAnyGranted="ROLE_ROMS_REF_ITA_SEARCH" >
+										             <li><a href="${request.contextPath}/spring/maintenance/ita-examiner" id="menu-item-5-2-3" class="submenu">ITA Examiner</a></li>  
+										             </sec:authorize>
+										             <sec:authorize ifAnyGranted="ROLE_ROMS_REF_JP_SEARCH" >
+										             <li><a href="${request.contextPath}/spring/maintenance/justice-of-peace" id="menu-item-5-2-4" class="submenu">Justice Of The Peace</a></li>    
+										             </sec:authorize>
+										             <sec:authorize ifAnyGranted="ROLE_ROMS_REF_LOC_SEARCH" >
+										             <li><a href="${request.contextPath}/spring/maintenance/location" id="menu-item-5-2-5" class="submenu">Location</a></li> 
+										             </sec:authorize>
+										             <sec:authorize ifAnyGranted="ROLE_ROMS_REF_OFFENCE_SEARCH" >
+										             <li><a href="${request.contextPath}/spring/maintenance/offence" id="menu-item-5-2-6" class="submenu">Offence</a></li>   
+										             </sec:authorize>
+										             <sec:authorize ifAnyGranted="ROLE_ROMS_REF_PARISH_SEARCH" >
+										             <li><a href="${request.contextPath}/spring/maintenance/parish" id="menu-item-5-2-7" class="submenu">Parish</a></li>  
+										             </sec:authorize>
+										             <sec:authorize ifAnyGranted="ROLE_ROMS_REF_POUND_SEARCH" >
+										             <li><a href="${request.contextPath}/spring/maintenance/pound" id="menu-item-5-2-8" class="submenu">Pound</a></li> 
+										             </sec:authorize>
+										             <sec:authorize ifAnyGranted="ROLE_ROMS_REF_REASON_SEARCH" >
+										             <li><a href="${request.contextPath}/spring/maintenance/reason" id="menu-item-5-2-9" class="submenu">Reason</a></li>  
+										             </sec:authorize>
+										             <sec:authorize ifAnyGranted="ROLE_ROMS_REF_STRATEGY_SEARCH" >
+										             <li><a href="${request.contextPath}/spring/maintenance/strategy" id="menu-item-5-2-10" class="submenu">Strategy</a></li>  
+										             </sec:authorize>
+										             <sec:authorize ifAnyGranted="ROLE_ROMS_REF_TAVHCLE_SEARCH" >
+										             <li><a href="${request.contextPath}/spring/maintenance/ta-vehicle" id="menu-item-5-2-11" class="submenu">TA Vehicle</a></li>   
+										             </sec:authorize>
+										             <sec:authorize ifAnyGranted="ROLE_ROMS_REF_WRKCOM_SEARCH" >
+										             <li><a href="${request.contextPath}/spring/maintenance/wrecker-company" id="menu-item-5-2-12" class="submenu">Wrecker Company</a></li> 
+										             </sec:authorize>
+												</ul>
+											</li>
+											</sec:authorize>
+											<!-- <li><a href="#">Trigger System Processes</a></li>
+											<li><a href="#">Non-Business Day Maintenance</a></li>	 -->							
+										</ul>
+									</li>
+								</sec:authorize>
+								
+								<sec:authorize ifAnyGranted="ROLE_ROMS_RPT_EVNT_AUDIT_VIEW,ROLE_ROMS_RPT_COURT_SCHD_VIEW, ROLE_ROMS_RPT_OP_SUM_VIEW" >
+								<li style="display:#{roadCheckServiceAction.isHandHeldNoFlow()?'none':'block'}"><a href="#" id="menu-item-6" class="menuLink"><i class="icon-bar-chart-o icon-large"></i><span class="title">Reports</span></a>
+									<ul class="submenu">
+										<sec:authorize ifAnyGranted="ROLE_ROMS_RPT_EVNT_AUDIT_VIEW" >	
+										<li><a href="${request.contextPath}/spring/reports/event-audit-report" id="menu-item-6-1" class="submenu">Event Audit Report</a></li>
+										</sec:authorize>
+										<sec:authorize ifAnyGranted="ROLE_ROMS_RPT_COURT_SCHD_VIEW" >
+										<li><a href="${request.contextPath}/spring/reports/court-schedule-report" id="menu-item-6-2" class="submenu">Court Schedule Report</a></li>
+										</sec:authorize>
+										<sec:authorize ifAnyGranted="ROLE_ROMS_RPT_OP_SUM_VIEW" >
+										<li><a href="${request.contextPath}/spring/reports/operation-summary-report" id="menu-item-6-3" class="submenu">Operation Summary Report</a></li>
+										</sec:authorize>
+									</ul>
+								</li>
+								</sec:authorize>
+								
+								<c:if test="#{roadCheckServiceAction.isHandHeldNoFlow()}">						
+								<li > 
+								 <p:commandLink actionListener="#{downloadsMaintenanceAction.loadDownloadDetails(flowRequestContext)}" ajax="true" oncomplete="reloadPage();rc()">
+ 									<i class="icon-download icon-large"></i><span class="title">Roms Print App</span> 
+								</p:commandLink>
+								<p:remoteCommand name="rc" actionListener="#{downloadsMaintenanceAction.resetDownload(flowRequestContext)}" />
+								<p:commandButton id="selectBtn" value="Do select" style="display:none" processIds="*" ajax="false" ></p:commandButton>
+									
+								</li> 
+								</c:if>
+						</ul>
+					</h:form>
+					<f:subview id="downloadOfFile">
+						<h:panelGroup rendered="#{flowScope.downloadNow == 'true'}">
+							<script type="text/javascript">
+								myWin = openNewWindowWithName('../DownloadFile');
+			
+								checkWinStillOpen(myWin);
+								//rc();
+								
+								
+							</script>
+						</h:panelGroup>
+					</f:subview>
+					</div>
+			
+			</div>
+			</div>
+		</div>
+			
+			<div id="version-footer" class="container_24">
+					<footer class="grid_24">
+						<span>
+							<img src="${request.contextPath}/img/ta-logo.png" alt="transport authority"/>
+						</span>
+						<br/>Copyright &#169; <span id="copyYear"></span> eGov Jamaica Ltd.   Version ${app.version}
+					</footer>
+			</div>
+
+		
+	
+    </body>
+
+</html>

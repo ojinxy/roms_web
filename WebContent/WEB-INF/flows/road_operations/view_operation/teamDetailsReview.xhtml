@@ -1,0 +1,386 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fsl="http://org.fsl.com">
+
+	
+	<ui:fragment id="pageRoadOpCancel">	
+							<p:dataTable id="reviewTeams" var="team" value="#{operation.teams}">  
+						  
+						        <f:facet name="header">  
+						            Team Listing - Expand rows to see detailed information  
+						        </f:facet>  
+						        
+						       <!-- /*This function is used to color code select one buttons red or green.*/ -->
+						  <p:ajax  event="rowToggle"  oncomplete="setAttendedStateColors();"/>		  
+						  <p:ajax  event="page"  oncomplete="setAttendedStateColors();"/>		
+				        		
+				        
+						        <p:column rendered="#{not team.delete}" style="width:2%">  
+						            <p:rowToggler />  
+						        </p:column>  
+						  
+						      <p:column rendered="#{not team.delete}" style="width:49%">  
+						            <f:facet name="header">  
+						                    Name  
+						            </f:facet>  
+						            <h:outputText value="#{team.teamName}" />  
+						  	  </p:column>  
+						  
+						    <p:column rendered="#{not team.delete}" style="width:49%">  
+				            <f:facet name="header">  
+				                    Team Lead  
+				            </f:facet>  
+				            <h:outputText value="#{team.teamLead.fullName}" />  
+				       		</p:column>  
+						
+						<p:column rendered="#{not team.delete}" style="width:49%">  
+				            <f:facet name="header">  
+				                    Location(s)
+				            </f:facet>  
+				            
+				            <ui:repeat value="#{team.operationLocationList}" var="teamLoc" varStatus="loop">
+									   		<li style="margin-left:2%"> #{teamLoc.shortDesc}#{not loop.last ? ', ' : ''}</li>
+							</ui:repeat>
+				              
+				        </p:column>  
+						
+						<p:column rendered="#{not team.delete}" style="width:49%">  
+				            <f:facet name="header">  
+				                    TA Staff
+				            </f:facet>  
+				            <h:outputText value="#{team.numOfTAStaff}" />  
+				        </p:column>  
+						
+						<p:column rendered="#{not team.delete}" style="width:49%">  
+				            <f:facet name="header">  
+				                    ITA Examiner(s)
+				            </f:facet>  
+				            <h:outputText value="#{team.numOfITAExaminer}" />  
+				        </p:column>  
+				  
+						<p:column rendered="#{not team.delete}" style="width:49%">  
+				            <f:facet name="header">  
+				                    Police
+				            </f:facet>  
+				            <h:outputText value="#{team.numOfPolice}" />  
+				        </p:column>  
+						
+						<p:column rendered="#{not team.delete}" style="width:49%">  
+				            <f:facet name="header">  
+				                    JP
+				            </f:facet>  
+				            <h:outputText value="#{team.numOfJP}" />  
+				        </p:column>  
+						
+						<p:column rendered="#{not team.delete}" style="width:49%">  
+				            <f:facet name="header">  
+				                    Vehicle(s)
+				            </f:facet>  
+				            <h:outputText value="#{team.numOfVehicle}" />  
+				        </p:column>  
+						
+						<p:column rendered="#{not team.delete}" style="width:49%">  
+				            <f:facet name="header">  
+				                    Other Agency Vehicle(s)
+				            </f:facet>  
+				            <h:outputText value="#{team.numOfMotorCycle}" />  
+				        </p:column> 
+						  <p:column rendered="#{not team.delete}" >  
+			            <f:facet name="header">  
+			                    Coverage(km)
+			            </f:facet>  
+			            <h:outputText  value="#{team.coverage}" />  
+			        </p:column> 		
+						        <p:rowExpansion>
+						        	
+						        <!--  DIV FOR RESOURCES BEFORE OPERATION HAS STARTED -->	
+						         <div id="resourcesBeforeStart">  
+							           <p:tabView id="tabViewResources" orientation="top" rendered="#{operation.statusId =='NONE' || operation.statusId =='RO_SCH'? true : false}">   
+				                   	
+				                   			<p:tab id="tastaff-tab" title="TA Staff">
+				                   				
+				                   				<div>
+					                   				<p:dataTable border="2" rows="5" 
+														 id="taStaffList" value="#{team.taStaffList}" var="taStaff" style="width:80%"
+														 paginator="true"
+										                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+										                 rowsPerPageTemplate="5,10,15">
+															<p:ajax  event="page"  oncomplete="setAttendedStateColors();"/>	        				
+							        						<p:column>
+	<!-- 								        					<f:facet name="header">TA Staff Assigned</f:facet> -->
+									        					<h:outputText styleClass="reviewDataTableDetails" value="#{taStaff.fullName} - #{taStaff.staffId}" ></h:outputText>
+									        				</p:column>
+									        				
+							        				</p:dataTable>
+												</div>					
+							                </p:tab>
+				                             	
+				                             	
+				                            <p:tab id="ita-tab" title="ITA Examiners"> 
+				
+													<p:dataTable border="2" rows="5" first="0" cellpadding="0"
+														cellspacing="0" id="itaExaminerList" value="#{team.itaExaminerList}" var="ita" style="width:80%"
+														paginator="true"
+										                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+										                 rowsPerPageTemplate="5,10,15">
+						        						<p:ajax  event="page"  oncomplete="setAttendedStateColors();"/>
+						        						<p:column>
+	<!-- 							        					<f:facet name="header">ITA Examiners Assigned</f:facet> -->
+								        					<h:outputText styleClass="reviewDataTableDetails" value="#{ita.personBO.fullName} - #{ita.examinerId}" ></h:outputText>
+								        				</p:column>
+								        				
+						        					</p:dataTable>
+				
+											</p:tab>
+				                             	
+				                             	
+				                             	
+				                             <p:tab id="police-tab" title="Police"> 
+				
+														<p:dataTable border="2" rows="5" first="0" cellpadding="0"
+														cellspacing="0" id="policeList" value="#{team.policeOfficerList}" var="police" style="width:80%"
+														paginator="true"
+										                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+										                 rowsPerPageTemplate="5,10,15">
+						        						<p:ajax  event="page"  oncomplete="setAttendedStateColors();"/>
+						        						<p:column >
+	<!-- 							        					<f:facet name="header">Police Officers Assigned</f:facet> -->
+								        					<h:outputText styleClass="reviewDataTableDetails"  value="#{police.rank} #{police.fullName} - [ #{police.polOfficerCompNo} ] - #{police.stationDescription}" ></h:outputText>
+								        				</p:column>
+								        				
+						        					</p:dataTable>
+									        	</p:tab>
+				                             	
+				                             	
+				                             	
+				                             	
+				                               <p:tab id="jp-tab" title="JP"> 
+													
+													<p:dataTable border="2" rows="5" first="0" cellpadding="0"
+														cellspacing="0" id="jpList" value="#{team.jpList}" var="jp" style="width:80%"
+														paginator="true"  
+										                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+										                 rowsPerPageTemplate="5,10,15">
+						        						<p:ajax  event="page"  oncomplete="setAttendedStateColors();"/>
+						        						<p:column>
+	<!-- 							        					<f:facet name="header">JPs Assigned</f:facet> -->
+								        					<h:outputText styleClass="reviewDataTableDetails"  value="#{jp.personBO.fullName} - #{jp.regNumber}" ></h:outputText>
+								        				</p:column>
+								        				
+						        					</p:dataTable>
+												
+									        	</p:tab>
+									        	
+									        	
+									       	<p:tab id="veh-tab" title="Vehicle"> 
+													<p:dataTable border="2" rows="5" first="0" cellpadding="0"
+														cellspacing="0" id="vehList" value="#{team.taVehicleList}" var="veh" style="width:80%"
+														paginator="true" 
+										                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+										                 rowsPerPageTemplate="5,10,15">
+						        						<p:ajax  event="page"  oncomplete="setAttendedStateColors();"/>
+						        						<p:column>
+	<!-- 							        					<f:facet name="header">TA Vehicles Assigned</f:facet> -->
+								        					<h:outputText styleClass="reviewDataTableDetails"  value="#{veh.vehicle.model}, #{veh.vehicle.typeDesc} , #{veh.vehicle.plateRegNo}" ></h:outputText>
+								        				</p:column>
+								        				
+						        					</p:dataTable>
+														
+								        	</p:tab>
+				                             	
+				                       </p:tabView>
+			                       </div>	
+			                       
+			                       <!-- DIV FOR RESOURCES AFTER OPERATION HAS STARTED -->
+			                       
+			                        <div id="resourcesAfterStart" >  
+							           <p:tabView id="tabViewResources" orientation="top" rendered="#{operation.statusId =='NONE' || operation.statusId =='RO_SCH'? false : true}">   
+				                   	
+				                   			<p:tab id="tastaff-tab" title="TA Staff">
+				                   				
+				                   				<div>
+					                   				<p:dataTable
+														border="1"  style="width: 100%" styleClass="tblroadOpClass"
+														 cellpadding="5"
+														cellspacing="8"  id="teamTAStaff"  rows="10"
+														value="#{team.taStaffList}" var="taStaff" 
+														currentPageReportTemplate="{currentPage} of {totalPages} TA Staff" paginator="true"
+														paginatorTemplate="{PreviousPageLink} {NextPageLink}           {CurrentPageReport}"
+														paginatorPosition="top" paginatorAlwaysVisible="false" scrollable="false">
+															<p:column id="col1" headerText="Team Member">
+																	<h:outputText value="#{taStaff.getFullName()} - #{taStaff.getStaffId()}"/>
+															</p:column>
+															<p:column id="col2" headerText="Role" style="width:10%">
+																
+																	<h:outputText value="#{taStaff.staffTypeCode == 'I' ? 'Inspector' : 'Administrative'}"/>
+															</p:column>
+															<p:column id="col3" headerText="Attended" style="width:50%">
+																	<span style="display:inline-block;white-space:nowrap">
+																        <p:selectOneButton value="#{taStaff.attended}"  onchange="checkAttendedState(this)" disabled="true">
+																        	  <p:ajax update="taStaffAbsentComment"/> 
+																            <f:selectItem itemLabel="YES" itemValue="#{true}" />  
+																            <f:selectItem itemLabel="NO" itemValue="#{false}" />    
+																        </p:selectOneButton>
+																        <h:outputText id="taStaffAbsentComment"  value="#{taStaff.comment}"  style="visibility:#{(taStaff.comment eq null or taStaff.comment.trim().toLowerCase() eq '')?'hidden':'' }"/>
+															        </span> 
+															</p:column>
+															<p:ajax  event="page"  oncomplete="setAttendedStateColors();"/>
+													</p:dataTable>
+
+												</div>					
+							                </p:tab>
+				                             	
+				                             	
+				                            <p:tab id="ita-tab" title="ITA Examiners"> 
+				
+													<p:dataTable
+														border="1"  style="width: 100%" styleClass="tblroadOpClass"
+														 cellpadding="5"
+														cellspacing="8"  id="teamITAExaminer"  rows="10"
+														value="#{team.itaExaminerList}" var="itaEx" 
+														currentPageReportTemplate="{currentPage} of {totalPages} ITA Examiner" paginator="true"
+														paginatorTemplate="{PreviousPageLink} {NextPageLink}           {CurrentPageReport}"
+														paginatorPosition="top" paginatorAlwaysVisible="false" scrollable="false">
+															<p:column id="col1" headerText="Team Member">
+																	<h:outputText value="#{itaEx.personBO.getFullName()} - #{itaEx.getExaminerId()}"/>
+															</p:column>
+															<p:column id="col2" headerText="Attended" style="width:50%">
+																	<span style="display:inline-block;white-space:nowrap">
+																        <p:selectOneButton value="#{itaEx.attended}"  onchange="checkAttendedState(this)" disabled="true">
+																        	<p:ajax update="itaExAbsentComment"/>   
+																            <f:selectItem itemLabel="YES" itemValue="#{true}" />  
+																            <f:selectItem itemLabel="NO" itemValue="#{false}" />    
+																        </p:selectOneButton>
+																        <h:outputText  id="itaExAbsentComment"  value="#{itaEx.comment}"  style="visibility:#{(itaEx.comment eq null or itaEx.comment.trim().toLowerCase() eq '')?'hidden':'' }"/>
+															        </span>
+															</p:column>
+														 	<p:ajax  event="page"  oncomplete="setAttendedStateColors();"/>
+													</p:dataTable>
+													
+				
+											</p:tab>
+				                             	
+				                             	
+				                             	
+				                             <p:tab id="police-tab" title="Police"> 
+				
+														<p:dataTable
+															border="1"  style="width: 100%" styleClass="tblroadOpClass"
+															 cellpadding="5"
+															cellspacing="8"  id="teamPolice"  rows="10"
+															value="#{team.policeOfficerList}" var="police" 
+															currentPageReportTemplate="{currentPage} of {totalPages} Police Officer" paginator="true"
+															paginatorTemplate="{PreviousPageLink} {NextPageLink}           {CurrentPageReport}"
+															paginatorPosition="top" paginatorAlwaysVisible="false" scrollable="false">
+																<p:column id="col1" headerText="Rank" style="width:15%">
+																		<h:outputText value="#{police.getRank()}"/>
+																</p:column>
+																<p:column id="col2" headerText="Team Member">
+																		<h:outputText value="#{police.getFullName()} - [#{police.getPolOfficerCompNo()}] - #{police.getStationDescription()}"/>
+																</p:column>	
+																<p:column id="col3" headerText="Attended" style="width:50%">
+																		<span style="display:inline-block;white-space:nowrap">
+																	        <p:selectOneButton value="#{police.attended}"  onchange="checkAttendedState(this)" disabled="true">
+																	        	<p:ajax update="policeAbsentComment"/>    
+																	            <f:selectItem itemLabel="YES" itemValue="#{true}" />  
+																	            <f:selectItem itemLabel="NO" itemValue="#{false}" />    
+																	        </p:selectOneButton>
+																	        <h:outputText id="policeAbsentComment"  value="#{police.comment}"  style="visibility:#{(police.comment eq null or police.comment.trim().toLowerCase() eq '')?'hidden':'' }"/>
+																        </span>
+																</p:column>
+																<p:ajax  event="page"  oncomplete="setAttendedStateColors();"/>
+														</p:dataTable>
+									        	</p:tab>
+				                             	
+				                             	
+				                             	
+				                             	
+				                               <p:tab id="jp-tab" title="JP"> 
+													
+													<p:dataTable
+														border="1"  style="width: 100%" styleClass="tblroadOpClass"
+														 cellpadding="5"
+														cellspacing="8"  id="teamJP"  rows="10"
+														value="#{team.jpList}" var="jp" 
+														currentPageReportTemplate="{currentPage} of {totalPages} Justice of the Peace" paginator="true"
+														paginatorTemplate="{PreviousPageLink} {NextPageLink}           {CurrentPageReport}"
+														paginatorPosition="top" paginatorAlwaysVisible="false" scrollable="false">
+															<p:column id="col1" headerText="Team Member">
+																	<h:outputText value="#{jp.personBO.getFullName()} - #{jp.getRegNumber()}"/>
+															</p:column>
+															<p:column id="col2" headerText="Attended" style="width:50%">
+																	<span style="display:inline-block;white-space:nowrap">
+																        <p:selectOneButton value="#{jp.attended}"  onchange="checkAttendedState(this)" disabled="true">
+																        	<p:ajax update="jpAbsentComment"/>   
+																            <f:selectItem itemLabel="YES" itemValue="#{true}" />  
+																            <f:selectItem itemLabel="NO" itemValue="#{false}" />    
+																        </p:selectOneButton>
+																        <h:outputText  id="jpAbsentComment"  value="#{jp.comment}"  style="visibility:#{(jp.comment eq null or jp.comment.trim().toLowerCase() eq '')?'hidden':'' }"/>
+																    </span>
+															</p:column>
+															<p:ajax  event="page"  oncomplete="setAttendedStateColors();"/>
+													</p:dataTable>
+												
+									        	</p:tab>
+									        	
+									        	
+									       	<p:tab id="veh-tab" title="Vehicle"> 
+													<p:dataTable
+														border="1"  style="width: 100%" styleClass="tblroadOpClass"
+														 cellpadding="5"
+														cellspacing="8"  id="teamVehicle"  rows="10"
+														value="#{team.taVehicleList}" var="veh" 
+														currentPageReportTemplate="{currentPage} of {totalPages} Vehicle" paginator="true"
+														paginatorTemplate="{PreviousPageLink} {NextPageLink}           {CurrentPageReport}"
+														paginatorPosition="top" paginatorAlwaysVisible="false" scrollable="false">
+															<p:column id="col1" headerText="Plate Number">
+																	<h:outputText value="#{veh.vehicle.plateRegNo}"/>
+															</p:column>
+															<p:column id="col2" headerText="Make-Model [Color]">
+																	<h:outputText value="#{veh.vehicle.makeDescription} - #{veh.vehicle.model} [ #{veh.vehicle.colour} ]"/>
+															</p:column>
+															<p:column id="col2" headerText="Attended" style="width:50%">
+																	<span style="display:inline-block;white-space:nowrap">
+																        <p:selectOneButton value="#{veh.attended}"  onchange="checkAttendedState(this)" disabled="true"> 
+																        	<p:ajax update="vehAbsentComment"/>  
+																            <f:selectItem itemLabel="YES" itemValue="#{true}" />  
+																            <f:selectItem itemLabel="NO" itemValue="#{false}" />    
+																        </p:selectOneButton>
+																        <h:outputText id="vehAbsentComment"  value="#{veh.comment}"  style="visibility:#{(veh.comment eq null or veh.comment.trim().toLowerCase() eq '')?'hidden':'' }"/>
+																    </span>
+															</p:column>
+															<p:ajax  event="page"  oncomplete="setAttendedStateColors();"/>
+													</p:dataTable>
+													<div style="color:purple;padding-top:15px">
+														<!-- Motor Cycles -->
+														Other Agency Vehicles
+													</div>
+													<div style="padding-top:10px">
+														<h:outputText style="width:14%;display:inline-block" value="Requested :"/> 
+														<h:outputText style="text-align:left" value="#{team.numOfMotorCycle}"/>
+													</div>
+													<div style="padding-top:10px">
+														<h:outputText style="width:14%;display:inline-block" value="Provided :"/>
+														<h:outputText id="txtMotorCyclesProvided" value="#{team.numOfMotorCycleUsed}" />
+													</div> 
+														
+								        	</p:tab>
+				                             	
+				                       </p:tabView>
+			                       </div>	
+			                       
+						        </p:rowExpansion>  
+						    </p:dataTable>  
+								
+							
+							          
+	</ui:fragment>
+</ui:composition>

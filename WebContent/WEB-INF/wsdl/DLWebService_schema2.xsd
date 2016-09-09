@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://object.dl.ws.fsl.org" version="1.0" xmlns:tns="http://object.dl.ws.fsl.org">
+
+  <xs:complexType name="DriverLicenceDetails">
+    <xs:sequence>
+      <xs:element name="driversLicenceNo" nillable="true" type="xs:string"/>
+      <xs:element name="controlNo" nillable="true" type="xs:string"/>
+      <xs:element name="issueDate" nillable="true" type="xs:string"/>
+      <xs:element name="expiryDate" nillable="true" type="xs:string"/>
+      <xs:element name="disqDate" nillable="true" type="xs:string"/>
+      <xs:element name="disqTypeCode" nillable="true" type="xs:string"/>
+      <xs:element name="disqTypeDesc" nillable="true" type="xs:string"/>
+      <xs:element name="dlClassCode" nillable="true" type="xs:string"/>
+      <xs:element name="dlClassDesc" nillable="true" type="xs:string"/>
+      <xs:element name="vehicleLicencedToDrive" nillable="true" type="xs:string"/>
+      <xs:element name="trnNo" nillable="true" type="xs:string"/>
+      <xs:element name="lastName" nillable="true" type="xs:string"/>
+      <xs:element name="firstName" nillable="true" type="xs:string"/>
+      <xs:element name="middleName" nillable="true" type="xs:string"/>
+      <xs:element name="nationality" nillable="true" type="xs:string"/>
+      <xs:element name="address" nillable="true" type="tns:Address"/>
+      <xs:element name="placeOfBirth" nillable="true" type="xs:string"/>
+      <xs:element name="dateOfBirth" nillable="true" type="xs:string"/>
+      <xs:element name="parishOfBirth" nillable="true" type="xs:string"/>
+      <xs:element name="gender" nillable="true" type="xs:string"/>
+      <xs:element name="collectorateIssued" nillable="true" type="xs:string"/>
+      <xs:element name="collectorateFirstIssued" nillable="true" type="xs:string"/>
+      <xs:element name="dateFirstIssued" nillable="true" type="xs:string"/>
+      <xs:element name="licenceStatus" nillable="true" type="xs:string"/>
+      <xs:element name="photograph" type="xs:base64Binary"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Address">
+    <xs:sequence>
+      <xs:element name="mark" nillable="true" type="xs:string"/>
+      <xs:element name="streetNumber" nillable="true" type="xs:string"/>
+      <xs:element name="streetName" nillable="true" type="xs:string"/>
+      <xs:element name="poBoxNumber" nillable="true" type="xs:string"/>
+      <xs:element name="poLocation" nillable="true" type="xs:string"/>
+      <xs:element name="areaCityTown" nillable="true" type="xs:string"/>
+      <xs:element name="parish" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

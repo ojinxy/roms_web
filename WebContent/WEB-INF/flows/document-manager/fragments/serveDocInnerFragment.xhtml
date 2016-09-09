@@ -1,0 +1,124 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces" xmlns:hx="http://www.ibm.com/jsf/html_extended" xmlns:sec="http://www.springframework.org/security/tags" xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fsl="http://org.fsl.com"
+>
+	<ui:fragment id="page">
+		<p:messages autoupdate="true" closable="true"></p:messages>
+		<p:fieldset label="Please provide the following details:">
+			<div>
+				<!-- <strong><h:outputText value="Served At Address:*"
+								style="font-weight:bold;text-transform:uppercase;min-width:30%" />
+						</strong> -->
+				<table>
+					<tr>
+						<td><h:outputText value="Served by TA Staff:" style="font-weight:bold;" /><h:outputText value=" * " styleClass="required" />
+						</td>
+						<td colspan="3">
+							<p:watermark id="taStaffWM" for="txtTaStaff" value="Last, First Middle Name [ID]"/>  
+							<p:autoComplete global="false" id="txtTaStaff" scrollHeight="200"  size="43" value="#{flowScope.staffBOForServe}" 
+							completeMethod="#{documentManagerServiceAction.taStaffNameAutoComplete}" converter="TAStaffIDConverter"
+							var="p" itemValue="#{p}" forceSelection="true" itemLabel="#{p.fullName.concat(' [').concat(p.staffId).concat(']')}">
+							<p:ajax event="query" global="false"></p:ajax>   
+							</p:autoComplete>  
+							
+							
+						</td>
+					</tr>
+					<tr>
+						<td><h:outputText value="Date Served:" style="font-weight:bold;" /><h:outputText value=" * " styleClass="required" />
+						</td>
+						<td colspan="3"><c:choose>
+								<c:when test="#{ flowScope.docType == 'SUM'}">
+									<p:calendar value="${flowScope.summons.servedOnDate}" style="max-width:20%" pattern="yyyy-MM-dd hh:mm a" id="dateServedk" readonlyInput="true" showOn="button">
+										<fsl:dateTimeConverter showTime="true" />
+									</p:calendar>
+								</c:when>
+								<c:when test="#{flowScope.docType == 'WNO' }">
+									<p:calendar value="${flowScope.warningNotice.servedOnDate}" style="max-width:20%" pattern="yyyy-MM-dd hh:mm a" id="dateServedk" readonlyInput="true" showOn="button" mindate="2001-01-01">
+										<fsl:dateTimeConverter showTime="true" />
+									</p:calendar>
+								</c:when>
+								<c:when test="#{flowScope.docType == 'WNP' }">
+									<p:calendar value="${flowScope.warningNoProsecution.servedOnDate}" style="max-width:20%" pattern="yyyy-MM-dd hh:mm a" id="dateServedk" readonlyInput="true" showOn="button">
+										<fsl:dateTimeConverter showTime="true" />
+									</p:calendar>
+								</c:when>
+								<c:when test="#{flowScope.docType == null }">
+									<p:calendar value="${flowScope.roadCheckReviewSummaryBean.servedByDetails.servedOnDate}" style="max-width:20%" pattern="yyyy-MM-dd hh:mm a" id="dateServedk" readonlyInput="true"
+										showOn="button"
+									>
+										<fsl:dateTimeConverter showTime="true" />
+									</p:calendar>
+								</c:when>
+							</c:choose> <p:watermark for="dateServedk" value="yyyy-MM-dd hh:mm a" />
+						</td>
+					</tr>
+					<c:if test="#{ flowScope.docType == 'SUM' or flowScope.summonsDocTypePresent=='yes'}"><!-- or flowScope.docType == null -->
+						<tr>
+							<td colspan="4"><h:outputText styleClass="outputText" value="Address" style="font-weight:bold; font-size:14px;" /></td>
+						</tr>
+						
+						<tr>
+							<td><h:outputText styleClass="outputText" value="Street Number:" style="font-weight:bold;" />
+							</td>
+							<td colspan="3"><p:inputText value="#{flowScope.summons.servedAtAddressBO.streetNo}" id="streetNo" maxlength="15" size="10" rendered="#{flowScope.docType != null }" style="text-align:right" /> <p:inputText
+									value="#{flowScope.roadCheckReviewSummaryBean.servedByDetails.servedAtAddressBO.streetNo}" id="streetNo" maxlength="15" size="10"  rendered="#{flowScope.docType == null }"
+									style="text-align: right;width: 94%;" onkeyup="restrictAlphaNumericDashFields(this);" onkeydown="restrictAlphaNumericDashFields(this);"
+								/></td>
+						</tr>
+						<tr>
+							<td><h:outputText styleClass="outputText" value="Street Name:" style="font-weight:bold;" />
+						
+							</td>
+							<td colspan="3"><p:inputText value="#{flowScope.summons.servedAtAddressBO.streetName}" id="streetName" maxlength="25" rendered="#{flowScope.docType != null }" style="text-align: left; width:93%;" /> <p:inputText
+									value="#{flowScope.roadCheckReviewSummaryBean.servedByDetails.servedAtAddressBO.streetName}" id="streetName" maxlength="25" rendered="#{flowScope.docType == null }" style="text-align: left;width: 93%;"
+								/></td>
+						</tr>
+						<tr>
+							<td><h:outputText styleClass="outputText" value="P.O. Box #:" style="font-weight:bold;" /></td>
+							<td><p:inputText value="#{flowScope.summons.servedAtAddressBO.poBoxNo}" rendered="#{flowScope.docType != null }" id="poBoxNo" maxlength="6" size="10" style="text-align: right;" /> <p:inputText
+									value="#{flowScope.roadCheckReviewSummaryBean.servedByDetails.servedAtAddressBO.poBoxNo}" rendered="#{flowScope.docType == null }" id="poBoxNo" maxlength="6" size="10" style="text-align: right"
+								/></td>
+							<td nowrap="nowrap"><h:outputText styleClass="outputText" value="P.O. Location:" style="font-weight:bold;" />
+								
+							</td>
+							<td><p:inputText value="#{flowScope.summons.servedAtAddressBO.poLocationName}" id="poLocationName" maxlength="25" rendered="#{flowScope.docType != null }"
+									style="text-align: left; width:84%;"
+								/> <p:inputText value="#{flowScope.roadCheckReviewSummaryBean.servedByDetails.servedAtAddressBO.poLocationName}" id="poLocationName" maxlength="25" 
+									rendered="#{flowScope.docType == null }" style="text-align: left; width:84%;"
+								/></td>
+						</tr>
+						<tr>
+							<td><h:outputText styleClass="outputText" value="Mark:" style="font-weight:bold;" /></td>
+							<td colspan="3"><p:inputText value="#{flowScope.summons.servedAtAddressBO.markText}" id="markText" maxlength="40" rendered="#{flowScope.docType != null }"
+									style="text-align: left; width:93%;"
+								/> <p:inputText value="#{flowScope.roadCheckReviewSummaryBean.servedByDetails.servedAtAddressBO.markText}" id="markText" maxlength="40" rendered="#{flowScope.docType == null }"
+									style="text-align: left; width:93%;"
+								/></td>
+						</tr>
+						<tr>
+							<td><h:outputText value="Parish:" style="font-weight:bold;" />
+								<h:outputText value=" * " styleClass="required" /></td>
+							<td colspan="3"><p:selectOneMenu id="servedAtPar" value="${flowScope.summons.servedAtParish}" rendered="#{flowScope.docType != null }">
+									<f:selectItem itemValue="" itemLabel="[Select One]            " />
+									<f:selectItems value="#{parishList}" var="s" itemLabel="#{s.label}" itemValue="#{s.value}" />
+								</p:selectOneMenu> <p:watermark for="servedAtPar" value="parish" /> <p:selectOneMenu id="servedAtPar" value="${flowScope.roadCheckReviewSummaryBean.servedByDetails.servedAtAddressBO.parish}"
+									rendered="#{flowScope.docType == null }"
+								>
+									<f:selectItem itemValue="" itemLabel="[Select One]" />
+									<f:selectItems value="#{parishList}" var="s" itemLabel="#{s.label}" itemValue="#{s.value}" />
+								</p:selectOneMenu> <p:watermark for="servedAtPar" value="parish" /></td>
+						</tr>
+					</c:if>
+				</table>
+			</div>
+			<div style="text-align: center;">
+				<span style="margin: 0 10px;"><p:commandButton id="save4" value="Serve" processIds="*" action="serve" ajax="false" onerror="PF('srvdialog').show();" onsuccess="PF('srvdialog').hide();"  styleClass="blue" />
+				</span> <span style="margin: 0 10px;"><p:commandButton id="cancel4" icon="ui-icon-refresh" value="Cancel" processIds="*" action="cancelAction" ajax="false" onerror="PF('srvdialog').show();"
+						onsuccess="PF('srvdialog').hide();" styleClass="blue"
+					/> </span>
+			</div>
+		</p:fieldset>
+	</ui:fragment>
+</ui:composition>

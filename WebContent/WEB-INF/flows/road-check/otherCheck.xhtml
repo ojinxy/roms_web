@@ -1,0 +1,209 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com">
+
+	<ui:fragment id="page">	
+				 <p:panel id="panelDataTableOTErr">
+						<h:outputText value="#{recordOffenceOutcomeView.otTableError}" id="otTableErr" style="display:none"/> 
+						<h:outputText value="#{recordOffenceOutcomeView.otOpenRecordCount}" style="display:none"/>
+				</p:panel>
+				<p:panel id="panelMsgOT">
+						<p:messages id="msgMV" closable="true"/>
+						</p:panel>
+				 <p:panel id="panelDataTableOther" header="Record Offence and Outcomes" >
+	  					  
+	  					  <p:dataTable var="offOutcome" value="#{otOffenceOutcomes}" editable="true" 
+	  					   rows="50" id="otOffenceOutcomeList" >  
+  
+						       <f:facet name="header" >  
+						           <div align="left">
+						             <h:outputText value=" Offences/Outcomes Observed " style="padding-right:30px"/>  
+						           <p:commandButton icon="ui-icon-plusthick" id="addOTBtn"  value="Add" action="otherAddOffenceOutcome" processIds="*"  ajax="true" style="padding-right:20px" oncomplete="addOtherRowOnComplete();" update=":recordOffenceOutcome:tabV:panelDataTableOther :recordOffenceOutcome:panelButtons" disabled="#{recordOffenceOutcomeView.otOpenRecordCount > 0 || otherOffenceList.size() == otOffenceOutcomes.size()}"/>
+						           <p:commandButton icon="ui-icon-trash"  id="deleteOTBtn"  value="Delete" action="otherDeleteOffenceOutcome" processIds="*"  ajax="true" update=":recordOffenceOutcome:tabV:panelDataTableOther :recordOffenceOutcome:panelButtons" disabled="#{!recordOffenceOutcomeView.otOffenceOutcomeSelected || recordOffenceOutcomeView.otOpenRecordCount > 0 || otOffenceOutcomes.size() == 0}" />
+						           </div>
+						           
+						       </f:facet>  
+						 
+						 		<p:ajax event="rowEditInit"  listener="#{roadCheckServiceAction.initRowEditOT}" oncomplete="updateOtTable();disablePenOT(); disableCheckBoxOT();"/> 
+						 		  <p:ajax event="rowEdit" listener="#{roadCheckServiceAction.editOtSelectedOffenceOutcome}"  update=":recordOffenceOutcome:tabV:panelMsgOT :recordOffenceOutcome:tabV:otTableErr" oncomplete="updateOtTableEdit();editAndCancelHideOT();"/>  
+						       <p:ajax event="rowEditCancel" listener="#{roadCheckServiceAction.cancelOtherEditSelectedOffenceOutcome}" update=":recordOffenceOutcome:tabV:panelMsgOT" oncomplete="updateOtTable();selectOtherAll();cancelHideOT();"/>  
+						       
+						 		  <p:column  style="width:6%" id="checkBoxes">  
+						         <f:facet  name="header">
+									 <p:selectBooleanCheckbox id="otSelectAllBox" value="#{recordOffenceOutcomeView.otSelectAllOffenceOutcome}" onchange="selectOtherAll();" disabled="#{recordOffenceOutcomeView.otOpenRecordCount > 0}" >
+									 		
+									 </p:selectBooleanCheckbox> 
+									</f:facet>
+						                <p:selectBooleanCheckbox value="#{offOutcome.rowSelected}" styleClass="ui-corner-checkbox">
+						              		<p:ajax oncomplete="selectOTRow();" />  
+						                </p:selectBooleanCheckbox>  
+						            
+						       </p:column>  
+						     
+						       <p:column headerText="Offence(s)" style="width:41%; text-align:left">  
+						         
+						                  <p:cellEditor>  
+						               <f:facet name="output">  
+						                   <h:outputText value="#{offOutcome.offenceShortDescription}" /> 
+						               </f:facet>  
+						               <f:facet name="input">  
+						                  <p:selectOneMenu style="width:100%"
+								id="comboOffenceInput" value="#{offOutcome.offenceId}">
+								<f:selectItem itemValue="" itemLabel="[Select One]" />
+								<f:selectItems var="offence" itemValue="#{offence.offenceId}" itemLabel="#{offence.shortDescription}" value="#{otherOffenceList}" />
+									</p:selectOneMenu>  
+						               </f:facet>  
+						           </p:cellEditor>
+						            
+						       </p:column>  
+						         <p:column headerText="Issue Summons" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">  
+						                   <f:subview rendered="#{offOutcome.issueSummons}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.issueSummons}"/>  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column> 
+						        <p:column headerText="Issue Warning Notice" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">    
+						                   <f:subview rendered="#{offOutcome.issuewWarningNotice}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.issuewWarningNotice}"/>  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column>  
+						       <p:column headerText="Warning No Prosecution" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">  
+						                   <f:subview rendered="#{offOutcome.issueWarningNP}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.issueWarningNP}"/>  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column> 
+						       <p:column headerText="Warning For Prosecution" style="width:10%">  
+						           <p:cellEditor>  
+						               <f:facet name="output">   
+						                    <f:subview rendered="#{offOutcome.warnForProsecution}">
+												<i class="icon icon-check icon-1x"></i>
+											</f:subview>
+						               </f:facet>  
+						               <f:facet name="input">  
+						                   <p:selectBooleanCheckbox value="#{offOutcome.warnForProsecution}" />  
+						               </f:facet>  
+						           </p:cellEditor>  
+						       </p:column>
+<!-- 						        <p:column headerText="Remove Plate" style="width:10%">   -->
+<!-- 						           <p:cellEditor>   -->
+<!-- 						               <f:facet name="output">    -->
+<!-- 						                     <f:subview rendered="#{offOutcome.removePlate}"> -->
+<!-- 												<i class="icon icon-check icon-1x"></i> -->
+<!-- 											</f:subview> -->
+<!-- 						               </f:facet>   -->
+						             
+<!-- 						               <f:facet name="input">   -->
+<!-- 						                   <p:selectBooleanCheckbox value="#{offOutcome.removePlate}" disabled="#{initiateView.activityType == 'U'}"/>   -->
+<!-- 						               </f:facet>   -->
+<!-- 						           </p:cellEditor>   -->
+<!-- 						       </p:column>  -->
+						       
+						         <p:column>  
+           							 <p:rowEditor id="otRowEditor"/>  
+           							  <p:tooltip for="otRowEditor" value="Click to Add/Edit" showEffect="fade" hideEffect="fade" /> 
+        							</p:column>  
+						   </p:dataTable>
+						   
+						   <p:commandButton wigetVar="allBtnSelOther" id="allSelectBtnOther" value="Do select" style="display:none" processIds="*" action="otherSelectAllOffenceOutcome" 
+			 ajax="true" update=":recordOffenceOutcome:tabV:panelDataTableOther" ></p:commandButton>
+			 
+			  <p:commandButton wigetVar="selectOther" id="selectBtnOTRow" value="Do select" style="display:none" processIds="*" action="otSelectRowOffenceOutcome" 
+			 ajax="true" update=":recordOffenceOutcome:tabV:panelDataTableOther" ></p:commandButton>
+			 
+			  <p:commandButton wigetVar="updateOTTableVar" id="updateOTTable" value="Do select2" style="display:none" processIds="*" 
+			 	ajax="true" update=":recordOffenceOutcome:tabV:otOffenceOutcomeList:addOTBtn :recordOffenceOutcome:tabV:otOffenceOutcomeList:deleteOTBtn :recordOffenceOutcome:tabV:otOffenceOutcomeList:otSelectAllBox :recordOffenceOutcome:panelButtons :recordOffenceOutcome:progressPanel"
+			 	>
+			 </p:commandButton>
+			
+			 <script>
+			 function selectOTRow(){
+				    $("button[id*='selectBtnOTRow']").click();	
+				    }
+			 	function selectOtherAll(){
+			 	$("button[id*='allSelectBtnOther']").click()			 	
+			 	}
+			 	function addOtherRowOnComplete() {
+			 		  jQuery('#recordOffenceOutcome\\:tabV\\:otOffenceOutcomeList\\:0\\:otRowEditor .ui-icon-pencil')[0].id = 'supercoolnewrowOt';
+			 		  jQuery('#supercoolnewrowOt').trigger('click');
+			 		}
+			 	
+			 	function updateOtTableEdit(){
+			 		var x = $('#recordOffenceOutcome\\:tabV\\:otTableErr').text();
+			 		
+			 		if(x=='false'){
+				 		$("button[id*='updateOTTable']").click();	
+			 		}
+				 }
+			 	
+			 	function updateOtTable(){
+			 		
+				 		$("button[id*='updateOTTable']").click();	
+			 		
+				 }
+			 	
+			 	function disableCheckBoxOT(){
+			 		
+			 		 
+			 		$('#recordOffenceOutcome\\:tabV\\:otOffenceOutcomeList .ui-corner-checkbox').each(function(){
+			        	 $(this).css('display','none');
+			        	 });
+			 		
+	        	 }
+			 	function disablePenOT(){
+		        	 $('#recordOffenceOutcome\\:tabV\\:otOffenceOutcomeList .ui-icon-pencil').each(function(){
+		        	 $(this).css('display','none');
+		        	 });
+	        	 }
+			 	function cancelHideOT(){
+		        	 $('#recordOffenceOutcome\\:tabV\\:otOffenceOutcomeList .ui-icon-pencil').each(function(){
+		        	 //$(').addClass('rat');
+		        	 // $(this).css({backgroundColor: '#0099ff'});
+		        	 $(this).css('display','');
+		        	 });
+		        	 
+		        	 $('#recordOffenceOutcome\\:tabV\\:otOffenceOutcomeList .ui-corner-checkbox').each(function(){
+			        	 $(this).css('display','');
+			        	 });
+			 		
+	        	 }
+	        	 
+	        	 function editAndCancelHideOT(){
+				 		var x = $('#recordOffenceOutcome\\:tabV\\:otTableErr').text();
+				 		//alert(x);
+				 		if(x=='false'){
+				 			cancelHideOT();
+				 		}
+					 }
+			 </script>
+			
+			 </p:panel>
+	  	
+</ui:fragment>
+</ui:composition>

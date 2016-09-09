@@ -1,0 +1,30 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com"
+	template="/WEB-INF/newTemplate.xhtml">
+	
+
+	<ui:define name="title"><h:outputText value="#{roadOperationDetailsSumary.roadOp.statusId.trim().equalsIgnoreCase('RO_STA')?'Complete ':'Start '}"/> Road Operation</ui:define>
+	<ui:define name="pageHeader">
+		<h:outputText value="#{roadOperationDetailsSumary.roadOp.statusId.trim().equalsIgnoreCase('RO_STA')?'Complete ':'Start '}"/> Road Operation
+			
+		<script type="text/javascript"	src="${request.contextPath}/script/roadOpAttendance.js" />
+		<!-- CSS Used for Road Operation Screens -->
+		<link	href="${request.contextPath}/theme/roadOp.css"	rel="stylesheet" />	
+		<link	href="${request.contextPath}/theme/docManager.css"	rel="stylesheet" />
+	</ui:define>
+	<ui:define name="content">	 
+	<h:form styleClass="form" id="roadOperationStart">
+		<ui:include src="roadOperationStart_InnerFragmentView.xhtml"></ui:include>
+
+		</h:form>
+		</ui:define>
+
+</ui:composition>

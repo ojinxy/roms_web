@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+            http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+
+
+	<jee:jndi-lookup id="romsDatasource"
+		jndi-name="java:comp/env/server/ds/jdbc/bims" />
+
+	<bean id="romsSessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="romsDatasource" />
+		<property name="annotatedClasses" >
+			<list>
+				<value>fsl.ta.toms.roms.dataobjects.ArteryDO</value>			
+				<value>fsl.ta.toms.roms.dataobjects.AssignedPersonDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.AssignedVehicleDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.BadgeCheckResultDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.CDCategoryDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.CDCourtRulingDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.CDEventDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.CDEventRefTypeDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.CDOutcomeTypeDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.CDPersonTypeDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.CDPleaDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.CDRoadCheckTypeDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.CitationCheckDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.ComplianceDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.ConfigurationDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.CourtDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.DLCheckResultDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.EventAuditDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.ExcerptParamMappingDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.GoverningLawDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.ITAExaminerDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.JPDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.LicenceOwnerDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.LocationDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.OffenceCheckResultDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.OffenceDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.OffenceLawDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.OffenceParamDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.TeamDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.TeamArteryDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.TeamLocationDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.OperationStrategyDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.ParishDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.PersonDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.PoliceOfficerDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.PoundDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.ReasonTypeDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.ReasonDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.RoadCheckDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.RoadCheckOffenceDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.RoadCheckOffenceOutcomeDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.RoadLicCheckResultDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.RoadOperationDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.StatusDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.StrategyDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.StrategyRuleDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.SummonsDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.ScannedDocDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.ScannedDocHistoryDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.ScannedDocumentTypeDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.TAStaffDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.TAVehicleDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.TicketCheckResultDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.VehicleCheckResultDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.VehicleDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.VehicleOwnerDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.WarningNoticeDO</value>			
+				<value>fsl.ta.toms.roms.dataobjects.WitnessWarningNoticeDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.WreckingCompanyDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.CDVerdictDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.VehicleFitnessDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.VehicleInsuranceDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.CourtCaseDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.CourtAppearanceDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.WarningNoProsecutionDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.HolidayExceptionsDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.ProcessControlDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.OffenceMandatoryOutcomeDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.VehicleCheckResultOwnerDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.TeamParishDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.OperationRegionDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.ComplianceParamDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.LicenceDriverConductorDO</value>
+								<value>fsl.ta.toms.roms.dataobjects.CDOtherRoleDO</value>				
+				<!-- Other DOs to be inserted here -->
+				
+				<!-- Other VIEW DOs to be inserted here -->
+				<value>fsl.ta.toms.roms.dataobjects.BIMS_StaffView</value>
+				<value>fsl.ta.toms.roms.dataobjects.BIMS_BadgeView</value>
+				<value>fsl.ta.toms.roms.dataobjects.BIMS_CDStaffTypeView</value>
+				<value>fsl.ta.toms.roms.dataobjects.BIMS_ApplicantView</value>
+				<value>fsl.ta.toms.roms.dataobjects.ROMS_CitationOffenceView</value>
+				<value>fsl.ta.toms.roms.dataobjects.LMIS_ResourceViewDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.LMIS_GroupViewDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.LMIS_GroupPermissionsViewDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.LMIS_TAOfficeLocationViewDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.LMIS_UserViewDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.LMIS_UserGroupViewDO</value>
+				<value>fsl.ta.toms.roms.dataobjects.LMIS_licenceOwnerView</value>
+				<value>fsl.ta.toms.roms.dataobjects.LMIS_licenceView</value>
+				<value>fsl.ta.toms.roms.dataobjects.ROMS_AllStaffView</value>
+				<value>fsl.ta.toms.roms.dataobjects.LMIS_licenceBadgeView</value>
+				<value>fsl.ta.toms.roms.dataobjects.LMIS_licenceFitnessView</value>
+				<value>fsl.ta.toms.roms.dataobjects.LMIS_licenceInsuranceView</value>
+				<value>fsl.ta.toms.roms.dataobjects.LMIS_ApplicationView</value>
+				
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.InformixDialect
+				hibernate.show_sql=false
+				hibernate.use_sql_comments=false
+				hibernate.generate_statistics=false
+				hibernate.format_sql=false
+				hibernate.transaction.factory_class=org.hibernate.transaction.JTATransactionFactory
+				hibernate.transaction.manager_lookup_class=org.hibernate.transaction.WebSphereTransactionManagerLookup
+				hibernate.connection.release_mode=after_transaction
+			</value>
+		</property>
+
+
+	</bean>
+
+	 <tx:advice id="defaultTxAdvice" transaction-manager="transactionManager" >
+	    <tx:attributes>
+	      <tx:method name="*" timeout="300000"/>
+	    </tx:attributes>
+	  </tx:advice>
+	<!--
+		Transaction manager that delegates to JTA (for a transactional JNDI
+		DataSource)
+	-->
+
+
+	<bean id="transactionManager"
+		class="org.springframework.transaction.jta.WebSphereUowTransactionManager" />
+
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<!-- <context:annotation-config/> -->
+</beans>

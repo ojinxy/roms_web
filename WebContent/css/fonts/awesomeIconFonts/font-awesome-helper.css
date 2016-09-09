@@ -1,0 +1,5 @@
+/*!
+ *  Font Awesome Helper (init) by Patrick Reid (Intern)
+ *	:: icon spacing and placement tweaks 
+*/
+.main [class^="icon-"]:before, .main [class*=" icon-"]:before {margin-right: 4px;}

@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Warning Notice" pageWidth="612" pageHeight="1008" columnWidth="504" leftMargin="54" rightMargin="54" topMargin="28" bottomMargin="28" uuid="89e277da-6133-4bc4-937b-54ccba4e3e55">
+	<property name="ireport.zoom" value="1.210000000000005"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="446"/>
+	<field name="offenderFirstName" class="java.lang.String"/>
+	<field name="offenderTRN" class="java.lang.String"/>
+	<field name="offenderAddress" class="java.lang.String"/>
+	<field name="offenceLocation" class="java.lang.String"/>
+	<field name="vehiclePlateNo" class="java.lang.String"/>
+	<field name="vehicleMake" class="java.lang.String"/>
+	<field name="vehicleModel" class="java.lang.String"/>
+	<field name="vehicleEngineNo" class="java.lang.String"/>
+	<field name="vehicleChassisNo" class="java.lang.String"/>
+	<field name="vehicleColor" class="java.lang.String"/>
+	<field name="taStaffFirstName" class="java.lang.String"/>
+	<field name="automaticSerialNo" class="java.lang.String"/>
+	<field name="offenderLastName" class="java.lang.String"/>
+	<field name="offenderDriverLicenceNo" class="java.lang.String"/>
+	<field name="ownerFirstName" class="java.lang.String"/>
+	<field name="ownerMiddleName" class="java.lang.String"/>
+	<field name="ownerLastName" class="java.lang.String"/>
+	<field name="ownerAddress" class="java.lang.String"/>
+	<field name="vehicleType" class="java.lang.String"/>
+	<field name="offenceDayWord" class="java.lang.String"/>
+	<field name="offenceDay" class="java.lang.String"/>
+	<field name="offenceMonth" class="java.lang.String"/>
+	<field name="offenceYearWord" class="java.lang.String"/>
+	<field name="offenceTime" class="java.lang.String"/>
+	<field name="offenceParish" class="java.lang.String"/>
+	<field name="allegations" class="java.lang.String"/>
+	<field name="issueDate" class="java.util.Date"/>
+	<field name="offenderMiddleName" class="java.lang.String"/>
+	<field name="taStaffAssignedLocation" class="java.lang.String"/>
+	<field name="taStaffBadgeNo" class="java.lang.String"/>
+	<field name="taStaffLastName" class="java.lang.String"/>
+	<field name="offenceExcerpt" class="java.lang.String"/>
+	<field name="ownerFullName" class="java.lang.String"/>
+	<field name="referenceNo" class="java.lang.String"/>
+	<field name="reprinted" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="864" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="164" width="162" height="16" uuid="87835b9a-2078-4e1e-a450-34a13a63480d">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[OFFENDER INFORMATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="181" width="44" height="17" uuid="79d70a0a-a2c4-45be-a28f-ee8fca0fba6f">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Name:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="10" y="199" width="52" height="17" uuid="bc8fb255-c391-4da3-92dd-d55337a845b5">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Address:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="261" width="495" height="13" uuid="bb1c490f-5715-48ec-b866-9631e0f45fb0">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[YOU ARE HEREBY WARNED FOR HAVING COMMITED THE FOLLOWING OFFENCE(S):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="320" width="92" height="15" uuid="ba883ccd-ca5d-4022-be1a-2bfc80dd5a32">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ALLEGATION(S):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="351" width="495" height="15" uuid="71b98c9a-df85-4836-b307-7e380e7e94c4">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VEHICLE INFORMATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="10" y="366" width="87" height="17" uuid="1ce461b8-8c50-4f76-9e6a-c9365e4762aa">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Registration #:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="260" y="366" width="92" height="17" uuid="9109af12-a779-4c1d-acc5-ce4b613efde7">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Type of Vehicle:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="10" y="383" width="40" height="17" uuid="37f87990-a4fe-419b-8d67-e633377713a8">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Make:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="260" y="383" width="68" height="17" uuid="c25fdf4a-ea6e-4e60-94ff-a307fc6cf23f">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Model:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="10" y="400" width="52" height="17" uuid="43ebda38-8a86-4246-b177-0d6eb7e7ff6f">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Engine #:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="260" y="400" width="66" height="17" uuid="52129614-148c-404b-b4e3-bbb4c6fa55b0">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Chassis #:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="10" y="417" width="42" height="17" uuid="dea9279f-6928-4b32-a428-5c86beab4232">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Colour:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="467" width="495" height="15" uuid="c4450543-9979-4558-95a6-5e9beecf8968">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TA INSPECTOR INFORMATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="10" y="485" width="106" height="17" uuid="c0301898-df15-40d5-bd9f-8dd6f6ff3a10">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Inspector's Name:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="390" y="485" width="50" height="17" uuid="61460d8d-f9ea-4dc3-86ad-4d5c77b12be6">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Badge #:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="10" y="509" width="125" height="17" uuid="a936e73d-39b7-4d24-bdd3-4ba3b18792bd">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Location:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="10" y="541" width="125" height="20" uuid="d959898b-4e2a-4d3c-b972-e64892a1f5f6">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Inspector's Signature:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="333" y="541" width="34" height="20" uuid="d05d0e6a-6ec0-4e5b-b244-db3d38a52aad">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="10" y="575" width="125" height="20" uuid="b6a12707-ad0c-40e8-b0e5-dbac00a36ede">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Offender's Signature:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="334" y="575" width="34" height="20" uuid="04a1e624-5b1f-4da7-bc02-5306f4fd4e37">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date:]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="135" y="552" width="193" height="1" uuid="96f4689b-0c03-429d-8350-7911161709e9">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="135" y="588" width="193" height="1" uuid="ba37f86e-90f6-4306-aae0-e6d930a7b97c">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="368" y="551" width="133" height="1" uuid="b5f41ae0-6fa3-47d4-a857-41b64d0a9172">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="368" y="587" width="133" height="1" uuid="fb1fb6bc-5dc1-432f-9515-7b75fc3ad5ac">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+			</line>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="62" y="181" width="295" height="17" uuid="0ab03898-fb29-4139-9cf9-93d59d1371ab">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offenderFirstName}.toUpperCase()+" "+
+($F{offenderMiddleName}!= null?$F{offenderMiddleName}.toUpperCase()+" ":"")+
+$F{offenderLastName}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="62" y="199" width="295" height="53" uuid="a2378e57-57cd-4dca-a523-9e086541a93f">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false" isUnderline="false"/>
+					<paragraph spacingAfter="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offenderAddress}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="352" y="366" width="150" height="17" uuid="96e01a44-1ca1-425c-b2ea-d681f5bfa9f2">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vehicleType}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="102" y="366" width="152" height="17" uuid="bc372d89-f36f-43fb-a2e0-5c05e81cfb87">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vehiclePlateNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="102" y="383" width="152" height="17" uuid="28d27e43-3947-4526-bf10-feb740827831">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vehicleMake}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="352" y="383" width="150" height="17" uuid="dc226c71-7d90-4788-bada-3bf5e45b3bb1">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vehicleModel}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="102" y="400" width="152" height="17" uuid="ffcc55ca-4970-4d8d-b72e-7d18805570ec">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vehicleEngineNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="352" y="400" width="150" height="17" uuid="c587938f-9c87-4fd3-8260-4b98fad9dbf4">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vehicleChassisNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="102" y="417" width="152" height="17" uuid="74dca2df-167d-43eb-a1e7-7ee07ca42b58">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vehicleColor}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="65" y="509" width="436" height="17" uuid="635a7039-fa53-453f-b656-dfc28822ec64">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{taStaffAssignedLocation}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="440" y="485" width="61" height="17" uuid="4fc44f69-06a6-455c-9caf-8176938cd5b2">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{taStaffBadgeNo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="116" y="485" width="271" height="17" uuid="04c1f5df-912c-410a-8d3d-a6b10e779f28">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{taStaffFirstName} + " " + $F{taStaffLastName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="92" y="320" width="410" height="15" uuid="5a92458e-6bd1-4d4a-a65d-fef5a3393716">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{allegations}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="10" y="274" width="464" height="19" uuid="1c83b72e-d05e-4763-a9bd-82fa67b88a55">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offenceExcerpt}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="58" y="-334" width="493" height="1" uuid="ccfc1707-075c-422f-8a09-95ac4b42a661">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="379" y="110" width="123" height="20" uuid="3edde06e-19b2-42fe-8d13-ed52d01edcb5">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Ref No. #: " + $F{referenceNo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="152" y="88" width="225" height="21" uuid="4e5bd7d1-f9a2-4cd0-afbe-8d78d58f22b1">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="16" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[WARNING NOTICE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="182" y="110" width="165" height="17" uuid="ebb8509a-4aaf-43c7-a8b9-0c4f16e90f7f">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="14" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[NO PROSECUTION]]></text>
+			</staticText>
+			<image>
+				<reportElement x="157" y="2" width="200" height="80" uuid="91d295e8-60b9-4841-b3e8-5bc03962af47">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA["taLogo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement positionType="Float" x="10" y="436" width="92" height="17" uuid="a5b3ea20-490e-45f9-b3c3-2931ecf570e1">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Name of Owner:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="352" y="436" width="150" height="17" uuid="b63ffd81-ae27-44f3-96be-ce822390b44c">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ownerAddress}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="260" y="436" width="66" height="17" uuid="ab6a3f6c-5c8d-4546-82db-fbf34e748801">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Address:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="102" y="436" width="152" height="17" uuid="a7ecdb22-1ae3-4a16-9a47-68b60e4a844e">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ownerFullName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="232" y="127" width="64" height="20" uuid="a3f43c44-5df2-46bd-b972-5aded16e7458">
+					<printWhenExpression><![CDATA[$F{reprinted}.equals("YES") && (($V{PAGE_NUMBER}%2) != 0)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<text><![CDATA[(Reprint)]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="293" width="502" height="15" uuid="8ab06619-f155-4520-a51c-40dc3603f6a9">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement markup="styled">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<style isBold='true'>"+"in the parish of "+"</style>"+$F{offenceParish}+"<style isBold='true'>"+" on the "+"</style>"+$F{offenceDay}+"<style isBold='true'>"+" day of "+"</style>"+$F{offenceMonth}+" "+$F{offenceYearWord}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="16" y="198" width="100" height="1" forecolor="#FFFFFF" uuid="75b371ba-917c-4df0-a635-508a333a501f">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+			</line>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="378" y="181" width="65" height="17" forecolor="#000000" uuid="3db92bf0-c89d-4d88-a2e7-1cf1f3b52dc5">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(($F{offenderTRN}!=null && $F{offenderDriverLicenceNo}!=null)&&
+    !$F{offenderTRN}.equals($F{offenderDriverLicenceNo}))?"DLN: ":"DLN/TRN: "]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="443" y="200" width="59" height="17" forecolor="#000000" uuid="b482c07d-4759-4f29-978a-9cab525cdf3c">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 &&
+    ((($F{offenderTRN} != null &&$F{offenderDriverLicenceNo} != null)&&
+                !$F{offenderTRN}.equals($F{offenderDriverLicenceNo}))))]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offenderTRN}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="378" y="200" width="65" height="17" forecolor="#000000" uuid="828290e2-8e96-43aa-b069-c79b20f7e8d6">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 &&
+    ((($F{offenderTRN} != null &&$F{offenderDriverLicenceNo} != null)&&
+                !$F{offenderTRN}.equals($F{offenderDriverLicenceNo}))))]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TRN:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="443" y="181" width="59" height="17" forecolor="#000000" uuid="bfcc2a1f-545b-41f6-b837-8c7970d6c73f">
+					<printWhenExpression><![CDATA[( ($V{PAGE_NUMBER}.intValue() % 2) != 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offenderDriverLicenceNo} != null?$F{offenderDriverLicenceNo}:
+$F{offenderTRN}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

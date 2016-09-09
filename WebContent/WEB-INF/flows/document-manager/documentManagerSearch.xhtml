@@ -1,0 +1,304 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces" xmlns:hx="http://www.ibm.com/jsf/html_extended" xmlns:sec="http://www.springframework.org/security/tags" xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/newTemplate.xhtml" xmlns:fsl="http://org.fsl.com"
+>
+	<ui:define name="title">Document Manager Search</ui:define>
+	<ui:define name="pageHeader">
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/theme/docManager.css" />
+		<script type="text/javascript" src="${request.contextPath}/script/docManagerPagination.js" />
+		<script type="text/javascript">
+			/* <![CDATA[ */
+		function getTAStaffValFromhiddenField(){
+			var taStaffID = "";
+			var taStaffFullInfo = "";
+			var lastName = "";
+			var tempFirstName = "";
+			var firstName = "";
+			$('#acc\\:taStaffLastNameHidden').val("");
+			$('#acc\\:taStaffFirstNameHidden').val("");
+			$('#acc\\:taStaffIDHidden').val("");
+		
+			taStaffID = $('#acc\\:txtTaStaff_hinput').val();
+			$('#acc\\:taStaffIDHidden').val(taStaffID);
+		
+			//Sanitize auto-complete value to retrieve TA Staff info
+			/* taStaffFullInfo = $('#acc\\:txtTaStaff_input').val();
+			if(taStaffFullInfo != ""){
+				lastName = taStaffFullInfo.split(',');
+				$('#acc\\:taStaffLastNameHidden').val(lastName[0]);
+				tempFirstName = lastName[1].split('[');
+				firstName = tempFirstName[0].split(' ');
+				alert(tempFirstName[0]);
+				$('#acc\\:taStaffFirstNameHidden').val(firstName[0]);
+			} */
+	
+
+}
+				/* ]]> */
+		</script>
+	</ui:define>
+	<ui:define name="content">
+		<h:form styleClass="form" id="documentManagerSearch" prependId="false">
+			
+			<p:panel id="panel" header="Document Manager Search">
+				<div class="tabs">
+					<a href="#">Document Manager Search</a>
+				</div>
+				<div class="main borders">
+					<p:messages id="errorMessages" closable="true" />
+					<!-- <h4 class="pageHead">
+						<span>At least one search criteria MUST be entered</span>
+					</h4> -->
+					<p:accordionPanel multiple="true" id="acc" prependId="false" activeIndex="0,1">
+						<p:tab title="Document Details">
+							<p:panelGrid>
+								<p:row>
+									<p:column colspan="1" styleClass="lbl">
+										<h:outputText value="Document Type:" />
+									</p:column>
+									<p:column colspan="1">
+										<p:selectOneMenu id="comboCategory" value="#{criteria.documentType}">
+											<f:selectItem itemValue="ALL" itemLabel="[Select One]" />
+											<f:selectItem itemValue="SUM" itemLabel="Summons" />
+											<f:selectItem itemValue="WNO" itemLabel="Warning Notice" />
+											<f:selectItem itemValue="WNP" itemLabel="Warning Notice No Prosecution" />
+											<p:ajax update="comboStatus" listener="#{documentManagerServiceAction.getDocManagerStatuses(flowRequestContext)}"/>
+										</p:selectOneMenu>
+									</p:column>
+									<p:column colspan="1" styleClass="lbl">
+										<h:outputText value="Status:" />
+									</p:column>
+									<p:column colspan="1">
+										<p:selectOneMenu id="comboStatus" value="#{criteria.documentStatus}">
+											<f:selectItem itemValue="" itemLabel="[Select One]" />
+											<f:selectItems value="#{statusList}" var="s" itemLabel="#{s.description}" itemValue="#{s.code}" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column colspan="1" styleClass="lbl">
+										<h:outputText value="Reference No:" />
+									</p:column>
+									<p:column colspan="1">
+										<p:inputText value="#{criteria.referenceNo}" id="refNo" onkeyup="restrictNumericFields(this)" maxlength="15" />
+									</p:column>
+									<p:column colspan="1" styleClass="lbl">
+										<h:outputText value="Manual Reference No:" />
+									</p:column>
+									<p:column colspan="1">
+										<p:inputText value="#{criteria.manualSerialNo}" id="serialNo" 
+										style="text-transform: uppercase" maxlength="15">											
+										</p:inputText>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:tab>
+						<p:tab title="Offender's Details">
+							<p:panelGrid>
+								<p:row>
+									<p:column colspan="1" styleClass="lbl">
+										<h:outputText value="TRN:" />
+									</p:column>
+									<p:column colspan="1">
+										<p:inputText value="#{criteria.trnNbr}" id="trn" maxlength="9" onkeyup="restrictNumericFields(this);" onkeydown="restrictNumericFields(this);" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column colspan="1" styleClass="lbl">
+										<h:outputText value="Name:" />
+									</p:column>
+									<p:column colspan="1">
+										<p:inputText value="#{criteria.offenderLastName}" id="offLN" alt="lastName" maxlength="40" style="margin-right:10px;" onkeyup="restrictAlphaNumericDashFields(this);"
+											onkeydown="restrictAlphaNumericDashFields(this);"
+										/>
+										<p:watermark for="offLN" value="Last Name" />
+										<p:inputText value="#{criteria.offenderFirstName}" id="offFN" alt="firstName" maxlength="40" style="margin-right:10px;" onkeyup="restrictAlphaNumericDashFields(this);"
+											onkeydown="restrictAlphaNumericDashFields(this);"
+										/>
+										<p:watermark for="offFN" value="First Name" />
+										<p:inputText value="#{criteria.offenderMiddleName}" alt="middleName" id="offMN" maxlength="25" onkeyup="restrictAlphaNumericDashFields(this);"
+											onkeydown="restrictAlphaNumericDashFields(this);"
+										/>
+										<p:watermark for="offMN" value="Middle Name" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column colspan="1" styleClass="lbl">
+										<h:outputText value="Offence Date:" />
+									</p:column>
+									<p:column colspan="1">
+										<p:calendar value="#{criteria.offenceStartDateRange}" id="ofStartDate" 
+										readonlyInput="true" showOn="button" maxlength="10" pattern="yyyy-MM-dd"
+										navigator="true">
+											  <fsl:dateTimeConverter showTime="false" />
+										</p:calendar>
+										<p:watermark for="ofStartDate" value="yyyy-mm-dd" />
+										<span style="padding-right: 5px; padding-left: 5px;"> to </span>
+										<p:calendar value="#{criteria.offenceEndDateRange}" id="ofEndDate" 
+										readonlyInput="true" showOn="button" maxlength="10" pattern="yyyy-MM-dd"
+										navigator="true">
+											  <fsl:dateTimeConverter showTime="false" />
+										</p:calendar>
+										<p:watermark for="ofEndDate" value="yyyy-mm-dd" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:tab>
+						<p:tab title="Operation Details">
+							<p:panelGrid>
+								<p:row>
+									<p:column colspan="1" styleClass="lbl">
+										<h:outputText value="Operation Name:" />
+									</p:column>
+									<p:column colspan="2">
+										<p:autoComplete global="false" id="operationName" scrollHeight="200" size="40" cache="true" cacheTimeout="30000" value="#{criteria.operationName}"
+											completeMethod="#{documentManagerServiceAction.roadOperationNameAutoComplete}" style="width: 100%;"
+										>
+											<p:ajax event="query" global="false"></p:ajax>
+										</p:autoComplete>
+										<!-- 	<p:watermark for="operationName" value="[auto complete text box]" /> -->
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column colspan="1" styleClass="lbl">
+										<h:outputText value="Operation Date:" />
+									</p:column>
+									<p:column colspan="1">
+										<p:calendar value="#{criteria.operationStartDateRange}" id="opStartDate" 
+										readonlyInput="true" showOn="button" maxlength="10" pattern="yyyy-MM-dd"
+										navigator="true">
+											  <fsl:dateTimeConverter showTime="false" />
+										</p:calendar>
+										<p:watermark for="opStartDate" value="yyyy-mm-dd" />
+										<span style="padding-right: 5px; padding-left: 5px;"> to </span>
+										<p:calendar value="#{criteria.operationEndDateRange}" id="opEndDate" 
+										readonlyInput="true" showOn="button" maxlength="10" pattern="yyyy-MM-dd"
+									 	navigator="true">
+											  <fsl:dateTimeConverter showTime="false" />
+										</p:calendar>
+										<p:watermark for="opEndDate" value="yyyy-mm-dd" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column colspan="1" styleClass="lbl">
+										<h:outputText value="TA Staff:" />
+									</p:column>
+									<p:column colspan="2">
+									
+										<p:watermark id="taStaffWM" for="txtTaStaff" value="Last, First Middle Name [ID]"/>  
+										<p:autoComplete global="false" id="txtTaStaff" scrollHeight="200"  size="43" value="#{flowScope.staffBOForSearch}" 
+										completeMethod="#{documentManagerServiceAction.taStaffNameAutoComplete}" converter="TAStaffIDConverter"
+										var="p" itemValue="#{p}" forceSelection="true" itemLabel="#{p.fullName.concat(' [').concat(p.staffId).concat(']')}">
+										<p:ajax event="query" global="false"></p:ajax>   
+										</p:autoComplete>  
+										<h:inputHidden id="taStaffIDHidden" value="#{criteria.staffId}"></h:inputHidden>
+										<h:inputHidden id="taStaffLastNameHidden" value="#{criteria.staffLastName}"></h:inputHidden>
+										<h:inputHidden id="taStaffFirstNameHidden" value="#{criteria.staffFirstName}"></h:inputHidden>
+							
+										<!-- <p:selectOneMenu id="comboStaff" value="#{criteria.staffId}">
+											<f:selectItem itemValue="" itemLabel="Last Name, First MI [ID]" />
+											<f:selectItems value="#{staffDropDown}" />
+										</p:selectOneMenu>
+										<p:watermark for="comboStaff" value="[LASTNAME, First Name   MI]" />-->
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:tab>
+					</p:accordionPanel>
+					<br /> <br />
+					<div align="center" style="margin: 0px auto">
+						<p:commandButton id="butSearch1" value="Search" action="search" processIds="*" ajax="false" styleClass="blue blue-icon icon-search icon-af" update="tableDocuments" onclick="getTAStaffValFromhiddenField();"/>
+						<p:commandButton id="butReset1" style="padding-rght:1em;" value="Clear" processIds="*" action="reset" ajax="false" styleClass="blue blue-icon icon-refresh icon-af" update="tableDocuments" />
+					</div>
+				</div>
+				<div>
+					<p:panel rendered="#{!(empty documents)}">
+						<p:dataTable value="#{documents}" var="doc" rowIndexVar="index" id="tableDocuments" rows="10" paginator="true" paginatorAlwaysVisible="true" rowKey="#{doc.referenceNo} #{doc.automaticSerialNo}"
+							selection="#{flowScope.documentsSelected}" currentPageReportTemplate="Results: Documents Listing {startRecord}-{endRecord} of {totalRecords}"
+							paginatorTemplate="Items: {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,50,100"
+							paginatorPosition="bottom" widgetVar="widgetTableAssociatedDocs" rowStyleClass="#{(doc.statusId == 'DOC_CR') &amp;&amp; (doc.verificationRequired != 'Y') ? '' : 'passiveA'}"
+						>
+							<p:ajax global="false" event="rowSelectCheckbox" update="printDocuments" />
+							<p:ajax global="false" event="rowUnselectCheckbox" update="printDocuments" />
+							<p:ajax global="false" event="toggleSelect" listener="#{documentManagerServiceAction.handleDocumentToggleSelect}" update="printDocuments" />
+							<p:ajax global="false" event="rowSelect" listener="#{documentManagerServiceAction.handleDocumentSelect}" oncomplete="$('button[id*=butView2]').click();" update="printDocuments" />
+							<p:ajax global="false" event="rowUnselect" update="printDocuments" />
+							<sec:authorize ifAnyGranted="ROLE_ROMS_DOC_MAN_PRINT">
+								<p:column global="false" selectionMode="multiple" editingRow="false" />
+							</sec:authorize>
+							<p:ajax event="page" global="false" />
+							<f:facet name="header">
+								<sec:authorize ifAnyGranted="ROLE_ROMS_DOC_MAN_PRINT">
+									<span style="margin: auto 20%;"> <p:commandButton id="printDocuments" value="Print" processIds="*" action="printSelectedDocuments" ajax="false" icon="ui-icon-print"
+											disabled="#{empty documentsSelected}" update="tableDocuments"
+										></p:commandButton> </span>
+								</sec:authorize>
+							</f:facet>
+							<p:column sortBy="offenderLastName" headerText="Offender's Name" id="onCol">
+								<p:row>
+									<h:outputText style="padding-rght:1em;" value="${doc.offenderFullName}" />
+								</p:row>
+								<p:row>
+									<br />
+									<h:outputText value="TRN:[#{!empty doc.offenderTRN ? doc.offenderTRN : 'N/A'}]" />
+								</p:row>
+							</p:column>
+							<p:column sortBy="documentTypeName" headerText="Document Type" id="dTCol">
+								<h:outputText value="#{doc.documentTypeName}" />
+							</p:column>
+							<p:column sortBy="offenceDescription" headerText="Offence" id="offdCol">
+								<h:outputText value="#{doc.offenceDescription}" />
+							</p:column>
+							<p:column sortBy="offenceDtimeString" headerText="Offence Date" id="dsCol">
+								<h:outputText value="#{doc.offenceDtimeString}">
+								</h:outputText>
+							</p:column>
+							<p:column sortBy="taStaffLastName" headerText="TA Staff" id="insCol">
+								<p:row>
+									<h:outputText value="#{doc.taStaffFullName}" />
+								</p:row>
+								<p:row>
+									<br />
+									<h:outputText value="ID:[#{doc.taStaffId}]" />
+								</p:row>
+							</p:column>
+							<p:column sortBy="operationName" headerText="Operation Name" id="opnCol">
+								<h:outputText value="#{empty doc.operationName  ? 'Unscheduled' : doc.operationName} " />
+							</p:column>
+							<p:column sortBy="#{!empty doc.manualSerialNo ? 'manualSerialNo' : 'referenceNo'} " headerText="Reference No.[Manual]" id="snCol">
+								<p:row>
+									<h:outputText value="#{doc.referenceNo}" />
+								</p:row>
+								<p:row>
+									<br />
+									<h:outputText value="#{!empty doc.manualSerialNo ? '[' : ''} #{!empty doc.manualSerialNo ?   doc.manualSerialNo   : ''} #{!empty doc.manualSerialNo ? ']' : ''}" style="text-transform: uppercase" />
+								</p:row>
+							</p:column>
+							<p:column sortBy="statusDescription" headerText="Status" id="statCol">
+								<h:outputText value="#{doc.statusDescription}" />
+								<br />
+								<h:outputText value="#{(doc.authorizedFlag == 'N' || doc.verificationRequired == 'Y' and doc.statusId != 'DOC_CA' ? '(Verification Required)' : '') }"></h:outputText>
+							</p:column>
+							
+						</p:dataTable>
+						<p:commandButton id="butView2" style="padding-rght:1em;display:none" value="A" processIds="*" action="view" ajax="false">
+						</p:commandButton>
+					</p:panel>
+				</div>
+			</p:panel>
+			<!-- This is used  to reset-->
+			<p:commandButton id="editCaseNum" action="resetPrintWindows" style="display:none" />
+		</h:form>
+		<f:subview id="viewofDocuemnts">
+			<h:panelGroup rendered="#{flowScope.printDocumentFromList == 'true'}">
+				<script type="text/javascript">
+					// 					myWin = openNewWindowWithName('../GenerateDocs');
+					myWin = openNewWindowWithName('../ROMS_Documents');
+
+					checkWinStillOpen(myWin);	
+				</script>
+			</h:panelGroup>
+		</f:subview>
+	</ui:define>
+</ui:composition>

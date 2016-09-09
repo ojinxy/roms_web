@@ -1,0 +1,284 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces" xmlns:hx="http://www.ibm.com/jsf/html_extended" xmlns:sec="http://www.springframework.org/security/tags" xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+>
+	<ui:define name="title">Summons Details</ui:define>
+	<ui:define name="pageHeader">Summons Details</ui:define>
+	<ui:fragment id="page">
+		<div class="main borders">
+			<p:panel id="panelMain" header="Summons Details" prependId="false">
+				<div class="pageHead">
+					<c:if test="#{ !empty flowScope.summons.manualSerialNo}">
+						<div style="float: left; min-width: 30%">
+							<h:outputLabel for="msn" value="Manual Reference No.: " />
+							<h:outputText value="#{flowScope.summons.manualSerialNo }" id="msn" style="text-transform: uppercase"/>
+						</div>
+					</c:if>
+					<div style="float: left; min-width: 30%">
+						<h:outputLabel for="msna" value="Reference No.: " />
+						<h:outputText value="#{flowScope.summons.referenceNo}" id="msna" />
+					</div>
+					<div style="float: right; min-width: 30%">
+						<h:outputLabel for="adt" value="Date Created: " />
+						<h:outputText value="#{flowScope.summons.issueDate}" id="adt">
+							<fsl:dateTimeConverter showTime="true" />							
+						</h:outputText>
+					</div>
+				</div>
+				<p:panelGrid id="panelSD2">
+					<p:row>
+						<p:column style="width:152px">
+							<h:outputLabel for="ori" value="Document Origin:" styleClass="lbl-display" />
+						</p:column>	
+						<p:column style="width:30%">
+							<h:outputText value="#{flowScope.summons.origin}" id="ori" />
+						</p:column>
+						<p:column style="width:152px">
+							<h:outputLabel for="stat" value="Status:" styleClass="lbl-display" />
+						</p:column>
+						<p:column style="width:30%">
+							<h:outputText value="#{flowScope.summons.statusDescription}" id="stat" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel for="tasn" value="Inspector:" styleClass="lbl-display" />
+						</p:column>
+						<p:column>	
+							<h:outputText value="#{flowScope.summons.taStaffFullName}" id="tasn" />
+						</p:column>
+						<p:column>
+							<h:outputLabel for="dpr" value="Date Printed:" styleClass="lbl-display" />
+						</p:column>	
+						<p:column>
+							<h:outputText rendered="#{!(empty flowScope.summons.printDtime)}" value="#{!(empty flowScope.summons.printDtime) ? flowScope.summons.printDtime : '[Not yet Printed]'}" id="dpr">
+								<fsl:dateTimeConverter showTime="true" />
+							</h:outputText>
+							<h:outputText rendered="#{(empty flowScope.summons.printDtime)}" value="[Not yet Printed]" id="dpr" />
+						</p:column>
+					</p:row>
+					<c:if test="#{(!empty flowScope.summons.servedOnDate) and flowScope.summons.statusId=='DOC_SE'}">
+						<p:row>
+							<p:column>
+								<h:outputLabel for="isb" value="Served by:" styleClass="lbl-display" />
+							</p:column>
+							<p:column>	
+								<h:outputText value="#{flowScope.summons.servedByLastName}, #{flowScope.summons.servedByFirstName}" id="isb" />
+							</p:column>
+							<p:column>
+								<h:outputLabel for="sod" value="Date Served:" styleClass="lbl-display" />
+							</p:column>	
+							<p:column>
+								<h:outputText value="#{flowScope.summons.servedOnDate}" id="sod">
+									<fsl:dateTimeConverter showTime="true" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+					</c:if>
+				</p:panelGrid>
+				<div style="float: left; width: 50%">
+					<p:panelGrid id="panelSD3">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">Offender's Details</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:152px">
+								<h:outputLabel for="trn" value="TRN:" styleClass="lbl-display" />
+							</p:column>
+							<p:column style="width:30%">	
+								<h:outputText value="#{flowScope.summons.offenderTRN}" id="trn" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel for="ofn" value="Name:" styleClass="lbl-display" />
+							</p:column>	
+							<p:column>
+								<h:outputText value="#{flowScope.summons.offenderFullName}" id="ofn" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel for="rob" value="Offender Type:" styleClass="lbl-display" />
+							</p:column>
+							<p:column>	
+								<h:outputText value="#{flowScope.summons.offenderRoleObserved}" id="rob" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel for="addr" value="Address:" styleClass="lbl-display" />
+							</p:column>
+							<p:column>	
+								<h:outputText style="width: 277px;float: right;" value="#{fn:replace(flowScope.summons.offenderAddressWithNewLine,'\\n','&lt;br/&gt;&#9;')}" id="addr" escape="false" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+				<div style="float: left; width: 50%">
+					<p:panelGrid>
+						<f:facet name="header">
+							<p:row>
+								<p:column>Contact Information:</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column>
+								<h:outputLabel for="mob" value="Mobile:" styleClass="lbl-display" />
+								<h:outputText value="#{flowScope.summons.offenderCellPhone}" id="mob" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel for="hom" value="Home:" styleClass="lbl-display" />
+								<h:outputText value="#{flowScope.summons.offenderHomePhone}" id="hom" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel for="work" value="Work:" styleClass="lbl-display" />
+								<h:outputText value="#{flowScope.summons.offenderWorkPhone}" id="work" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+				<p:panelGrid id="panelSD4" header="Details of Offence">
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="2">Details of Offence</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column style="width:152px">
+							<h:outputLabel for="loo" value="Offence Date:" styleClass="lbl-display" />
+						</p:column>
+						<p:column>	
+							<h:outputText value="#{flowScope.summons.offenceDtime}" id="odt">
+								<fsl:dateTimeConverter showTime="true" />								
+							</h:outputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel for="loo" value="Place of offence:" styleClass="lbl-display" />
+						</p:column>	
+						<p:column>
+							<h:outputText value="#{flowScope.summons.offenceLocation}" id="loo" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel for="ofc" value="Offence(s) Committed:" styleClass="lbl-display" style="text-transform:none"/>
+						</p:column>	
+						<p:column>	
+							<h:outputText value="#{flowScope.summons.offenceDescription}" id="ofc" />
+						</p:column>
+					</p:row>
+					<c:if test="#{flowScope.associatedWarningNotice != null}">
+					<p:row>
+						<p:column>
+							<h:outputLabel for="ofc" value="Associated Document(s):" styleClass="lbl-display" style="text-transform:none"/>
+						</p:column>	
+						<p:column>	
+							<h:outputText value="Warning Notice [#{flowScope.associatedWarningNotice}]" id="ofad" />
+						</p:column>
+					</p:row>
+					</c:if>
+					<p:row>
+						<p:column>
+							<h:outputLabel for="ofe" value="Summons Excerpt:" styleClass="lbl-display" style="float:left;" />
+						</p:column>	
+						<p:column>	
+							<div style="width: 80%; float: left;">
+								<h:outputText escape="false" value="#{flowScope.summons.excerpt}" id="ofe" />
+							</div>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<!-- Vehicle Detail  -->
+				<!-- <p:panel id="vehicleDetailsPanel"> -->
+				<ui:include src="fragments/vehicleDetailsFragment.xhtml"></ui:include>
+				<!-- </p:panel> -->
+				<p:panelGrid id="panelSD8jp" header="Justice of the Peace:">
+					<f:facet name="header">
+						<p:row>
+							<p:column>Justice of the Peace (JP) Details</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column>
+							<h:outputLabel rendered="#{flowScope.summons.jpRegNumber != null}" value="Name:" id="jopn" styleClass="lbl-display" />
+							<h:outputText rendered="#{flowScope.summons.jpRegNumber != null}" value="#{flowScope.summons.jpLastName} , #{flowScope.summons.jpFirstName} [#{flowScope.summons.jpRegNumber}]" id="jop" />
+							<h:outputText rendered="#{flowScope.summons.jpRegNumber == null}" value="No details added." id="jop" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel rendered="#{flowScope.summons.jpRegNumber != null}" value="Parish" id="jopn2" styleClass="lbl-display" />
+							<h:outputText rendered="#{flowScope.summons.jpRegNumber != null}" value="#{flowScope.summons.jpParish}" id="jopa" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<p:panelGrid id="panelSD8jp" header="Comments" columns="1">
+					<f:facet name="header">
+						Comments		
+				</f:facet>
+					<h:outputText id="adcom" value="#{fn:replace((empty flowScope.summons.comment ? '[No Comment Added]' : flowScope.summons.comment),'\\(','&lt;br/&gt;&#9;&#40;')}" escape="false" />
+					<h:outputText id="recom" value="#{fn:replace((empty flowScope.summons.reprintComment ? '' : flowScope.summons.reprintComment),'\\(','&lt;br/&gt;&#9;&#40;')}" escape="false" />
+				</p:panelGrid>
+				<p:panelGrid id="panelSD14" header="Discharge Witness
+						Details" rendered="#{flowScope.summons.statusId == 'DOC_WI' }">
+					<f:facet name="header">
+						<p:row>
+							<p:column>Discharge Witness</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column>
+							<h:outputLabel for="dwn" value="Witness Name:" styleClass="lbl-display" />
+							<h:outputText value="#{flowScope.summons.dischargeWitness.fullName}" id="dwn" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel for="dwaddr" value="Witness Address:" styleClass="lbl-display" />
+							<h:outputText value="#{fn:replace(flowScope.summons.dischargeWitness.addressLine2NL,'\\n','&lt;br/&gt;&#9;')}" id="dwaddr" escape="false" style="display: inline-table;" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+			</p:panel>
+		</div>
+		<!-- Court Detail  -->
+		<c:if test="#{not empty flowScope.summons.courtCase.courtCaseId}">
+			<div class="tabs">
+				<a href="#">Court Case Details</a>
+			</div>
+			<div class="main borders">
+				<ui:include src="fragments/courtDetailsFragment.xhtml"></ui:include>
+				<c:if test="#{ not empty flowScope.summons.courtCase.courtCaseId}">
+					<p:commandLink id="ccButton" value="View Details" styleClass="blue icon-pencil-square-o icon-small" processIds="*" action="viewCourtCaseDetails" ajax="false"
+						style="float:right;margin-top: -8px;margin-right: -14px;"
+					/>
+				</c:if>
+			</div>
+		</c:if>
+		<!-- Dialog  Boxes -->
+		<!-- Withdraw Document -->
+		<!-- <p:panel id="withdrawDocPanel"> -->
+		<ui:include src="fragments/withdrawDocFragment.xhtml"></ui:include>
+		<!-- </p:panel> -->
+		<!-- Verify JP Details D -->
+		<!-- <p:panel id="verifyJPDocPanel"> -->
+		<!-- <ui:include src="fragments/verifyJPDocFragment.xhtml"></ui:include> -->
+		<!-- </p:panel> -->
+		<!-- Verify User Details  -->
+		<!-- 	
+			<p:panel id="verifyUserDocPanel2">
+				<ui:include src="fragments/verifyUserCredentialsFragmentJP.xhtml"></ui:include>
+			</p:panel>
+ -->
+	</ui:fragment>
+</ui:composition>

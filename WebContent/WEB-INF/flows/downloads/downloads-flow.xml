@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+
+	<var name="mode" class="java.lang.String" />
+
+	<view-state id="downloads">
+		<on-entry>
+			<evaluate expression="downloadsMaintenanceAction.loadDownloadDetails"></evaluate>
+		</on-entry>
+		
+		<transition on="success">
+			<set name="flowScope.mode" value="'view'" />
+		</transition>
+
+		<transition on="error">
+			<render fragments="downloads" />
+		</transition>
+<!-- 
+		<transition on="downloadFile">
+			<evaluate expression="downloadsMaintenanceAction.loadDownloadDetails"></evaluate>
+		</transition> -->
+
+		<transition on="resetPrintWindows" to="documentManagerView">
+			<set name="flowScope.downloadNow" value="'false'"></set>
+		</transition>
+
+	</view-state>
+
+	<end-state id="endState" />
+
+</flow>

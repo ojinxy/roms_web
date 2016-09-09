@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://object.dl.ws.fsl.org" version="1.0">
+
+  <xs:complexType name="Address">
+    <xs:sequence>
+      <xs:element name="mark" nillable="true" type="xs:string"/>
+      <xs:element name="streetNumber" nillable="true" type="xs:string"/>
+      <xs:element name="streetName" nillable="true" type="xs:string"/>
+      <xs:element name="poBoxNumber" nillable="true" type="xs:string"/>
+      <xs:element name="poLocation" nillable="true" type="xs:string"/>
+      <xs:element name="areaCityTown" nillable="true" type="xs:string"/>
+      <xs:element name="parish" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

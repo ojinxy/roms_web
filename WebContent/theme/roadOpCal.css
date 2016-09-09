@@ -1,0 +1,138 @@
+/***********************************************
+ *	Road Operation Calendar Related Stylesheet *
+ ***********************************************/
+ .fc-day {
+border: 1px solid #CCD0D0 !important;
+}
+
+.ui-widget-header {
+border: 1px solid #808080;
+background: #808080;
+color: #ffffff;
+font-weight: bold;
+}
+
+ .eventSch
+ {
+ /*kpowell-addressed ROMS1.0 -094*/
+ 	color: #fff;/*#A5530F;*/
+background: #3E91C7;/*#ffbf00;*/
+border: 1px solid #0E75BA;/*#d39b00;*/
+ 
+ }
+ 
+ .eventClo
+ {
+ 	background-color: red;
+ 	color: white;
+ 	
+ }
+ 
+ .eventSta
+ {
+ 	background-color: green;
+ 	color: white;
+ 	border:0 none;
+ 	
+ }
+ 
+ .eventCom
+ {
+  /*kpowell-addressed ROMS1.0 -094*/
+ 	/*background-color: orange;*//*#FF6600;*/
+ 	color: white;
+ 	/*background: linear-gradient( #fec053, #e57804) repeat scroll 0 0 rgba(0, 0, 0, 0) !important;*/
+ 	background: linear-gradient( #103671, #02193F) repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+ 	border-color: #02193F; /*#fec053;*/
+ }
+ 
+ .eventNoa
+ {
+ 	/*background-color: #FF9900;
+ 	color: red;*/
+ 	
+ 	color: #A5530F;
+background:#fff;
+border: 2px solid #ffbf00;
+ 	
+ }
+ 
+ .eventTer
+ {
+ 	background-color: #FFCC00;
+ 	color: red;
+ 	
+ }	
+ 
+ .eventCan
+ {
+ 	background-color: #fff;
+ 	color:#FF0033;
+ 	border: 2px solid #FF0033;;
+ 	
+ 	
+ }	
+ 
+ 
+ .eventUnk
+ {
+ 	background-color: blue;
+ 	color: white;
+ 	
+ }
+ 
+ .eventMor
+ {
+ 	
+	background-color: gray;
+	width:auto !important;
+	background-image: url('/ROMS-WEB/resources/images/bullet-arrow-down-icon.png');
+	background-repeat:no-repeat; 
+	background-position: right;
+	padding-right:15px;
+	
+ }
+ 
+.balloonCss
+{
+	opacity: 1 !important;
+	background-color:white !important;
+}
+
+.balloonHeader
+{
+	color:#0099FF;
+}
+
+.closeBallon
+{
+	float: right;
+	text-decoration: none;
+}
+
+.closeBallon:hover
+{
+	color:black ;
+}
+
+.balHeader
+{
+	width: 101%;
+	background-color: #A0A0A0;
+	border-color: #A0A0A0;
+}
+
+.legendKey
+{
+	width: 14px;
+	height: 14px;
+	display: inherit;
+	float: left;
+	margin-right: 4px;
+}
+
+.legend
+{
+	padding-bottom: 10px;
+	white-space: nowrap;
+}

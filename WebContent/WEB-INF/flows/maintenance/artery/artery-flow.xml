@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+ <secured attributes="ROLE_ROMS_REF_ART_SEARCH" />	
+	
+	<var name="mode" class="java.lang.String" />
+	<var name="saved" class="java.lang.String" />
+	<var name="artery" class="fsl.ta.toms.roms.bo.ArteryBO" />
+	<var name="arteries" class="org.fsl.roms.view.ArteryBean" />
+	<var name="criteria" class="fsl.ta.toms.roms.search.criteria.impl.ArteryCriteriaBO" />
+	<var name="locationList" class="java.util.ArrayList" />
+	<var name="results" class="java.util.ArrayList" />
+	<var name="errorMsg" class="java.lang.String" />
+	<var name="displaySaveBtn" class="java.lang.String" />
+	<var name="displayUpdateBtn" class="java.lang.String" />
+	<var name="constants" class="org.fsl.roms.constants.Constants.UserPermissions" />
+	
+	<on-start>
+			<!-- <evaluate expression="locationMaintenanceServiceAction.getLocations" ></evaluate> -->
+			<evaluate expression="locationMaintenanceServiceAction.getParishes" ></evaluate>
+	</on-start>
+	
+	<view-state id="arteryMaintenanceSearch" redirect="false">
+	<on-entry>
+		<evaluate expression="arteryMaintenanceServiceAction.getLocationList()" ></evaluate>
+	</on-entry>
+		<transition on="search">
+		<evaluate expression="arteryMaintenanceServiceAction.search(flowRequestContext)" ></evaluate>
+			<!-- <set name="flowScope.arteries" value="flowScope.arteries"></set> -->
+			<!--<set name="flowScope.saved" value="'false'"></set> -->
+			<!--  <render fragments="arteryResults" />-->
+		</transition>
+
+		<transition on="view" to="arteryMaintenanceDetails">
+			<set name="flowScope.mode" value="'view'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+			<set name="flowScope.artery" value="flowScope.arteries.selectedRow" />
+		</transition>
+
+
+		<transition on="add">
+			<evaluate expression="arteryMaintenanceServiceAction.add(flowRequestContext)"></evaluate>
+			<set name="flowScope.displayUpdateBtn" value="'none'"></set>
+			<set name="flowScope.displaySaveBtn" value="''"></set>
+			<set name="flowScope.mode" value="'save'"></set>
+			<set name="flowScope.saved" value="'false'"></set>	
+		</transition>
+		
+		<transition on="edit">
+			<evaluate expression="arteryMaintenanceServiceAction.select(flowRequestContext)"></evaluate>
+			<set name="flowScope.displaySaveBtn" value="'none'"></set>
+			<set name="flowScope.displayUpdateBtn" value="''"></set>
+		</transition>
+		
+		<transition on="save">
+			<evaluate expression="arteryMaintenanceServiceAction.saveartery(flowRequestContext)" />	
+		</transition>
+		
+		<transition on="update">
+			<evaluate expression="arteryMaintenanceServiceAction.updateartery(flowRequestContext)" />
+		</transition>
+		
+		<transition on="cancel">
+			<evaluate expression="arteryMaintenanceServiceAction.back(flowRequestContext)" />
+			<!--<evaluate expression="arteryMaintenanceServiceAction.cancelartery" />-->	
+		</transition>
+		
+		<transition on="select">
+			<evaluate expression="arteryMaintenanceServiceAction.select(flowRequestContext)"></evaluate>
+		</transition>
+		
+		<!-- Sort the values on the screen -->
+		<transition on="sort" to="arteryMaintenanceSearch">
+			<set name="criteria.sortOn" value="requestParameters.sortOn"/>
+			<evaluate expression="arteryMaintenanceServiceAction.sort" />	
+			<set name="flowScope.sarteries" value="flowScope.datatable.pageElements" />					
+			<render fragments="arteryMaintenanceSearch,searchResults" />
+		</transition>
+		
+		<!-- Next action on datatable -->
+		<transition on="next" to="arteryMaintenanceSearch">
+			<evaluate expression="arteryMaintenanceServiceAction.next" />	
+			<set name="flowScope.arteries" value="flowScope.datatable.pageElements" />	
+			<render fragments="arteryMaintenanceSearch,searchResults" />
+		</transition>
+		
+		<!-- previous action on datatable -->
+		<transition on="previous" to="arteryMaintenanceSearch">
+			<evaluate expression="arteryMaintenanceServiceAction.previous" />	
+			<set name="flowScope.arteries" value="flowScope.datatable.pageElements" />				
+			<render fragments="arteryMaintenanceSearch,searchResults" />
+		</transition>
+		
+		<!-- first action on datatable -->
+		<transition on="first" to="arteryMaintenanceSearch">
+			<evaluate expression="arteryMaintenanceServiceAction.first" />	
+			<set name="flowScope.arteries" value="flowScope.datatable.pageElements" />				
+			<render fragments="arteryMaintenanceSearch,searchResults" />
+		</transition>
+		
+		<!-- last action on datatable -->
+		<transition on="last" to="arteryMaintenanceSearch">
+			<evaluate expression="arteryMaintenanceServiceAction.last" />	
+			<set name="flowScope.arteries" value="flowScope.datatable.pageElements" />				
+			<render fragments="arteryMaintenanceSearch,searchResults" />
+		</transition>
+		
+		
+		
+		<transition on="clear" to="endState" />
+
+	</view-state>		
+
+
+	<!-- <action-state id="search">
+		<evaluate expression="arteryMaintenanceServiceAction.search"></evaluate>
+		<transition on="success" to="arteryMaintenanceSearch"></transition>
+		<transition on="error" to="arteryMaintenanceSearch" />
+		<transition on="yes" to="arteryMaintenanceSearch">
+			<set name="flowScope.mode" value="'view'"></set>
+		</transition>
+	</action-state> -->
+
+	<!-- <action-state id="saveartery">
+		<evaluate expression="arteryMaintenanceServiceAction.saveartery(flowRequestContext)" />		
+		<transition on="success" to="arteryMaintenanceSearch">
+			<set name="flowScope.saved" value="'true'"></set>
+			<set name="flowScope.mode" value="'view'"></set>
+			<set name="flowScope.errorMsg" value="''"></set>
+		</transition>
+		<transition on="error" to="arteryMaintenanceSearch" >
+			<set name="flowScope.errorMsg" value="'true'"></set>
+		</transition>		
+	</action-state>-->
+	
+	<!-- <action-state id="cancelartery">
+		<evaluate expression="arteryMaintenanceServiceAction.cancelartery" />		
+		<transition on="success" to="arteryMaintenanceSearch"/>
+		<transition on="error" to="arteryMaintenanceSearch" />
+		
+	</action-state> -->
+
+	<!-- <action-state id="updateartery">
+		<evaluate expression="arteryMaintenanceServiceAction.updateartery(flowRequestContext)" />
+		<transition on="success" to="arteryMaintenanceSearch">
+			<set name="flowScope.errorMsg" value="''"></set>
+		</transition>
+	</action-state> -->
+	
+	<end-state id="endState" />
+	
+
+
+</flow>

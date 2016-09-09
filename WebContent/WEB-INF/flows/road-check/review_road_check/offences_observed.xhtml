@@ -1,0 +1,64 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:hx="http://www.ibm.com/jsf/html_extended"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fsl="http://org.fsl.com">
+
+	<ui:fragment id="page">	
+	
+					<p:dataTable value="#{currentOffenceOutcomeList}" var="offencesOut" rowIndexVar="index" id="tableOffenceOutcomes"
+						rows="10" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom"
+						currentPageReportTemplate="Results: {startRecord}-{endRecord} of {totalRecords}" rowsPerPageTemplate="10, 50, 100"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+						 <f:facet name="header">
+							Offence(s)
+						 </f:facet>
+						<p:column headerText="Offences/Outcomes Observed">
+							
+							<h:outputText value="#{index + 1}. #{offencesOut.getOffenceShortDescription()}" style="font-weight:bolder;"/>
+						</p:column>
+						<p:column headerText="Issue Summons" style="text-align:center">
+							<f:subview rendered="#{offencesOut.issueSummons}">
+										<i class="icon icon-check icon-1x"></i>
+							</f:subview>
+						</p:column>
+						<p:column headerText="Issue Warning Notice" style="text-align:center">
+							<f:subview rendered="#{offencesOut.issuewWarningNotice}">
+										<i class="icon icon-check icon-1x"></i>
+							</f:subview>
+						</p:column>
+						<p:column headerText="Warning No Prosecution" style="text-align:center">
+							<f:subview rendered="#{offencesOut.issueWarningNP}">
+										<i class="icon icon-check icon-1x"></i>
+							</f:subview>
+						</p:column>
+						<p:column headerText="Warning For Prosecution" style="text-align:center">
+							<f:subview rendered="#{offencesOut.warnForProsecution}">
+										<i class="icon icon-check icon-1x"></i>
+							</f:subview>
+						</p:column>
+<!-- 						<p:column headerText="Remove Plate" style="text-align:center"> -->
+<!-- 							<f:subview rendered="#{offencesOut.removePlate}" > -->
+<!-- 										<i class="icon icon-check icon-1x"></i> -->
+<!-- 							</f:subview> -->
+<!-- 						</p:column> -->
+						<f:facet name="footer" >
+							<div style="text-align:right !important;width:100%">
+								<p:selectBooleanButton disabled="#{allOffenceOutcomeViews.size() > 10?false:true}" offLabel="Show All"  onLabel="Show Less"  id="butShowAll"  value="#{roadCheckReviewSummaryBean.showAllQueriesPerformed}">
+									<p:ajax update="tableOffenceOutcomes" listener="#{roadCheckServiceAction.showAllOffenceOutcomes()}" oncomplete="paginatorForOffencesObservedTable()"/> 
+								</p:selectBooleanButton>
+							</div>
+						</f:facet>
+					</p:dataTable>
+	  				<p:commandLink id="butEditOffencesDetailsForOffObs" widgetVar="butEditOffencesDetailsForOffObs" style="width: 50px;float: right;"
+						disabled="#{roadCheckReviewSummaryBean.getDocViews() != null}" action="toStep2" ajax="false" rendered="#{! roadCheckReviewSummaryBean.isViewDetailsScreen()}">
+						<span class="icon icon-edit icon-large"></span>
+					</p:commandLink>
+					<p:tooltip for="butEditOffencesDetailsForOffObs" value="Edit Offence and Outcomes."/>
+</ui:fragment>
+</ui:composition>

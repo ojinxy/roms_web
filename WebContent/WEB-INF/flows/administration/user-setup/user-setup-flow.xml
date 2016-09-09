@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+        
+   <secured attributes="ROLE_ROMS_USR_SET_SEARCH" /> 
+        
+        
+	<var name="userSetupView" class="org.fsl.roms.view.UserSetupView" />
+     <var name="regionList" class="java.util.ArrayList" />
+     <var name="staffTypeList" class="java.util.ArrayList" />
+     <var name="staffList" class="java.util.ArrayList" />
+     <var name="bimsUserList" class="java.util.ArrayList" />
+  	
+     
+    <view-state id="userSetup" redirect="false">
+		<on-entry>
+			 <evaluate expression="userSetupServiceAction.getAllList"></evaluate>
+			 <set name="flowScope.taOfficeRegion"  value="new java.util.ArrayList()"  type="java.io.Serializable"></set>
+		</on-entry>
+	
+		<transition on="clear" to="userSetup">
+			<evaluate expression="userSetupServiceAction.clear"></evaluate>
+		</transition>
+		
+		<transition on="search" >
+			<evaluate expression="userSetupServiceAction.search"></evaluate>
+		</transition>
+
+		
+		<!-- <transition on="searchName" to="nameSearchResults"/> -->
+	
+	
+	</view-state>
+	
+</flow>
